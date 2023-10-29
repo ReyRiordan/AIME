@@ -8,6 +8,7 @@ import token_counter
 
 KEY = "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"
 MODEL = "gpt-4"
+PROMPT = "./Prompt/" + "Prompt_10:28.txt"
 
 llm = ChatOpenAI(openai_api_key=KEY, model_name=MODEL)
 conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
@@ -16,11 +17,13 @@ conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
 # A list of all messages sent thusfar
 allMessages = []
 #Adding the prompt from the .docx file before the conversation begins
-user_input = textract.process("./Prompt/Chat_GPT_prompt_V1023_OBJ1.docx").decode()
+#user_input = textract.process("./Prompt/Chat_GPT_prompt_V1023_OBJ1.docx").decode()
+with open(PROMPT) as prompt:
+    user_input = prompt.read()
 allMessages.append(user_input)
 
 while user_input != "END":
-    print("GPT:" + conversation.predict(input=user_input) + "\n")
+    print("GPT: " + conversation.predict(input=user_input) + "\n")
     user_input = input("User: ")
     allMessages.append(user_input)
     #Count number of tokens used

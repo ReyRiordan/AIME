@@ -16,7 +16,7 @@ The role description is listed below, separated by sections:
 •	You are nervous about your symptoms of chest pressure because your father died suddenly of a heart attack when he was 50.
 ‘History of present illness’:
 •	You came to the hospital because you are experiencing a heaviness in your chest.
-•	The heaviness in your chest started about 2-hours ago and gradually got worse over a period of 10-15 minutes.
+•	The heaviness in your chest started about 2 hours ago and gradually got worse over a period of 10-15 minutes.
 •	You were seated at your desk at home when the symptoms appeared.
 •	The “heaviness” is located at the center of your chest.
 •	When the pressure sensation was at its worst, you also felt an aching pain in your jaw and both shoulders.
@@ -44,7 +44,7 @@ If asked about medications, you will state that the medications are written on y
 ‘Allergies’:
 •	You do not have any allergies that you are aware of.  
  ‘Family History’:
-•	Your father died suddenly of a heart attack when he was 50 years-old.  
+•	Your father died suddenly of a heart attack when he was 50 years old.  
 •	Your mother passed away from breast cancer two years ago.  
 •	You have three children, ages 22, 24, and 27. They are all healthy. 
 ‘Social history’:
@@ -52,4 +52,4 @@ If asked about medications, you will state that the medications are written on y
 •	You drink about 2 glasses of wine or a cocktail during the week, more on the weekend.  
 ‘Other Symptoms’:
 •	You have had difficulty maintaining an erection for the past 2 years and have considered speaking to your doctor about this.
-•	You do get pain in your left leg when you walk, a cramp in the calf.  It goes away when you stop walking.
+•	You do get pain in your left leg when you walk, a cramp in the calf. It goes away when you stop walking.

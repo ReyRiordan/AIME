@@ -42,7 +42,7 @@ if mode == "AUTO":
                 user_input = questions.readline()
                 if not user_input: break
                 allMessages.append(user_input)
-                print("User: " + user_input + "\n")
+                print("User: " + user_input)
                 output = conversation.predict(input=user_input)
                 allMessages.append(output)
                 print("GPT: " + output + "\n")

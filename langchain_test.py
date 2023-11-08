@@ -14,11 +14,12 @@ import export_docx
 
 KEY = "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"
 MODEL = "gpt-4"
-PROMPT = "./Prompt/" + "Prompt_10-28.txt"
+PROMPT = "./Prompt/" + "Prompt_11-7.txt"
 TOWRITE = "./Prompt/" + "output.txt"
 QUESTIONS = "./Prompt/questions.txt"
+QUESTIONS_OPEN = "./Prompt/questions_open.txt"
 
-llm = ChatOpenAI(openai_api_key=KEY, model_name=MODEL)
+llm = ChatOpenAI(openai_api_key=KEY, model_name=MODEL, temperature=0.7)
 conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
 
 
@@ -28,16 +29,17 @@ allMessages = []
 #user_input = textract.process("./Prompt/Chat_GPT_prompt_V1023_OBJ1.docx").decode()
 with open(PROMPT, "r", encoding="utf8") as prompt:
     prompt_input = prompt.read()
+print("Prompt length: " + str(token_counter.num_tokens_used([prompt_input])) + " tokens")
 
 #with open(TOWRITE,"w", encoding = "utf8") as logger: 
     #logger.write(""); 
 
 output = conversation.predict(input=prompt_input)
 print("GPT: " + output + "\n")
-mode = input("Select mode (AUTO / MANUAL): ")
+mode = input("Select mode (AUTO / AUTO OPEN / MANUAL): ")
 
-if mode == "AUTO":
-    with open(QUESTIONS, "r", encoding="utf8") as questions:
+def auto_questioning(question_prompt, delay):
+     with open(question_prompt, "r", encoding="utf8") as questions:
             while True:
                 user_input = questions.readline()
                 if not user_input: break
@@ -46,7 +48,13 @@ if mode == "AUTO":
                 output = conversation.predict(input=user_input)
                 allMessages.append(output)
                 print("GPT: " + output + "\n")
-                time.sleep(15)
+                time.sleep(delay)
+
+if mode == "AUTO":
+    auto_questioning(QUESTIONS, 15)
+
+elif mode == "AUTO OPEN":
+    auto_questioning(QUESTIONS_OPEN, 15)
 
 elif mode == "MANUAL":
     user_input = input("Begin the conversation: ")

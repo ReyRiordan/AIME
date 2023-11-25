@@ -7,7 +7,7 @@ import os
 import time
 import textract
 import tiktoken
-import token_counter
+import testing.token_counter as token_counter
 
 # import aspose.words as aw
 import datetime as date

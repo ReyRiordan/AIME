@@ -5,11 +5,11 @@ from langchain.memory import ConversationBufferMemory
 import time
 import textract
 import tiktoken
-import token_counter
+import testing.token_counter as token_counter
 
 import aspose.words as aw
 from datetime import date
-import export_docx
+import testing.export_docx as export_docx
 
 
 KEY = "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"

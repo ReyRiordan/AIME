@@ -1,0 +1,6 @@
+langchain
+time
+datetime
+docx
+io
+streamlit

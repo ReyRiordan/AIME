@@ -44,8 +44,8 @@ if st.session_state["stage"] == 2:
         with open(PROMPT, 'r', encoding='utf8') as prompt:
             prompt_input = prompt.read()
 
-    KEY = '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'
-    MODEL = 'gpt-4'
+    KEY = ""
+    MODEL = "gpt-4"
     llm = ChatOpenAI(openai_api_key=KEY, model_name=MODEL, temperature=0.7)
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
     initial_output = st.session_state["conversation"].predict(input=prompt_input)

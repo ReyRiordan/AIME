@@ -12,7 +12,7 @@ from datetime import date
 import testing.export_docx as export_docx
 
 
-KEY = "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"
+KEY = ""
 MODEL = "gpt-4"
 PROMPT = "./Prompt/" + "Prompt_11-7.txt"
 TOWRITE = "./Prompt/" + "output.txt"

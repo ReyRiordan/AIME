@@ -15,7 +15,7 @@ from docx import Document
 # import export_docx
 
 
-KEY = "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"
+KEY = ""
 MODEL = "gpt-4"
 PROMPT = "Prompt/Prompt_10-28.txt"
 TOWRITE = "Prompt/output.txt"

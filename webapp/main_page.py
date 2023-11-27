@@ -48,7 +48,7 @@ if st.session_state["stage"] == 2:
     os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
     KEY = os.getenv("OPENAI_API_KEY")
     MODEL = "gpt-4"
-    llm = ChatOpenAI(openai_api_key=KEY, model_name=MODEL, temperature=0.7)
+    llm = ChatOpenAI(openai_api_key=KEY, model_name=MODEL, temperature=0.0)
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
     initial_output = st.session_state["conversation"].predict(input=prompt_input)
 

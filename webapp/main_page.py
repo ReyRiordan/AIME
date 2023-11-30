@@ -4,19 +4,37 @@ from langchain.memory import ConversationBufferMemory
 import time
 import datetime as date
 from docx import Document
+import docx as docx
 import io
 import streamlit as st
 
 st.title("Medical Interview Simulation")
 
+
+# @REY: Instead of writing down numbers, make each one of those numbers
+#       into its own variable for easy on-the-fly changing. I did the first
+#       one but I'm mad lazy so u got the rest. It's out of order right now, 
+#       but once they're all named, u can then easily swap 'em around. Good
+#       programming practice. 
+
+
+# All page indices
+LOGIN_PAGE = 0
+INTRODUCTORY_INFO_PAGE = 5
+
+
+#All relevant directories
+PROMPT = "./Prompt/Prompt_11-7.txt" #all globals and constants are declared at the start
+INTRODUCTORY_MESSAGE_LOCATION = "./Prompt/Website_introduction.docx"
+
 if "stage" not in st.session_state:
-    st.session_state["stage"] = 0
+    st.session_state["stage"] = LOGIN_PAGE
 
 def set_stage(stage):
     st.session_state["stage"] = stage
 
 
-if st.session_state["stage"] == 0:
+if st.session_state["stage"] == LOGIN_PAGE:
     st.session_state["username"] = st.text_input("Enter a username (does not have to be your real name):")
     if st.session_state["username"]:
         password = st.text_input("Enter user password:")
@@ -34,13 +52,20 @@ if st.session_state["stage"] == 1:
                                                index = None,
                                                placeholder = "Select patient...")
 
-    st.button("Start conversation", on_click=set_stage, args=[2])
+    st.button("Confirm choice", on_click=set_stage, args=[INTRODUCTORY_INFO_PAGE])
+
+
+if st.session_state["stage"]==INTRODUCTORY_INFO_PAGE: 
+    introductory_msg = Document(INTRODUCTORY_MESSAGE_LOCATION)
+    for parargraph in introductory_msg.paragraphs:
+        st.write(parargraph.text)
+    st.button("Proceed to interview", on_click=set_stage, args=[2])
+
 
 
 if st.session_state["stage"] == 2:
     prompt_input = "default prompt"
     if st.session_state["patient"] == "John Smith":
-        PROMPT = "./Prompt/Prompt_11-7.txt"
         with open(PROMPT, 'r', encoding='utf8') as prompt:
             prompt_input = prompt.read()
 

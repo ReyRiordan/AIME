@@ -21,11 +21,14 @@ st.title("Medical Interview Simulation")
 # All page indices
 LOGIN_PAGE = 0
 INTRODUCTORY_INFO_PAGE = 5
-
+PHYSICAL_EXAMINATION = 6
 
 #All relevant directories
 PROMPT = "./Prompt/Prompt_11-7.txt" #all globals and constants are declared at the start
-INTRODUCTORY_MESSAGE_LOCATION = "./Prompt/Website_introduction.docx"
+INTRODUCTORY_MESSAGE_LOCATION = "./Medical_Info/Website_introduction.docx"
+PHYSICAL_EXAMINATION_LOCATION = "./Medical_Info/Physical_examination_for_first_test_case.docx"
+ECG_LOCATION = "./Medical_Info/ecg.png"
+
 
 if "stage" not in st.session_state:
     st.session_state["stage"] = LOGIN_PAGE
@@ -94,8 +97,17 @@ if st.session_state["stage"] == 3:
             st.markdown(output)
             st.session_state["messages"].append({"role": st.session_state["patient"], "content": output})
 
-    st.button("End conversation", on_click=set_stage, args=[4])
+    st.button("End conversation", on_click=set_stage, args=[PHYSICAL_EXAMINATION])
 
+if st.session_state["stage"]==PHYSICAL_EXAMINATION:
+    physical_exam_doc = Document(PHYSICAL_EXAMINATION_LOCATION)
+    st.header("Physical Examination Findings")
+    for parargraph in physical_exam_doc.paragraphs:
+        st.write(parargraph.text)
+    st.header("ECG Chart")
+    st.image(ECG_LOCATION)
+    st.button("Proceed to diagnosis and end screen", on_click=set_stage, args=[4])
+    
 
 if st.session_state["stage"] == 4:
     bio = io.BytesIO()

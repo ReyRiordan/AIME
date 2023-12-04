@@ -13,6 +13,9 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 #os.environ["LOGIN_PASS"] = st.secrets["LOGIN_PASS"]
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 
+PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
+ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
+
 st.title("Medical Interview Simulation")
 
 if "stage" not in st.session_state:
@@ -118,8 +121,10 @@ if st.session_state["stage"] == 5:
              feedback from helpful people like you, we plan to add a screen where you can enter your diagonsis and get feedback on it.""")
     
     st.button("View Physical", on_click=set_stage, args=[6])
-    st.button("View ECG", on_click=set_stage, args=(7))
+    st.button("View ECG", on_click=set_stage, args=[7])
 
+    currentDateAndTime = date.datetime.now()
+    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
     st.session_state["interview"].save(bio)
     st.download_button("Download interview", 
@@ -135,7 +140,7 @@ if st.session_state["stage"] == 5:
 if st.session_state["stage"] == 6:
     st.header("Physical Examination Findings")
     st.write("Here is the full physical examination for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
-    physical_exam_doc = Document(PHYSICAL_EXAMINATION_LOCATION)
+    physical_exam_doc = Document(PHYSICAL_LOCATION)
     for parargraph in physical_exam_doc.paragraphs:
         st.write(parargraph.text)
     st.button("Back", on_click=set_stage, args=[5])

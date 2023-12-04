@@ -5,6 +5,7 @@ import time
 import datetime as date
 from docx import Document
 import docx as docx
+import os
 import io
 import streamlit as st
 
@@ -72,7 +73,8 @@ if st.session_state["stage"] == 2:
         with open(PROMPT, 'r', encoding='utf8') as prompt:
             prompt_input = prompt.read()
 
-    KEY = ""
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+    KEY = os.getenv("OPENAI_API_KEY")
     MODEL = "gpt-4"
     llm = ChatOpenAI(openai_api_key=KEY, model_name=MODEL, temperature=0.7)
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())

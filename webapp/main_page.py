@@ -8,9 +8,9 @@ import io
 import os
 import streamlit as st
 
-#os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-#os.environ["LOGIN_PASS"] = st.secrets["LOGIN_PASS"]
+os.environ["LOGIN_PASS"] = st.secrets["LOGIN_PASS"]
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 
 PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"

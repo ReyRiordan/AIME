@@ -1,5 +1,4 @@
 langchain
 datetime
 docx
-io
 streamlit

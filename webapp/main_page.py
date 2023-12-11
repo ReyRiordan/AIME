@@ -14,9 +14,15 @@ from sendgrid.helpers.mail import (
     FileType, Disposition, ContentId)
 
 # PAGE INFORMATION
-# @REY Please be a homie and index all the pages :sob: 
 
 LOGIN_PAGE = 0
+PATIENT_SELECTION = 1
+PATIENT_LOADING = 2
+CHAT_INTERFACE = 3
+CREATE_INTERVIEW_FILE = 4
+POST_INTERVIEW = 5
+PHYSICAL_SCREEN = 6
+ECG_SCREEN = 7
 
 # FILE LOCATIONS
 
@@ -90,7 +96,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
             st.rerun()
 
 
-if st.session_state["stage"] == 1:
+if st.session_state["stage"] == PATIENT_SELECTION:
     st.write("""This is the patient selection screen. Currently we only have one patient (case study) option, but we hope to expand this further
              in the future. For now, please just select "John Smith" as your patient and click the "Start Interview" button when you are 
              ready to begin.""")
@@ -104,7 +110,7 @@ if st.session_state["stage"] == 1:
     st.button("Start Interview", on_click=set_stage, args=[2])
 
 
-if st.session_state["stage"] == 2:
+if st.session_state["stage"] == PATIENT_LOADING:
     prompt_input = "default prompt"
     if st.session_state["patient"] == "John Smith":
         PROMPT = "./Prompt/Prompt_12-11.txt"
@@ -121,7 +127,7 @@ if st.session_state["stage"] == 2:
     set_stage(3)
 
 
-if st.session_state["stage"] == 3:
+if st.session_state["stage"] == CHAT_INTERFACE:
     st.write("""This is the chat interface where you can interview your virtual patient. You may type your message to your patient 
              in the text box at the bottom of your screen, and either press \"Enter\" or click the paper airplane button when your message 
              is ready to be sent. The virtual patient should then respond to your message. Please treat this as a real medical interview, 
@@ -144,7 +150,7 @@ if st.session_state["stage"] == 3:
     st.button("End Interview", on_click=set_stage, args=[4])
 
 
-if st.session_state["stage"] == 4:
+if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
     st.session_state["interview"] = Document()
     heading = st.session_state["interview"].add_paragraph("User: " + st.session_state["username"] + ", ")
     currentDateAndTime = date.datetime.now()
@@ -157,7 +163,7 @@ if st.session_state["stage"] == 4:
     
     set_stage(5)
 
-if st.session_state["stage"] == 5:
+if st.session_state["stage"] == POST_INTERVIEW:
     st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. If you would like, you may 
              view a physical examination and ECG corresponding for the patient in order to get a clearer potential differential diagnosis 
              in your mind. You may also click the \"Download Interview\" button to save a copy for yourself as a docx file. After receiving 
@@ -187,7 +193,7 @@ if st.session_state["stage"] == 5:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-if st.session_state["stage"] == 6:
+if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
     st.write("Here is the full physical examination for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
     physical_exam_doc = Document(PHYSICAL_LOCATION)
@@ -196,7 +202,7 @@ if st.session_state["stage"] == 6:
     st.button("Back", on_click=set_stage, args=[5])
     
 
-if st.session_state["stage"] == 7:
+if st.session_state["stage"] == ECG_SCREEN:
     st.header("ECG Chart")
     st.write("Here is the ECG for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
     st.image(ECG_LOCATION)

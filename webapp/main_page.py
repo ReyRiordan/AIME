@@ -143,13 +143,13 @@ if st.session_state["stage"] == 5:
     to_emails= EMAILS_TO_SEND,
     subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
     html_content='<p>New conversation</p>')
-    attachment = Attachment()
-    attachment.file_content=FileContent(bio.getvalue())
-    attachment.file_type = FileType('docx')
-    attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
-    attachment.disposition = Disposition('attachment')
-    attachment.content_id = ContentId('Some Content ID')
-    message.attachment = attachment
+    # attachment = Attachment()
+    # attachment.file_content=FileContent(bio.getvalue())
+    # attachment.file_type = FileType('docx')
+    # attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
+    # attachment.disposition = Disposition('attachment')
+    # attachment.content_id = ContentId('Some Content ID')
+    # message.attachment = attachment
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)

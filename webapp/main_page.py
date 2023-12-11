@@ -63,8 +63,7 @@ def send_email(bio):
         message.attachment = attachment
         try:
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-            if(HAS_SENT_EMAIL):
-                response = sg.send(message)
+            response = sg.send(message)
             print(response.status_code)
             print(response.body)
             print(response.headers)

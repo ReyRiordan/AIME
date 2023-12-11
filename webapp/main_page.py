@@ -10,10 +10,9 @@ import streamlit as st
 
 
 # PAGE INFORMATION
+# @REY Please be a homie and index all the pages :sob: 
 
 LOGIN_PAGE = 0
-INTRODUCTORY_INFO_PAGE = 5
-PHYSICAL_EXAMINATION = 6
 
 # FILE LOCATIONS
 
@@ -29,13 +28,13 @@ LOGIN_PASS = os.getenv("LOGIN_PASS")
 st.title("Medical Interview Simulation")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = 0
+    st.session_state["stage"] = LOGIN_PAGE
 
 def set_stage(stage):
     st.session_state["stage"] = stage
 
 
-if st.session_state["stage"] == 0:
+if st.session_state["stage"] == LOGIN_PAGE:
     st.write("""Welcome! Thank you for agreeing to try out this virtual patient interview platform. Once you log in and get started, 
              there will be a chat interface where you can interview a virtual patient AI acting as a patient in a specific case study. 
              The goal is to interview the patient as if it was a real patient in order to work towards a diagnosis. The AI's 

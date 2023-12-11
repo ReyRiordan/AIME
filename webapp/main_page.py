@@ -7,6 +7,7 @@ from docx import Document
 import io
 import os
 import streamlit as st
+import base64
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
@@ -147,11 +148,12 @@ if st.session_state["stage"] == 5:
             subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
             html_content='<p>New conversation</p>')
         attachment = Attachment()
-        attachment.file_content=FileContent(bio.getvalue())
+        encoded = base64.b64encode(bio.getvalue().decode())
+        attachment.file_content=FileContent(encoded)
         attachment.file_type = FileType('docx')
         attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
         attachment.disposition = Disposition('attachment')
-        attachment.content_id = ContentId('Some Content ID')
+        attachment.content_id = ContentId('docx')
         message.attachment = attachment
         try:
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))

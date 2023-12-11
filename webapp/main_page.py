@@ -187,6 +187,7 @@ if st.session_state["stage"] == 6:
     for parargraph in physical_exam_doc.paragraphs:
         st.write(parargraph.text)
     st.button("Back", on_click=set_stage, args=[5])
+    HAS_SENT_EMAIL = True
     
 
 if st.session_state["stage"] == 7:
@@ -194,3 +195,5 @@ if st.session_state["stage"] == 7:
     st.write("Here is the ECG for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
     st.image(ECG_LOCATION)
     st.button("Back", on_click=set_stage, args=[5])
+    HAS_SENT_EMAIL = True
+    

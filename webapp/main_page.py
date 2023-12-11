@@ -139,7 +139,8 @@ if st.session_state["stage"] == 5:
     # Setting up file for attachment sending
     bio = io.BytesIO()
     st.session_state["interview"].save(bio)
-
+    if HAS_SENT_EMAIL:
+        st.write("Email already successfully sent")
     if HAS_SENT_EMAIL==False:
         HAS_SENT_EMAIL=True
         message = Mail(

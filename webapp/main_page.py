@@ -148,7 +148,7 @@ if st.session_state["stage"] == 5:
             subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
             html_content='<p>New conversation</p>')
         attachment = Attachment()
-        encoded = base64.b64encode(bio.getvalue().decode())
+        encoded = base64.b64encode(bio.getvalue()).decode()
         attachment.file_content=FileContent(encoded)
         attachment.file_type = FileType('docx')
         attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")

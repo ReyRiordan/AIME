@@ -47,7 +47,6 @@ def set_stage(stage):
 def send_email(bio):
     global HAS_SENT_EMAIL
     if HAS_SENT_EMAIL==False:
-        global HAS_SENT_EMAIL
         HAS_SENT_EMAIL=True
         message = Mail(
             from_email='rutgers.aime@gmail.com',

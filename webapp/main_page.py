@@ -149,6 +149,7 @@ if st.session_state["stage"] == 5:
     attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
     attachment.disposition = Disposition('attachment')
     attachment.content_id = ContentId('Some Content ID')
+    message.attachment = attachment
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)

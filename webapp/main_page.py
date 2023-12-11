@@ -8,13 +8,23 @@ import io
 import os
 import streamlit as st
 
+
+# PAGE INFORMATION
+
+LOGIN_PAGE = 0
+INTRODUCTORY_INFO_PAGE = 5
+PHYSICAL_EXAMINATION = 6
+
+# FILE LOCATIONS
+
+PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
+ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
+
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 os.environ["LOGIN_PASS"] = st.secrets["LOGIN_PASS"]
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 
-PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
-ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
 
 st.title("Medical Interview Simulation")
 

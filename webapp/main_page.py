@@ -7,7 +7,8 @@ from docx import Document
 import io
 import os
 import streamlit as st
-
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 # PAGE INFORMATION
 # @REY Please be a homie and index all the pages :sob: 
@@ -124,7 +125,19 @@ if st.session_state["stage"] == 5:
     
     st.button("View Physical", on_click=set_stage, args=[6])
     st.button("View ECG", on_click=set_stage, args=[7])
-
+    message = Mail(
+    from_email='rutgers.aime@gmail.com',
+    to_emails='ahmedali6395@gmail.com',
+    subject='Sending with Twilio SendGrid is Fun',
+    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()

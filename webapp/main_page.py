@@ -27,6 +27,7 @@ INTRODUCTORY_MESSAGE_LOCATION = "./Global_Resources/Website_introduction.docx"
 # EMAIL API
 
 EMAILS_TO_SEND = [('ahmedali6395@gmail.com', 'Ali Ahmed'), ('aa2535@scarletmail.rutgers.edu', 'Ali Ahmed')]
+HAS_SENT_EMAIL = False
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -83,7 +84,7 @@ if st.session_state["stage"] == 2:
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
     initial_output = st.session_state["conversation"].predict(input=prompt_input)
 
-    st.session_state["messages"].append({"role": "assistant", "content": "You may now begin your interview with " + st.session_state["patient"] + "."})
+    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + st.session_state["patient"] + "."})
     
     set_stage(3)
 
@@ -136,34 +137,34 @@ if st.session_state["stage"] == 5:
 
     # Setting up file for attachment sending
     bio = io.BytesIO()
-   
+    st.session_state["interview"].save(bio)
 
-    message = Mail(
-    from_email='rutgers.aime@gmail.com',
-    to_emails= EMAILS_TO_SEND,
-    subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
-    html_content='<p>New conversation</p>')
-    # attachment = Attachment()
-    # attachment.file_content=FileContent(bio.getvalue())
-    # attachment.file_type = FileType('docx')
-    # attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
-    # attachment.disposition = Disposition('attachment')
-    # attachment.content_id = ContentId('Some Content ID')
-    # message.attachment = attachment
-    try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-        response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
-    except: 
-        print("ERROR ENCOUNTERED SENDING MESSAGE\n")
-    
+    if HAS_SENT_EMAIL==False:
+        HAS_SENT_EMAIL=True
+        message = Mail(
+            from_email='rutgers.aime@gmail.com',
+            to_emails= EMAILS_TO_SEND,
+            subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
+            html_content='<p>New conversation</p>')
+        attachment = Attachment()
+        attachment.file_content=FileContent(bio.getvalue())
+        attachment.file_type = FileType('docx')
+        attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
+        attachment.disposition = Disposition('attachment')
+        attachment.content_id = ContentId('Some Content ID')
+        message.attachment = attachment
+        try:
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except: 
+            print("ERROR ENCOUNTERED SENDING MESSAGE\n")
 
     st.button("View Physical", on_click=set_stage, args=[6])
     st.button("View ECG", on_click=set_stage, args=[7])
     # Download button
-    st.session_state["interview"].save(bio)
     st.download_button("Download interview", 
                         data=bio.getvalue(),
                         file_name=st.session_state["username"]+"_"+date_time+".docx",

@@ -1,13 +1,8 @@
-from langchain.chat_models import ChatOpenAI
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
-import time
-import datetime as date
-from docx import Document 
-import io
-import streamlit as st
-import base64
+INFO = "./Prompt/JackieSmith_12-11.txt"
+BASE = "./Prompt/Base_12-11.txt"
 
-INTRODUCTORY_MESSAGE_LOCATION = '../Prompt/Website_introduction.docx'
-introductory_msg = Document(INTRODUCTORY_MESSAGE_LOCATION)
-print(introductory_msg.paragraphs[1].text)
+with open(BASE, 'r', encoding='utf8') as base:
+    base_prompt = base.read()
+with open(INFO, 'r', encoding='utf8') as info:
+    patient_info = info.read()
+print(str(base_prompt + patient_info))

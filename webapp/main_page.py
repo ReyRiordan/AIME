@@ -29,6 +29,12 @@ ECG_SCREEN = 7
 PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
 ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
 
+BASE_PROMPT = "./Prompt/Base_12-11.txt"
+prompts = {
+    "John Smith" : "./Prompt/JohnSmith_12-11.txt",
+    "Jackie Smith" : "./Prompt/JackieSmith_12-11.txt"
+}
+
 # EMAIL API
 
 EMAILS_TO_SEND = [('rutgers.aime@gmail.com')]
@@ -97,8 +103,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
 
 if st.session_state["stage"] == PATIENT_SELECTION:
-    st.write("""This is the patient selection screen. Currently we only have one patient (case study) option, but we hope to expand this further
-             in the future. For now, please just select "John Smith" as your patient and click the "Start Interview" button when you are 
+    st.write("""This is the patient selection screen. Please select a patient of your choice and click the "Start Interview" button when you are 
              ready to begin.""")
     
     st.session_state["messages"] = []
@@ -111,11 +116,12 @@ if st.session_state["stage"] == PATIENT_SELECTION:
 
 
 if st.session_state["stage"] == PATIENT_LOADING:
-    prompt_input = "default prompt"
-    if st.session_state["patient"] == "John Smith":
-        PROMPT = "./Prompt/Prompt_12-11.txt"
-        with open(PROMPT, 'r', encoding='utf8') as prompt:
-            prompt_input = prompt.read()
+    with open(BASE_PROMPT, 'r', encoding='utf8') as base:
+        base_prompt = base.read()
+    INFO = prompts[st.session_state["patient"]]
+    with open(INFO, 'r', encoding='utf8') as info:
+        patient_info = info.read()
+    prompt_input = str(base_prompt + patient_info)
 
     MODEL = "gpt-4"
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=MODEL, temperature=0.0)

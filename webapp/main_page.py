@@ -92,7 +92,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
         if password == LOGIN_PASS: 
             st.write("Authentication successful!")
             time.sleep(2)
-            set_stage(1)
+            set_stage(PATIENT_SELECTION)
             st.rerun()
 
 
@@ -107,7 +107,7 @@ if st.session_state["stage"] == PATIENT_SELECTION:
                                                index = None,
                                                placeholder = "Select patient...")
 
-    st.button("Start Interview", on_click=set_stage, args=[2])
+    st.button("Start Interview", on_click=set_stage, args=[PATIENT_LOADING])
 
 
 if st.session_state["stage"] == PATIENT_LOADING:
@@ -124,7 +124,7 @@ if st.session_state["stage"] == PATIENT_LOADING:
 
     st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + st.session_state["patient"] + "."})
     
-    set_stage(3)
+    set_stage(CHAT_INTERFACE)
 
 
 if st.session_state["stage"] == CHAT_INTERFACE:
@@ -147,7 +147,7 @@ if st.session_state["stage"] == CHAT_INTERFACE:
             st.markdown(output)
             st.session_state["messages"].append({"role": st.session_state["patient"], "content": output})
 
-    st.button("End Interview", on_click=set_stage, args=[4])
+    st.button("End Interview", on_click=set_stage, args=[CREATE_INTERVIEW_FILE])
 
 
 if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
@@ -161,7 +161,7 @@ if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
         st.session_state["interview"].add_paragraph(message["role"] + ": " + message["content"])
     st.session_state["interview"].save("./Conversations/" + st.session_state["username"]+"_"+date_time+".docx")
     
-    set_stage(5)
+    set_stage(POST_INTERVIEW)
 
 if st.session_state["stage"] == POST_INTERVIEW:
     st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. If you would like, you may 
@@ -179,15 +179,15 @@ if st.session_state["stage"] == POST_INTERVIEW:
     send_email(bio)
     if HAS_SENT_EMAIL:
         st.write("Data successfully sent")
-    st.button("View Physical", on_click=set_stage, args=[6])
-    st.button("View ECG", on_click=set_stage, args=[7])
+    st.button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
+    st.button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
     # Download button
     st.download_button("Download interview", 
                         data=bio.getvalue(),
                         file_name=st.session_state["username"]+"_"+date_time+".docx",
                         mime="docx")
     
-    st.button("New interview", on_click=set_stage, args=[1])
+    st.button("New interview", on_click=set_stage, args=[PATIENT_SELECTION])
     
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
@@ -199,13 +199,13 @@ if st.session_state["stage"] == PHYSICAL_SCREEN:
     physical_exam_doc = Document(PHYSICAL_LOCATION)
     for parargraph in physical_exam_doc.paragraphs:
         st.write(parargraph.text)
-    st.button("Back", on_click=set_stage, args=[5])
+    st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
     
 
 if st.session_state["stage"] == ECG_SCREEN:
     st.header("ECG Chart")
     st.write("Here is the ECG for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
     st.image(ECG_LOCATION)
-    st.button("Back", on_click=set_stage, args=[5])
+    st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
 

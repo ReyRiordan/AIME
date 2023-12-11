@@ -47,6 +47,7 @@ def set_stage(stage):
 def send_email(bio):
     global HAS_SENT_EMAIL
     if HAS_SENT_EMAIL==False:
+        global HAS_SENT_EMAIL
         HAS_SENT_EMAIL=True
         message = Mail(
             from_email='rutgers.aime@gmail.com',
@@ -63,7 +64,8 @@ def send_email(bio):
         message.attachment = attachment
         try:
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-            response = sg.send(message)
+            if(HAS_SENT_EMAIL):
+                response = sg.send(message)
             print(response.status_code)
             print(response.body)
             print(response.headers)

@@ -130,27 +130,25 @@ if st.session_state["stage"] == 5:
              in your mind. You may also click the \"Download Interview\" button to save a copy for yourself as a docx file. After receiving 
              feedback from helpful people like you, we plan to add a screen where you can enter your diagonsis and get feedback on it.""")
     
-    st.button("View Physical", on_click=set_stage, args=[6])
-    st.button("View ECG", on_click=set_stage, args=[7])
-
-    # Getting current date and time for bookkeeping purposes
+     # Getting current date and time for bookkeeping purposes
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
 
     # Setting up file for attachment sending
     bio = io.BytesIO()
-    attachment = Attachment()
-    attachment.file_content=FileContent(bio.getvalue())
-    attachment.file_type = FileType('docx')
-    attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
-    attachment.disposition = Disposition('attachment')
-    attachment.content_id = ContentId('Some Content ID')
+   
 
     message = Mail(
     from_email='rutgers.aime@gmail.com',
     to_emails= EMAILS_TO_SEND,
     subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
-    )
+    html_content='<p>New conversation</p>')
+    # attachment = Attachment()
+    # attachment.file_content=FileContent(bio.getvalue())
+    # attachment.file_type = FileType('docx')
+    # attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
+    # attachment.disposition = Disposition('attachment')
+    # attachment.content_id = ContentId('Some Content ID')
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
@@ -159,7 +157,10 @@ if st.session_state["stage"] == 5:
         print(response.headers)
     except: 
         print("ERROR ENCOUNTERED SENDING MESSAGE\n")
+    
 
+    st.button("View Physical", on_click=set_stage, args=[6])
+    st.button("View ECG", on_click=set_stage, args=[7])
     # Download button
     st.session_state["interview"].save(bio)
     st.download_button("Download interview", 

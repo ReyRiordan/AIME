@@ -22,8 +22,6 @@ LOGIN_PAGE = 0
 
 PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
 ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
-INTRODUCTORY_MESSAGE_LOCATION = "./Global_Resources/Website_introduction.docx"
-
 
 # EMAIL API
 
@@ -71,9 +69,17 @@ def send_email(bio):
             print("ERROR ENCOUNTERED SENDING MESSAGE\n")
 
 if st.session_state["stage"] == LOGIN_PAGE:
-    introductory_msg = Document(INTRODUCTORY_MESSAGE_LOCATION)
-    for parargraph in introductory_msg.paragraphs:
-        st.write(parargraph.text)  
+    st.write("""Welcome! Thank you for agreeing to try out this virtual patient interview platform. Once you log in and get started, 
+             there will be a chat interface where you can interview a virtual patient AI acting as a patient in a specific case study. 
+             The goal is to interview the patient as if it was a real patient in order to work towards a diagnosis. The AI's 
+             conversational responses to your questions may include expressions of worry and we hope that you respond as if it was a real patient.""")
+    st.write("""We are working on developing a feedback rubric that will evaluate the virtual patient interaction with regard to clinical reasoning
+             (e.g. general data gathering, evidence of hypothesis-driven questions, and data interpretation) as well as empathy and clarity. 
+             Once you have completed the interview, we would apprciate any feedback regarding the nature of the responses themselves 
+             (any responses that went off the rails) and their appropriateness to the questions that you asked. We would also appreciate 
+             any feedback on how the interaction may be improved or made more realistic (responses seem too rote, a normal patient wouldn't 
+             use these words, etc). Thank you in advance; please follow the instructions below to log in and get started!""")
+    
     st.session_state["username"] = st.text_input("Enter any username (does not have to be your real name) and press \"Enter\":")
     if st.session_state["username"]:
         password = st.text_input("Enter the password you were provided and press \"Enter\":")
@@ -101,7 +107,7 @@ if st.session_state["stage"] == 1:
 if st.session_state["stage"] == 2:
     prompt_input = "default prompt"
     if st.session_state["patient"] == "John Smith":
-        PROMPT = "./Prompt/Prompt_11-7.txt"
+        PROMPT = "./Prompt/Prompt_12-11.txt"
         with open(PROMPT, 'r', encoding='utf8') as prompt:
             prompt_input = prompt.read()
 

@@ -27,7 +27,7 @@ INTRODUCTORY_MESSAGE_LOCATION = "./Global_Resources/Website_introduction.docx"
 
 # EMAIL API
 
-EMAILS_TO_SEND = [('ahmedali6395@gmail.com', 'Ali Ahmed'), ('aa2535@scarletmail.rutgers.edu', 'Ali Ahmed')]
+EMAILS_TO_SEND = [('rutgers.aime@gmail.com')]
 HAS_SENT_EMAIL = False
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]

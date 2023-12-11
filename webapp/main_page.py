@@ -14,7 +14,6 @@ from sendgrid.helpers.mail import (
     FileType, Disposition, ContentId)
 
 # PAGE INFORMATION
-
 LOGIN_PAGE = 0
 PATIENT_SELECTION = 1
 PATIENT_LOADING = 2
@@ -25,7 +24,6 @@ PHYSICAL_SCREEN = 6
 ECG_SCREEN = 7
 
 # FILE LOCATIONS
-
 PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
 ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
 
@@ -36,7 +34,6 @@ prompts = {
 }
 
 # EMAIL API
-
 EMAILS_TO_SEND = [('rutgers.aime@gmail.com')]
 HAS_SENT_EMAIL = False
 
@@ -108,7 +105,7 @@ if st.session_state["stage"] == PATIENT_SELECTION:
     
     st.session_state["messages"] = []
     st.session_state["patient"] = st.selectbox("Which patient would you like to interview?", 
-                                               ["John Smith"],
+                                               ["John Smith", "Jackie Smith"],
                                                index = None,
                                                placeholder = "Select patient...")
 
@@ -175,7 +172,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
              in your mind. You may also click the \"Download Interview\" button to save a copy for yourself as a docx file. After receiving 
              feedback from helpful people like you, we plan to add a screen where you can enter your diagonsis and get feedback on it.""")
     
-     # Getting current date and time for bookkeeping purposes
+    # Getting current date and time for bookkeeping purposes
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
 

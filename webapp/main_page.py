@@ -18,6 +18,7 @@ LOGIN_PAGE = 0
 
 PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
 ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
+INTRODUCTORY_MESSAGE_LOCATION = "./Global_Resources/file.docx"
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -35,6 +36,9 @@ def set_stage(stage):
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
+    introductory_msg = Document(INTRODUCTORY_MESSAGE_LOCATION)
+    for parargraph in introductory_msg.paragraphs:
+        st.write(parargraph.text)
     st.write("""Welcome! Thank you for agreeing to try out this virtual patient interview platform. Once you log in and get started, 
              there will be a chat interface where you can interview a virtual patient AI acting as a patient in a specific case study. 
              The goal is to interview the patient as if it was a real patient in order to work towards a diagnosis. The AI's 

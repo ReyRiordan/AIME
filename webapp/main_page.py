@@ -44,6 +44,31 @@ if "stage" not in st.session_state:
 def set_stage(stage):
     st.session_state["stage"] = stage
 
+def send_email(bio):
+    global HAS_SENT_EMAIL
+    if HAS_SENT_EMAIL==False:
+        HAS_SENT_EMAIL=True
+        message = Mail(
+            from_email='rutgers.aime@gmail.com',
+            to_emails= EMAILS_TO_SEND,
+            subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
+            html_content='<p>New conversation</p>')
+        attachment = Attachment()
+        encoded = base64.b64encode(bio.getvalue()).decode()
+        attachment.file_content=FileContent(encoded)
+        attachment.file_type = FileType('docx')
+        attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
+        attachment.disposition = Disposition('attachment')
+        attachment.content_id = ContentId('docx')
+        message.attachment = attachment
+        try:
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except: 
+            print("ERROR ENCOUNTERED SENDING MESSAGE\n")
 
 if st.session_state["stage"] == LOGIN_PAGE:
     introductory_msg = Document(INTRODUCTORY_MESSAGE_LOCATION)
@@ -139,33 +164,9 @@ if st.session_state["stage"] == 5:
     # Setting up file for attachment sending
     bio = io.BytesIO()
     st.session_state["interview"].save(bio)
+    send_email(bio)
     if HAS_SENT_EMAIL:
-        st.write("Email already successfully sent")
-    if HAS_SENT_EMAIL==False:
-        HAS_SENT_EMAIL=True
-        message = Mail(
-            from_email='rutgers.aime@gmail.com',
-            to_emails= EMAILS_TO_SEND,
-            subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
-            html_content='<p>New conversation</p>')
-        attachment = Attachment()
-        encoded = base64.b64encode(bio.getvalue()).decode()
-        attachment.file_content=FileContent(encoded)
-        attachment.file_type = FileType('docx')
-        attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
-        attachment.disposition = Disposition('attachment')
-        attachment.content_id = ContentId('docx')
-        message.attachment = attachment
-        try:
-            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-            response = sg.send(message)
-            print(response.status_code)
-            print(response.body)
-            print(response.headers)
-        except: 
-            print("ERROR ENCOUNTERED SENDING MESSAGE\n")
-    if HAS_SENT_EMAIL:
-        st.write("Email successfully sent")
+        st.write("Data successfully sent")
     st.button("View Physical", on_click=set_stage, args=[6])
     st.button("View ECG", on_click=set_stage, args=[7])
     # Download button
@@ -187,7 +188,6 @@ if st.session_state["stage"] == 6:
     for parargraph in physical_exam_doc.paragraphs:
         st.write(parargraph.text)
     st.button("Back", on_click=set_stage, args=[5])
-    HAS_SENT_EMAIL = True
     
 
 if st.session_state["stage"] == 7:
@@ -195,5 +195,5 @@ if st.session_state["stage"] == 7:
     st.write("Here is the ECG for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
     st.image(ECG_LOCATION)
     st.button("Back", on_click=set_stage, args=[5])
-    HAS_SENT_EMAIL = True
-    
+
+

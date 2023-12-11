@@ -8,7 +8,9 @@ import io
 import os
 import streamlit as st
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid.helpers.mail import (
+    Mail, Attachment, FileContent, FileName,
+    FileType, Disposition, ContentId)
 
 # PAGE INFORMATION
 # @REY Please be a homie and index all the pages :sob: 
@@ -20,6 +22,11 @@ LOGIN_PAGE = 0
 PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
 ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
 INTRODUCTORY_MESSAGE_LOCATION = "./Global_Resources/Website_introduction.docx"
+
+
+# EMAIL API
+
+EMAILS_TO_SEND = [('ahmedali6395@gmail.com', 'Ali Ahmed'), ('aa2535@scarletmail.rutgers.edu', 'Ali Ahmed')]
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -125,11 +132,25 @@ if st.session_state["stage"] == 5:
     
     st.button("View Physical", on_click=set_stage, args=[6])
     st.button("View ECG", on_click=set_stage, args=[7])
+
+    # Getting current date and time for bookkeeping purposes
+    currentDateAndTime = date.datetime.now()
+    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+
+    # Setting up file for attachment sending
+    bio = io.BytesIO()
+    attachment = Attachment()
+    attachment.file_content=FileContent(bio.getvalue())
+    attachment.file_type = FileType('docx')
+    attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
+    attachment.disposition = Disposition('attachment')
+    attachment.content_id = ContentId('Some Content ID')
+
     message = Mail(
     from_email='rutgers.aime@gmail.com',
-    to_emails='ahmedali6395@gmail.com',
-    subject='Sending with Twilio SendGrid is Fun',
-    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+    to_emails= EMAILS_TO_SEND,
+    subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
+    )
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
@@ -137,17 +158,18 @@ if st.session_state["stage"] == 5:
         print(response.body)
         print(response.headers)
     except Exception as e:
-        print(e.message)
-    currentDateAndTime = date.datetime.now()
-    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
-    bio = io.BytesIO()
+        print(e.message)  
+
+
+    # Download button
     st.session_state["interview"].save(bio)
     st.download_button("Download interview", 
                         data=bio.getvalue(),
                         file_name=st.session_state["username"]+"_"+date_time+".docx",
                         mime="docx")
+    
     st.button("New interview", on_click=set_stage, args=[1])
-
+    
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])

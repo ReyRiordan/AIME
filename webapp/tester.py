@@ -6,7 +6,7 @@ import datetime as date
 from docx import Document 
 import io
 import streamlit as st
-
+import base64
 
 INTRODUCTORY_MESSAGE_LOCATION = '../Prompt/Website_introduction.docx'
 introductory_msg = Document(INTRODUCTORY_MESSAGE_LOCATION)

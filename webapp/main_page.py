@@ -157,9 +157,8 @@ if st.session_state["stage"] == 5:
         print(response.status_code)
         print(response.body)
         print(response.headers)
-    except Exception as e:
-        print(e.message)  
-
+    except: 
+        print("ERROR ENCOUNTERED SENDING MESSAGE\n")
 
     # Download button
     st.session_state["interview"].save(bio)

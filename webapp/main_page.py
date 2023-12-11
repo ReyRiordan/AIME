@@ -163,7 +163,8 @@ if st.session_state["stage"] == 5:
             print(response.headers)
         except: 
             print("ERROR ENCOUNTERED SENDING MESSAGE\n")
-    st.write("Value of HAS_SENT_EMAIL: "+HAS_SENT_EMAIL) 
+    if HAS_SENT_EMAIL:
+        st.write("Email successfully sent")
     st.button("View Physical", on_click=set_stage, args=[6])
     st.button("View ECG", on_click=set_stage, args=[7])
     # Download button

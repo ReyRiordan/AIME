@@ -176,7 +176,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
     
     st.write("""Thank you for completing your interview! At this stage, you may view a physical
             examination and ECG corresponding for the patient in order to get a clearer potential differential
-            diagnosis in your mind. Once you have a potential diagnosis in mind, click \"Provide Your Diagnosis\" 
+            diagnosis in your mind. Once you have a potential diagnosis in mind, click \"Provide Your Feedback\" 
             to proceed further. """)
     
 
@@ -208,6 +208,7 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
                                         After you are done, please click the \"Send Feedback\" button and a copy of your feedback and interview will automatically be emailed to us.
                                         Thank you again!""")
     st.session_state["feedback_string"] = "<p> "+st.session_state["feedback_string"]+" </p>"
+    st.session_state["feedback_string"] = "<h1>User: "+st.session_state["username"]+ "</h1> <p> Feedback: </p>" + st.session_state["feedback_string"]
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 if st.session_state["stage"] == FINAL_SCREEN: 

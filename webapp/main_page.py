@@ -35,7 +35,6 @@ prompts = {
 
 # EMAIL API
 EMAILS_TO_SEND = [('rutgers.aime@gmail.com')]
-HAS_SENT_EMAIL = False
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -52,9 +51,8 @@ def set_stage(stage):
     st.session_state["stage"] = stage
 
 def send_email(bio):
-    global HAS_SENT_EMAIL
-    if HAS_SENT_EMAIL==False:
-        HAS_SENT_EMAIL=True
+    if st.session_state["has_sent_email"]==False:
+        st.session_state["has_sent_email"]=True
         message = Mail(
             from_email='rutgers.aime@gmail.com',
             to_emails= EMAILS_TO_SEND,
@@ -163,7 +161,7 @@ if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
     for message in st.session_state["messages"]:
         st.session_state["interview"].add_paragraph(message["role"] + ": " + message["content"])
     st.session_state["interview"].save("./Conversations/" + st.session_state["username"]+"_"+date_time+".docx")
-    
+    st.session_state["has_sent_email"]=False
     set_stage(POST_INTERVIEW)
 
 if st.session_state["stage"] == POST_INTERVIEW:
@@ -180,8 +178,6 @@ if st.session_state["stage"] == POST_INTERVIEW:
     bio = io.BytesIO()
     st.session_state["interview"].save(bio)
     send_email(bio)
-    if HAS_SENT_EMAIL:
-        st.write("Data successfully sent")
     st.button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     st.button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
     # Download button

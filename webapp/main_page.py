@@ -218,7 +218,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
              evaluation engine. Thank you once again for your time, and we look forward to having you again.""")
 
 
-    # Getting current date and time for bookkeeping purposes
+    # Getting current date and time for bookkeeping purposess 
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
 

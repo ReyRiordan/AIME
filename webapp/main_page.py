@@ -182,7 +182,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
 
     st.button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     st.button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
-    st.button("Provide Your Diagnosis", on_click=set_stage, args=[FEEDBACK_SCREEN])
+    st.button("Provide Your Feedback", on_click=set_stage, args=[FEEDBACK_SCREEN])
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
@@ -208,7 +208,7 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
                                         After you are done, please click the \"Send Feedback\" button and a copy of your feedback and interview will automatically be emailed to us.
                                         Thank you again!""")
     st.session_state["feedback_string"] = "<p> "+st.session_state["feedback_string"]+" </p>"
-    st.session_state["feedback_string"] = "<h1>User: "+st.session_state["username"]+ "</h1> <p> Feedback: </p>" + st.session_state["feedback_string"]
+    st.session_state["feedback_string"] = "<h2>User: "+st.session_state["username"]+ "</h2> <p> Feedback: </p>" + st.session_state["feedback_string"]
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 if st.session_state["stage"] == FINAL_SCREEN: 

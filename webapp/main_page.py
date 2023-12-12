@@ -193,7 +193,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
                         mime="docx")
     
     st.button("New interview", on_click=set_stage, args=[PATIENT_SELECTION])
-    components.html("""<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSewi5bVnqeLUI0hfXykD3JxVsiHUkQzQKlJon3YtLptCevY3A/viewform?embedded=true" width="640" height="2000" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>""",scrolling=True, height=2000)
+    components.html("""<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSewi5bVnqeLUI0hfXykD3JxVsiHUkQzQKlJon3YtLptCevY3A/viewform?embedded=true" width="640" height="462" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>""",scrolling=True)
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])

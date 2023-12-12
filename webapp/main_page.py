@@ -60,7 +60,7 @@ def send_email(bio):
             from_email='rutgers.aime@gmail.com',
             to_emails= EMAILS_TO_SEND,
             subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
-            html_content='<p>New conversation</p>')
+            html_content=st.session_state["feedback_string"])
         attachment = Attachment()
         encoded = base64.b64encode(bio.getvalue()).decode()
         attachment.file_content=FileContent(encoded)
@@ -200,10 +200,14 @@ if st.session_state["stage"] == ECG_SCREEN:
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
 if st.session_state["stage"]==FEEDBACK_SCREEN:
-    st.write("Please fill out the following form to continue. After you've completed your form, you can click \"Go to End Screen\"")
-    components.html("""<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSewi5bVnqeLUI0hfXykD3JxVsiHUkQzQKlJon3YtLptCevY3A/viewform?embedded=true"
-                     width="640" height="1978" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>""", scrolling=True, height=1978)
-    time.sleep(60)
+    st.session_state["feedback_string"] = st.text_input(""" Once you are ready, please take the time to give us some feedback in the text box provided.
+                                        What's your diagnosis of the patient?
+                                        Were there any responses that the AI gave that you felt were unrealistic or problematic (specific examples)?
+                                        Are there any fixes, improvements, or additional features you have in mind before you would consider this to
+                                        be a good practice tool for students? 
+                                        After you are done, please click the \"Send Feedback\" button and a copy of your feedback and interview will automatically be emailed to us.
+                                        Thank you again!""")
+    st.session_state["feedback_string"] = "<p> "+st.session_state["feedback_string"]+" </p>"
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 if st.session_state["stage"] == FINAL_SCREEN: 

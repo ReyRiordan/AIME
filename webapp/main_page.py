@@ -174,20 +174,15 @@ if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
 
 if st.session_state["stage"] == POST_INTERVIEW:
     
-    st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. If you would like, you may 
-             view a physical examination and ECG corresponding for the patient in order to get a clearer potential differential diagnosis 
-             in your mind.""")
-    
-    # st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. If you would like, you may 
-    #          view a physical examination and ECG corresponding for the patient in order to get a clearer potential differential diagnosis 
-    #          in your mind. You may also click the \"Download Interview\" button to save a copy for yourself as a docx file. After receiving 
-    #          feedback from helpful people like you, we plan to add a screen where you can enter your diagonsis and get feedback on it.""")
-    
+    st.write("""Thank you for completing your interview! At this stage, you may view a physical
+            examination and ECG corresponding for the patient in order to get a clearer potential differential
+            diagnosis in your mind. Once you have a potential diagnosis in mind, click \"Provide Your Diagnosis\" 
+            to proceed further. """)
     
 
     st.button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     st.button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
-    st.button("Go to End Screen", on_click=set_stage, args=[FEEDBACK_SCREEN])
+    st.button("Provide Your Diagnosis", on_click=set_stage, args=[FEEDBACK_SCREEN])
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
@@ -205,10 +200,10 @@ if st.session_state["stage"] == ECG_SCREEN:
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
 if st.session_state["stage"]==FEEDBACK_SCREEN:
-    st.write("Please fill out the following feedback form to continue. ")
+    st.write("Please fill out the following form to continue. After you've completed your form, you can click \"Go to End Screen\"")
     components.html("""<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSewi5bVnqeLUI0hfXykD3JxVsiHUkQzQKlJon3YtLptCevY3A/viewform?embedded=true"
                      width="640" height="1978" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>""", scrolling=True, height=1978)
-    time.sleep(20)
+    time.sleep(60)
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 if st.session_state["stage"] == FINAL_SCREEN: 

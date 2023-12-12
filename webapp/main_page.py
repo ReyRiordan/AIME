@@ -23,6 +23,8 @@ CREATE_INTERVIEW_FILE = 4
 POST_INTERVIEW = 5
 PHYSICAL_SCREEN = 6
 ECG_SCREEN = 7
+FEEDBACK_SCREEN = 8
+FINAL_SCREEN = 9
 
 # FILE LOCATIONS
 PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
@@ -171,32 +173,21 @@ if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
     set_stage(POST_INTERVIEW)
 
 if st.session_state["stage"] == POST_INTERVIEW:
+    
     st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. If you would like, you may 
              view a physical examination and ECG corresponding for the patient in order to get a clearer potential differential diagnosis 
-             in your mind. You may also click the \"Download Interview\" button to save a copy for yourself as a docx file. After receiving 
-             feedback from helpful people like you, we plan to add a screen where you can enter your diagonsis and get feedback on it.""")
+             in your mind.""")
     
-    # Getting current date and time for bookkeeping purposes
-    currentDateAndTime = date.datetime.now()
-    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    # st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. If you would like, you may 
+    #          view a physical examination and ECG corresponding for the patient in order to get a clearer potential differential diagnosis 
+    #          in your mind. You may also click the \"Download Interview\" button to save a copy for yourself as a docx file. After receiving 
+    #          feedback from helpful people like you, we plan to add a screen where you can enter your diagonsis and get feedback on it.""")
+    
+    
 
-    # Setting up file for attachment sending
-    bio = io.BytesIO()
-    st.session_state["interview"].save(bio)
-    send_email(bio)
     st.button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     st.button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
-    # Download button
-    st.download_button("Download interview", 
-                        data=bio.getvalue(),
-                        file_name=st.session_state["username"]+"_"+date_time+".docx",
-                        mime="docx")
-    
-    st.button("New interview", on_click=set_stage, args=[PATIENT_SELECTION])
-    components.html("""<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSewi5bVnqeLUI0hfXykD3JxVsiHUkQzQKlJon3YtLptCevY3A/viewform?embedded=true" width="640" height="462" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>""", scrolling=True, height=462)
-    for message in st.session_state["messages"]:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    st.button("Go to End Screen", on_click=set_stage, args=[FEEDBACK_SCREEN])
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
@@ -213,4 +204,37 @@ if st.session_state["stage"] == ECG_SCREEN:
     st.image(ECG_LOCATION)
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
+if st.session_state["stage"]==FEEDBACK_SCREEN:
+    st.write("Please fill out the following feedback form to continue. ")
+    components.html("""<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSewi5bVnqeLUI0hfXykD3JxVsiHUkQzQKlJon3YtLptCevY3A/viewform?embedded=true"
+                     width="640" height="1978" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>""", scrolling=True, height=1978)
+    time.sleep(20)
+    st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
+if st.session_state["stage"] == FINAL_SCREEN: 
+
+    st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. You may also click the \"Download Interview\" 
+             button to save a copy for yourself as a docx file. After receiving feedback from helpful people like you, we plan to add an automated diagnosis
+             evaluation engine. Thank you once again for your time, and we look forward to having you again.""")
+
+
+    # Getting current date and time for bookkeeping purposes
+    currentDateAndTime = date.datetime.now()
+    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+
+    # Setting up file for attachment sending
+    bio = io.BytesIO()
+    st.session_state["interview"].save(bio)
+    send_email(bio)
+    
+    # Download button
+    st.download_button("Download interview", 
+                        data=bio.getvalue(),
+                        file_name=st.session_state["username"]+"_"+date_time+".docx",
+                        mime="docx")
+    
+    st.button("New interview", on_click=set_stage, args=[PATIENT_SELECTION])
+    
+    for message in st.session_state["messages"]:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])

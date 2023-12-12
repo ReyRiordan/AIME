@@ -207,9 +207,9 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
                     be a good practice tool for students? 
                     After you are done, please click the \"Send Feedback\" button and a copy of your feedback and interview will automatically be emailed to us.
                     Thank you again!""")
-    st.session_state["feedback_string"] = st.text_area("")
-    
-    
+    st.session_state["feedback_string"] = st.text_area("Provide your feedback here")
+    st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
+    st.button("Send Feedback", on_click=set_stage, args=[FINAL_SCREEN])
     
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
@@ -218,9 +218,7 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
     st.session_state["feedback_string"] = "<p> "+st.session_state["feedback_string"]+" </p>"
     st.session_state["feedback_string"] = "<h2>User: "+st.session_state["username"]+ "</h2> <p> Feedback: </p>" + st.session_state["feedback_string"]
 
-    st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
-    st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
-
+    
 
 if st.session_state["stage"] == FINAL_SCREEN: 
 

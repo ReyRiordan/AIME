@@ -7,6 +7,7 @@ from docx import Document
 import io
 import os
 import streamlit as st
+import streamlit.components.v1 as components
 import base64
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
@@ -161,7 +162,12 @@ if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
     for message in st.session_state["messages"]:
         st.session_state["interview"].add_paragraph(message["role"] + ": " + message["content"])
     st.session_state["interview"].save("./Conversations/" + st.session_state["username"]+"_"+date_time+".docx")
+
+    #We haven't sent the interview file yet, so set to false
+    
     st.session_state["has_sent_email"]=False
+    
+    #Set stage to POST_INTERVIEW
     set_stage(POST_INTERVIEW)
 
 if st.session_state["stage"] == POST_INTERVIEW:
@@ -187,7 +193,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
                         mime="docx")
     
     st.button("New interview", on_click=set_stage, args=[PATIENT_SELECTION])
-    
+    components.html("""<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSewi5bVnqeLUI0hfXykD3JxVsiHUkQzQKlJon3YtLptCevY3A/viewform?embedded=true" width="640" height="462" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>""",scrolling=True)
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])

@@ -27,8 +27,10 @@ FEEDBACK_SCREEN = 8
 FINAL_SCREEN = 9
 
 # FILE LOCATIONS
-PHYSICAL_LOCATION = "./Patient_Info/Physical_JohnSmith.docx"
-ECG_LOCATION = "./Patient_Info/ECG_JohnSmith.png"
+PHYSICAL_LOCATION_JOHN = "./Patient_Info/Physical_JohnSmith.docx"
+ECG_LOCATION_JOHN = "./Patient_Info/ECG_JohnSmith.png"
+PHYSICAL_LOCATION_JACKIE = "./Patient_Info/Physical_Jackie.docx"
+ECG_LOCATION_JACKIE="./Patient_Info/ECG_Jackie.jpg"
 
 BASE_PROMPT = "./Prompt/Base_12-11.txt"
 prompts = {
@@ -187,7 +189,11 @@ if st.session_state["stage"] == POST_INTERVIEW:
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
     st.write("Here is the full physical examination for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
-    physical_exam_doc = Document(PHYSICAL_LOCATION)
+    if st.session_state["stage"] == "John Smith":
+        physical_exam_doc = Document(PHYSICAL_LOCATION_JOHN)
+    else:
+        physical_exam_doc = Document(PHYSICAL_LOCATION_JACKIE)
+    
     for parargraph in physical_exam_doc.paragraphs:
         st.write(parargraph.text)
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
@@ -196,7 +202,10 @@ if st.session_state["stage"] == PHYSICAL_SCREEN:
 if st.session_state["stage"] == ECG_SCREEN:
     st.header("ECG Chart")
     st.write("Here is the ECG for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
-    st.image(ECG_LOCATION)
+    if st.session_state["stage"] == "John Smith":
+        st.image(ECG_LOCATION_JOHN)
+    else:
+        st.image(ECG_LOCATION_JACKIE)
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
 if st.session_state["stage"]==FEEDBACK_SCREEN:
@@ -208,8 +217,9 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
                     After you are done, please click the \"Send Feedback\" button and a copy of your feedback and interview will automatically be emailed to us.
                     Thank you again!""")
     st.session_state["feedback_string"] = st.text_area("Provide your feedback here")
-    st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
+    
     st.button("Send Feedback", on_click=set_stage, args=[FINAL_SCREEN])
+    st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
     
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):

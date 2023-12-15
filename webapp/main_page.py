@@ -189,7 +189,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
     st.write("Here is the full physical examination for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
-    if st.session_state["stage"] == "John Smith":
+    if st.session_state["patient"] == "John Smith":
         physical_exam_doc = Document(PHYSICAL_LOCATION_JOHN)
     else:
         physical_exam_doc = Document(PHYSICAL_LOCATION_JACKIE)
@@ -199,7 +199,7 @@ if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
     
 
-if st.session_state["stage"] == ECG_SCREEN:
+if st.session_state["patient"] == ECG_SCREEN:
     st.header("ECG Chart")
     st.write("Here is the ECG for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
     if st.session_state["stage"] == "John Smith":

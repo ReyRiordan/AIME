@@ -210,14 +210,15 @@ if st.session_state["stage"] == ECG_SCREEN:
 
 if st.session_state["stage"]==FEEDBACK_SCREEN:
     st.write(""" Once you are ready, please take the time to give us some feedback in the text box provided.
-                    What's your diagnosis of the patient?
-                    Were there any responses that the AI gave that you felt were unrealistic or problematic (specific examples)?
+                    What's your diagnosis of the patient? Provide a brief DDx with three 
+                    to four potential causes for their symptoms. Which diagnosis are you most confident in?""")
+    st.session_state["diagnosis"]=st.text_input("Provide your brief diagnosis here")
+    st.write("""Were there any responses that the AI gave that you felt were unrealistic or problematic (specific examples)?
                     Are there any fixes, improvements, or additional features you have in mind before you would consider this to
                     be a good practice tool for students? 
                     After you are done, please click the \"Send Feedback\" button and a copy of your feedback and interview will automatically be emailed to us.
                     Thank you again!""")
     st.session_state["feedback_string"] = st.text_area("Provide your feedback here")
-    
     st.button("Send Feedback", on_click=set_stage, args=[FINAL_SCREEN])
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
     
@@ -225,8 +226,8 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    st.session_state["feedback_string"] = "<p> "+st.session_state["feedback_string"]+" </p>"
-    st.session_state["feedback_string"] = "<h2>User: "+st.session_state["username"]+ "</h2> <p> Feedback: </p>" + st.session_state["feedback_string"]
+    st.session_state["feedback_string"] = "<p> " + st.session_state["diagnosis"]+"</p> <p> "+st.session_state["feedback_string"]+" </p>"
+    st.session_state["feedback_string"] = "<h2>User: "+st.session_state["username"]+ "</h2> <h3> Feedback: </h3>" + st.session_state["feedback_string"]
 
     
 

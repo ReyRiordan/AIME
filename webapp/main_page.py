@@ -212,7 +212,7 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
     st.write(""" Once you are ready, please take the time to give us some feedback in the text box provided.
                     What's your diagnosis of the patient? Provide a brief DDx with three 
                     to four potential causes for their symptoms. Which diagnosis are you most confident in?""")
-    st.session_state["diagnosis"]=st.text_area("Provide your brief diagnosis here")
+    st.session_state["diagnosis"]=st.text_area("Provide list your differential diagnosis here. ")
     st.write("""Were there any responses that the AI gave that you felt were unrealistic or problematic (specific examples)?
                     Are there any fixes, improvements, or additional features you have in mind before you would consider this to
                     be a good practice tool for students? 

@@ -23,4 +23,4 @@ prompts = {
 }
 
 # EMAIL API
-EMAILS_TO_SEND = [('rutgers.aime@gmail.com')]
+EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]

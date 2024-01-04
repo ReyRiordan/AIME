@@ -1,0 +1,3 @@
+This is the final step! Please take the time to write a brief differential diagnosis of the patient you interviewed, and then give us some feedback about your experience. 
+Were there any responses that the AI gave that you felt were unrealistic or problematic (specific examples)? Are there any fixes, improvements, or additional features you have in mind before you would consider this to be a good practice tool for students? 
+Once you are done, please click the "Send" button and a copy of your feedback, diagnosis, and interview will automatically be emailed to us. Thank you for your time!

@@ -1,0 +1,3 @@
+Welcome! Thank you for agreeing to try out this virtual patient interview platform. Once you log in and get started, there will be a chat interface where you can interview a virtual patient AI acting as a patient in a specific case study. The goal is to interview the patient as if it was a real patient in order to work towards a diagnosis. Please treat the AI as if it were a real patient and interview it accordingly.
+Once you have completed the interview, you will be asked for a diagnosis and feedback regarding the quality of your interview experience. We would greatly appreciate any feedback and criticism in order to continuously improve the platform, as it is still very much a work in progress.
+Please follow the directions to log in and get started!

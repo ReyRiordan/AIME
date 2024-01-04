@@ -1,0 +1,1 @@
+This is the patient selection screen. Please select a patient of your choice and click the "Start Interview" button when you are ready to begin. Currently we only have two cases available, and for testing purposes it does not matter which one you interview.

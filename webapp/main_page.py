@@ -14,6 +14,7 @@ from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
 from constants import *
+from email import send_email
 
 
 # SECRETS
@@ -31,30 +32,6 @@ if "stage" not in st.session_state:
 def set_stage(stage):
     st.session_state["stage"] = stage
 
-def send_email(bio):
-    if st.session_state["has_sent_email"]==False:
-        st.session_state["has_sent_email"]=True
-        message = Mail(
-            from_email='rutgers.aime@gmail.com',
-            to_emails= EMAILS_TO_SEND,
-            subject='Conversation from '+st.session_state["username"]+" at time "+date_time,
-            html_content=st.session_state["feedback_string"])
-        attachment = Attachment()
-        encoded = base64.b64encode(bio.getvalue()).decode()
-        attachment.file_content=FileContent(encoded)
-        attachment.file_type = FileType('docx')
-        attachment.file_name = FileName(st.session_state["username"]+"_"+date_time+".docx")
-        attachment.disposition = Disposition('attachment')
-        attachment.content_id = ContentId('docx')
-        message.attachment = attachment
-        try:
-            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-            response = sg.send(message)
-            print(response.status_code)
-            print(response.body)
-            print(response.headers)
-        except: 
-            print("ERROR ENCOUNTERED SENDING MESSAGE\n")
 
 if st.session_state["stage"] == LOGIN_PAGE:
     st.write("""Welcome! Thank you for agreeing to try out this virtual patient interview platform. Once you log in and get started, 
@@ -150,6 +127,7 @@ if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
     #Set stage to POST_INTERVIEW
     set_stage(POST_INTERVIEW)
 
+
 if st.session_state["stage"] == POST_INTERVIEW:
     
     st.write("""Thank you for completing your interview! At this stage, you may view a physical
@@ -161,6 +139,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
     st.button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     st.button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
     st.button("Provide Your Feedback", on_click=set_stage, args=[FEEDBACK_SCREEN])
+
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
@@ -184,8 +163,9 @@ if st.session_state["stage"] == ECG_SCREEN:
         st.image(ECG_LOCATION_JACKIE)
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
+
 if st.session_state["stage"]==FEEDBACK_SCREEN:
-    st.write(""" Once you are ready, please take the time to give us some feedback in the text box provided.
+    st.write("""Once you are ready, please take the time to give us some feedback in the text box provided.
                     What's your diagnosis of the patient? Provide a brief DDx with three 
                     to four potential causes for their symptoms. Which diagnosis are you most confident in?""")
     st.session_state["diagnosis"]=st.text_area("Please list your differential diagnosis here. ")
@@ -205,14 +185,12 @@ if st.session_state["stage"]==FEEDBACK_SCREEN:
     st.session_state["feedback_string"] = "<p> " + st.session_state["diagnosis"]+"</p> <p> "+st.session_state["feedback_string"]+" </p>"
     st.session_state["feedback_string"] = "<h2>User: "+st.session_state["username"]+ "</h2> <h3> Feedback: </h3>" + st.session_state["feedback_string"]
 
-    
 
 if st.session_state["stage"] == FINAL_SCREEN: 
 
     st.write("""Thank you so much for completing your interview! A record of the interview has been sent to us. You may also click the \"Download Interview\" 
              button to save a copy for yourself as a docx file. After receiving feedback from helpful people like you, we plan to add an automated diagnosis
              evaluation engine. Thank you once again for your time, and we look forward to having you again.""")
-
 
     # Getting current date and time for bookkeeping purposess 
     currentDateAndTime = date.datetime.now()
@@ -221,7 +199,9 @@ if st.session_state["stage"] == FINAL_SCREEN:
     # Setting up file for attachment sending
     bio = io.BytesIO()
     st.session_state["interview"].save(bio)
-    send_email(bio)
+    if st.session_state["has_sent_email"]==False:
+        send_email(bio, EMAIL_TO_SEND, st.session_state["username"], date_time, st.session_state["feedback_string"])
+        st.session_state["has_sent_email"]=True
     
     # Download button
     st.download_button("Download interview", 

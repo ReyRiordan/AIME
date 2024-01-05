@@ -1,10 +1,10 @@
 paths = {
-        "intro" : "./streamlit/website_text/intro.txt",
-        "selection" : "./streamlit/website_text/selection.txt",
-        "interview" : "./streamlit/website_text/interview.txt",
-        "post" : "./streamlit/website_text/post.txt",
-        "feedback" : "./streamlit/website_text/feedback.txt",
-        "final": "./streamlit/website_text/final.txt"
+        "intro" : "./webapp/website_text/intro.txt",
+        "selection" : "./webapp/website_text/selection.txt",
+        "interview" : "./webapp/website_text/interview.txt",
+        "post" : "./webapp/website_text/post.txt",
+        "feedback" : "./webapp/website_text/feedback.txt",
+        "final": "./webapp/website_text/final.txt"
         }
 
 def get(content):

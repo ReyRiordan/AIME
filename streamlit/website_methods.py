@@ -8,6 +8,19 @@ import datetime as date
 import base64
 import io
 
+def create_interview_file(username, patient, messages):
+    interview = Document()
+    heading = interview.add_paragraph("User: " + username + ", ")
+    currentDateAndTime = date.datetime.now()
+    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    heading.add_run("Date: " + date_time + ", ")
+    heading.add_run("Patient: " + patient)
+    for message in messages:
+        interview.add_paragraph(message["role"] + ": " + message["content"])
+    
+    return interview
+
+
 def send_email(bio, EMAIL_TO_SEND, username, date_time, feedback):
     message = Mail(
         from_email = 'rutgers.aime@gmail.com',

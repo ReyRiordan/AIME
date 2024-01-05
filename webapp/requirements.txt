@@ -4,4 +4,3 @@ openai
 python-docx
 streamlit
 sendgrid
-/mount/src/aime/virtual_patient

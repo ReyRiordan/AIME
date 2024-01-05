@@ -16,7 +16,7 @@ from sendgrid.helpers.mail import (
 from constants import *
 import website_methods as methods
 import descriptions
-from virtual_patient.patients import GPT_patient
+from ..virtual_patient.patients import GPT_patient
 
 
 # SECRETS
@@ -125,7 +125,7 @@ if st.session_state["stage"] == ECG_SCREEN:
     st.write("Here is the ECG for " + st.session_state["patient"].name + ". Click the \"Back\" button to go back once you're done.")
     
     st.image(st.session_state["patient"].ECG_path)
-    
+
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
 

@@ -16,6 +16,8 @@ from sendgrid.helpers.mail import (
 from constants import *
 import website_methods as methods
 import descriptions
+import sys
+sys.path.append("/mount/src/aime")
 from ..virtual_patient.patients import GPT_patient
 
 

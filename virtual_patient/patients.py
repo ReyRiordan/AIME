@@ -15,4 +15,4 @@ class GPT_patient:
         self.initial_input = str(base + case)
 
         self.physical_path = "./Patient_Info/Physical_" + self.name.replace(" ", "") + ".docx"
-        self.ECG_path = "./Patient_Info/Physical_" + self.name.replace(" ", "") + ".png"
+        self.ECG_path = "./Patient_Info/ECG_" + self.name.replace(" ", "") + ".png"

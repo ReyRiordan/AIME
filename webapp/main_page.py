@@ -63,12 +63,12 @@ if st.session_state["stage"] == PATIENT_SELECTION:
                                                ["John Smith", "Jackie Smith"],
                                                index = None,
                                                placeholder = "Select patient...")
+    if patient_name: st.session_state["patient"] = GPT_patient(patient_name)
 
-    st.button("Start Interview", on_click=set_stage, args=[PATIENT_LOADING])
+    st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
 
-if st.session_state["stage"] == PATIENT_LOADING:
-    st.session_state["patient"] = GPT_patient(patient_name)
+if st.session_state["stage"] == CHAT_SETUP:
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=MODEL, temperature=0.0)
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
     initial_output = st.session_state["conversation"].predict(input = st.session_state["patient"].initial_input)

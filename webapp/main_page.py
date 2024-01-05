@@ -14,13 +14,14 @@ from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
 from constants import *
-from email import send_email
+import website_methods as methods
 import descriptions
 
 
 # SECRETS
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+os.environ["SENDGRID_API_KEY"] = st.secrets["SENDGRID_API_KEY"]
 os.environ["LOGIN_PASS"] = st.secrets["LOGIN_PASS"]
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 
@@ -51,6 +52,7 @@ if st.session_state["stage"] == PATIENT_SELECTION:
     st.write(descriptions.get("selection"))
     
     st.session_state["interview"] = None
+    st.session_state["created_interview_file"] = False
     st.session_state["feedback_string"] = None
     st.session_state["messages"] = []
     st.session_state["patient"] = st.selectbox("Which patient would you like to interview?", 
@@ -95,27 +97,18 @@ if st.session_state["stage"] == CHAT_INTERFACE:
             st.markdown(output)
             st.session_state["messages"].append({"role": st.session_state["patient"], "content": output})
 
-    st.button("End Interview", on_click=set_stage, args=[CREATE_INTERVIEW_FILE])
-
-
-if st.session_state["stage"] == CREATE_INTERVIEW_FILE:
-    st.session_state["interview"] = Document()
-    heading = st.session_state["interview"].add_paragraph("User: " + st.session_state["username"] + ", ")
-    currentDateAndTime = date.datetime.now()
-    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
-    heading.add_run("Date: " + date_time + ", ")
-    heading.add_run("Patient: " + st.session_state["patient"])
-    for message in st.session_state["messages"]:
-        st.session_state["interview"].add_paragraph(message["role"] + ": " + message["content"])
-    st.session_state["interview"].save("./Conversations/" + st.session_state["username"]+"_"+date_time+".docx")
-
-    set_stage(POST_INTERVIEW)
+    st.button("End Interview", on_click=set_stage, args=[POST_INTERVIEW])
 
 
 if st.session_state["stage"] == POST_INTERVIEW:
-    
     st.write(descriptions.get("post"))
     
+    if not st.session_state["created_interview_file"]:
+        st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
+                                                                      st.session_state["patient"], 
+                                                                      st.session_state["messages"])
+        st.session_state["created_interview_file"] = True
+
     st.button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     st.button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
     st.button("Provide Your Feedback", on_click=set_stage, args=[FEEDBACK_SCREEN])
@@ -169,7 +162,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
     # Setting up file for attachment sending
     bio = io.BytesIO()
     st.session_state["interview"].save(bio)
-    send_email(bio, EMAIL_TO_SEND, st.session_state["username"], date_time, st.session_state["feedback_string"])
+    methods.send_email(bio, EMAIL_TO_SEND, st.session_state["username"], date_time, st.session_state["feedback_string"])
     
     st.download_button("Download interview", 
                         data=bio.getvalue(),

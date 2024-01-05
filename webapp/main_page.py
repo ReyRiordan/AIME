@@ -16,6 +16,7 @@ from sendgrid.helpers.mail import (
 from constants import *
 import website_methods as methods
 import descriptions
+from virtual_patient.patients import GPT_patient
 
 
 # SECRETS
@@ -55,28 +56,22 @@ if st.session_state["stage"] == PATIENT_SELECTION:
     st.session_state["created_interview_file"] = False
     st.session_state["feedback_string"] = None
     st.session_state["messages"] = []
-    st.session_state["patient"] = st.selectbox("Which patient would you like to interview?", 
+
+    patient_name = st.selectbox("Which patient would you like to interview?", 
                                                ["John Smith", "Jackie Smith"],
                                                index = None,
                                                placeholder = "Select patient...")
+    st.session_state["patient"] = GPT_patient(patient_name)
 
     st.button("Start Interview", on_click=set_stage, args=[PATIENT_LOADING])
 
 
 if st.session_state["stage"] == PATIENT_LOADING:
-    with open(BASE_PROMPT, 'r', encoding='utf8') as base:
-        base_prompt = base.read()
-    INFO = prompts[st.session_state["patient"]]
-    with open(INFO, 'r', encoding='utf8') as info:
-        patient_info = info.read()
-    prompt_input = str(base_prompt + patient_info)
-
-    MODEL = "gpt-4"
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=MODEL, temperature=0.0)
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
-    initial_output = st.session_state["conversation"].predict(input=prompt_input)
+    initial_output = st.session_state["conversation"].predict(input = st.session_state["patient"].initial_input)
 
-    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + st.session_state["patient"] + "."})
+    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + st.session_state["patient"].name + "."})
     
     set_stage(CHAT_INTERFACE)
 
@@ -93,9 +88,9 @@ if st.session_state["stage"] == CHAT_INTERFACE:
             st.markdown(user_input)
         st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
         output = st.session_state["conversation"].predict(input=user_input)
-        with st.chat_message(st.session_state["patient"]):
+        with st.chat_message(st.session_state["patient"].name):
             st.markdown(output)
-            st.session_state["messages"].append({"role": st.session_state["patient"], "content": output})
+            st.session_state["messages"].append({"role": st.session_state["patient"].name, "content": output})
 
     st.button("End Interview", on_click=set_stage, args=[POST_INTERVIEW])
 
@@ -105,7 +100,7 @@ if st.session_state["stage"] == POST_INTERVIEW:
     
     if not st.session_state["created_interview_file"]:
         st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
-                                                                      st.session_state["patient"], 
+                                                                      st.session_state["patient"].name, 
                                                                       st.session_state["messages"])
         st.session_state["created_interview_file"] = True
 
@@ -116,24 +111,21 @@ if st.session_state["stage"] == POST_INTERVIEW:
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
-    st.write("Here is the full physical examination for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
-    if st.session_state["patient"] == "John Smith":
-        physical_exam_doc = Document(PHYSICAL_LOCATION_JOHN)
-    else:
-        physical_exam_doc = Document(PHYSICAL_LOCATION_JACKIE)
+    st.write("Here is the full physical examination for " + st.session_state["patient"].name + ". Click the \"Back\" button to go back once you're done.")
     
+    physical_exam_doc = Document(st.session_state["patient"].physical_path)
     for parargraph in physical_exam_doc.paragraphs:
         st.write(parargraph.text)
+    
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
     
 
 if st.session_state["stage"] == ECG_SCREEN:
     st.header("ECG Chart")
-    st.write("Here is the ECG for " + st.session_state["patient"] + ". Click the \"Back\" button to go back once you're done.")
-    if st.session_state["patient"] == "John Smith":
-        st.image(ECG_LOCATION_JOHN)
-    else:
-        st.image(ECG_LOCATION_JACKIE)
+    st.write("Here is the ECG for " + st.session_state["patient"].name + ". Click the \"Back\" button to go back once you're done.")
+    
+    st.image(st.session_state["patient"].ECG_path)
+    
     st.button("Back", on_click=set_stage, args=[POST_INTERVIEW])
 
 

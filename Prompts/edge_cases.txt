@@ -1,10 +1,11 @@
 Hi, I'm Dr. Corbett. Before we begin, could you please confirm your full name and age for me?
 How would you prefer to be addressed?
-What brings you in today?
+Tell me what's been going on.
 Can you tell me more about the heaviness you are experiencing?
-Are you noticing discomfort anywhere else?
-Have you noticed anything that seems to make this heaviness worse? Like breathing or movement?
+Does the pain come and go or is it constant?
 Have you ever experienced anything like this before?
-Are you aware of any problems with your heart?
+Have you noticed any pedal edema?
 What medications do you take?
-Are there any other medical problems that run in your family?
+What's your home and work situation like?
+Have you ever smoked?
+What age did you start smoking?

@@ -16,6 +16,8 @@ from sendgrid.helpers.mail import (
 from constants import *
 import website_methods as methods
 import descriptions
+from audiorecorder import audiorecorder
+import openai
 
 
 # SECRETS
@@ -26,7 +28,7 @@ BETA_PATIENT = "John Smith"
 BASE = "./Prompts/Base_1-15.txt"
 CONTEXT = "./Prompts/JohnSmith_sectioned.txt"
 
-st.title("Medical Interview Simulation (BETA)")
+st.title("Medical Interview Simulation (VOICE BETA)")
 
 if "stage" not in st.session_state:
     st.session_state["stage"] = LOGIN_PAGE
@@ -60,12 +62,16 @@ if st.session_state["stage"] == CHAT_SETUP:
 
     st.session_state["messages"] = []
     st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + BETA_PATIENT + "."})
+
     
     set_stage(CHAT_INTERFACE)
 
 if st.session_state["stage"] == CHAT_INTERFACE:
-    st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
-    
+    st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
+             Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
+
+    audio = audiorecorder("Start Recording", "Stop")
+
     container = st.container(height=300)
 
     for message in st.session_state["messages"]:
@@ -73,7 +79,9 @@ if st.session_state["stage"] == CHAT_INTERFACE:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
-    if user_input := st.chat_input("Type here..."):
+    if len(audio) > 0:
+        audio.export("audio.wav", format="wav")
+        user_input = methods.transcribe_voice("audio.wav", OPENAI_API_KEY)
         with container:
             with st.chat_message(st.session_state["username"]):
                 st.markdown(user_input)

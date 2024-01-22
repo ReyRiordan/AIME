@@ -4,6 +4,7 @@ openai
 python-docx
 streamlit
 sendgrid
-streamlit-audiorecorder
 pydub
 ffmpeg
+ffmpeg-python
+streamlit-audiorecorder

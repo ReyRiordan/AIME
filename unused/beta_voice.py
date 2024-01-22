@@ -18,6 +18,7 @@ import website_methods as methods
 import descriptions
 from audiorecorder import audiorecorder
 import openai
+import tempfile
 
 
 # SECRETS
@@ -64,9 +65,9 @@ if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + BETA_PATIENT + "."})
 
     
-    set_stage(CHAT_INTERFACE)
+    set_stage(CHAT_INTERFACE_VOICE)
 
-if st.session_state["stage"] == CHAT_INTERFACE:
+if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
              Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 
@@ -80,8 +81,8 @@ if st.session_state["stage"] == CHAT_INTERFACE:
                 st.markdown(message["content"])
 
     if len(audio) > 0:
-        audio.export("audio.wav", format="wav")
-        user_input = methods.transcribe_voice("audio.wav", OPENAI_API_KEY)
+        user_input = methods.transcribe_voice(audio, OPENAI_API_KEY)
+
         with container:
             with st.chat_message(st.session_state["username"]):
                 st.markdown(user_input)

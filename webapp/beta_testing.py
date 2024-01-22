@@ -16,6 +16,9 @@ from sendgrid.helpers.mail import (
 from constants import *
 import website_methods as methods
 import descriptions
+from audiorecorder import audiorecorder
+import openai
+import tempfile
 
 
 # SECRETS
@@ -44,8 +47,21 @@ if st.session_state["stage"] == LOGIN_PAGE:
         if password == LOGIN_PASS: 
             st.write("Authentication successful!")
             time.sleep(2)
-            set_stage(CHAT_SETUP)
+            set_stage(SETTINGS)
             st.rerun()
+
+
+if st.session_state["stage"] == SETTINGS:
+    chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
+                             ["Text", "Voice"],
+                             index = None,
+                             placeholder = "Select interview mode...")
+    if chat_mode == "Text": st.session_state["chat_mode"] = CHAT_INTERFACE_TEXT
+    elif chat_mode == "Voice": st.session_state["chat_mode"] = CHAT_INTERFACE_VOICE
+    else: st.session_state["chat_mode"] = None
+
+    if st.session_state["chat_mode"]: st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
+
 
 if st.session_state["stage"] == CHAT_SETUP:
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=MODEL, temperature=0.0)
@@ -61,9 +77,10 @@ if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["messages"] = []
     st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + BETA_PATIENT + "."})
     
-    set_stage(CHAT_INTERFACE)
+    set_stage(st.session_state["chat_mode"])
 
-if st.session_state["stage"] == CHAT_INTERFACE:
+
+if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
     
     container = st.container(height=300)
@@ -87,6 +104,38 @@ if st.session_state["stage"] == CHAT_INTERFACE:
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[CHAT_SETUP])
     columns[2].button("End Interview", on_click=set_stage, args=[FINAL_SCREEN])
+
+
+if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
+    st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
+             Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
+
+    audio = audiorecorder("Start Recording", "Stop")
+
+    container = st.container(height=300)
+
+    for message in st.session_state["messages"]:
+        with container:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+    if len(audio) > 0:
+        user_input = methods.transcribe_voice(audio, OPENAI_API_KEY)
+
+        with container:
+            with st.chat_message(st.session_state["username"]):
+                st.markdown(user_input)
+        st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
+        output = st.session_state["conversation"].predict(input=user_input)
+        with container:
+            with st.chat_message(BETA_PATIENT):
+                st.markdown(output)
+        st.session_state["messages"].append({"role": BETA_PATIENT, "content": output})
+
+    columns = st.columns(4)
+    columns[1].button("Restart", on_click=set_stage, args=[CHAT_SETUP])
+    columns[2].button("End Interview", on_click=set_stage, args=[FINAL_SCREEN])
+
 
 if st.session_state["stage"] == FINAL_SCREEN: 
     st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")

@@ -1,6 +1,8 @@
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
+import openai
+from audiorecorder import audiorecorder
 import time
 import datetime as date
 from docx import Document
@@ -47,11 +49,11 @@ if st.session_state["stage"] == LOGIN_PAGE:
         if password == LOGIN_PASS: 
             st.write("Authentication successful!")
             time.sleep(2)
-            set_stage(PATIENT_SELECTION)
+            set_stage(SETTINGS)
             st.rerun()
 
 
-if st.session_state["stage"] == PATIENT_SELECTION:
+if st.session_state["stage"] == SETTINGS:
     st.write(descriptions.get("selection"))
     
     st.session_state["interview"] = None
@@ -75,10 +77,10 @@ if st.session_state["stage"] == CHAT_SETUP:
 
     st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + st.session_state["patient"].name + "."})
     
-    set_stage(CHAT_INTERFACE)
+    set_stage(CHAT_INTERFACE_TEXT)
 
 
-if st.session_state["stage"] == CHAT_INTERFACE:
+if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     st.write(descriptions.get("interview"))
     
     for message in st.session_state["messages"]:
@@ -163,7 +165,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
                         file_name=st.session_state["username"]+"_"+date_time+".docx",
                         mime="docx")
     
-    st.button("New Interview", on_click=set_stage, args=[PATIENT_SELECTION])
+    st.button("New Interview", on_click=set_stage, args=[SETTINGS])
     
     for message in st.session_state["messages"]:
         with st.chat_message(message["role"]):

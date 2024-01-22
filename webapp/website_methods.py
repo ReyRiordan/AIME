@@ -9,6 +9,7 @@ import base64
 import io
 from audiorecorder import audiorecorder
 import openai
+import tempfile
 
 def create_interview_file(username, patient, messages):
     interview = Document()
@@ -46,9 +47,11 @@ def send_email(bio, EMAIL_TO_SEND, username, date_time, feedback):
     except: 
         print("ERROR ENCOUNTERED SENDING MESSAGE\n")
 
-def transcribe_voice(audio_file, OPENAI_API_KEY):
-    with open(audio_file, "rb") as file:
-        openai.api_key = OPENAI_API_KEY
+def transcribe_voice(voice_input, OPENAI_API_KEY):
+    openai.api_key = OPENAI_API_KEY
+    temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
+    voice_input.export(temp_audio_file.name, format="wav")
+    with open(temp_audio_file.name, "rb") as file:
         result = openai.Audio.transcribe("whisper-1", file)
-    transcription = result['text']
+    transcription = result["text"]
     return transcription

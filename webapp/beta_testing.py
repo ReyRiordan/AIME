@@ -19,8 +19,6 @@ import descriptions
 from audiorecorder import audiorecorder
 import openai
 import tempfile
-import sys
-sys.path.append("/mount/src/aime")
 
 
 # SECRETS

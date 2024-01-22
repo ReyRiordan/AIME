@@ -6,3 +6,4 @@ streamlit
 sendgrid
 streamlit-audiorecorder
 pydub
+ffmpeg-python

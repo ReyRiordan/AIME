@@ -111,7 +111,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
              Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 
     audio = audiorecorder("Start Recording", "Stop")
-
+    
     container = st.container(height=300)
 
     for message in st.session_state["messages"]:

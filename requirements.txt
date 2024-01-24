@@ -6,6 +6,7 @@ streamlit
 sendgrid
 av
 ffmpeg-python
+ffmpeg
 pydub
 streamlit-audiorecorder
 ffprobe

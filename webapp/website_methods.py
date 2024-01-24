@@ -52,6 +52,8 @@ def transcribe_voice(voice_input, OPENAI_API_KEY):
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     voice_input.export(temp_audio_file.name, format="wav")
     with open(temp_audio_file.name, "rb") as file:
-        result = client.audio.transcriptions.create(model="whisper-1", file=file)
-    transcription = result["text"]
+        transcription = client.audio.transcriptions.create(model="whisper-1", 
+                                                    file=file, 
+                                                    response_format="text")
+    
     return transcription

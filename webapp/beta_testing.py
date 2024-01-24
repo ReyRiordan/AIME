@@ -74,7 +74,7 @@ if st.session_state["stage"] == CHAT_SETUP:
     initial_output = st.session_state["conversation"].predict(input = prompt_input)
 
     st.session_state["messages"] = []
-    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + BETA_PATIENT + "."})
+    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + BETA_PATIENT + ". Start by introducing yourself."})
     
     set_stage(st.session_state["chat_mode"])
 

@@ -19,7 +19,7 @@ import descriptions
 from audiorecorder import audiorecorder
 import openai
 import tempfile
-
+import ffprobe
 
 # SECRETS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

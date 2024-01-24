@@ -102,7 +102,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         st.session_state["messages"].append({"role": BETA_PATIENT, "content": output})
 
     columns = st.columns(4)
-    columns[1].button("Restart", on_click=set_stage, args=[CHAT_SETUP])
+    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
     columns[2].button("End Interview", on_click=set_stage, args=[FINAL_SCREEN])
 
 
@@ -133,7 +133,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         st.session_state["messages"].append({"role": BETA_PATIENT, "content": output})
 
     columns = st.columns(4)
-    columns[1].button("Restart", on_click=set_stage, args=[CHAT_SETUP])
+    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
     columns[2].button("End Interview", on_click=set_stage, args=[FINAL_SCREEN])
 
 

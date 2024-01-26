@@ -1,4 +1,5 @@
 langchain
+langchain-community
 datetime
 openai
 python-docx

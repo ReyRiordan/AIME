@@ -1,6 +1,6 @@
 from langchain_community.chat_models import ChatOpenAI
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
+from langchain.chains.conversation.base import ConversationChain
+from langchain.memory.buffer import ConversationBufferMemory
 import time
 import datetime as date
 from docx import Document
@@ -19,14 +19,12 @@ import descriptions
 from audiorecorder import audiorecorder
 import openai
 import tempfile
+from virtual_patient.patients import GPT_patient
+
 
 # SECRETS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LOGIN_PASS = "corbetsi"
-
-BETA_PATIENT = "John Smith"
-BASE = "./Prompts/Base_1-15.txt"
-CONTEXT = "./Prompts/JohnSmith_sectioned.txt"
 
 st.title("Medical Interview Simulation (BETA)")
 
@@ -51,6 +49,9 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
 
 if st.session_state["stage"] == SETTINGS:
+    st.session_state["messages"] = []
+    st.session_state["interview"] = None
+
     chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
                              ["Text", "Voice"],
                              index = None,
@@ -59,22 +60,21 @@ if st.session_state["stage"] == SETTINGS:
     elif chat_mode == "Voice": st.session_state["chat_mode"] = CHAT_INTERFACE_VOICE
     else: st.session_state["chat_mode"] = None
 
+    patient_name = st.selectbox("Which patient would you like to interview?", 
+                                               ["John Smith", "Jackie Smith"],
+                                               index = None,
+                                               placeholder = "Select patient...")
+    if patient_name: st.session_state["patient"] = GPT_patient(patient_name)
+
     if st.session_state["chat_mode"]: st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
 
 if st.session_state["stage"] == CHAT_SETUP:
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=MODEL, temperature=0.0)
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
-    with open(BASE, "r", encoding="utf8") as base_file:
-        base = base_file.read()
-    base = base.replace("{patient}", BETA_PATIENT)
-    with open(CONTEXT, "r", encoding="utf8") as context_file:
-        context = context_file.read()
-    prompt_input = str(base + context)
-    initial_output = st.session_state["conversation"].predict(input = prompt_input)
+    initial_output = st.session_state["conversation"].predict(input = st.session_state["patient"].initial_input)
 
-    st.session_state["messages"] = []
-    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + BETA_PATIENT + ". Start by introducing yourself."})
+    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + st.session_state["patient"].name + ". Start by introducing yourself."})
     
     set_stage(st.session_state["chat_mode"])
 
@@ -96,9 +96,9 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
-            with st.chat_message(BETA_PATIENT):
+            with st.chat_message(st.session_state["patient"].name):
                 st.markdown(output)
-        st.session_state["messages"].append({"role": BETA_PATIENT, "content": output})
+        st.session_state["messages"].append({"role": st.session_state["patient"].name, "content": output})
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
@@ -127,9 +127,9 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
-            with st.chat_message(BETA_PATIENT):
+            with st.chat_message(st.session_state["patient"].name):
                 st.markdown(output)
-        st.session_state["messages"].append({"role": BETA_PATIENT, "content": output})
+        st.session_state["messages"].append({"role": st.session_state["patient"].name, "content": output})
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
@@ -144,7 +144,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
-                                                                  BETA_PATIENT, 
+                                                                  st.session_state["patient"].name, 
                                                                   st.session_state["messages"])
     st.session_state["interview"].save(bio)
 
@@ -153,4 +153,4 @@ if st.session_state["stage"] == FINAL_SCREEN:
                         file_name=st.session_state["username"]+"_"+date_time+".docx",
                         mime="docx")
 
-    st.button("New Interview", on_click=set_stage, args=[CHAT_SETUP])
+    st.button("New Interview", on_click=set_stage, args=[SETTINGS])

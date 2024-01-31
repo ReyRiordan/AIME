@@ -12,7 +12,7 @@ Any open-ended question that tries to establish the main concern for the patient
 •	"What brings you in today?"
 •	"Tell me what's been going on."
 [Additional_Information]
-Any open-ended question that asks for more information or clarification.
+Any open-ended question that asks generally for more information or clarification. Anything that asks for something specific about a symptom or etc does not count.
 •	"Tell me more about this ___ you're experiencing."
 •	"Anything else?"
 [Medical_History]
@@ -48,6 +48,6 @@ Any question, statement, or phrase that does not fit into the previous categorie
 
 Here is an example of valid input and output to help you get started.
 Input: "Hi, I'm Dr. Corbett. Before we begin, could you please confirm your full name and date of birth for me? How would you prefer to be addressed? What brings you in today? Can you describe the sensation for me? Have you ever had surgery before?"
-Output: "Introduction Confirm_Identity Establish_Chief_Concern Surgery_Hospitalization Other"
+Output: "Introduction Confirm_Identity Establish_Chief_Concern Other Surgery_Hospitalization"
 
 The following is the text input I want you to classify: 

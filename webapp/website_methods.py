@@ -10,8 +10,12 @@ import io
 from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
+from webapp.constants import *
+from langchain_openai import ChatOpenAI
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
 
-def create_interview_file(username, patient, messages):
+def create_interview_file(username: str, patient: str, messages: list[dict[str, str]]) -> Document:
     interview = Document()
     heading = interview.add_paragraph("User: " + username + ", ")
     currentDateAndTime = date.datetime.now()
@@ -57,3 +61,21 @@ def transcribe_voice(voice_input, OPENAI_API_KEY):
                                                     response_format="text")
     
     return transcription
+
+def classify_input(messages: list[str], OPENAI_API_KEY: str) -> dict[str, bool]:
+    llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=MODEL, temperature=0.0)
+    conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
+    with open(CLASSIFY_INPUT_PROMPT, "r", encoding="utf8") as classify:
+        prompt_input = classify.read()
+    for message in messages:
+        message = message.rstrip() + " "
+        prompt_input += message
+    raw_classification = conversation.predict(input=prompt_input)
+    classification = raw_classification.split()
+    output = {}
+    for label in CLASSIFY_INPUT_LABELS:
+        if label in classification:
+            output[label] = True
+        else:
+            output[label] = False
+    return output

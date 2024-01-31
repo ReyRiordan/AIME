@@ -15,3 +15,18 @@ MODEL = "gpt-4"
 
 # EMAIL API
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
+
+# Classification related
+CLASSIFY_INPUT_PROMPT = "./Prompts/Classification_1-29.txt"
+CLASSIFY_INPUT_LABELS = ["Introduction",
+                  "Confirm_Identity",
+                  "Establish_Chief_Concern",
+                  "Additional_Information",
+                  "Medical_History",
+                  "Surgery_Hospitalization",
+                  "Medication",
+                  "Allergies",
+                  "Family_History",
+                  "Alcohol",
+                  "Smoking",
+                  "Drug_Use"] # note "Other" is ommitted

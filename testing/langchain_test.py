@@ -1,4 +1,4 @@
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
@@ -17,7 +17,9 @@ sys.path.append('/Users/reyriordan/Documents/Research/Artificial-Intelligence-in
 from webapp.website_methods import create_interview_file
 
 KEY = os.getenv("OPENAI_API_KEY")
-MODEL = "gpt-4"
+MODEL = "gpt-4-0125-preview"
+CLASSIFY = "./Prompts/Classification_1-29.txt"
+QUESTIONS_CLASSIFY = "./Prompts/questions_classify.txt"
 BASE = "./Prompts/Base_1-15.txt"
 CONTEXT = "./Prompts/JohnSmith_sectioned.txt"
 #TOWRITE = "./testing/output.txt"
@@ -34,12 +36,24 @@ messages = []
 
 #Adding the prompt from the .docx file before the conversation begins
 #user_input = textract.process("./Prompt/Chat_GPT_prompt_V1023_OBJ1.docx").decode()
-with open(BASE, "r", encoding="utf8") as base_file:
-    base = base_file.read()
-    base = base.replace("{patient}", patient_name)
-with open(CONTEXT, "r", encoding="utf8") as context_file:
-    context = context_file.read()
-prompt_input = str(base + context)
+# with open(BASE, "r", encoding="utf8") as base_file:
+#     base = base_file.read()
+#     base = base.replace("{patient}", patient_name)
+# with open(CONTEXT, "r", encoding="utf8") as context_file:
+#     context = context_file.read()
+# prompt_input = str(base + context)
+with open(CLASSIFY, "r", encoding="utf8") as classification_file:
+     prompt_input = classification_file.read()
+messages = []
+with open(QUESTIONS_CLASSIFY, "r", encoding="utf8") as questions_classify:
+     while True:
+          classify_input = questions_classify.readline()
+          if not classify_input: break
+          messages.append(classify_input)
+for message in messages:
+     message = message.rstrip() + " "
+     prompt_input += message
+print(prompt_input)
 print("Prompt length: " + str(token_counter.num_tokens_used([prompt_input])) + " tokens")
 
 #with open(TOWRITE,"w", encoding = "utf8") as logger: 

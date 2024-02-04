@@ -50,6 +50,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
 if st.session_state["stage"] == SETTINGS:
     st.session_state["messages"] = []
+    st.session_state["graded_messages"]=[]
     st.session_state["interview"] = None
 
     chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",

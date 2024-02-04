@@ -94,6 +94,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             with st.chat_message(st.session_state["username"]):
                 st.markdown(user_input)
         st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
+        st.session_state["graded_messages"].append({"role": st.session_state["username"], "content": user_input})
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
             with st.chat_message(st.session_state["patient"].name):
@@ -125,6 +126,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             with st.chat_message(st.session_state["username"]):
                 st.markdown(user_input)
         st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
+        st.session_state["graded_messages"].append({"role": st.session_state["username"], "content": user_input})
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
             with st.chat_message(st.session_state["patient"].name):
@@ -138,10 +140,12 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 if st.session_state["stage"] == FINAL_SCREEN: 
     st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
-
+    
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
-
+    grading_results=methods.classifier(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
+    for element in CLASSIFY_DIMS_LABELS:
+        st.write(element+" "+grading_results(element))
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
                                                                   st.session_state["patient"].name, 

@@ -95,7 +95,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             with st.chat_message(st.session_state["username"]):
                 st.markdown(user_input)
         st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
-        st.session_state["graded_messages"].append({"role": st.session_state["username"], "content": user_input})
+        st.session_state["graded_messages"].append(user_input)
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
             with st.chat_message(st.session_state["patient"].name):
@@ -127,7 +127,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             with st.chat_message(st.session_state["username"]):
                 st.markdown(user_input)
         st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
-        st.session_state["graded_messages"].append({"role": st.session_state["username"], "content": user_input})
+        st.session_state["graded_messages"].append(user_input)
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
             with st.chat_message(st.session_state["patient"].name):

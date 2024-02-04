@@ -141,12 +141,13 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 if st.session_state["stage"] == FINAL_SCREEN: 
     st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
+    st.write("In this beta testing, we have also implemented basic grading functionality. This is what topics we think you touched up on during your interview!")
     
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     grading_results=methods.classifier(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
     for element in CLASSIFY_INPUT_LABELS:
-        st.write(grading_results[element])
+        st.write(element+": "grading_results[element])
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
                                                                   st.session_state["patient"].name, 

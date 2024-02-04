@@ -147,7 +147,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
     grading_results=methods.classifier(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
     with st.container():
         for element in CLASSIFY_INPUT_LABELS:
-        st.write(element+": "+str(grading_results[element]))
+            st.write(element+": "+str(grading_results[element]))
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 

@@ -146,8 +146,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     grading_results=methods.classifier(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
     for element in CLASSIFY_DIMS_LABELS:
-        score=grading_results(element)
-        print(score)
+        print(grading_results)
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
                                                                   st.session_state["patient"].name, 

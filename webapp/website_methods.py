@@ -11,7 +11,7 @@ from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
 from constants import *
-from langchain_openai import ChatOpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 

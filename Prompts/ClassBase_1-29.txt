@@ -1,10 +1,11 @@
 I have a medical interview between a doctor and patient, and I want you to help me analyze the doctor's questions and statements to determine whether they asked what was required. I want you to act as a multi-label text classifier that outputs one or more of 13 labels when given all of a doctor's quotes from a medical interview at once as input. The 13 labels will be provided below, with each label name between [] brackets and followed by a description of the label and examples of text that are classified as the label. I want you to respond only with the label names and nothing else. If a text is classified with multiple labels, return them separated only by a space.
 
 [Introduction]
-Any introductory message or question.
+Any introductory message or question where the doctor introduces themselves.
 •	"Hello, my name is ___ I am a medical student working with Dr. ___."
 •	"Hello I'm ___, could you please confirm your full name and date of birth before we begin?"
 [Confirm_Identity]
+Any question that confirms the patient's identity.
 •	"Can you tell me your first and last name and date of birth?"
 •	"Hello I'm ___, could you please confirm your full name and date of birth before we begin?"
 [Establish_Chief_Concern]

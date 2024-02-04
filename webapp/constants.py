@@ -17,7 +17,7 @@ MODEL = "gpt-4"
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
 # Classification related
-CLASSIFY_INPUT_PROMPT = "./Prompts/Classification_1-29.txt"
+CLASSIFY_INPUT_PROMPT = "./Prompts/ClassBase_1-29.txt"
 CLASSIFY_INPUT_LABELS = ["Introduction",
                   "Confirm_Identity",
                   "Establish_Chief_Concern",
@@ -30,3 +30,14 @@ CLASSIFY_INPUT_LABELS = ["Introduction",
                   "Alcohol",
                   "Smoking",
                   "Drug_Use"] # note "Other" is ommitted
+CLASSIFY_DIMS_PROMPT = "./Prompts/ClassDims_2-3.txt"
+CLASSIFY_DIMS_LABELS = ["Onset",
+                  "Quality",
+                  "Location",
+                  "Timing",
+                  "Pattern",
+                  "Exacerbating",
+                  "Relieving",
+                  "Prior_History",
+                  "Radiation",
+                  "Severity"] # "Other" ommitted

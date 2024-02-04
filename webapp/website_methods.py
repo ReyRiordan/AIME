@@ -62,10 +62,10 @@ def transcribe_voice(voice_input, OPENAI_API_KEY):
     
     return transcription
 
-def classify_input(messages: list[str], OPENAI_API_KEY: str) -> dict[str, bool]:
+def classifier(prompt: str, labels: list[str], messages: list[str], OPENAI_API_KEY: str) -> dict[str, bool]:
     llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=MODEL, temperature=0.0)
     conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
-    with open(CLASSIFY_INPUT_PROMPT, "r", encoding="utf8") as classify:
+    with open(prompt, "r", encoding="utf8") as classify:
         prompt_input = classify.read()
     for message in messages:
         message = message.rstrip() + " "
@@ -73,7 +73,7 @@ def classify_input(messages: list[str], OPENAI_API_KEY: str) -> dict[str, bool]:
     raw_classification = conversation.predict(input=prompt_input)
     classification = raw_classification.split()
     output = {}
-    for label in CLASSIFY_INPUT_LABELS:
+    for label in labels:
         if label in classification:
             output[label] = True
         else:

@@ -18,9 +18,8 @@ from webapp.constants import *
 from webapp.website_methods import *
 
 KEY = os.getenv("OPENAI_API_KEY")
-MODEL = "gpt-4-0125-preview"
-CLASSIFY = "./Prompts/Classification_1-29.txt"
-QUESTIONS_CLASSIFY = "./Prompts/questions_classify.txt"
+#MODEL = "gpt-4-0125-preview"
+QUESTIONS_CLASSIFY = "./Prompts/classtest_dims.txt"
 BASE = "./Prompts/Base_1-15.txt"
 CONTEXT = "./Prompts/JohnSmith_sectioned.txt"
 #TOWRITE = "./testing/output.txt"
@@ -54,7 +53,7 @@ with open(QUESTIONS_CLASSIFY, "r", encoding="utf8") as questions_classify:
 # for message in messages:
 #      message = message.rstrip() + " "
 #      prompt_input += message
-classifications = classify_input(messages, KEY)
+classifications = classifier(CLASSIFY_DIMS_PROMPT, CLASSIFY_DIMS_LABELS, messages, KEY)
 print(classifications)
 # print("Prompt length: " + str(token_counter.num_tokens_used([prompt_input])) + " tokens")
 

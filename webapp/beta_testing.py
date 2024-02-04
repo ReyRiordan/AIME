@@ -145,7 +145,9 @@ if st.session_state["stage"] == FINAL_SCREEN:
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     grading_results=methods.classifier(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
-    with st.container():
+    
+    final_container=st.container(height=300)
+    with final_container:
         for element in CLASSIFY_INPUT_LABELS:
             st.write(element+": "+str(grading_results[element]))
 

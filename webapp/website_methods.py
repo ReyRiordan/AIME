@@ -15,7 +15,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
-def create_interview_file(username: str, patient: str, messages: list[dict[str, str]]) -> Document:
+def create_interview_file(username: str, patient: str, messages: list[dict[str, str]], grading_results: dict[str,bool]) -> Document:
     interview = Document()
     heading = interview.add_paragraph("User: " + username + ", ")
     currentDateAndTime = date.datetime.now()
@@ -24,7 +24,9 @@ def create_interview_file(username: str, patient: str, messages: list[dict[str, 
     heading.add_run("Patient: " + patient)
     for message in messages:
         interview.add_paragraph(message["role"] + ": " + message["content"])
-    
+    interview.add_paragraph("Grading Criteria")
+    for criteria in CLASSIFY_INPUT_LABELS:
+        interview.add_paragraph(criteria+": "+str(grading_results[criteria]))
     return interview
 
 

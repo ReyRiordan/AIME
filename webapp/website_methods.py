@@ -99,4 +99,5 @@ def classifier_experimental(prompt: str, labels: list[str], messages: list[str],
     for question in classification: 
         question_array=question.split(":")
         question_by_question_list+=question_array
+    st.write(question_by_question_list)
     return question_by_question_list

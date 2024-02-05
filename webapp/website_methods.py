@@ -14,6 +14,7 @@ from constants import *
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
+import streamlit as st
 
 def create_interview_file(username: str, patient: str, messages: list[dict[str, str]], grading_results: dict[str,bool]) -> Document:
     interview = Document()
@@ -73,6 +74,7 @@ def classifier(prompt: str, labels: list[str], messages: list[str], OPENAI_API_K
         message = message.rstrip() + " "
         prompt_input += message
     raw_classification = conversation.predict(input=prompt_input)
+    st.write(raw_classification)
     classification = raw_classification.split()
     output = {}
     for label in labels:

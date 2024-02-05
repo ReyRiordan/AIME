@@ -17,7 +17,7 @@ MODEL = "gpt-4"
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
 # Classification related
-CLASSIFY_INPUT_PROMPT = "./Prompts/ClassBase_1-29.txt"
+CLASSIFY_INPUT_PROMPT = "./Prompts/ClassBase_2-5_experimental.txt"
 CLASSIFY_INPUT_LABELS = ["Introduction",
                   "Confirm_Identity",
                   "Establish_Chief_Concern",

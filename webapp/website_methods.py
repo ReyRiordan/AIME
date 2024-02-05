@@ -7,6 +7,7 @@ import os
 import datetime as date
 import base64
 import io
+import streamlit as st
 from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
@@ -14,7 +15,6 @@ from constants import *
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
-import streamlit as st
 
 def create_interview_file(username: str, patient: str, messages: list[dict[str, str]], grading_results: dict[str,bool]) -> Document:
     interview = Document()
@@ -74,7 +74,6 @@ def classifier(prompt: str, labels: list[str], messages: list[str], OPENAI_API_K
         message = message.rstrip() + " "
         prompt_input += message
     raw_classification = conversation.predict(input=prompt_input)
-    st.write(raw_classification)
     classification = raw_classification.split()
     output = {}
     for label in labels:
@@ -83,3 +82,21 @@ def classifier(prompt: str, labels: list[str], messages: list[str], OPENAI_API_K
         else:
             output[label] = False
     return output
+
+
+def classifier_experimental(prompt: str, labels: list[str], messages: list[str], OPENAI_API_KEY: str):
+    llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=MODEL, temperature=0.0)
+    conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
+    with open(prompt, "r", encoding="utf8") as classify:
+        prompt_input = classify.read()
+    for message in messages:
+        message = message.rstrip() + " "
+        prompt_input += message
+    raw_classification = conversation.predict(input=prompt_input)
+    st.write(raw_classification)
+    classification = raw_classification.split("; ")
+    question_by_question_list = []
+    for question in classification: 
+        question_array=question.split()
+        question_by_question_list+=question_array
+    return question_by_question_list

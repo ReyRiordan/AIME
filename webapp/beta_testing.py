@@ -147,12 +147,13 @@ if st.session_state["stage"] == FINAL_SCREEN:
     
     
     
-    st.session_state["grading_results"]=methods.classifier(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
+    st.session_state["grading_results"]=methods.classifier_experimental(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
     
     final_container=st.container(height=300)
     with final_container:
-        for element in CLASSIFY_INPUT_LABELS:
-            st.write(element+": "+str(st.session_state["grading_results"][element]))
+        with st.chat_message(st.session_state["username"]):
+            for i in range(len(st.session_state["graded_messages"])):
+                st.markdown(st.session_state["graded_messages"][i]+": "+st.session_state["grading_results"][i])
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 

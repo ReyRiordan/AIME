@@ -153,7 +153,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
     with final_container:
         with st.chat_message(st.session_state["username"]):
             for i in range(len(st.session_state["graded_messages"])):
-                st.markdown(st.session_state["graded_messages"][i]+": "+st.session_state["grading_results"][i])
+                st.markdown(st.session_state["grading_results"][i])
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 

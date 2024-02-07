@@ -27,8 +27,8 @@ def create_interview_file(username: str, patient: str, messages: list[dict[str, 
         interview.add_paragraph(message["role"] + ": " + message["content"])
     interview.add_paragraph("Grading Criteria")
     for message in grading_results:
-        interview.add_paragraph(message[0])
-        interview.add_run(message[1]).bold=True
+        msg=interview.add_paragraph(message[0])
+        msg.add_run(message[1]).bold=True
     return interview
 
 

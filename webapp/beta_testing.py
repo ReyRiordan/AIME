@@ -156,7 +156,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         index = 2
         for message in st.session_state["grading_results"]:
             with st.chat_message(st.session_state["username"]):
-                annotated_text((message.pop(0),message[0],"#8ef"))
+                annotated_text((message.pop(0),message[0]))
             with st.chat_message(st.session_state["patient"].name):
                 st.markdown(st.session_state["messages"][index]["content"])
             index+=2

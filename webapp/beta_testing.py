@@ -23,6 +23,7 @@ from virtual_patient.patients import GPT_patient
 from annotated_text import annotated_text
 
 
+
 # SECRETS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LOGIN_PASS = "corbetsi"
@@ -154,7 +155,8 @@ if st.session_state["stage"] == FINAL_SCREEN:
     with final_container:
         with st.chat_message(st.session_state["username"]):
             for message in st.session_state["grading_results"]:
-                annotated_text((message.pop(0),message[1]))
+                annotated_text((message.pop(0),message[1],"#8ef"))
+                # st.markdown(message)
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 

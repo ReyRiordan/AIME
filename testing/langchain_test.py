@@ -3,7 +3,6 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
 import time
-import textract
 import tiktoken
 import token_counter as token_counter
 

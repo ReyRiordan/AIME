@@ -1,4 +1,4 @@
-from langchain_community.chat_models import ChatOpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.chains.conversation.base import ConversationChain
 from langchain.memory.buffer import ConversationBufferMemory
 import time

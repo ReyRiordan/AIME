@@ -20,6 +20,7 @@ from audiorecorder import audiorecorder
 import openai
 import tempfile
 from virtual_patient.patients import GPT_patient
+from annotated_text import annotated_text
 
 
 # SECRETS
@@ -153,7 +154,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
     with final_container:
         with st.chat_message(st.session_state["username"]):
             for message in st.session_state["grading_results"]:
-                st.markdown(message)
+                annotated_text((message.pop(0),message[1]))
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 

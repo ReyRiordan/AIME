@@ -7,3 +7,4 @@ streamlit
 sendgrid
 pydub
 streamlit-audiorecorder
+st-annotated-text

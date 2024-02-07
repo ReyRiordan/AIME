@@ -90,7 +90,7 @@ def classifier_experimental(prompt: str, labels: list[str], messages: list[str],
     with open(prompt, "r", encoding="utf8") as classify:
         prompt_input = classify.read()
     for message in messages:
-        message = message.rstrip() + " "
+        message = message.rstrip() + "||"
         prompt_input += message
     raw_classification = conversation.predict(input=prompt_input)
     classification = raw_classification.split("; ")

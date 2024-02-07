@@ -154,8 +154,11 @@ if st.session_state["stage"] == FINAL_SCREEN:
     final_container=st.container(height=300)
     with final_container:
         with st.chat_message(st.session_state["username"]):
+            index = 1
             for message in st.session_state["grading_results"]:
                 annotated_text((message.pop(0),message[0],"#8ef"))
+                st.markdown(st.session_state["messages"][index]["content"])
+                index+=2
                 # st.markdown(message)
 
     bio = io.BytesIO()

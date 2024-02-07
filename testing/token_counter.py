@@ -1,4 +1,3 @@
-import textract
 import tiktoken
 
 def num_tokens_used(listOfMessages,encoding_name = "cl100k_base"):

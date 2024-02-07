@@ -153,13 +153,14 @@ if st.session_state["stage"] == FINAL_SCREEN:
     
     final_container=st.container(height=300)
     with final_container:
-        with st.chat_message(st.session_state["username"]):
-            index = 2
-            for message in st.session_state["grading_results"]:
+        index = 2
+        for message in st.session_state["grading_results"]:
+            with st.chat_message(st.session_state["username"]):
                 annotated_text((message.pop(0),message[0],"#8ef"))
+            with st.chat_message(st.session_state["patient"]):
                 st.markdown(st.session_state["messages"][index]["content"])
-                index+=2
-                # st.markdown(message)
+            index+=2
+            # st.markdown(message)
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 

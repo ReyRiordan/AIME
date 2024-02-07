@@ -42,7 +42,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
     
     st.session_state["username"] = st.text_input("Enter any username (does not have to be your real name) and press \"Enter\":")
     if st.session_state["username"]:
-        password = st.text_input("Enter the password you were provided and press \"Enter\":")
+        password = st.text_input("Enter the password you were provided and press \"Enter\":", type = "password")
         if password == LOGIN_PASS: 
             st.write("Authentication successful!")
             time.sleep(2)

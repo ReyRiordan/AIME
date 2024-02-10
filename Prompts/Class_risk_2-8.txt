@@ -1,0 +1,13 @@
+I have a medical interview between a doctor and patient, and I want you to help me analyze the doctor's inputs in the form of their questions and statements from the interview to determine whether they asked what was required. I want you to act as a multi-label text classifier that outputs one or more of the provided list of labels per input when given all of a doctor's inputs from a medical interview at once. The labels will be provided below, with each label name between [] brackets and followed by a description of the label and examples of text that are classified as the label. Inputs will be separated by the symbol ||. If an input is classified with multiple labels, return them separated only by a space. Separate classifications for different inputs by the symbol ||. I want you to respond only with the labels associated with each of the inputs, separated by || as needed. 
+
+|PATIENT DEPENDENT|[Other]
+Any question, statement, or phrase that does not fit into any of the previous categories. This can include general medical questions, questions about dimensions of the patient's main concern, questions about associated symptoms, statements reassuring or expressing empathy towards the patient, small talk, irrelevant questions or statements, etc.
+•	"How and when did the symptom first start?"
+•	"Are you experiencing any swelling in your legs?"
+•	"Do you have any allergies?"
+
+Here is an example of valid input and output to help you get started. Note that the labels in the example output may not match the labels provided. 
+Input: "Hi, I'm Dr. Corbett. Before we begin, could you please confirm your full name and date of birth for me?||What brings you in today?||Are you aware of any problems with your blood pressure?||Have you felt nauseated or sweaty?||Have you experienced any difficulty maintaining an erection?||Have you ever smoked or used drugs recreationally?||"
+Output: Other||Other||Hypertension||Other||Peripheral_Vascular||Smoking" 
+
+The following is the text input I want you to classify: 

@@ -19,8 +19,9 @@ import descriptions
 from audiorecorder import audiorecorder
 import openai
 import tempfile
-from virtual_patient.patients import GPT_patient
+from virtual_patient.patients import GPT_Patient
 from annotated_text import annotated_text
+from website_classes import Message
 
 
 
@@ -52,7 +53,6 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
 if st.session_state["stage"] == SETTINGS:
     st.session_state["messages"] = []
-    st.session_state["graded_messages"]=[]
     st.session_state["interview"] = None
 
     chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
@@ -67,7 +67,7 @@ if st.session_state["stage"] == SETTINGS:
                                                ["John Smith", "Jackie Smith"],
                                                index = None,
                                                placeholder = "Select patient...")
-    if patient_name: st.session_state["patient"] = GPT_patient(patient_name)
+    if patient_name: st.session_state["patient"] = GPT_Patient(patient_name)
 
     if st.session_state["chat_mode"]: st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
@@ -77,7 +77,7 @@ if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["conversation"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
     initial_output = st.session_state["conversation"].predict(input = st.session_state["patient"].initial_input)
 
-    st.session_state["messages"].append({"role": "Assistant", "content": "You may now begin your interview with " + st.session_state["patient"].name + ". Start by introducing yourself."})
+    st.session_state["messages"].append(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["patient"].name + ". Start by introducing yourself."))
     
     set_stage(st.session_state["chat_mode"])
 
@@ -89,20 +89,19 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
     for message in st.session_state["messages"]:
         with container:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
+            with st.chat_message(message.role):
+                st.markdown(message.content)
 
     if user_input := st.chat_input("Type here..."):
         with container:
-            with st.chat_message(st.session_state["username"]):
+            with st.chat_message("User"):
                 st.markdown(user_input)
-        st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
-        st.session_state["graded_messages"].append(user_input)
+        st.session_state["messages"].append(Message("input", "User", user_input))
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
-            with st.chat_message(st.session_state["patient"].name):
+            with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)
-        st.session_state["messages"].append({"role": st.session_state["patient"].name, "content": output})
+        st.session_state["messages"].append(Message("output", "AI", output))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
@@ -119,48 +118,51 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
     for message in st.session_state["messages"]:
         with container:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
+            with st.chat_message(message.role):
+                st.markdown(message.content)
 
     if len(audio) > 0:
         user_input = methods.transcribe_voice(audio, OPENAI_API_KEY)
-
         with container:
-            with st.chat_message(st.session_state["username"]):
+            with st.chat_message("User"):
                 st.markdown(user_input)
-        st.session_state["messages"].append({"role": st.session_state["username"], "content": user_input})
-        st.session_state["graded_messages"].append(user_input)
+        st.session_state["messages"].append(Message("input", "User", user_input))
         output = st.session_state["conversation"].predict(input=user_input)
         with container:
-            with st.chat_message(st.session_state["patient"].name):
+            with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)
-        st.session_state["messages"].append({"role": st.session_state["patient"].name, "content": output})
+        st.session_state["messages"].append(Message("output", "AI", output))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
     columns[2].button("End Interview", on_click=set_stage, args=[FINAL_SCREEN])
 
 
+if st.session_state["stage"] == FEEDBACK_SETUP:
+    methods.annotate(st.session_state["patient"], st.session_state["messages"], OPENAI_API_KEY)
+    st.set_stage(FEEDBACK_SCREEN)
+
+
+if st.session_state["stage"] == FEEDBACK_SCREEN:
+    data_acquisition, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
+    
+    with data_acquisition:
+        chat_container = st.container(height=300)
+        for message in st.session_state["messages"]:
+                with chat_container:
+                    with st.chat_message(message.role):
+                        if message.annotation is None:
+                            st.markdown(message.content)
+                        else:
+                            annotated_text((message.content, message.annotation, message.color))
+    
+    st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
+
+
 if st.session_state["stage"] == FINAL_SCREEN: 
     st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
-    st.write("In this beta testing, we have also implemented basic grading functionality. This is what topics we think you touched up on during your interview!")
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
-    
-    
-    
-    st.session_state["grading_results"]=methods.classifier_experimental(CLASSIFY_INPUT_PROMPT, CLASSIFY_INPUT_LABELS,st.session_state["graded_messages"],OPENAI_API_KEY)
-    
-    final_container=st.container(height=300)
-    with final_container:
-        index = 2
-        for message in st.session_state["grading_results"]:
-            with st.chat_message(st.session_state["username"]):
-                annotated_text((message[0],message[1]))
-            with st.chat_message(st.session_state["patient"].name):
-                st.markdown(st.session_state["messages"][index]["content"])
-            index+=2
-            # st.markdown(message)
 
     bio = io.BytesIO()
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 

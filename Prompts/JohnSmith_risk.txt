@@ -1,0 +1,8 @@
+Coronary_Artery 5
+Peripheral_Vascular 3
+Hypertension 5
+Hyperlipidemia 5
+Smoking 5
+Diabetes 5
+Relative_Cardiovascular 5
+Sedentary 1

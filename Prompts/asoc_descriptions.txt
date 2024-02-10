@@ -1,0 +1,11 @@
+Breathing||shortness of breath or trouble breathing.
+Sweating||sweating.
+Nausea||nausea.
+Syncope||syncope and other related symptoms such as dizziness, light-headedness, presyncope, etc.
+Fatigue||fatigue or weakness.
+Palpitations||palpitations or abnormal heart rhythm.
+Leg_Swelling||swelling in the legs.
+Fever||fevers.
+Cough||cough.
+URI||upper respiratory infections or related conditions.
+Heartburn||upper abdominal pain or heartburn unrelated to food.

@@ -1,0 +1,6 @@
+Viral_Illness 5
+Heart_Attack 1
+Kidney 1
+Cancer 1
+New_Meds 5
+Radiation 1

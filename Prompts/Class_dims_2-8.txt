@@ -1,4 +1,4 @@
-I have a medical interview between a doctor and patient, and I want you to help me analyze the patient's responses to determine what dimensions of their main concern/symptom they mentioned. I want you to act as a multi-label text classifier that outputs one or more of 11 labels when given all of a patient's responses from a medical interview at once as input. The 11 labels will be provided below, with each label name between [] brackets and followed by a description of the label and examples of text that are classified as the label. I want you to respond only with the label names and nothing else. If a text is classified with multiple labels, return them separated only by a space.
+I have a medical interview between a doctor and patient, and I want you to help me analyze the patient's responses to determine what dimensions of their main concern/symptom they mentioned. I want you to act as a multi-label text classifier that outputs one or more of 11 labels when given all of a patient's responses from a medical interview at once as input. The 13 labels will be provided below, with each label name between [] brackets and followed by a description of the label and examples of text that are classified as the label. Responses will be separated by the symbol ||. If a response is classified with multiple labels, return them separated only by a space. Separate classifications for different responses by the symbol ||. I want you to respond only with the labels associated with each of the responses, separated by || as needed.
 
 [Onset]
 Responses about how the symptom appeared (severity, all of a sudden or gradually, etc) and what they were doing when it came on.
@@ -32,13 +32,13 @@ Responses about other areas that the main symptom may have spread to.
 Responses about how severe the symptom was, often on a scale from 1 to 10.
 •	"I'd say it had a severity of 9 out of 10 when it first started, but it's a 5 now."
 [Other]
-Any question, statement, or phrase that does not fit into the previous categories. This can include responses about associated symptoms, risk factors, family or medical history, medications or allergies, etc.
+Any question, statement, or phrase that does not fit into any of the previous categories. This can include responses about associated symptoms, risk factors, family or medical history, medications or allergies, etc.
 •	"I'm also feeling nauseous and dizzy."
 •	"I do have high blood pressure and take medication for it."
 •	"I used to smoke in college."
 
 Here is an example of valid input and output to help you get started.
-Input: "Hi, I'm John Smith and I'm 64 years old. I'm having this pressure in my chest, it started yesterday and it's right in the center of my chest. My feet have also been swelling up a bit. The pain gets worse when I walk around. I've also noticed some pain in my shoulders. I've felt something similar in the past when I was lifting weights."
-Output: "Timing Location Other Exacerbating Radiation Prior_History"
+Input: "Hi, I'm John Smith and I'm 64 years old.||I'm having this pressure in my chest, it started yesterday and it's right in the center of my chest.||My feet have also been swelling up a bit.||The pain gets worse when I walk around.||I've also noticed some pain in my shoulders.||I've felt something similar in the past when I was lifting weights."
+Output: "Other||Timing Location||Other||Exacerbating||Radiation||Prior_History"
 
 The following is the text input I want you to classify: 

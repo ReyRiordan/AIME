@@ -20,7 +20,7 @@ import website_methods as methods
 import descriptions
 import sys
 sys.path.append("/mount/src/aime")
-from virtual_patient.patients import GPT_patient
+from virtual_patient.patients import GPT_Patient
 
 
 # SECRETS
@@ -65,7 +65,7 @@ if st.session_state["stage"] == SETTINGS:
                                                ["John Smith", "Jackie Smith"],
                                                index = None,
                                                placeholder = "Select patient...")
-    if patient_name: st.session_state["patient"] = GPT_patient(patient_name)
+    if patient_name: st.session_state["patient"] = GPT_Patient(patient_name)
 
     st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 

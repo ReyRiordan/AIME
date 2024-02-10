@@ -1,4 +1,4 @@
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
@@ -18,7 +18,7 @@ from webapp.website_methods import *
 
 KEY = os.getenv("OPENAI_API_KEY")
 #MODEL = "gpt-4-0125-preview"
-QUESTIONS_CLASSIFY = "./Prompts/classtest_dims.txt"
+INPUT_CLASSIFY = "./Prompts/classtest_gen.txt"
 BASE = "./Prompts/Base_1-15.txt"
 CONTEXT = "./Prompts/JohnSmith_sectioned.txt"
 #TOWRITE = "./testing/output.txt"
@@ -44,16 +44,17 @@ patient_name = "John Smith"
 # with open(CLASSIFY, "r", encoding="utf8") as classification_file:
 #      prompt_input = classification_file.read()
 messages = []
-with open(QUESTIONS_CLASSIFY, "r", encoding="utf8") as questions_classify:
+with open(INPUT_CLASSIFY, "r", encoding="utf8") as input_classify:
      while True:
-          question = questions_classify.readline()
+          question = input_classify.readline()
           if not question: break
           messages.append(question)
 # for message in messages:
 #      message = message.rstrip() + " "
 #      prompt_input += message
-classifications = classifier(CLASSIFY_DIMS_PROMPT, CLASSIFY_DIMS_LABELS, messages, KEY)
-print(classifications)
+classifications = classifier(CLASSIFY_GEN_PROMPT, messages, KEY)
+for index, message in enumerate(messages):
+     print(message.rstrip() + ": " + str(classifications[index]) + "\n")
 # print("Prompt length: " + str(token_counter.num_tokens_used([prompt_input])) + " tokens")
 
 #with open(TOWRITE,"w", encoding = "utf8") as logger: 

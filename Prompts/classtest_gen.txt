@@ -1,0 +1,6 @@
+Hi, I'm Rey, a medical student working with Dr. Corbett. Before we begin, could you please confirm your full name and date of birth for me?
+How would you prefer to be addressed? 
+What brings you in today? 
+Can you describe the sensation for me?
+Are you aware of any problems with your heart?
+Do you have any history alcohol use or smoking?

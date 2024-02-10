@@ -1,0 +1,11 @@
+Breathing 5
+Sweating 3
+Nausea 5
+Syncope 4
+Fatigue 2
+Palpitations 2
+Leg_Swelling 2
+Fever 1
+Cough 1
+URI 1
+Heartburn 3

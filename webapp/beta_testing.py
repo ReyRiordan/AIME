@@ -166,11 +166,11 @@ if st.session_state["stage"] == FINAL_SCREEN:
 
     bio = io.BytesIO()
     st.session_state["grading_results"]=""
-    st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
-                                                                  st.session_state["patient"].name, 
-                                                                  st.session_state["messages"], 
-                                                                  st.session_state["grading_results"])
-    st.session_state["interview"].save(bio)
+    # st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
+    #                                                               st.session_state["patient"].name, 
+    #                                                               st.session_state["messages"], 
+    #                                                               st.session_state["grading_results"])
+    # st.session_state["interview"].save(bio)
 
     st.download_button("Download interview", 
                         data=bio.getvalue(),

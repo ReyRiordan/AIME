@@ -105,7 +105,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-    columns[2].button("End Interview", on_click=set_stage, args=[FINAL_SCREEN])
+    columns[2].button("End Interview", on_click=set_stage, args=[FEEDBACK_SETUP])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
@@ -135,7 +135,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-    columns[2].button("End Interview", on_click=set_stage, args=[FINAL_SCREEN])
+    columns[2].button("End Interview", on_click=set_stage, args=[FEEDBACK_SETUP])
 
 
 if st.session_state["stage"] == FEEDBACK_SETUP:

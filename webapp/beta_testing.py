@@ -140,7 +140,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 if st.session_state["stage"] == FEEDBACK_SETUP:
     methods.annotate(st.session_state["patient"], st.session_state["messages"], OPENAI_API_KEY)
-    st.set_stage(FEEDBACK_SCREEN)
+    set_stage(FEEDBACK_SCREEN)
 
 
 if st.session_state["stage"] == FEEDBACK_SCREEN:

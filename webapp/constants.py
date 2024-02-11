@@ -30,7 +30,9 @@ WEIGHTS_GEN = {"Introduction" : 5,
                 "Family History": 5, 
                 "Alcohol": 2, 
                 "Smoking": 2, 
-                "Drug Use": 2} # note "Other" is ommitted
+                "Drug Use": 2,
+                "Other" : 0} 
+
 # Employment 1, Social_Support 1
 CLASSIFY_DIMS_PROMPT = "./Prompts/Class_dims_2-8.txt"
 WEIGHTS_DIMS = {"Onset": 5, 

@@ -126,5 +126,29 @@ def annotate(patient: GPT_Patient, messages: list[Message], OPENAI_API_KEY: str)
         message.add_annotation()
 
  
-#def grade_data_acquisition(annotated_messages: list[dict[str, str or bool]], patient: GPT_Patient):
-    # UNFINISHED
+def grade_data_acquisition(annotated_messages: list[Message], patient: GPT_Patient):
+    general_score=0
+    
+    general_categories = {"Introduction": False,
+                "Confirm Identity": False,
+                "Establish Chief Concern":False,
+                "Additional Information":False, 
+                "Medical History":False,
+                "Surgery Hospitalization":False,
+                "Medication":False,
+                "Allergies":False,
+                "Family History":False,
+                "Alcohol":False,
+                "Smoking":False,
+                "Drug Use":False,
+                "Other":False}
+    
+    for message in annotated_messages:
+        if general_categories[message.labels_gen]:
+            general_categories[message.labels_gen]=True
+
+    for category in general_categories:
+        if general_categories[category]:
+            general_score+=WEIGHTS_GEN[category]
+            
+    return general_score

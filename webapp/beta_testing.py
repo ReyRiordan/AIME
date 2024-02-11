@@ -140,6 +140,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 if st.session_state["stage"] == FEEDBACK_SETUP:
     methods.annotate(st.session_state["patient"], st.session_state["messages"], OPENAI_API_KEY)
+    
     set_stage(FEEDBACK_SCREEN)
 
 
@@ -155,7 +156,10 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
                             st.markdown(message.content)
                         else:
                             annotated_text((message.content, message.annotation, message.color))
+    general_score=methods.grade_data_acquisition(st.session_state["messages"],GPT_Patient)
     
+    st.header(":blue[General Questions]: " + str(general_score) + "/" + str(len(st.session_state["general_classed"])), divider = "blue")
+
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 

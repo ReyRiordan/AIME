@@ -165,6 +165,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
 
     bio = io.BytesIO()
+    st.session_state["grading_results"]=""
     st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
                                                                   st.session_state["patient"].name, 
                                                                   st.session_state["messages"], 

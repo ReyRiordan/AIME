@@ -29,7 +29,7 @@ load_dotenv()
 
 # SECRETS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-LOGIN_PASS = "corbetsi"
+LOGIN_PASS = os.getenv("PASSWORD")
 
 st.title("Medical Interview Simulation (BETA)")
 

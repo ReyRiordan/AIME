@@ -19,19 +19,41 @@ from virtual_patient.patients import GPT_Patient
 from website_classes import Message
 
 
-def create_interview_file(username: str, patient: str, messages: list[dict[str, str]], grading_results: dict[str,bool]) -> Document:
+def create_interview_file(username: str, patient: str, messages: list[Message]) -> Document:
     interview = Document()
     heading = interview.add_paragraph("User: " + username + ", ")
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     heading.add_run("Date: " + date_time + ", ")
     heading.add_run("Patient: " + patient)
+
+    messages_table=interview.add_table(rows = 1, cols = 0)
+    messages_table.add_column(914400)
+    messages_table.add_column(1828800)
+    for i in range(4):
+        messages_table.add_column(914400)
+    messages_table.add_row()
+    header_cells = messages_table.rows[0].cells
+    header_cells[1].text="Message"
+    header_cells[2].merge(header_cells[5])
+    header_cells[2].text="Comments"
+
+    cat_rows=messages_table.rows[1].cells
+    header_cells[0].merge(cat_rows[1])
+    cat_rows[2].text="General"
+    cat_rows[3].text="Dimensions of Chief Concern"
+    cat_rows[4].text="Associated Symptoms"
+    cat_rows[5].text="Risk Factors"
     for message in messages:
-        interview.add_paragraph(message["role"] + ": " + message["content"])
-    interview.add_paragraph("Grading Criteria")
-    for message in grading_results:
-        msg=interview.add_paragraph(message[0])
-        msg.add_run(message[1]).bold=True
+        row_cells=messages_table.add_row().cells
+        row_cells[0].text=message.role
+        row_cells[1].text=message.content
+        row_cells[1].width=2
+        row_cells[2].text=str(message.labels_gen)
+        row_cells[3].text=str(message.labels_dims)
+        row_cells[4].text=str(message.labels_asoc)
+        row_cells[5].text=str(message.labels_risk)
+    
     return interview
 
 

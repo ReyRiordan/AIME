@@ -86,7 +86,8 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
-    
+    st.session_state["start_time"] = date.currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+
     container = st.container(height=300)
 
     for message in st.session_state["messages"]:
@@ -157,40 +158,23 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
     with data_acquisition:
         chat_container = st.container(height=300)
         for message in st.session_state["messages"]:
-                with chat_container:
-                    with st.chat_message(message.role):
-                        if message.annotation is None:
-                            st.markdown(message.content)
-                        else:
-                            annotated_text((message.content, message.annotation, message.color))
-    
-        gen_score, gen_max = st.session_state["scores"]["gen"]
-        st.header(":blue[General Questions]: " + str(gen_score) + "/"+str(gen_max), divider = "blue")
-        gen_display = []
-        for key, value in st.session_state["grades"]["gen"].items():
-            gen_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
-        annotated_text(gen_display)
+            with chat_container:
+                with st.chat_message(message.role):
+                    if message.annotation is None:
+                        st.markdown(message.content)
+                    else:
+                        annotated_text((message.content, message.annotation, message.color))
 
-        dims_score, dims_max = st.session_state["scores"]["dims"]
-        st.header(":red[Dimensions of Chief Concern]: " + str(dims_score) + "/" + str(dims_max), divider = "red")
-        dims_display = []
-        for key, value in st.session_state["grades"]["dims"].items():
-            dims_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
-        annotated_text(dims_display)
+        def display_section(header_text, scores, grades, color):
+            score, score_max = scores
+            st.header(f":{color}[{header_text}]: {score}/{score_max}", divider=color)
+            display_data = [(key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba") for key, value in grades.items()]
+            annotated_text(display_data)
 
-        asoc_score, asoc_max = st.session_state["scores"]["asoc"]
-        st.header(":orange[Associated Symptom Questions]: " + str(asoc_score) + "/"+str(asoc_max), divider = "orange")
-        asoc_display = []
-        for key, value in st.session_state["grades"]["asoc"].items():
-            asoc_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
-        annotated_text(asoc_display)
-
-        risk_score, risk_max = st.session_state["scores"]["risk"]
-        st.header(":violet[Risk Factor Questions]: " + str(risk_score) + "/"+str(risk_max), divider = "violet")
-        risk_display = []
-        for key, value in st.session_state["grades"]["risk"].items():
-            risk_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
-        annotated_text(risk_display)
+        display_section("General Questions", st.session_state["scores"]["gen"], st.session_state["grades"]["gen"], "blue")
+        display_section("Dimensions of Chief Concern", st.session_state["scores"]["dims"], st.session_state["grades"]["dims"], "red")
+        display_section("Associated Symptom Questions", st.session_state["scores"]["asoc"], st.session_state["grades"]["asoc"], "orange")
+        display_section("Risk Factor Questions", st.session_state["scores"]["risk"], st.session_state["grades"]["risk"], "violet")
 
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
@@ -202,12 +186,11 @@ if st.session_state["stage"] == FINAL_SCREEN:
 
     bio = io.BytesIO()
     st.session_state["grading_results"]=""
-    # st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
-    #                                                               st.session_state["patient"].name, 
-    #                                                               st.session_state["messages"], 
-    #                                                               st.session_state["grading_results"])
-    # st.session_state["interview"].save(bio)
-
+    st.session_state["interview"] = methods.create_interview_file(st.session_state["username"], 
+                                                                  st.session_state["patient"].name, 
+                                                                  st.session_state["messages"])
+    st.session_state["interview"].save(bio)
+    
     st.download_button("Download interview", 
                         data=bio.getvalue(),
                         file_name=st.session_state["username"]+"_"+date_time+".docx",

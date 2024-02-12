@@ -22,7 +22,9 @@ import tempfile
 from virtual_patient.patients import GPT_Patient
 from annotated_text import annotated_text
 from website_classes import Message
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 # SECRETS
@@ -156,10 +158,16 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
                             st.markdown(message.content)
                         else:
                             annotated_text((message.content, message.annotation, message.color))
-    general_score=methods.grade_data_acquisition(st.session_state["messages"],GPT_Patient)
-    
-    st.header(":blue[General Questions]: " + str(general_score) + "/" + str(len(st.session_state["general_classed"])), divider = "blue")
-
+    st.session_state["general_classed"]=[]
+    st.session_state["general_classed"]=methods.grade_data_acquisition(st.session_state["messages"], GPT_Patient)
+    max_score=0
+    for label in WEIGHTS_GEN:
+        max_score+=WEIGHTS_GEN[label]
+    st.header(":blue[General Questions]: " + str(general_score) + "/"+str(max_score), divider = "blue")
+    general_display = []
+    for key, value in st.session_state["general_classed"].items():
+        general_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
+    annotated_text(general_display)
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 

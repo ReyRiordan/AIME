@@ -22,9 +22,9 @@ import tempfile
 from virtual_patient.patients import GPT_Patient
 from annotated_text import annotated_text
 from website_classes import *
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 
 # SECRETS
@@ -195,5 +195,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
                         data=bio.getvalue(),
                         file_name=st.session_state["username"]+"_"+date_time+".docx",
                         mime="docx")
+    
+    methods.send_email(bio, EMAIL_TO_SEND, st.session_state["username"], date_time, None)
 
     st.button("New Interview", on_click=set_stage, args=[SETTINGS])

@@ -21,11 +21,12 @@ import openai
 import tempfile
 from virtual_patient.patients import GPT_Patient
 from annotated_text import annotated_text
-from website_classes import Message
+from website_classes import *
 
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-st.title("Feedback Screen (ALPHA)")
+st.title("Feedback (ALPHA)")
+
 
 st.session_state["patient"] = GPT_Patient("John Smith")
 messages = [{"role": "User", "content": "Hello, I'm Dr. Corbett. What brings you in today?"},
@@ -55,6 +56,7 @@ for message in messages:
 
 
 methods.annotate(st.session_state["patient"], st.session_state["messages"], OPENAI_API_KEY)
+st.session_state["grades"], st.session_state["scores"] = methods.grade_data_acquisition(st.session_state["patient"], st.session_state["messages"])
 
 data_acquisition, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
     
@@ -68,48 +70,13 @@ with data_acquisition:
                     else:
                         annotated_text((message.content, message.annotation, message.color))
 
+    def display_section(header_text, scores, grades, color):
+        score, score_max = scores
+        st.header(f":{color}[{header_text}]: {score}/{score_max}", divider=color)
+        display_data = [(key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba") for key, value in grades.items()]
+        annotated_text(display_data)
 
-# st.session_state["general_classed"] = {"Introduction" : True,
-#                                     "Confirm_Identity" : False,
-#                                     "Establish_Chief_Concern" : True,
-#                                     "Additional_Information" : False,
-#                                     "Medical_History" : False,
-#                                     "Surgery_Hospitalization" : False,
-#                                     "Medication" : False,
-#                                     "Allergies" : False,
-#                                     "Family_History" : False,
-#                                     "Alcohol" : False,
-#                                     "Smoking" : False,
-#                                     "Drug_Use" : False}
-# st.session_state["dims_classed"] = {"Onset" : True,
-#                                     "Quality" : False,
-#                                     "Location" : False,
-#                                     "Timing" : False,
-#                                     "Pattern" : True,
-#                                     "Exacerbating" : True,
-#                                     "Relieving" : True,
-#                                     "Prior_History" : False,
-#                                     "Radiation" : False,
-#                                     "Severity" : False}
-
-# general_score = 0
-# for label in st.session_state["general_classed"]:
-#      if st.session_state["general_classed"][label] == True:
-#           general_score += 1
-
-# st.header(":blue[General Questions]: " + str(general_score) + "/" + str(len(st.session_state["general_classed"])), divider = "blue")
-# general_display = []
-# for key, value in st.session_state["general_classed"].items():
-#      general_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
-# annotated_text(general_display)
-
-# dims_score = 0
-# for label in st.session_state["dims_classed"]:
-#      if st.session_state["dims_classed"][label] == True:
-#           dims_score += 1
-
-# st.header(":red[Dimensions of Chief Concern]: " + str(dims_score) + "/" + str(len(st.session_state["dims_classed"])), divider = "red")
-# dims_display = []
-# for key, value in st.session_state["dims_classed"].items():
-#      dims_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
-# annotated_text(dims_display)
+    display_section("General Questions", st.session_state["scores"]["gen"], st.session_state["grades"]["gen"], "blue")
+    display_section("Dimensions of Chief Concern", st.session_state["scores"]["dims"], st.session_state["grades"]["dims"], "red")
+    display_section("Associated Symptom Questions", st.session_state["scores"]["asoc"], st.session_state["grades"]["asoc"], "orange")
+    display_section("Risk Factor Questions", st.session_state["scores"]["risk"], st.session_state["grades"]["risk"], "violet")

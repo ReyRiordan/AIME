@@ -21,7 +21,7 @@ import openai
 import tempfile
 from virtual_patient.patients import GPT_Patient
 from annotated_text import annotated_text
-from website_classes import Message
+from website_classes import *
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -141,12 +141,17 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 
 if st.session_state["stage"] == FEEDBACK_SETUP:
+    # Annotate all the messages
     methods.annotate(st.session_state["patient"], st.session_state["messages"], OPENAI_API_KEY)
+
+    # Get grades and scores based on all the annotated messages
+    st.session_state["grades"], st.session_state["scores"] = methods.grade_data_acquisition(st.session_state["patient"], st.session_state["messages"])
     
     set_stage(FEEDBACK_SCREEN)
 
 
 if st.session_state["stage"] == FEEDBACK_SCREEN:
+    # tabs for feedback types
     data_acquisition, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
     
     with data_acquisition:
@@ -158,16 +163,35 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
                             st.markdown(message.content)
                         else:
                             annotated_text((message.content, message.annotation, message.color))
-    st.session_state["general_classed"]=[]
-    st.session_state["general_classed"]=methods.grade_data_acquisition(st.session_state["messages"], GPT_Patient)
-    max_score=0
-    for label in WEIGHTS_GEN:
-        max_score+=WEIGHTS_GEN[label]
-    st.header(":blue[General Questions]: " + str(general_score) + "/"+str(max_score), divider = "blue")
-    general_display = []
-    for key, value in st.session_state["general_classed"].items():
-        general_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
-    annotated_text(general_display)
+    
+        gen_score, gen_max = st.session_state["scores"]["gen"]
+        st.header(":blue[General Questions]: " + str(gen_score) + "/"+str(gen_max), divider = "blue")
+        gen_display = []
+        for key, value in st.session_state["grades"]["gen"].items():
+            gen_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
+        annotated_text(gen_display)
+
+        dims_score, dims_max = st.session_state["scores"]["dims"]
+        st.header(":red[Dimensions of Chief Concern]: " + str(dims_score) + "/" + str(dims_max), divider = "red")
+        dims_display = []
+        for key, value in st.session_state["grades"]["dims"].items():
+            dims_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
+        annotated_text(dims_display)
+
+        asoc_score, asoc_max = st.session_state["scores"]["asoc"]
+        st.header(":orange[Associated Symptom Questions]: " + str(asoc_score) + "/"+str(asoc_max), divider = "orange")
+        asoc_display = []
+        for key, value in st.session_state["grades"]["asoc"].items():
+            asoc_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
+        annotated_text(asoc_display)
+
+        risk_score, risk_max = st.session_state["scores"]["risk"]
+        st.header(":violet[Risk Factor Questions]: " + str(risk_score) + "/"+str(risk_max), divider = "violet")
+        risk_display = []
+        for key, value in st.session_state["grades"]["risk"].items():
+            risk_display.append((key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba"))
+        annotated_text(risk_display)
+
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 

@@ -112,12 +112,12 @@ def annotate(patient: GPT_Patient, messages: list[Message], OPENAI_API_KEY: str)
     output_index = 0
     for message in messages:
         if message.type == "input":
-            message.labels_gen = input_labeled_gen[input_index]
-            message.labels_asoc = input_labeled_asoc[input_index]
-            message.labels_risk = input_labeled_risk[input_index]
+            if input_labeled_gen[input_index]: message.labels_gen = input_labeled_gen[input_index]
+            if input_labeled_asoc[input_index]: message.labels_asoc = input_labeled_asoc[input_index]
+            if input_labeled_risk[input_index]: message.labels_risk = input_labeled_risk[input_index]
             input_index += 1
         elif message.type == "output":
-            message.labels_dims = output_labeled_dims[output_index]
+            if output_labeled_dims[output_index]: message.labels_dims = output_labeled_dims[output_index]
             output_index += 1
     
     # Add color and annotation after all labels are assigned
@@ -125,21 +125,33 @@ def annotate(patient: GPT_Patient, messages: list[Message], OPENAI_API_KEY: str)
         message.add_color()
         message.add_annotation()
 
- 
-def grade_data_acquisition(annotated_messages: list[Message], patient: GPT_Patient):
-    general_score=0
-    general_categories=WEIGHTS_GEN.copy()
-    for category in general_categories:
-        general_categories[category]=False
-            
-    for message in annotated_messages:
-        if message.labels_gen!=None:
-            for label in message.labels_gen:
-                if label in general_categories.keys():
-                    general_categories[label]=True
 
-    for category in general_categories:
-        if general_categories[category]:
-            general_score+=WEIGHTS_GEN[category]
+def grade_data_acquisition(patient: GPT_Patient, messages: list[Message]) -> [dict[dict[str, bool]], dict[str, list[int]]]:
+    # Helper dict with attribute names
+    categories = {"gen": {"message": "labels_gen", "patient": "weights_gen"}, 
+                  "dims": {"message": "labels_dims", "patient": "weights_dims"}, 
+                  "asoc": {"message": "labels_asoc", "patient": "weights_asoc"}, 
+                  "risk": {"message": "labels_risk", "patient": "weights_risk"}}
+    
+    # Initialize label grades
+    all_grades = {category: {label: False for label in getattr(patient, categories[category]["patient"])} for category in categories}
 
-    return general_score
+    # Initialize scores
+    all_scores = {category: [0, 0] for category in categories}
+
+    # Iterate through messages and update label grades
+    for message in messages:
+        for category in categories:
+            labels = getattr(message, categories[category]["message"])
+            if labels:
+                for label in labels:
+                    all_grades[category][label] = True
+
+    # Get scores and max scores
+    for category in categories:
+        weights = getattr(patient, categories[category]["patient"])
+        for label in weights:
+            if all_grades[category][label]: all_scores[category][0] += weights[label]
+            all_scores[category][1] += weights[label]
+
+    return [all_grades, all_scores]

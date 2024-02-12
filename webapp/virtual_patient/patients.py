@@ -71,3 +71,7 @@ class GPT_Patient:
             for label in self.weights_risk:
                 self.class_risk_prompt += "[" + label + "]\nAny question about " + risk_label_descs[label] + "\n"
             self.class_risk_prompt += risk_base[1]
+
+        # Extract gen and dims label weights (not patient specific for now)
+        self.weights_gen = WEIGHTS_GEN
+        self.weights_dims = WEIGHTS_DIMS

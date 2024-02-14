@@ -1,5 +1,5 @@
 from lookups import *
-
+import json
 
 class Patient:
 
@@ -19,22 +19,8 @@ class Patient:
         self.ECG = PATIENTS[name]["ECG"]
 
         # Extract labels and weights for patient
-        self.weights = {} # dict[str, dict[str, int]]
-        with open(PATIENTS[name]["weights"], "r", encoding="utf8") as weights_file:
-            raw = weights_file.read()
-            cat_split = raw.split("||")
-            for cat in cat_split:
-                cat = cat.rstrip()
-                cat_all = cat.split("\n")
-                cat_name = cat_all[0]
-                labels_weights = cat_all[1:]
-                cat_dict = {} # dict[str, int]
-                for line in labels_weights:
-                    line_split = line.split(" ")
-                    label = line_split[0].replace("_", " ")
-                    weight = int(line_split[1])
-                    cat_dict[label] = weight
-                self.weights[cat_name] = cat_dict
+        with open(PATIENTS[name]["weights"], "r") as weights_json:
+            self.weights = json.load(weights_json)
 
 
 class Category:

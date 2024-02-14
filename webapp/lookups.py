@@ -27,13 +27,13 @@ PATIENTS = {
     "John Smith": {"base": "./Prompts/Base_1-15.txt", 
                    "case": "./Prompts/JohnSmith_1-15.txt", 
                    "weights": "./Prompts/JohnSmith_weights.txt", 
-                   "physical": "./Patient_Info/Physical_JohnSmith.docx", 
-                   "ECG": "./Patient_Info/ECG_JohnSmith.png"}, 
+                   "physical": "./Patient_Info/JohnSmith_physical.docx", 
+                   "ECG": "./Patient_Info/JohnSmith_ECG.png"}, 
     "Jackie Smith": {"base": "./Prompts/Base_1-15.txt", 
                      "case": "./Prompts/JackieSmith_1-15.txt", 
                      "weights": "./Prompts/JackieSmith_weights.txt", 
-                     "physical": "./Patient_Info/Physical_JackieSmith.docx", 
-                     "ECG": "./Patient_Info/ECG_JackieSmith.png"}
+                     "physical": "./Patient_Info/JackieSmith_physical.docx", 
+                     "ECG": "./Patient_Info/JackieSmith_ECG.png"}
 }
 
 CATEGORIES = {

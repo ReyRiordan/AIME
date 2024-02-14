@@ -41,16 +41,18 @@ def set_stage(stage):
 if st.session_state["stage"] == LOGIN_PAGE:
     st.write("For beta testing use only.")
     
-    st.session_state["username"] = st.text_input("Enter any username (does not have to be your real name) and press \"Enter\":")
+    st.session_state["username"] = st.text_input("Enter any username (does not have to be your real name):")
     password = st.text_input("Enter the password you were provided and press \"Enter\":", type = "password")
-    if st.session_state["username"] and password:
-        if password == LOGIN_PASS: 
+    if password:
+        if not st.session_state["username"]:
+            st.write("Missing username.")
+        elif password == LOGIN_PASS: 
             st.write("Authentication successful!")
             time.sleep(1)
             set_stage(SETTINGS)
             st.rerun()
         else:
-            st.write("Password incorrect")
+            st.write("Password incorrect.")
 
 
 if st.session_state["stage"] == SETTINGS:

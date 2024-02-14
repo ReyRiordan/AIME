@@ -14,7 +14,7 @@ FINAL_SCREEN = 10
 
 # LLM models
 CONVO_MODEL = "gpt-4"
-CLASS_MODEL = "gpt-4-0125-preview"
+CLASS_MODEL = "gpt-4"
 
 # Email API
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]

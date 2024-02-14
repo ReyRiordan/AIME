@@ -13,7 +13,7 @@ import datetime as date
 import os
 import sys
 sys.path.append('/Users/reyriordan/Documents/Research/Artificial-Intelligence-in-Medical-Education-AIME-/')
-from webapp.constants import *
+from webapp.lookups import *
 from webapp.website_methods import *
 
 KEY = os.getenv("OPENAI_API_KEY")

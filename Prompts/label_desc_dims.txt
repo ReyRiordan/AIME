@@ -1,0 +1,13 @@
+Onset||Responses about how the symptom appeared (severity, all of a sudden or gradually, etc) and what they were doing when it came on. For example, "The pain came on all of a sudden." "I was seated at home when it appeared."
+Quality||Responses about the quality/sensation of the symptom, describing what it feels like. For example, "It's a sharp and stabbing pain in my chest."
+Location||Responses about the location of the main symptom.
+Timing||Responses about when the symptom started, how long it's been going on, or the duration of the symptom.
+Pattern||Responses about whether the symptom is constant or coming and going.
+Exacerbating||Responses about what makes the symptom worse. 
+Relieving||Responses about what makes the symptom better or more bearable.
+Prior_History||Responses about whether the patient has ever had a similar symptom before. Family history does not count. For example, "I've never felt anything like this before."
+Radiation||Responses about other areas that the main symptom/concern may have spread to. For example, "When the pain was at its worst, I also felt an aching in my jaw and shoulders."
+Severity||Responses about how severe the symptom was on a scale from 1 to 10. General remarks about the severity do not count. For example, "I'd say it had a severity of 9 out of 10 when it first started, but it's a 5 now."
+|EXAMPLE|
+Inputs: Hi, I'm John Smith and I'm 64 years old.||I'm having this pressure in my chest, it started yesterday and it's right in the center of my chest.||My feet have also been swelling up a bit.||The pain gets worse when I walk around.||I've also noticed some pain in my shoulders.||I've felt something similar in the past when I was lifting weights.||
+Output: Other||Timing Location||Other||Exacerbating||Radiation||Prior_History||

@@ -1,0 +1,45 @@
+gen
+Introduction 5
+Confirm_Identity 5
+Establish_Chief_Concern 5
+Additional_Information 5
+Medical_History 5
+Surgery_Hospitalization 5
+Medication 5
+Allergies 5
+Family_History 5
+Alcohol 2
+Smoking 2
+Drug_Use 2
+Employment 1
+Social_Support 1
+||dims
+Onset 5
+Quality 5
+Location 5
+Timing 5
+Pattern 5
+Exacerbating 5
+Relieving 5
+Prior_History 5
+Radiation 5
+Severity 5
+||asoc
+Breathing 5
+Sweating 1
+Nausea 1
+Syncope 3
+Fatigue 4
+Palpitations 1
+Leg_Swelling 1
+Fever 5
+Cough 1
+URI 5
+Heartburn 1
+||risk
+Viral_Illness 5
+Heart_Attack 1
+Kidney 1
+Cancer 1
+New_Meds 5
+Radiation 1

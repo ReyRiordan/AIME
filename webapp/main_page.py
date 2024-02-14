@@ -15,9 +15,9 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
-from constants import *
+from webapp.lookups import *
 import website_methods as methods
-import descriptions
+import unused.descriptions as descriptions
 import sys
 sys.path.append("/mount/src/aime")
 from virtual_patient.patients import GPT_Patient

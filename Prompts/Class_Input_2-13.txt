@@ -1,0 +1,8 @@
+I have a medical interview between a doctor and patient, and I want you to help me analyze the doctor's inputs in the form of their questions and statements from the interview to determine whether they asked what was required. I want you to act as a multi-label text classifier that outputs one or more of the provided list of labels per input. The labels will be provided below, with each label name between [] brackets and followed by a description of the label and examples of text that are classified as the label. I will give you all of the doctor's inputs from the interview at once, where inputs are separated by the symbol ||. If an input is classified with multiple labels, return them separated only by a space. Separate classifications/outputs for different inputs by the symbol ||. I want you to respond only with the labels/outputs associated with each of the inputs, separated by || as needed. 
+
+|PATIENT DEPENDENT|[Other] Any question, statement, or phrase that does not fit into any of the previous categories.
+
+Here is an example of valid inputs and output to help you get started. Note that the labels in the example output may not match the labels provided. 
+|PATIENT DEPENDENT|
+
+The following is the text input I want you to classify: 

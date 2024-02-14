@@ -13,22 +13,19 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
-from constants import *
-import website_methods as methods
-import descriptions
-from audiorecorder import audiorecorder
-import openai
-import tempfile
-from virtual_patient.patients import GPT_Patient
-from annotated_text import annotated_text
+from lookups import *
+from website_methods import *
 from website_classes import *
+from audiorecorder import audiorecorder
+from openai import OpenAI
+import tempfile
+from annotated_text import annotated_text
 
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 st.title("Feedback (ALPHA)")
 
 
-st.session_state["patient"] = GPT_Patient("John Smith")
 messages = [{"role": "User", "content": "Hello, I'm Dr. Corbett. What brings you in today?"},
             {"role": "AI", "content": "Hi there, I've been having this sharp pain in my chest. It's been going on for about a day and a half now. It started off mild but it's gotten much worse today. I'm really worried because my dad died of a heart attack when he was 50."}, 
             {"role": "User", "content": "Tell me more about this sharp pain in your chest"}, 
@@ -44,39 +41,43 @@ messages = [{"role": "User", "content": "Hello, I'm Dr. Corbett. What brings you
             {"role": "User", "content": "Do you drink or smoke?"}, 
             {"role": "AI", "content": "No, I've never smoked. I do enjoy a glass of wine or a cocktail during the week, but that's about it."}]
 
-st.session_state["messages"] = []
+st.session_state["interview"] = Interview("TEST", Patient("John Smith"))
 for message in messages:
      if message["role"] == "User":
-          st.session_state["messages"].append(Message("input", message["role"], message["content"]))
+          st.session_state["interview"].messages.append(Message("input", message["role"], message["content"]))
      elif message["role"] == "AI":
-          st.session_state["messages"].append(Message("output", message["role"], message["content"]))
+          st.session_state["interview"].messages.append(Message("output", message["role"], message["content"]))
 
 # for message in st.session_state["messages"]:
 #      st.write(message.content)
 
 
-methods.annotate(st.session_state["patient"], st.session_state["messages"], OPENAI_API_KEY)
-st.session_state["grades"], st.session_state["scores"] = methods.grade_data_acquisition(st.session_state["patient"], st.session_state["messages"])
+annotate(st.session_state["interview"], OPENAI_API_KEY)
+st.session_state["interview"].add_grades()
 
-data_acquisition, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
+data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
     
-with data_acquisition:
+with data:
     chat_container = st.container(height=300)
-    for message in st.session_state["messages"]:
+    for message in st.session_state["interview"].messages:
             with chat_container:
                 with st.chat_message(message.role):
                     if message.annotation is None:
                         st.markdown(message.content)
                     else:
-                        annotated_text((message.content, message.annotation, message.color))
+                        annotated_text((message.content, message.annotation, message.highlight))
 
-    def display_section(header_text, scores, grades, color):
-        score, score_max = scores
-        st.header(f":{color}[{header_text}]: {score}/{score_max}", divider=color)
-        display_data = [(key.replace("_", " "), "", "#baffc9" if value else "#ffb3ba") for key, value in grades.items()]
-        annotated_text(display_data)
+    for category in st.session_state["interview"].categories:
+         if category.tab == "data":
+            display_grades(st.session_state["interview"].grades, category)
 
-    display_section("General Questions", st.session_state["scores"]["gen"], st.session_state["grades"]["gen"], "blue")
-    display_section("Dimensions of Chief Concern", st.session_state["scores"]["dims"], st.session_state["grades"]["dims"], "red")
-    display_section("Associated Symptom Questions", st.session_state["scores"]["asoc"], st.session_state["grades"]["asoc"], "orange")
-    display_section("Risk Factor Questions", st.session_state["scores"]["risk"], st.session_state["grades"]["risk"], "violet")
+currentDateAndTime = date.datetime.now()
+date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+bio = io.BytesIO()
+st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
+st.session_state["convo_file"].save(bio)
+    
+st.download_button("Download interview", 
+                   data = bio.getvalue(),
+                   file_name = st.session_state["interview"].username + "_"+date_time + ".docx",
+                   mime = "docx")

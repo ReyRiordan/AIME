@@ -42,25 +42,18 @@ class Category:
             if len(base_split) != 3:
                 raise ValueError("Base classification prompt should have 3 parts.")
 
-        self.all_label_descs = {} # dict[str, str]
+        with open(CATEGORIES[name]["desc"], "r") as desc_json:
+            full_desc = json.load(desc_json)
+        self.all_label_descs = full_desc["labels"] # dict[str, str]
+        self.example = full_desc["example"] # str
+
         self.used_label_descs = {} # dict[str, str]
-        with open(CATEGORIES[name]["desc_path"], "r", encoding="utf8") as desc_file:
-            raw = desc_file.read()
-            raw_split = raw.split("|EXAMPLE|\n")
-            label_descs = raw_split[0].rstrip()
-            self.example = raw_split[1]
-            split_by_label = label_descs.split("\n")
-            for line in split_by_label:
-                line_split = line.split("||")
-                label = line_split[0].replace("_", " ")
-                desc = line_split[1]
-                self.all_label_descs[label] = desc
         for label in patient.weights[name]:
             self.used_label_descs[label] = self.all_label_descs[label]
         
         self.class_prompt = base_split[0]
         for label in self.used_label_descs:
-            self.class_prompt += "[" + label + "] " + self.used_label_descs[label] + "\n"
+            self.class_prompt += "[" + label.replace(" ", "_") + "] " + self.used_label_descs[label] + "\n"
         self.class_prompt += base_split[1] + self.example + base_split[2]
         
 

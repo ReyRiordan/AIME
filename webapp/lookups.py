@@ -42,25 +42,25 @@ CATEGORIES = {
             "header": "General Questions", 
             "color": "blue", 
             "highlight": "#bae1ff", # light blue
-            "desc_path": "./Prompts/label_desc_gen.txt"}, 
+            "desc": "./Prompts/desc_gen.json"}, 
     "dims": {"tab": "data", 
              "type": "output", 
              "header": "Dimensions of Chief Concern", 
              "color": "red", 
              "highlight": "#ffb3ba", # light red
-             "desc_path": "./Prompts/label_desc_dims.txt"}, 
+             "desc": "./Prompts/desc_dims.json"}, 
     "asoc": {"tab": "data", 
              "type": "input", 
              "header": "Associated Symptoms Questions", 
              "color": "orange", 
              "highlight": "#ffdfba", # light orange
-             "desc_path": "./Prompts/label_desc_asoc.txt"}, 
+             "desc": "./Prompts/desc_asoc.json"}, 
     "risk": {"tab": "data", 
              "type": "input", 
              "header": "Risk Factor Questions", 
              "color": "violet", 
              "highlight": "#f1cbff", # light violet
-             "desc_path": "./Prompts/label_desc_risk.txt"}
+             "desc": "./Prompts/desc_risk.json"}
 }
 
 WEBSITE_TEXT = {

@@ -18,9 +18,6 @@ from sendgrid.helpers.mail import (
 from webapp.lookups import *
 import website_methods as methods
 import unused.descriptions as descriptions
-import sys
-sys.path.append("/mount/src/aime")
-from virtual_patient.patients import GPT_Patient
 
 
 # SECRETS

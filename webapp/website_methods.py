@@ -17,6 +17,7 @@ import tempfile
 from lookups import *
 from website_classes import *
 from annotated_text import annotated_text
+import json
 
 
 def get_webtext(content: str) -> str:

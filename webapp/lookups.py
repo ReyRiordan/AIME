@@ -26,14 +26,14 @@ CLASS_OUTPUT = "./Prompts/Class_Output_2-13.txt"
 PATIENTS = {
     "John Smith": {"base": "./Prompts/Base_1-15.txt", 
                    "case": "./Prompts/JohnSmith_1-15.txt", 
-                   "weights": "./Prompts/JohnSmith_weights.txt", 
-                   "physical": "./Patient_Info/Physical_JohnSmith.docx", 
-                   "ECG": "./Patient_Info/ECG_JohnSmith.png"}, 
+                   "weights": "./Patient_Info/JohnSmith_weights.json", 
+                   "physical": "./Patient_Info/JohnSmith_physical.docx", 
+                   "ECG": "./Patient_Info/JohnSmith_ECG.png"}, 
     "Jackie Smith": {"base": "./Prompts/Base_1-15.txt", 
                      "case": "./Prompts/JackieSmith_1-15.txt", 
-                     "weights": "./Prompts/JackieSmith_weights.txt", 
-                     "physical": "./Patient_Info/Physical_JackieSmith.docx", 
-                     "ECG": "./Patient_Info/ECG_JackieSmith.png"}
+                     "weights": "./Patient_Info/JackieSmith_weights.json", 
+                     "physical": "./Patient_Info/JackieSmith_physical.docx", 
+                     "ECG": "./Patient_Info/JackieSmith_ECG.png"}
 }
 
 CATEGORIES = {
@@ -42,25 +42,25 @@ CATEGORIES = {
             "header": "General Questions", 
             "color": "blue", 
             "highlight": "#bae1ff", # light blue
-            "desc_path": "./Prompts/label_desc_gen.txt"}, 
+            "desc": "./Prompts/desc_gen.json"}, 
     "dims": {"tab": "data", 
              "type": "output", 
              "header": "Dimensions of Chief Concern", 
              "color": "red", 
              "highlight": "#ffb3ba", # light red
-             "desc_path": "./Prompts/label_desc_dims.txt"}, 
+             "desc": "./Prompts/desc_dims.json"}, 
     "asoc": {"tab": "data", 
              "type": "input", 
              "header": "Associated Symptoms Questions", 
              "color": "orange", 
              "highlight": "#ffdfba", # light orange
-             "desc_path": "./Prompts/label_desc_asoc.txt"}, 
+             "desc": "./Prompts/desc_asoc.json"}, 
     "risk": {"tab": "data", 
              "type": "input", 
              "header": "Risk Factor Questions", 
              "color": "violet", 
              "highlight": "#f1cbff", # light violet
-             "desc_path": "./Prompts/label_desc_risk.txt"}
+             "desc": "./Prompts/desc_risk.json"}
 }
 
 WEBSITE_TEXT = {

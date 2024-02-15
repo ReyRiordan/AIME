@@ -1,0 +1,51 @@
+{
+  "gen": {
+    "Introduction": 5,
+    "Confirm Identity": 5,
+    "Establish Chief Concern": 5,
+    "Additional Information": 5,
+    "Medical History": 5,
+    "Surgery Hospitalization": 5,
+    "Medication": 5,
+    "Allergies": 5,
+    "Family History": 5,
+    "Alcohol": 2,
+    "Smoking": 2,
+    "Drug Use": 2,
+    "Employment": 1,
+    "Social Support": 1
+  },
+  "dims": {
+    "Onset": 5,
+    "Quality": 5,
+    "Location": 5,
+    "Timing": 5,
+    "Pattern": 5,
+    "Exacerbating": 5,
+    "Relieving": 5,
+    "Prior History": 5,
+    "Radiation": 5,
+    "Severity": 5
+  },
+  "asoc": {
+    "Breathing": 5,
+    "Sweating": 1,
+    "Nausea": 1,
+    "Syncope": 3,
+    "Fatigue": 4,
+    "Palpitations": 1,
+    "Leg Swelling": 1,
+    "Fever": 5,
+    "Cough": 1,
+    "URI": 5,
+    "Heartburn": 1
+  },
+  "risk": {
+    "Viral Illness": 5,
+    "Heart Attack": 1,
+    "Kidney": 1,
+    "Cancer": 1,
+    "New Meds": 5,
+    "Radiation": 1
+  }
+}

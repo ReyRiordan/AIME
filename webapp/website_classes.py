@@ -125,7 +125,7 @@ class Grades:
 
 
 class Interview:
-
+    #TODO Make all data private and use helper methods for access and modification
     def __init__(self, username: str, patient: Patient):
         self.username = username
         self.patient = patient

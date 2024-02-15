@@ -48,7 +48,7 @@ class Category:
             raw = desc_file.read()
             raw_split = raw.split("|EXAMPLE|\n")
             label_descs = raw_split[0].rstrip()
-            example = raw_split[1]
+            self.example = raw_split[1]
             split_by_label = label_descs.split("\n")
             for line in split_by_label:
                 line_split = line.split("||")
@@ -61,7 +61,7 @@ class Category:
         self.class_prompt = base_split[0]
         for label in self.used_label_descs:
             self.class_prompt += "[" + label + "] " + self.used_label_descs[label] + "\n"
-        self.class_prompt += base_split[1] + example + base_split[2]
+        self.class_prompt += base_split[1] + self.example + base_split[2]
         
 
 class Message:

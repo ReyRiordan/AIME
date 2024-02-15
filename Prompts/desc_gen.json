@@ -1,0 +1,19 @@
+{
+  "labels": {
+    "Introduction": "Any introductory message that includes the doctor/student introducing themselves.",
+    "Confirm Identity": "Any question that confirms the patient's identity (usually name and age).",
+    "Establish Chief Concern": "Any open-ended question that tries to establish the main concern for the patient. For example, \"What brings you in today?\" \"Tell me what's been going on.\"",
+    "Additional Information": "Any open-ended question that asks generally for more information or clarification about the patient's main concern. Anything that asks for something specific about a symptom or etc does not count. For example, \"Tell me more about this ___ you're experiencing.\"",
+    "Medical History": "Any open-ended question asking about the patient's general medical history. Anything that asks for a specific symptom, risk factor, or history does not count. For example, \"Do you have any medical problems that you're aware of?\"",
+    "Surgery Hospitalization": "Any open-ended question asking about the patient's history with surgeries or hospitalizations.",
+    "Medication": "Any question about medications that the patient uses or takes.",
+    "Allergies": "Any question about the patient's allergies.",
+    "Family History": "Any general question about medical conditions or issues that run in the patient's family. Questions that ask about specific conditions or types of issues do not count. For example, \"Are there any medical problems that run in your family?\"",
+    "Alcohol": "Any question about the patient's alcohol use.",
+    "Smoking": "Any question about the patient's smoking history.",
+    "Drug Use": "Any question about the patient's recreational drug use.",
+    "Employment": "Any question about the patient's employment status or work history.",
+    "Social Support": "Any question about the patient's social support system, such as those they live with or friends they can rely on."
+  },
+  "example": "Inputs: Hi, I'm Dr. Corbett. Before we begin, could you please confirm your full name and date of birth for me?||How would you prefer to be addressed?||What brings you in today?||Can you describe the sensation for me?||Have you ever had surgery before?||Have you ever smoked or used drugs recreationally?|| \nOutput: Introduction Confirm_Identity||Other||Establish_Chief_Concern||Other||Surgery_Hospitalization||Alcohol Smoking||"
+}

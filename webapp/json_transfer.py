@@ -22,8 +22,7 @@ import tempfile
 from annotated_text import annotated_text
 import json
 
-
-
-patient = Patient("Jackie Smith")
-with open("./Patient_Info/JackieSmith_weights.json", "w") as json_file:
-    json.dump(patient.weights, json_file, indent=2)
+category = Category("risk", Patient("John Smith"))
+desc = {"labels": category.all_label_descs, "example": category.example}
+with open("./Prompts/desc_risk.json", "w") as json_file:
+    json.dump(desc, json_file, indent=2)

@@ -127,14 +127,27 @@ class Grades:
 class Interview:
     #TODO Make all data private and use helper methods for access and modification
     def __init__(self, username: str, patient: Patient):
-        self.username = username
-        self.patient = patient
-        self.messages = []
+        self.__username = username
+        self.__patient = patient
+        self.__messages = []
     
         # Make categories according to categories that patient has weights for
-        self.categories = []
-        for category in patient.weights:
-            self.categories.append(Category(category, patient))
+        self.__categories = []
+        for category in self.__patient.weights:
+            self.__categories.append(Category(category, patient))
     
     def add_grades(self):
         self.grades = Grades(self.patient, self.categories, self.messages)
+    
+    def add_message(self, message: Message) -> None:
+        if message.type and message.role and message.content:
+            self.__messages.append(message)
+    
+    def get_username(self) -> str:
+        return self.__username
+    
+    def get_patient(self) -> Patient:
+        return self.__patient
+    
+    def get_messages(self) -> list[Message]:
+        return self.__messages

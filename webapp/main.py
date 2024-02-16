@@ -79,9 +79,9 @@ if st.session_state["stage"] == SETTINGS:
 if st.session_state["stage"] == CHAT_SETUP:
     llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=CONVO_MODEL, temperature=0.0)
     st.session_state["chatbot"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
-    initial_output = st.session_state["chatbot"].predict(input = st.session_state["interview"].patient.convo_prompt)
+    initial_output = st.session_state["chatbot"].predict(input = st.session_state["interview"].get_patient().convo_prompt)
 
-    st.session_state["interview"].messages.append(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["interview"].patient.name + ". Start by introducing yourself."))
+    st.session_state["interview"].add_message(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself."))
     
     set_stage(st.session_state["chat_mode"])
 
@@ -92,7 +92,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
     container = st.container(height=300)
 
-    for message in st.session_state["interview"].messages:
+    for message in st.session_state["interview"].get_messages():
         with container:
             with st.chat_message(message.role):
                 st.markdown(message.content)
@@ -102,12 +102,12 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             with st.chat_message("User"):
                 st.markdown(user_input)
         #TODO Instead of editing messages directly, create a helper method for this (it's better practice)
-        st.session_state["interview"].messages.append(Message("input", "User", user_input))
+        st.session_state["interview"].add_message(Message("input", "User", user_input))
         output = st.session_state["chatbot"].predict(input=user_input)
         with container:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)
-        st.session_state["interview"].messages.append(Message("output", "AI", output))
+        st.session_state["interview"].add_message(Message("output", "AI", output))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
@@ -122,7 +122,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     
     container = st.container(height=300)
 
-    for message in st.session_state["interview"].messages:
+    for message in st.session_state["interview"].get_messages():
         with container:
             with st.chat_message(message.role):
                 st.markdown(message.content)
@@ -132,12 +132,12 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         with container:
             with st.chat_message("User"):
                 st.markdown(user_input)
-        st.session_state["interview"].messages.append(Message("input", "User", user_input))
+        st.session_state["interview"].add_message(Message("input", "User", user_input))
         output = st.session_state["chatbot"].predict(input=user_input)
         with container:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)
-        st.session_state["interview"].messages.append(Message("output", "AI", output))
+        st.session_state["interview"].add_message(Message("output", "AI", output))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
@@ -158,7 +158,7 @@ if st.session_state["stage"] == DIAGNOSIS:
         
     st.download_button("Download interview", 
                     data = bio.getvalue(),
-                    file_name = st.session_state["interview"].username + "_"+date_time + ".docx",
+                    file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
     
     st.button("Get Feedback", on_click=set_stage, args=[FEEDBACK_SETUP])
@@ -167,11 +167,11 @@ if st.session_state["stage"] == DIAGNOSIS:
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
     st.header("Physical Examination Findings")
-    st.write("Here is the full physical examination for " + st.session_state["interview"].patient.name + ". Click the \"Back\" button to go back once you're done.")
+    st.write("Here is the full physical examination for " + st.session_state["interview"].get_patient().name + ". Click the \"Back\" button to go back once you're done.")
     
     physical = st.container(border = True)
     with physical:
-        physical_exam_doc = Document(st.session_state["interview"].patient.physical)
+        physical_exam_doc = Document(st.session_state["interview"].get_patient().physical)
         for paragraph in physical_exam_doc.paragraphs:
             st.write(paragraph.text)
     
@@ -180,9 +180,9 @@ if st.session_state["stage"] == PHYSICAL_SCREEN:
 
 if st.session_state["stage"] == ECG_SCREEN:
     st.header("ECG Chart")
-    st.write("Here is the ECG for " + st.session_state["interview"].patient.name + ". Click the \"Back\" button to go back once you're done.")
+    st.write("Here is the ECG for " + st.session_state["interview"].get_patient().name + ". Click the \"Back\" button to go back once you're done.")
     
-    st.image(st.session_state["interview"].patient.ECG)
+    st.image(st.session_state["interview"].get_patient().ECG)
 
     st.button("Back", on_click=set_stage, args=[DIAGNOSIS])
 
@@ -200,7 +200,7 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
     
     with data:
         chat_container = st.container(height=300)
-        for message in st.session_state["interview"].messages:
+        for message in st.session_state["interview"].get_messages():
                 with chat_container:
                     with st.chat_message(message.role):
                         if message.annotation is None:
@@ -208,9 +208,9 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
                         else:
                             annotated_text((message.content, message.annotation, message.highlight))
 
-        for category in st.session_state["interview"].categories:
+        for category in st.session_state["interview"].get_categories():
             if category.tab == "data":
-                display_grades(st.session_state["interview"].grades, category)
+                display_grades(st.session_state["interview"].get_grades(), category)
 
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
@@ -225,9 +225,9 @@ if st.session_state["stage"] == FINAL_SCREEN:
         
     st.download_button("Download interview", 
                     data = bio.getvalue(),
-                    file_name = st.session_state["interview"].username + "_"+date_time + ".docx",
+                    file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
     
-    send_email(bio, EMAIL_TO_SEND, st.session_state["username"], date_time, None)
+    send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
 
     st.button("New Interview", on_click=set_stage, args=[SETTINGS])

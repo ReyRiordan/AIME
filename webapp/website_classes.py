@@ -137,7 +137,7 @@ class Interview:
             self.__categories.append(Category(category, patient))
     
     def add_grades(self):
-        self.grades = Grades(self.patient, self.categories, self.messages)
+        self.__grades = Grades(self.__patient, self.__categories, self.__messages)
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
@@ -151,3 +151,9 @@ class Interview:
     
     def get_messages(self) -> list[Message]:
         return self.__messages
+    
+    def get_categories(self):
+        return self.__categories
+    
+    def get_grades(self):
+        return self.__grades

@@ -29,12 +29,12 @@ def get_webtext(content: str) -> str:
 
 def create_convo_file(interview: Interview) -> Document:
     convo = Document()
-    heading = convo.add_paragraph("User: " + interview.username + ", ")
+    heading = convo.add_paragraph("User: " + interview.get_username() + ", ")
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     heading.add_run("Date: " + date_time + ", ")
-    heading.add_run("Patient: " + interview.patient.name)
-    for message in interview.messages:
+    heading.add_run("Patient: " + interview.get_patient().name)
+    for message in interview.get_messages():
         convo.add_paragraph(message.role + ": " + message.content)
     
     return convo
@@ -112,8 +112,8 @@ def classifier(category: Category, messages: list[Message], OPENAI_API_KEY: str)
         
 
 def annotate(interview: Interview, OPENAI_API_KEY: str) -> None:
-    categories = interview.categories
-    messages = interview.messages
+    categories = interview.get_categories()
+    messages = interview.get_messages()
     # Classify all messages
     for category in categories:
         classifier(category, messages, OPENAI_API_KEY)

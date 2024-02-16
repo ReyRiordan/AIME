@@ -44,9 +44,9 @@ messages = [{"role": "User", "content": "Hello, I'm Dr. Corbett. What brings you
 st.session_state["interview"] = Interview("TEST", Patient("John Smith"))
 for message in messages:
      if message["role"] == "User":
-          st.session_state["interview"].messages.append(Message("input", message["role"], message["content"]))
+          st.session_state["interview"].add_message(Message("input", message["role"], message["content"]))
      elif message["role"] == "AI":
-          st.session_state["interview"].messages.append(Message("output", message["role"], message["content"]))
+          st.session_state["interview"].add_message(Message("output", message["role"], message["content"]))
 
 # for message in st.session_state["messages"]:
 #      st.write(message.content)
@@ -59,7 +59,7 @@ data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
     
 with data:
     chat_container = st.container(height=300)
-    for message in st.session_state["interview"].messages:
+    for message in st.session_state["interview"].get_messages():
             with chat_container:
                 with st.chat_message(message.role):
                     if message.annotation is None:
@@ -67,9 +67,9 @@ with data:
                     else:
                         annotated_text((message.content, message.annotation, message.highlight))
 
-    for category in st.session_state["interview"].categories:
+    for category in st.session_state["interview"].get_categories():
          if category.tab == "data":
-            display_grades(st.session_state["interview"].grades, category)
+            display_grades(st.session_state["interview"].get_grades(), category)
 
 currentDateAndTime = date.datetime.now()
 date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
@@ -79,5 +79,5 @@ st.session_state["convo_file"].save(bio)
     
 st.download_button("Download interview", 
                    data = bio.getvalue(),
-                   file_name = st.session_state["interview"].username + "_"+date_time + ".docx",
+                   file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                    mime = "docx")

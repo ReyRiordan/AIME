@@ -1,6 +1,8 @@
 from lookups import *
 import json
 
+#TODO Make data for rest of classes "private" + getters and setters?
+
 class Patient:
 
     def __init__(self, name):
@@ -125,7 +127,6 @@ class Grades:
 
 
 class Interview:
-    #TODO Make all data private and use helper methods for access and modification
     def __init__(self, username: str, patient: Patient):
         self.__username = username
         self.__patient = patient

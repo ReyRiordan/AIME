@@ -101,7 +101,6 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         with container:
             with st.chat_message("User"):
                 st.markdown(user_input)
-        #TODO Instead of editing messages directly, create a helper method for this (it's better practice)
         st.session_state["interview"].add_message(Message("input", "User", user_input))
         output = st.session_state["chatbot"].predict(input=user_input)
         with container:

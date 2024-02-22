@@ -188,3 +188,6 @@ class Interview:
         conversation_dict["messages"]=messages_dict
 
         return conversation_dict
+
+    def get_json(self):
+        return json.dumps(self.get_dict(),indent=4)

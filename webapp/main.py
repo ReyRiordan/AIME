@@ -16,7 +16,6 @@ from sendgrid.helpers.mail import (
 from lookups import *
 from website_methods import *
 from website_classes import *
-from conversation_to_json import * 
 from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile

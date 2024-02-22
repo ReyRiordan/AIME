@@ -3,6 +3,8 @@ import json
 
 #TODO Make data for rest of classes "private" + getters and setters?
 
+#TODO Move each class to its own separate file for cleanliness' sake. I'm lazy, u got it Rey
+
 class Patient:
 
     def __init__(self, name):
@@ -23,6 +25,12 @@ class Patient:
         # Extract labels and weights for patient
         with open(PATIENTS[name]["weights"], "r") as weights_json:
             self.weights = json.load(weights_json)
+        
+    def get_dict(self):
+        patient_dict={}
+        patient_dict["name"]=self.name
+        patient_dict["weights"]=self.weights
+        return patient_dict
 
 
 class Category:
@@ -60,11 +68,11 @@ class Category:
         
 
 class Message:
-
+    #TODO Just a thought, perhaps arranging these all into one big dict? See get_dict
     def __init__(self, type: str, role: str, content: str):
-        self.type = type
-        self.role = role
-        self.content = content
+        self.type = type #str
+        self.role = role #str  
+        self.content = content #str
         self.labels = {} # dict[str, list[str]]
         self.highlight = None
         self.annotation = None
@@ -80,7 +88,17 @@ class Message:
             all_labels.extend(self.labels[category])
         all_labels = list(dict.fromkeys(all_labels)) # Remove duplicates
         if all_labels: self.annotation = ", ".join(all_labels)
-
+    
+    def get_content(self):
+        return self.content
+    
+    def get_dict(self): 
+        message_dict={}
+        message_dict["type"] = self.type
+        message_dict["role"] = self.role
+        message_dict["content"]=self.content
+        message_dict["labels"]=self.labels
+        return message_dict
 
 class Grades:
 
@@ -158,3 +176,15 @@ class Interview:
     
     def get_grades(self):
         return self.__grades
+
+    def get_dict(self):
+        conversation_dict={} #Wrapper dictionary
+        messages_dict=[] # List of messages
+
+        conversation_dict["username"]=self.get_username()
+        conversation_dict["patient"]=self.get_patient().get_dict()
+        for message in self.__messages:
+            messages_dict.append(message.get_dict())
+        conversation_dict["messages"]=messages_dict
+
+        return conversation_dict

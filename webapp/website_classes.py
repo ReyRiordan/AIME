@@ -14,9 +14,14 @@ class Patient:
         # Create virtual patient prompt
         with open(PATIENTS[name]["base"], "r", encoding="utf8") as base_prompt:
             base = base_prompt.read()
-        with open(PATIENTS[name]["case"], "r", encoding="utf8") as case_prompt:
-            case = case_prompt.read()
-        self.convo_prompt = str(base + case)
+            base = base.replace("{patient}", name)
+        self.convo_prompt = str(base)
+        with open(PATIENTS[name]["case"], "r") as case_json:
+            case = json.load(case_json)
+        for category in case: 
+            self.convo_prompt += "[" + category + "] \n"
+            for line in case[category]:
+                self.convo_prompt += line + " \n"
 
         # Assign physical and ECG data paths for patient for website display use
         self.physical = PATIENTS[name]["physical"]
@@ -177,6 +182,7 @@ class Interview:
     def get_grades(self):
         return self.__grades
 
+#TODO Where are the grades :skull:
     def get_dict(self):
         conversation_dict={} #Wrapper dictionary
         messages_dict=[] # List of messages

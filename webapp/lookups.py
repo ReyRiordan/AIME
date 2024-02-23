@@ -24,8 +24,8 @@ CLASS_INPUT = "./Prompts/Class_Input_2-13.txt"
 CLASS_OUTPUT = "./Prompts/Class_Output_2-13.txt"
 
 PATIENTS = {
-    "John Smith": {"base": "./Prompts/Base_1-15.txt", 
-                   "case": "./Prompts/JohnSmith_1-15.txt", 
+    "John Smith": {"base": "./Prompts/Base_2-23.txt", 
+                   "case": "./Patient_Info/JohnSmith_case.json", 
                    "weights": "./Patient_Info/JohnSmith_weights.json", 
                    "physical": "./Patient_Info/JohnSmith_physical.docx", 
                    "ECG": "./Patient_Info/JohnSmith_ECG.png"}, 

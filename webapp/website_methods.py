@@ -131,7 +131,7 @@ def display_grades(grades: Grades, category: Category) -> None:
     display_labels = [(key, "", "#baffc9" if value else "#ffb3ba") for key, value in grades.label_grades[category.name].items()]
     annotated_text(display_labels)
 
-def get_chat_output(chatbot: OpenAI, convo_memory: list[dict[str, str]], user_input: str) -> str:
+def get_chat_output(chatbot: OpenAI, convo_memory: list[dict[str, str]], user_input: str) -> list[list[dict[str, str]], str]:
     convo_memory.append({"role": "user", "content": user_input})
     response = chatbot.chat.completions.create(model = CONVO_MODEL, 
                                                temperature = CHAT_TEMP, 
@@ -139,10 +139,23 @@ def get_chat_output(chatbot: OpenAI, convo_memory: list[dict[str, str]], user_in
     output = response.choices[0].message.content
     convo_memory.append({"role": "assistant", "content": output})
     if len(convo_memory) >= 10:
+        print(convo_memory[1:])
+        messages = [{"role": "system", "content": SUM_PROMPT}]
+        dialogue = ""
+        for message in convo_memory[1:]:
+            if message["role"] == "system":
+                dialogue += message["content"] + " \n"
+            elif message["role"] == "user":
+                dialogue += "User: " + message["content"] + " \n"
+            elif message["role"] == "assistant":
+                dialogue += "AI: " + message["content"] + "\n"
+        print(dialogue)
+        messages.append({"role": "user", "content": dialogue})
         raw_summary = chatbot.chat.completions.create(model = SUM_MODEL, 
                                                       temperature = SUM_TEMP, 
-                                                      messages = [{"role": "system", "content": SUM_PROMPT}].extend(convo_memory))
+                                                      messages = messages)
         summary = raw_summary.choices[0].message.content
-        convo_memory = [{"role": "system", "content": "Summary of conversation so far: \n" + summary}]
+        convo_memory = [convo_memory[0], {"role": "system", "content": "Summary of conversation so far: \n" + summary}]
         print(convo_memory)
-    return output
+        print("\n\n\n")
+    return convo_memory, output

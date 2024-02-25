@@ -12,9 +12,14 @@ FEEDBACK_SETUP = 8
 FEEDBACK_SCREEN = 9
 FINAL_SCREEN = 10
 
-# LLM models
+# LLM related
 CONVO_MODEL = "gpt-4"
 CLASS_MODEL = "gpt-4"
+CHAT_TEMP = 0.7
+SUM_MODEL = "gpt-3.5-turbo"
+with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
+    SUM_PROMPT = summarizer_file.read()
+SUM_TEMP = 0.7
 
 # Email API
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]

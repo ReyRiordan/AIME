@@ -130,3 +130,19 @@ def display_grades(grades: Grades, category: Category) -> None:
     st.header(f":{category.color}[{category.header}]: {score}/{maxscore}", divider=category.color)
     display_labels = [(key, "", "#baffc9" if value else "#ffb3ba") for key, value in grades.label_grades[category.name].items()]
     annotated_text(display_labels)
+
+def get_chat_output(chatbot: OpenAI, convo_memory: list[dict[str, str]], user_input: str) -> str:
+    convo_memory.append({"role": "user", "content": user_input})
+    response = chatbot.chat.completions.create(model = CONVO_MODEL, 
+                                               temperature = CHAT_TEMP, 
+                                               messages = convo_memory)
+    output = response.choices[0].message.content
+    convo_memory.append({"role": "assistant", "content": output})
+    if len(convo_memory) >= 10:
+        raw_summary = chatbot.chat.completions.create(model = SUM_MODEL, 
+                                                      temperature = SUM_TEMP, 
+                                                      messages = [{"role": "system", "content": SUM_PROMPT}].extend(convo_memory))
+        summary = raw_summary.choices[0].message.content
+        convo_memory = [{"role": "system", "content": "Summary of conversation so far: \n" + summary}]
+        print(convo_memory)
+    return output

@@ -88,7 +88,7 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
-    st.session_state["start_time"] = date.currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    # st.session_state["start_time"] = date.datetime.now()
 
     container = st.container(height=300)
 
@@ -160,6 +160,13 @@ if st.session_state["stage"] == DIAGNOSIS:
                     file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
     
+    st.download_button("Download JSON",
+                data=st.session_state["interview"].get_json(),
+                file_name = st.session_state["interview"].get_username() + "_"+date_time + ".json",
+                mime="json")
+    
+
+
     st.button("Get Feedback", on_click=set_stage, args=[FEEDBACK_SETUP])
     st.button("New Interview", on_click=set_stage, args=[SETTINGS])
 
@@ -228,5 +235,11 @@ if st.session_state["stage"] == FINAL_SCREEN:
                     mime = "docx")
     
     send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
+        
+
+    st.download_button("Download JSON",
+                data=st.session_state["interview"].get_json(),
+                file_name = st.session_state["interview"].get_username() + "_"+date_time + ".json",
+                mime="json")
 
     st.button("New Interview", on_click=set_stage, args=[SETTINGS])

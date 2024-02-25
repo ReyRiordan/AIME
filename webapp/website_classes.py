@@ -19,25 +19,7 @@ class Patient:
         with open(PATIENTS[name]["case"], "r") as case_json:
             case = json.load(case_json)
         self.HPI = case["History of Present Illness"]
-        for category in case: 
-            self.convo_prompt += "[" + category + "] \n"
-            if category == "Personal Details":
-                for element in case[category]:
-                    self.convo_prompt += element["detail"] + ": " + element["line"] + " \n"
-            elif category == "Chief Concern":
-                self.convo_prompt += case[category] + " \n"
-            elif category == "History of Present Illness":
-                for element in case[category]:
-                    line = element["dim"] + ": " + element["line"]
-                    if element["lock"]:
-                        line = "<LOCKED> " + line
-                    self.convo_prompt += line + "\n"
-            else:
-                for element in case[category]:
-                    line = element["line"]
-                    if element["lock"]:
-                        line = "<LOCKED> " + line
-                    self.convo_prompt += line + " \n"
+        self.convo_prompt += self.process_case(case)
 
         # Assign physical and ECG data paths for patient for website display use
         self.physical = PATIENTS[name]["physical"]
@@ -46,7 +28,30 @@ class Patient:
         # Extract labels and weights for patient
         with open(PATIENTS[name]["weights"], "r") as weights_json:
             self.weights = json.load(weights_json)
-        
+
+    def process_case(self, case: dict[str, list[dict[str]]]) -> str:
+        case_prompt = ""
+        for category in case: 
+            case_prompt += "[" + category + "] \n"
+            if category == "Personal Details":
+                for element in case[category]:
+                    case_prompt += element["detail"] + ": " + element["line"] + " \n"
+            elif category == "Chief Concern":
+                case_prompt += case[category] + " \n"
+            elif category == "History of Present Illness":
+                for element in case[category]:
+                    line = element["dim"] + ": " + element["line"]
+                    if element["lock"]:
+                        line = "<LOCKED> " + line
+                    case_prompt += line + "\n"
+            else:
+                for element in case[category]:
+                    line = element["line"]
+                    if element["lock"]:
+                        line = "<LOCKED> " + line
+                    case_prompt += line + " \n"
+        return case_prompt
+
     def get_dict(self):
         patient_dict={}
         patient_dict["name"]=self.name

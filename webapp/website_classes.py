@@ -18,10 +18,26 @@ class Patient:
         self.convo_prompt = str(base)
         with open(PATIENTS[name]["case"], "r") as case_json:
             case = json.load(case_json)
+        self.HPI = case["History of Present Illness"]
         for category in case: 
             self.convo_prompt += "[" + category + "] \n"
-            for line in case[category]:
-                self.convo_prompt += line + " \n"
+            if category == "Personal Details":
+                for element in case[category]:
+                    self.convo_prompt += element["detail"] + ": " + element["line"] + " \n"
+            elif category == "Chief Concern":
+                self.convo_prompt += case[category] + " \n"
+            elif category == "History of Present Illness":
+                for element in case[category]:
+                    line = element["dim"] + ": " + element["line"]
+                    if element["lock"]:
+                        line = "<LOCKED> " + line
+                    self.convo_prompt += line + "\n"
+            else:
+                for element in case[category]:
+                    line = element["line"]
+                    if element["lock"]:
+                        line = "<LOCKED> " + line
+                    self.convo_prompt += line + " \n"
 
         # Assign physical and ECG data paths for patient for website display use
         self.physical = PATIENTS[name]["physical"]

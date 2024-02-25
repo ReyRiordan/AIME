@@ -20,9 +20,9 @@ from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
 from annotated_text import annotated_text
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 
 # SECRETS
@@ -88,7 +88,7 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
-    st.session_state["start_time"] = date.datetime.now()
+    # st.session_state["start_time"] = date.datetime.now()
 
     container = st.container(height=300)
 

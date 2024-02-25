@@ -22,6 +22,7 @@ from annotated_text import annotated_text
 # load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+CHAT_TEMP = 0.7
 st.session_state["username"] = "TESTING"
 st.title("Medical Interview Simulation (CONVO ONLY)")
 
@@ -74,7 +75,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
                 st.markdown(user_input)
         st.session_state["interview"].add_message(Message("input", "User", user_input))
         st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-        response = st.session_state["chatbot"].chat.completions.create(model = CONVO_MODEL, temperature = 0.0, messages = st.session_state["convo_memory"])
+        response = st.session_state["chatbot"].chat.completions.create(model = CONVO_MODEL, temperature = CHAT_TEMP, messages = st.session_state["convo_memory"])
         output = response.choices[0].message.content
         with container:
             with st.chat_message("AI"): # Needs avatar eventually

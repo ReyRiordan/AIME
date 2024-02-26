@@ -107,18 +107,18 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
         st.session_state["all_interviews"] = get_data() 
     display_interview(dict_to_interview(st.session_state["all_interviews"][st.session_state["interview_display_index"]]))
 
-    st.write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
-    button_columns=st.columns(5) 
+    button_columns=st.columns(5)
+    button_columns[3].write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"]))) 
 
     #TODO Fix the buttons so that they don't glitch
 
-    if button_columns[0].button("Previous Interview"):
+    if button_columns[1].button("Previous"):
         if st.session_state["interview_display_index"] == 0:
             st.write("No more interviews available.")
         else: 
             st.session_state["interview_display_index"] -= 1
             st.rerun()
-    if button_columns[4].button("Next Interview") and st.session_state["interview_display_index"]<len(all_interviews)-1:
+    if button_columns[3].button("Next"):
         if st.session_state["interview_display_index"] >= len(st.session_state["all_interviews"])-1:
             st.write("No more interviews available")
         else: 
@@ -205,7 +205,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             with st.chat_message("User"):
                 st.markdown(user_input)
         st.session_state["interview"].add_message(Message("input", "User", user_input))
-        output = st.session_state["chatbot"].predict(input=user_input)
+        st.session_state["convo_memory"], output = get_chat_output(st.session_state["LLM"], st.session_state["convo_memory"], user_input)
         with container:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)

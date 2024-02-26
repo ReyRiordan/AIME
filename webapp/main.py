@@ -149,9 +149,9 @@ if st.session_state["stage"] == SETTINGS:
 
 
 if st.session_state["stage"] == CHAT_SETUP:
-    llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name=CONVO_MODEL, temperature=0.0)
-    st.session_state["chatbot"] = ConversationChain(llm=llm, memory=ConversationBufferMemory())
-    initial_output = st.session_state["chatbot"].predict(input = st.session_state["interview"].get_patient().convo_prompt)
+    st.session_state["LLM"] = OpenAI()
+    st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}, 
+                                        {"role": "system", "content": "Summary of conversation so far: None"}]
 
     st.session_state["interview"].add_message(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself."))
     

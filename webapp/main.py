@@ -181,20 +181,20 @@ if st.session_state["stage"] == DIAGNOSIS:
     columns[1].button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     columns[2].button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
 
-    currentDateAndTime = date.datetime.now()
-    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    # currentDateAndTime = date.datetime.now()
+    # date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
     st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
     st.session_state["convo_file"].save(bio)
         
     st.download_button("Download interview", 
                     data = bio.getvalue(),
-                    file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
+                    file_name = st.session_state["interview"].get_username() + "_" + ".docx",
                     mime = "docx")
     
     st.download_button("Download JSON",
                 data=st.session_state["interview"].get_json(),
-                file_name = st.session_state["interview"].get_username() + "_"+date_time + ".json",
+                file_name = st.session_state["interview"].get_username() + "_" + ".json",
                 mime="json")
     
 

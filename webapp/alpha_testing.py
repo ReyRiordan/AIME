@@ -48,7 +48,9 @@ def get_data():
 
 
 collection=client["AIME"]["Conversation"]
-
+all_interviews=get_data()
+if "interview_display_index" not in st.session_state:
+    st.session_state["interview_display_index"]=1
 
 some_conversation=Interview("Rey Riordan",Patient("John Smith"))
 
@@ -188,11 +190,14 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
         st.write("Secondary Diagnoses: " + ", ".join(diagnosis.secondary_diagnoses))
 
 if st.session_state["stage"]==VIEW_INTERVIEWS:
-    all_interviews=get_data()
-    for interview_dict in all_interviews:
-        st.write("USERNAME: "+interview_dict["username"])
-        display_interview(dict_to_interview(interview_dict))
-    button_columns=st.columns(5)
-    button_columns[0].button("Previous Interview",on_click=set_stage, args=[VIEW_INTERVIEWS])
-    button_columns[4].button("Next Interview",on_click=set_stage, args=[VIEW_INTERVIEWS])
+    display_interview(dict_to_interview(all_interviews[st.session_state["interview_display_index"]]))
+
+    button_columns=st.columns(5) 
+
+    if button_columns[0].button("Previous Interview") and st.session_state["interview_display_index"]>0:
+        st.session_state["interview_display_index"]-=1
+    if button_columns[4].button("Next Interview") and st.session_state["interview_display_index"]<len(all_interviews)-1:
+        st.session_state["interview_display_index"]+=1
+        print(st.session_state["interview_display_index"])
+
     button_columns[2].button("Back to previous page", on_click=set_stage, args=[DIAGNOSIS])

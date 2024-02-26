@@ -57,18 +57,20 @@ import json
 #                            {"lock": False, "line": "You are a software engineer."}], 
 #         "Other Symptoms": [{"lock": False, "line": "N/A"}]}
 
-diagnosis = {"Main": {"Acute coronary syndrome (unstable angina or NSTEMI)": 8}, 
-             "Secondary": {"Acute coronary syndrome (unstable angina or NSTEMI)": 1, 
+diagnosis = {"Main": {"Acute pericarditis": 8}, 
+             "Secondary": {"Acute pericarditis": 1, 
+                           "Acute Coronary Syndrome (ACS)": 1, 
+                           "Non-ST-elevation myocardial infarction (NSTEMI)": 1, 
+                           "Unstable Angina": 1, 
                            "Aortic dissection": 1, 
-                           "Acute pericarditis": 1, 
                            "Gastroesophageal reflux disease (GERD)": 1, 
                            "Pulmonary embolism": 1, 
                            "Pneumonia": 1}}
 
-patient = Patient("John Smith")
+patient = Patient("Jackie Smith")
 
-grading = {"data": patient.weights, 
+grading = {"data": patient.weights_data, 
            "diagnosis": diagnosis}
 
-with open("./Patient_Info/JohnSmith_grading.json", "w") as json_file:
+with open("./Patient_Info/JackieSmith_grading.json", "w") as json_file:
     json.dump(grading, json_file, indent=2)

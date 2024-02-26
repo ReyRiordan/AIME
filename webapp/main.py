@@ -219,30 +219,43 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 
 if st.session_state["stage"] == DIAGNOSIS:
-    st.write("NO DIAGNOSIS INPUT IMPLEMENTED YET.")
-    columns = st.columns(4)
-    columns[1].button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
-    columns[2].button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
+    st.title("Diagnosis")
+    st.write("Use the interview transcription and additional patient information to provide a differential diagnosis.")
 
-    # currentDateAndTime = date.datetime.now()
-    # date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    chat_container = st.container(height=300)
+    for message in st.session_state["interview"].get_messages():
+        with chat_container:
+            with st.chat_message(message.role):
+                st.markdown(message.content)
+    
+    info_columns = st.columns(5)
+    info_columns[1].button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
+    info_columns[3].button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
+
+    main_diagnosis = st.text_input(label = "Main Diagnosis:", placeholder = "Condition name")
+    main_rationale = st.text_area(label = "Rationale:", placeholder = "Rationale for main diagnosis")
+
+    input_columns = st.columns(2)
+    secondary1 = input_columns[0].text_input(label = "Secondary Diagnoses:", placeholder = "Condition name")
+    secondary2 = input_columns[1].text_input(label = "None", placeholder = "Condition name", label_visibility = "hidden")
+
+    currentDateAndTime = date.datetime.now()
+    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
     st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
     st.session_state["convo_file"].save(bio)
-        
-    st.download_button("Download interview", 
+    
+    button_columns = st.columns(6)
+    button_columns[1].button("New Interview", on_click=set_stage, args=[SETTINGS])
+    button_columns[2].download_button("Download interview", 
                     data = bio.getvalue(),
-                    file_name = st.session_state["interview"].get_username() + "_" + ".docx",
+                    file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
-    
-    st.download_button("Download JSON",
-                data=st.session_state["interview"].get_json(),
-                file_name = st.session_state["interview"].get_username() + "_" + ".json",
-                mime="json")
-    
-
-    st.button("Get Feedback", on_click=set_stage, args=[FEEDBACK_SETUP])
-    st.button("New Interview", on_click=set_stage, args=[SETTINGS])
+    if button_columns[3].button("Get Feedback"):
+        st.session_state["interview"].add_diagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
+        set_stage(FEEDBACK_SETUP)
+        st.rerun()
+    button_columns[4].button("My name is Dr. Corbett",on_click=set_stage, args=[VIEW_INTERVIEWS])
 
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:

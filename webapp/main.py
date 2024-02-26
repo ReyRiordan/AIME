@@ -106,6 +106,8 @@ if st.session_state["stage"]==VIEW_INTERVIEWS_LOGIN:
             st.write("Password incorrect.")
 
 if st.session_state["stage"]==VIEW_INTERVIEWS:
+    if "interview_display_index" not in st.session_state:
+        st.session_state["interview_display_index"]=0
     all_interviews=get_data() 
     display_interview(dict_to_interview(all_interviews[st.session_state["interview_display_index"]]))
 

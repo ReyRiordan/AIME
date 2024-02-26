@@ -16,7 +16,7 @@ VIEW_INTERVIEWS=12
 # LLM related
 CONVO_MODEL = "gpt-4"
 CLASS_MODEL = "gpt-4"
-CHAT_TEMP = 0.7
+CHAT_TEMP = 0.0
 
 SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:

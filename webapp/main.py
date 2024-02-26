@@ -90,7 +90,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
         else:
             st.write("Password incorect.")
     
-    if login_buttons[2].button("Admin Login"):
+    if login_buttons[2].button("I'm Dr. Corbett or Rick Anderson"):
         if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
             st.write("Authentication successful!")
             time.sleep(1)

@@ -50,7 +50,7 @@ def get_data():
 collection=client["AIME"]["Conversation"]
 all_interviews=get_data()
 if "interview_display_index" not in st.session_state:
-    st.session_state["interview_display_index"]=1
+    st.session_state["interview_display_index"]=0
 
 some_conversation=Interview("Rey Riordan",Patient("John Smith"))
 

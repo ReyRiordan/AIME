@@ -164,7 +164,8 @@ def get_chat_output(LLM: OpenAI, convo_memory: list[dict[str, str]], user_input:
     return convo_memory, output
 
 
-# TODO: @Rey since you have an aesthetically pleasing way of doing it please display all of the data from the conversation
+# TODO: @Rey since you have an aesthetically pleasing way of doing it please display all of the data from any given Interview instance. This method should take in an Interview and display all relavant data
+
 def display_interview(interview: Interview):
     title="Username: "+interview.get_username()
     st.title(title)

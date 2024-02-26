@@ -33,6 +33,10 @@ from pymongo.server_api import ServerApi
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 DB_URI=os.getenv("DB_URI")
+DATABASE_USERNAME=os.getenv("DATABASE_USERNAME")
+DATABASE_PASSWORD=os.getenv("DATABASE_PASSWORD")
+
+############## DATABASE
 
 # Establish connection to server
 
@@ -85,6 +89,35 @@ if st.session_state["stage"] == LOGIN_PAGE:
             st.rerun()
         else:
             st.write("Password incorrect.")
+    st.button("I'm Dr. Corbett or Rick Anderson", on_click=set_stage, args=[VIEW_INTERVIEWS_LOGIN])
+
+
+if st.session_state["stage"]==VIEW_INTERVIEWS_LOGIN:
+    st.title("DATABASE ACCESS")
+    database_username = st.text_input("Enter the access username") 
+    database_password = st.text_input("Enter the password and press \"Enter\":", type = "password")
+    if database_username and database_password:
+        if database_username==DATABASE_USERNAME and database_password==DATABASE_PASSWORD: 
+            st.write("Authentication successful!")
+            time.sleep(1)
+            set_stage(VIEW_INTERVIEWS)
+            st.rerun()
+        else:
+            st.write("Password incorrect.")
+
+if st.session_state["stage"]==VIEW_INTERVIEWS:
+    all_interviews=get_data() 
+    display_interview(dict_to_interview(all_interviews[st.session_state["interview_display_index"]]))
+
+    button_columns=st.columns(5) 
+
+    if button_columns[0].button("Previous Interview") and st.session_state["interview_display_index"]>0:
+        st.session_state["interview_display_index"]-=1
+    if button_columns[4].button("Next Interview") and st.session_state["interview_display_index"]<len(all_interviews)-1:
+        st.session_state["interview_display_index"]+=1
+        print(st.session_state["interview_display_index"])
+
+    button_columns[2].button("Back to previous page", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == SETTINGS:

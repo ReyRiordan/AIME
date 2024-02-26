@@ -281,8 +281,10 @@ if st.session_state["stage"] == ECG_SCREEN:
 
 
 if st.session_state["stage"] == FEEDBACK_SETUP:
+    st.write("Processing feedback...")
     annotate(st.session_state["interview"], OPENAI_API_KEY)
     st.session_state["interview"].add_datagrades()
+    st.session_state["interview"].add_diagnosisgrades()
     
     set_stage(FEEDBACK_SCREEN)
 

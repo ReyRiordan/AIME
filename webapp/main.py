@@ -20,14 +20,46 @@ from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
 from annotated_text import annotated_text
-# from dotenv import load_dotenv
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
-# load_dotenv()
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # SECRETS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LOGIN_PASS = os.getenv("LOGIN_PASS")
+DB_URI=os.getenv("DB_URI")
+
+# Establish connection to server
+
+client = MongoClient(DB_URI,server_api=ServerApi('1'))
+
+# Ping server on startup
+
+try:
+    client.admin.command('ping')
+    print("Connection Successful")
+except Exception as e:
+    print(e)
+
+# Method to get data of server
+
+@st.cache_data(ttl=1200)
+def get_data():
+    db=client["AIME"]
+    items=db["Conversation"].find()
+    items = list(items)
+    return items
+
+# MongoDB Collection to add to
+
+collection=client["AIME"]["Conversation"]
+
+######### WEBSITE 
 
 st.title("Medical Interview Simulation (BETA)")
 
@@ -234,6 +266,9 @@ if st.session_state["stage"] == FINAL_SCREEN:
                     file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
     
+    
+    collection.insert_one(st.session_state["interview"].get_json())
+
     send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
         
 

@@ -9,3 +9,4 @@ sendgrid
 pydub
 streamlit-audiorecorder
 st-annotated-text
+pymongo

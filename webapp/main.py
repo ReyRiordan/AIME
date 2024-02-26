@@ -119,7 +119,7 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
         st.session_state["interview_display_index"]+=1
         print(st.session_state["interview_display_index"])
 
-    button_columns[2].button("Back to previous page", on_click=set_stage, args=[DIAGNOSIS])
+    button_columns[2].button("Back to previous page", on_click=set_stage, args=[LOGIN_PAGE])
 
 
 if st.session_state["stage"] == SETTINGS:

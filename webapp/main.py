@@ -90,7 +90,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
         else:
             st.write("Password incorect.")
     
-    if login_buttons[3].button("Admin Login"):
+    if login_buttons[2].button("Admin Login"):
         if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
             st.write("Authentication successful!")
             time.sleep(1)
@@ -108,7 +108,7 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
     display_interview(dict_to_interview(st.session_state["all_interviews"][st.session_state["interview_display_index"]]))
 
     button_columns=st.columns(5)
-    button_columns[3].write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"]))) 
+    button_columns[2].write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"]))) 
 
     #TODO Fix the buttons so that they don't glitch
 

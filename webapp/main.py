@@ -65,8 +65,6 @@ collection=client["AIME"]["Conversation"]
 
 ######### WEBSITE 
 
-st.title("Medical Interview Simulation (BETA)")
-
 if "stage" not in st.session_state:
     st.session_state["stage"] = LOGIN_PAGE
 
@@ -75,35 +73,31 @@ def set_stage(stage):
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
+    st.title("Medical Interview Simulation (BETA)")
     st.write("For beta testing use only.")
     
-    st.session_state["username"] = st.text_input("Enter any username (does not have to be your real name):")
-    password = st.text_input("Enter the password you were provided and press \"Enter\":", type = "password")
-    if password:
-        if not st.session_state["username"]:
-            st.write("Missing username.")
-        elif password == LOGIN_PASS: 
+    username = st.text_input("Enter any username (does not have to be your real name):")
+    password = st.text_input("Enter the password you were provided:", type = "password")
+
+    if st.button("Log in"):
+        if username and password == LOGIN_PASS:
+            st.session_state["username"] = username
             st.write("Authentication successful!")
             time.sleep(1)
             set_stage(SETTINGS)
             st.rerun()
         else:
-            st.write("Password incorrect.")
-    st.button("I'm Dr. Corbett or Rick Anderson", on_click=set_stage, args=[VIEW_INTERVIEWS_LOGIN])
-
-
-if st.session_state["stage"]==VIEW_INTERVIEWS_LOGIN:
-    st.title("DATABASE ACCESS")
-    database_username = st.text_input("Enter the access username") 
-    database_password = st.text_input("Enter the password and press \"Enter\":", type = "password")
-    if database_username and database_password:
-        if database_username==DATABASE_USERNAME and database_password==DATABASE_PASSWORD: 
+            st.write("Password incorect.")
+    
+    if st.button("Admin Login"):
+        if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
             st.write("Authentication successful!")
-            time.sleep(1)
+            time.slee(1)
             set_stage(VIEW_INTERVIEWS)
             st.rerun()
         else:
             st.write("Password incorrect.")
+
 
 if st.session_state["stage"]==VIEW_INTERVIEWS:
     if "interview_display_index" not in st.session_state:

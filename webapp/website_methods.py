@@ -159,7 +159,7 @@ def get_chat_output(LLM: OpenAI, convo_memory: list[dict[str, str]], user_input:
     convo_memory.append({"role": "assistant", "content": output})
     if len(convo_memory) >= 10:
         summary = summarizer(LLM, convo_memory)
-        convo_memory = [convo_memory[0], {"role": "system", "content": "Summary of conversation so far: \n" + summary}]
+        convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
     return convo_memory, output
 
 

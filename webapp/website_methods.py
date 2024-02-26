@@ -126,8 +126,8 @@ def annotate(interview: Interview, OPENAI_API_KEY: str) -> None:
 
 def display_datagrades(grades: DataGrades, category: Category) -> None:
     score = grades.scores[category.name]
-    maxscore = grades.maxscores[category.name]
-    st.header(f":{category.color}[{category.header}]: {score}/{maxscore}", divider=category.color)
+    max_score = grades.max_scores[category.name]
+    st.header(f":{category.color}[{category.header}]: {score}/{max_score}", divider=category.color)
     display_labels = [(key, str(grades.weights[category.name][key]), "#baffc9" if value else "#ffb3ba") for key, value in grades.label_checklist[category.name].items()]
     annotated_text(display_labels)
 

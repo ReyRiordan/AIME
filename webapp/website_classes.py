@@ -243,7 +243,7 @@ class DiagnosisGrades:
         
         # Calculate scoring
         self.score = 0
-        self.maxscore = 10 # Just 10 static for now
+        self.max_score = 10 # Just 10 static for now
         for condition in self.main_checklist:
             if self.main_checklist[condition]:
                 self.score += self.weights["Main"][condition]

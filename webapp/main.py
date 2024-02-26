@@ -145,7 +145,7 @@ if st.session_state["stage"] == SETTINGS:
                                                placeholder = "Select patient...")
     if patient_name: st.session_state["interview"] = Interview(st.session_state["username"], Patient(patient_name))
 
-    if st.session_state["chat_mode"]: st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
+    if st.session_state["chat_mode"] and st.session_state["interview"]: st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
 
 if st.session_state["stage"] == CHAT_SETUP:

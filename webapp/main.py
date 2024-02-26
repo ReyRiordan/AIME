@@ -307,6 +307,16 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
         for category in st.session_state["interview"].get_categories():
             if category.tab == "data":
                 display_datagrades(st.session_state["interview"].get_datagrades(), category)
+    
+    with diagnosis:
+        diagnosis = st.session_state["interview"].get_diagnosis()
+        score = st.session_state["interview"].get_diagnosisgrades().score
+        maxscore = st.session_state["interview"].get_diagnosisgrades().maxscore
+        st.header(f"Diagnosis: {score}/{maxscore}")
+        st.divider()
+        st.write("Main Diagnosis: " + diagnosis.main_diagnosis)
+        st.write("Main Rationale: " + diagnosis.main_rationale)
+        st.write("Secondary Diagnoses: " + ", ".join(diagnosis.secondary_diagnoses))
 
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 

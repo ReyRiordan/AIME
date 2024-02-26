@@ -111,7 +111,7 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
     st.write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
 
     button_columns=st.columns(5)
-    
+
     if button_columns[1].button("Previous"):
         if st.session_state["interview_display_index"] == 0:
             st.write("No more interviews available.")
@@ -130,6 +130,8 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
 
 if st.session_state["stage"] == SETTINGS:
     st.session_state["interview"] = None
+    st.session_state["LLM"] = None
+    st.session_state["convo_memory"] = None
     st.session_state["convo_file"] = None
 
     chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
@@ -175,7 +177,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             with st.chat_message("User"):
                 st.markdown(user_input)
         st.session_state["interview"].add_message(Message("input", "User", user_input))
-        output = st.session_state["chatbot"].predict(input=user_input)
+        st.session_state["convo_memory"], output = get_chat_output(st.session_state["LLM"], st.session_state["convo_memory"], user_input)
         with container:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)

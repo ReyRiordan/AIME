@@ -113,6 +113,8 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
 
     button_columns=st.columns(5) 
 
+    #TODO Fix the buttons so that they don't glitch
+
     if button_columns[0].button("Previous Interview") and st.session_state["interview_display_index"]>0:
         st.session_state["interview_display_index"]-=1
     if button_columns[4].button("Next Interview") and st.session_state["interview_display_index"]<len(all_interviews)-1:
@@ -233,7 +235,6 @@ if st.session_state["stage"] == DIAGNOSIS:
                 mime="json")
     
 
-
     st.button("Get Feedback", on_click=set_stage, args=[FEEDBACK_SETUP])
     st.button("New Interview", on_click=set_stage, args=[SETTINGS])
 
@@ -267,6 +268,7 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
     set_stage(FEEDBACK_SCREEN)
 
 
+#TODO Feedback sometimes throws errors, mismatched number of output labels as input strings. Reproducible with low number of messages
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     # tabs for feedback types
     data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])

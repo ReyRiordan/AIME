@@ -154,10 +154,10 @@ class DataGrades:
 
         # Calculate scoring for each category
         self.scores = {}
-        self.maxscores = {}
+        self.max_scores = {}
         for category in categories:
             self.scores[category.name] = self.get_score(category)
-            self.maxscores[category.name] = self.get_maxscore(category)
+            self.max_scores[category.name] = self.get_maxscore(category)
         
     def get_score(self, category: Category) -> int:
         # Get weights from patient and grades from self
@@ -182,6 +182,14 @@ class DataGrades:
             max += weights[label]
         
         return max
+    
+    def get_dict(self):
+        to_return={}
+        to_return["scores"]=self.scores
+        to_return["max_scores"]=self.max_scores
+        to_return["label_checklist"]=self.label_checklist
+        return to_return
+
 
 
 class Diagnosis:
@@ -304,6 +312,7 @@ class Interview:
         for message in self.__messages:
             messages_dict.append(message.get_dict())
         conversation_dict["messages"]=messages_dict
+        conversation_dict["data_grades"]=self.get_datagrades().get_dict()
 
         return conversation_dict
 

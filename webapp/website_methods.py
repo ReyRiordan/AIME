@@ -162,3 +162,31 @@ def get_chat_output(LLM: OpenAI, convo_memory: list[dict[str, str]], user_input:
         convo_memory = [convo_memory[0], {"role": "system", "content": "Summary of conversation so far: \n" + summary}]
         print(convo_memory[1] + "\n")
     return convo_memory, output
+
+
+# TODO: @Rey since you have an aesthetically pleasing way of doing it please display all of the data from the conversation
+def display_interview(interview: Interview):
+    chat_container = st.container(height=300)
+    for message in interview.get_messages():
+            with chat_container:
+                with st.chat_message(message.role):
+                    if message.annotation is None:
+                        st.markdown(message.content)
+                    else:
+                        annotated_text((message.content, message.annotation, message.highlight))
+    # for category in interview.get_categories():
+    #         if category.tab == "data":
+    #             display_datagrades(interview.get_datagrades(), category)
+
+def dict_to_patient(json_dict):
+    to_return=Patient(json_dict["name"])
+    return to_return
+
+def dict_to_interview(json_dict):
+    to_return=Interview(json_dict["username"],dict_to_patient(json_dict["patient"]))
+    for message_json in json_dict["messages"]:
+        to_return.add_message(Message(type=message_json["type"],
+                                      role=message_json["role"],
+                                      content=message_json["content"]
+                                      ))
+    return to_return

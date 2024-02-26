@@ -267,7 +267,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
                     mime = "docx")
     
     
-    collection.insert_one(st.session_state["interview"].get_dict())
+    collection.update_one(st.session_state["interview"].get_dict(),upsert=True)
 
     send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
         

@@ -46,12 +46,10 @@ def get_data():
     items = list(items)
     return items
 
-items=get_data()
 
 collection=client["AIME"]["Conversation"]
 
 
-print(len(items))
 some_conversation=Interview("Rey Riordan",Patient("John Smith"))
 
 # collection.insert_one(some_conversation.get_dict())
@@ -93,9 +91,6 @@ if st.session_state["stage"] == CHAT_SETUP:
 if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")
     st.write("Use the interview transcription and additional patient information to provide a differential diagnosis.")
-    
-    for item in items:
-        st.write(item['username'])
 
     chat_container = st.container(height=300)
     for message in st.session_state["interview"].get_messages():
@@ -120,7 +115,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
     st.session_state["convo_file"].save(bio)
     
-    button_columns = st.columns(5)
+    button_columns = st.columns(6)
     button_columns[1].button("New Interview", on_click=set_stage, args=[SETTINGS])
     button_columns[2].download_button("Download interview", 
                     data = bio.getvalue(),
@@ -130,6 +125,8 @@ if st.session_state["stage"] == DIAGNOSIS:
         st.session_state["interview"].add_diagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
         set_stage(FEEDBACK_SETUP)
         st.rerun()
+    button_columns[4].button("My name is Dr. Corbett",on_click=set_stage, args=[VIEW_INTERVIEWS])
+        
 
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
@@ -189,3 +186,13 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
         st.write("Main Diagnosis: " + diagnosis.main_diagnosis)
         st.write("Main Rationale: " + diagnosis.main_rationale)
         st.write("Secondary Diagnoses: " + ", ".join(diagnosis.secondary_diagnoses))
+
+if st.session_state["stage"]==VIEW_INTERVIEWS:
+    all_interviews=get_data()
+    for interview_dict in all_interviews:
+        st.write("USERNAME: "+interview_dict["username"])
+        display_interview(dict_to_interview(interview_dict))
+    button_columns=st.columns(5)
+    button_columns[0].button("Previous Interview",on_click=set_stage, args=[VIEW_INTERVIEWS])
+    button_columns[4].button("Next Interview",on_click=set_stage, args=[VIEW_INTERVIEWS])
+    button_columns[2].button("Back to previous page", on_click=set_stage, args=[DIAGNOSIS])

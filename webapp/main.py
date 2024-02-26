@@ -79,7 +79,8 @@ if st.session_state["stage"] == LOGIN_PAGE:
     username = st.text_input("Enter any username (does not have to be your real name):")
     password = st.text_input("Enter the password you were provided:", type = "password")
 
-    if st.button("Log in"):
+    login_buttons = st.columns(5)
+    if login_buttons[1].button("Log in"):
         if username and password == LOGIN_PASS:
             st.session_state["username"] = username
             st.write("Authentication successful!")
@@ -89,10 +90,10 @@ if st.session_state["stage"] == LOGIN_PAGE:
         else:
             st.write("Password incorect.")
     
-    if st.button("Admin Login"):
+    if login_buttons[3].button("Admin Login"):
         if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
             st.write("Authentication successful!")
-            time.slee(1)
+            time.sleep(1)
             set_stage(VIEW_INTERVIEWS)
             st.rerun()
         else:

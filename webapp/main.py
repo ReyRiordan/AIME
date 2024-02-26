@@ -323,26 +323,27 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 
 if st.session_state["stage"] == FINAL_SCREEN: 
     st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
+    
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
     st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
     st.session_state["convo_file"].save(bio)
-        
-    st.download_button("Download interview", 
+    
+    button_columns = st.columns(5)
+    button_columns[1].download_button("Download interview", 
                     data = bio.getvalue(),
                     file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
     
-    
+    # Store interview in database and send email as backup
     collection.update_one(st.session_state["interview"].get_dict(),upsert=True)
-
     send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
         
+    # st.download_button("Download JSON",
+    #             data=st.session_state["interview"].get_json(),
+    #             file_name = st.session_state["interview"].get_username() + "_"+date_time + ".json",
+    #             mime="json")
 
-    st.download_button("Download JSON",
-                data=st.session_state["interview"].get_json(),
-                file_name = st.session_state["interview"].get_username() + "_"+date_time + ".json",
-                mime="json")
-
-    st.button("New Interview", on_click=set_stage, args=[SETTINGS])
+    button_columns[2].button("New Interview", on_click=set_stage, args=[SETTINGS])
+    button_columns[3].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])

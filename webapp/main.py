@@ -106,14 +106,12 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
         st.session_state["interview_display_index"]=0
         st.session_state["all_interviews"] = get_data() 
 
-    st.write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
-
     display_interview(dict_to_interview(st.session_state["all_interviews"][st.session_state["interview_display_index"]]))
 
+    st.write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
+
     button_columns=st.columns(5)
-
-    #TODO Fix the buttons so that they don't glitch
-
+    
     if button_columns[1].button("Previous"):
         if st.session_state["interview_display_index"] == 0:
             st.write("No more interviews available.")

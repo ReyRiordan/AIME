@@ -1,5 +1,6 @@
 from lookups import *
 import json
+from openai import OpenAI
 
 #TODO Make data for rest of classes "private" + getters and setters?
 
@@ -25,9 +26,13 @@ class Patient:
         self.physical = PATIENTS[name]["physical"]
         self.ECG = PATIENTS[name]["ECG"]
 
-        # Extract labels and weights for patient
-        with open(PATIENTS[name]["weights"], "r") as weights_json:
-            self.weights = json.load(weights_json)
+        # Extract grading for patient
+        with open(PATIENTS[name]["grading"], "r") as grading_json:
+            self.grading = json.load(grading_json)
+            self.weights_data = self.grading["data"]
+            self.weights_diagnosis = self.grading["diagnosis"]
+
+        
 
     def process_case(self, case: dict[str, list[dict[str]]]) -> str:
         case_prompt = ""
@@ -55,7 +60,7 @@ class Patient:
     def get_dict(self):
         patient_dict={}
         patient_dict["name"]=self.name
-        patient_dict["weights"]=self.weights
+        patient_dict["weights"]=self.weights_data
         return patient_dict
 
 
@@ -84,7 +89,7 @@ class Category:
         self.example = full_desc["example"] # str
 
         self.used_label_descs = {} # dict[str, str]
-        for label in patient.weights[name]:
+        for label in patient.weights_data[name]:
             self.used_label_descs[label] = self.all_label_descs[label]
         
         self.class_prompt = base_split[0]
@@ -126,41 +131,50 @@ class Message:
         message_dict["labels"]=self.labels
         return message_dict
 
-class Grades:
+
+class DataGrades:
 
     def __init__(self, patient: Patient, categories: list[Category], messages: list[Message]):
         self.patient = patient
         self.categories = categories
+        self.weights = patient.weights_data
         
         # Initialize all grades for each category to label: False
-        self.label_grades = {} # dict[str, dict[str, bool]]
+        self.label_checklist = {} # dict[str, dict[str, bool]]
         for category in categories:
-            self.label_grades[category.name] = {label: False for label in patient.weights[category.name]}
+            self.label_checklist[category.name] = {label: False for label in self.weights[category.name]}
 
-        # Iterate through messages and update grades
+        # Iterate through messages and grade checklist
         for message in messages:
             for category in categories:
                 if category.name in message.labels:
                     labels = message.labels[category.name]
                     for label in labels:
-                        self.label_grades[category.name][label] = True
+                        self.label_checklist[category.name][label] = True
+
+        # Calculate scoring for each category
+        self.scores = {}
+        self.maxscores = {}
+        for category in categories:
+            self.scores[category.name] = self.get_score(category)
+            self.maxscores[category.name] = self.get_maxscore(category)
         
     def get_score(self, category: Category) -> int:
         # Get weights from patient and grades from self
-        weights = self.patient.weights[category.name]
-        label_grades = self.label_grades[category.name]
+        weights = self.weights[category.name]
+        label_checklist = self.label_checklist[category.name]
 
         # Calculate score from weights and grades
         score = 0
         for label in weights:
-            if label_grades[label]: 
+            if label_checklist[label]: 
                 score += weights[label]
         
         return score
     
     def get_maxscore(self, category: Category) -> int:
         # Get weights from patient
-        weights = self.patient.weights[category.name]
+        weights = self.weights[category.name]
 
         # Calculate max score from weights
         max = 0
@@ -170,7 +184,70 @@ class Grades:
         return max
 
 
+class Diagnosis:
+
+    def __init__(self, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
+        self.main_diagnosis = main_diagnosis
+        self.main_rationale = main_rationale
+        self.secondary_diagnoses = secondary_diagnoses
+
+
+class DiagnosisGrades:
+
+    def __init__(self, patient: Patient, diagnosis: Diagnosis):
+        self.patient = patient
+        self.diagnosis = diagnosis
+        self.weights = patient.weights_diagnosis
+
+        # Intialize the checklist
+        self.main_checklist = {}
+        for condition in self.weights["Main"]:
+            self.main_checklist[condition] = False
+        self.secondary_checklist = {}
+        for condition in self.weights["Secondary"]:
+            self.secondary_checklist[condition] = False
+        
+        # Grade the checklists
+        client = OpenAI()
+        main_prompt = DIAG_PROMPT
+        for condition in self.main_checklist:
+            main_prompt += condition + "\n"
+        raw_output = client.chat.completions.create(model = DIAG_MODEL, 
+                                                    temperature = DIAG_TEMP, 
+                                                    messages = [{"role": "system", "content": main_prompt}, 
+                                                                {"role": "user", "content": diagnosis.main_diagnosis}])
+        matched_condition = raw_output.choices[0].message.content
+        print(diagnosis.main_diagnosis + ": " + matched_condition)
+        if matched_condition in self.main_checklist:
+            self.main_checklist[matched_condition] = True
+        secondary_prompt = DIAG_PROMPT
+        for condition in self.secondary_checklist:
+            secondary_prompt += condition + "\n"
+        for diagnosis in diagnosis.secondary_diagnoses:
+            raw_output = client.chat.completions.create(model = DIAG_MODEL, 
+                                                        temperature = DIAG_TEMP, 
+                                                        messages = [{"role": "system", "content": secondary_prompt}, 
+                                                                    {"role": "user", "content": diagnosis}])
+            matched_condition = raw_output.choices[0].message.content
+            print(diagnosis + ": " + matched_condition)
+            if matched_condition in self.secondary_checklist:
+                self.secondary_checklist[matched_condition] = True
+        
+        # Calculate scoring
+        self.score = 0
+        self.maxscore = 10 # Just 10 static for now
+        for condition in self.main_checklist:
+            if self.main_checklist[condition]:
+                self.score += self.weights["Main"][condition]
+        for condition in self.secondary_checklist:
+            if self.secondary_checklist[condition]:
+                self.score += self.weights["Secondary"][condition]
+
+            
+
+
 class Interview:
+
     def __init__(self, username: str, patient: Patient):
         self.__username = username
         self.__patient = patient
@@ -178,11 +255,19 @@ class Interview:
     
         # Make categories according to categories that patient has weights for
         self.__categories = []
-        for category in self.__patient.weights:
+        for category in self.__patient.weights_data:
             self.__categories.append(Category(category, patient))
+        
+        # Diagnosis added once user provides
     
-    def add_grades(self):
-        self.__grades = Grades(self.__patient, self.__categories, self.__messages)
+    def add_datagrades(self):
+        self.__datagrades = DataGrades(self.__patient, self.__categories, self.__messages)
+    
+    def add_diagnosis(self, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
+        self.__diagnosis = Diagnosis(main_diagnosis, main_rationale, secondary_diagnoses)
+    
+    def add_diagnosisgrades(self):
+        self.__diagnosisgrades = DiagnosisGrades(self.__patient, self.__diagnosis)
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
@@ -199,11 +284,17 @@ class Interview:
     
     def get_categories(self):
         return self.__categories
-    
-    def get_grades(self):
-        return self.__grades
 
-#TODO Where are the grades :skull:
+    def get_datagrades(self):
+        return self.__datagrades
+    
+    def get_diagnosis(self):
+        return self.__diagnosis
+    
+    def get_diagnosisgrades(self):
+        return self.__diagnosisgrades
+
+    #TODO Where are the grades :skull:
     def get_dict(self):
         conversation_dict={} #Wrapper dictionary
         messages_dict=[] # List of messages

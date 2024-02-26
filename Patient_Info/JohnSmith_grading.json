@@ -54,7 +54,9 @@
   },
   "diagnosis": {
     "Main": {
-      "Acute coronary syndrome (unstable angina or NSTEMI)": 8
+      "Acute coronary syndrome (ACS)": 8, 
+      "Non-ST-elevation myocardial infarction (NSTEMI)": 8, 
+      "Unstable Angina": 8
     },
     "Secondary": {
       "Acute coronary syndrome (unstable angina or NSTEMI)": 1,

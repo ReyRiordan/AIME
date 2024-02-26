@@ -16,10 +16,16 @@ FINAL_SCREEN = 10
 CONVO_MODEL = "gpt-4"
 CLASS_MODEL = "gpt-4"
 CHAT_TEMP = 0.7
+
 SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
-SUM_TEMP = 0.7
+SUM_TEMP = 0.0
+
+DIAG_MODEL = "gpt-3.5-turbo-0125"
+with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:
+    DIAG_PROMPT = grader_file.read()
+DIAG_TEMP = 0.0
 
 # Email API
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
@@ -31,7 +37,7 @@ CLASS_OUTPUT = "./Prompts/Class_Output_2-13.txt"
 PATIENTS = {
     "John Smith": {"base": "./Prompts/Base_2-23.txt", 
                    "case": "./Patient_Info/JohnSmith_case.json", 
-                   "weights": "./Patient_Info/JohnSmith_weights.json", 
+                   "grading": "./Patient_Info/JohnSmith_grading.json", 
                    "physical": "./Patient_Info/JohnSmith_physical.docx", 
                    "ECG": "./Patient_Info/JohnSmith_ECG.png"}, 
     "Jackie Smith": {"base": "./Prompts/Base_2-23.txt", 

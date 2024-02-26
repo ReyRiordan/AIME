@@ -124,11 +124,11 @@ def annotate(interview: Interview, OPENAI_API_KEY: str) -> None:
         message.add_annotation()
 
 
-def display_grades(grades: Grades, category: Category) -> None:
-    score = grades.get_score(category)
-    maxscore = grades.get_maxscore(category)
+def display_datagrades(grades: DataGrades, category: Category) -> None:
+    score = grades.scores[category.name]
+    maxscore = grades.maxscores[category.name]
     st.header(f":{category.color}[{category.header}]: {score}/{maxscore}", divider=category.color)
-    display_labels = [(key, "", "#baffc9" if value else "#ffb3ba") for key, value in grades.label_grades[category.name].items()]
+    display_labels = [(key, str(grades.weights[category.name][key]), "#baffc9" if value else "#ffb3ba") for key, value in grades.label_checklist[category.name].items()]
     annotated_text(display_labels)
 
 
@@ -144,8 +144,8 @@ def summarizer(LLM: OpenAI, convo_memory: list[dict[str, str]]) -> str:
             dialogue += "AI: " + message["content"] + "\n"
     messages.append({"role": "user", "content": dialogue})
     raw_summary = LLM.chat.completions.create(model = SUM_MODEL, 
-                                                    temperature = SUM_TEMP, 
-                                                    messages = messages)
+                                              temperature = SUM_TEMP, 
+                                              messages = messages)
     summary = raw_summary.choices[0].message.content
     return summary
 

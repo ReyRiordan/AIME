@@ -195,7 +195,7 @@ if st.session_state["stage"] == ECG_SCREEN:
 
 if st.session_state["stage"] == FEEDBACK_SETUP:
     annotate(st.session_state["interview"], OPENAI_API_KEY)
-    st.session_state["interview"].add_grades()
+    st.session_state["interview"].add_datagrades()
     
     set_stage(FEEDBACK_SCREEN)
 
@@ -216,7 +216,7 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 
         for category in st.session_state["interview"].get_categories():
             if category.tab == "data":
-                display_grades(st.session_state["interview"].get_grades(), category)
+                display_datagrades(st.session_state["interview"].get_datagrades(), category)
 
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 

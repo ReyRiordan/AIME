@@ -47,7 +47,7 @@ if st.session_state["stage"] == CHAT_SETUP:
                 {"role": "User", "content": "Do you drink or smoke?"}, 
                 {"role": "AI", "content": "No, I've never smoked. I do enjoy a glass of wine or a cocktail during the week, but that's about it."}]
 
-    st.session_state["interview"] = Interview("TEST", Patient("Jackie Smith"))
+    st.session_state["interview"] = Interview("TEST", Patient("John Smith"))
     for message in messages:
         if message["role"] == "User":
             st.session_state["interview"].add_message(Message("input", message["role"], message["content"]))
@@ -70,12 +70,12 @@ if st.session_state["stage"] == DIAGNOSIS:
     info_columns[1].button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
     info_columns[3].button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
 
-    st.text_input(label = "Main Diagnosis:", placeholder = "Condition name")
-    st.text_area(label = "Rationale:", placeholder = "Rationale for main diagnosis")
+    main_diagnosis = st.text_input(label = "Main Diagnosis:", placeholder = "Condition name")
+    main_rationale = st.text_area(label = "Rationale:", placeholder = "Rationale for main diagnosis")
 
     input_columns = st.columns(2)
-    input_columns[0].text_input(label = "Secondary Diagnoses:", placeholder = "Condition name")
-    input_columns[1].text_input(label = "None", placeholder = "Condition name", label_visibility = "hidden")
+    secondary1 = input_columns[0].text_input(label = "Secondary Diagnoses:", placeholder = "Condition name")
+    secondary2 = input_columns[1].text_input(label = "None", placeholder = "Condition name", label_visibility = "hidden")
 
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
@@ -89,7 +89,10 @@ if st.session_state["stage"] == DIAGNOSIS:
                     data = bio.getvalue(),
                     file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
-    button_columns[3].button("Get Feedback", on_click=set_stage, args=[FEEDBACK_SETUP])
+    if button_columns[3].button("Get Feedback"):
+        st.session_state["interview"].add_diagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
+        set_stage(FEEDBACK_SETUP)
+        st.rerun()
 
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:
@@ -116,7 +119,8 @@ if st.session_state["stage"] == ECG_SCREEN:
 
 if st.session_state["stage"] == FEEDBACK_SETUP:
     annotate(st.session_state["interview"], OPENAI_API_KEY)
-    st.session_state["interview"].add_grades()
+    st.session_state["interview"].add_datagrades()
+    st.session_state["interview"].add_diagnosisgrades()
     
     set_stage(FEEDBACK_SCREEN)
 
@@ -137,4 +141,14 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 
         for category in st.session_state["interview"].get_categories():
             if category.tab == "data":
-                display_grades(st.session_state["interview"].get_grades(), category)
+                display_datagrades(st.session_state["interview"].get_datagrades(), category)
+    
+    with diagnosis:
+        diagnosis = st.session_state["interview"].get_diagnosis()
+        score = st.session_state["interview"].get_diagnosisgrades().score
+        maxscore = st.session_state["interview"].get_diagnosisgrades().maxscore
+        st.header(f"Diagnosis: {score}/{maxscore}")
+        st.divider()
+        st.write("Main Diagnosis: " + diagnosis.main_diagnosis)
+        st.write("Main Rationale: " + diagnosis.main_rationale)
+        st.write("Secondary Diagnoses: " + ", ".join(diagnosis.secondary_diagnoses))

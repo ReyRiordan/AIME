@@ -20,9 +20,42 @@ from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
 from annotated_text import annotated_text
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+DB_URI=os.getenv("DB_URI")
+
+client = MongoClient(DB_URI,server_api=ServerApi('1'))
+
+try:
+    client.admin.command('ping')
+    print("connection successful")
+except Exception as e:
+    print(e)
+
+@st.cache_data(ttl=1200)
+def get_data():
+    db=client["AIME"]
+    items=db["Conversation"].find()
+    items = list(items)
+    return items
+
+items=get_data()
+
+collection=client["AIME"]["Conversation"]
+
+
+print(len(items))
+some_conversation=Interview("Rey Riordan",Patient("John Smith"))
+
+# collection.insert_one(some_conversation.get_dict())
+ 
 
 if "stage" not in st.session_state:
     st.session_state["stage"] = CHAT_SETUP
@@ -60,6 +93,10 @@ if st.session_state["stage"] == CHAT_SETUP:
 if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")
     st.write("Use the interview transcription and additional patient information to provide a differential diagnosis.")
+    
+    for item in items:
+        st.write(item['username'])
+
     chat_container = st.container(height=300)
     for message in st.session_state["interview"].get_messages():
         with chat_container:

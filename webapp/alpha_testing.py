@@ -47,7 +47,7 @@ if st.session_state["stage"] == CHAT_SETUP:
                 {"role": "User", "content": "Do you drink or smoke?"}, 
                 {"role": "AI", "content": "No, I've never smoked. I do enjoy a glass of wine or a cocktail during the week, but that's about it."}]
 
-    st.session_state["interview"] = Interview("TEST", Patient("John Smith"))
+    st.session_state["interview"] = Interview("TEST", Patient("Jackie Smith"))
     for message in messages:
         if message["role"] == "User":
             st.session_state["interview"].add_message(Message("input", message["role"], message["content"]))

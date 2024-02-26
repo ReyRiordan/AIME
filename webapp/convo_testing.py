@@ -33,7 +33,7 @@ def set_stage(stage):
 
 if st.session_state["stage"] == SETTINGS:
     st.session_state["interview"] = None
-    st.session_state["chatbot"] = None
+    st.session_state["LLM"] = None
     st.session_state["convo_memory"] = None
     st.session_state["convo_file"] = None
     patient_name = st.selectbox("Which patient would you like to interview?", 
@@ -46,7 +46,7 @@ if st.session_state["stage"] == SETTINGS:
 
 
 if st.session_state["stage"] == CHAT_SETUP:
-    st.session_state["chatbot"] = OpenAI()
+    st.session_state["LLM"] = OpenAI()
     st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}, 
                                         {"role": "system", "content": "Summary of conversation so far: None"}]
 
@@ -74,7 +74,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             with st.chat_message("User"):
                 st.markdown(user_input)
         st.session_state["interview"].add_message(Message("input", "User", user_input))
-        st.session_state["convo_memory"], output = get_chat_output(st.session_state["chatbot"], st.session_state["convo_memory"], user_input)
+        st.session_state["convo_memory"], output = get_chat_output(st.session_state["LLM"], st.session_state["convo_memory"], user_input)
         with container:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)

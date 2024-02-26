@@ -311,8 +311,8 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
     with diagnosis:
         diagnosis = st.session_state["interview"].get_diagnosis()
         score = st.session_state["interview"].get_diagnosisgrades().score
-        maxscore = st.session_state["interview"].get_diagnosisgrades().maxscore
-        st.header(f"Diagnosis: {score}/{maxscore}")
+        max_score = st.session_state["interview"].get_diagnosisgrades().max_score
+        st.header(f"Diagnosis: {score}/{max_score}")
         st.divider()
         st.write("Main Diagnosis: " + diagnosis.main_diagnosis)
         st.write("Main Rationale: " + diagnosis.main_rationale)

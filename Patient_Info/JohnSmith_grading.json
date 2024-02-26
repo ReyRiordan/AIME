@@ -59,7 +59,9 @@
       "Unstable Angina": 8
     },
     "Secondary": {
-      "Acute coronary syndrome (unstable angina or NSTEMI)": 1,
+      "Acute coronary syndrome (ACS)": 1,
+      "Non-ST-elevation myocardial infarction (NSTEMI)": 1, 
+      "Unstable Angina": 1, 
       "Aortic dissection": 1,
       "Acute pericarditis": 1,
       "Gastroesophageal reflux disease (GERD)": 1,

@@ -100,22 +100,31 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
 
 if st.session_state["stage"]==VIEW_INTERVIEWS:
+    st.title("View Interviews")
     if "interview_display_index" not in st.session_state:
         st.session_state["interview_display_index"]=0
-    all_interviews=get_data() 
-    display_interview(dict_to_interview(all_interviews[st.session_state["interview_display_index"]]))
+        st.session_state["all_interviews"] = get_data() 
+    display_interview(dict_to_interview(st.session_state["all_interviews"][st.session_state["interview_display_index"]]))
 
+    st.write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
     button_columns=st.columns(5) 
 
     #TODO Fix the buttons so that they don't glitch
 
-    if button_columns[0].button("Previous Interview") and st.session_state["interview_display_index"]>0:
-        st.session_state["interview_display_index"]-=1
+    if button_columns[0].button("Previous Interview"):
+        if st.session_state["interview_display_index"] == 0:
+            st.write("No more interviews available.")
+        else: 
+            st.session_state["interview_display_index"] -= 1
+            st.rerun()
     if button_columns[4].button("Next Interview") and st.session_state["interview_display_index"]<len(all_interviews)-1:
-        st.session_state["interview_display_index"]+=1
-        print(st.session_state["interview_display_index"])
+        if st.session_state["interview_display_index"] >= len(st.session_state["all_interviews"])-1:
+            st.write("No more interviews available")
+        else: 
+            st.session_state["interview_display_index"] += 1
+            st.rerun()
 
-    button_columns[2].button("Back to previous page", on_click=set_stage, args=[LOGIN_PAGE])
+    button_columns[2].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])
 
 
 if st.session_state["stage"] == SETTINGS:

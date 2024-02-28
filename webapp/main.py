@@ -106,9 +106,22 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
         st.session_state["interview_display_index"]=0
         st.session_state["all_interviews"] = get_data() 
 
+
+
+    list_of_interviews={}
+    for i in range(len(st.session_state["all_interviews"])):
+        str_to_append=st.session_state["all_interviews"][i]["username"]+": "
+        if "date_time" in st.session_state["all_interviews"][i].keys():
+            str_to_append+=st.session_state["all_interviews"][i]["date_time"]
+        list_of_interviews[str_to_append]=i
+    
+
+    interview_selection=st.selectbox("Select an interview", options=list_of_interviews,placeholder="Select Interview")
+    st.session_state["interview_display_index"]=list_of_interviews[interview_selection]
+
+    st.subheader("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
     display_interview(dict_to_interview(st.session_state["all_interviews"][st.session_state["interview_display_index"]]))
 
-    st.write("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
 
     button_columns=st.columns(5)
 
@@ -179,7 +192,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         st.session_state["interview"].add_message(Message("input", "User", user_input))
         st.session_state["convo_memory"], output = get_chat_output(st.session_state["LLM"], st.session_state["convo_memory"], user_input)
         with container:
-            with st.chat_message("AI"): # Needs avatar eventually
+            with st.chat_message("AI"): #TODO Needs avatar eventually
                 st.markdown(output)
         st.session_state["interview"].add_message(Message("output", "AI", output))
 
@@ -279,7 +292,8 @@ if st.session_state["stage"] == ECG_SCREEN:
 
     st.button("Back", on_click=set_stage, args=[DIAGNOSIS])
 
-
+#TODO: "Processing feedback" bug in the Feedback Screen. 
+    
 if st.session_state["stage"] == FEEDBACK_SETUP:
     st.write("Processing feedback...")
     annotate(st.session_state["interview"], OPENAI_API_KEY)

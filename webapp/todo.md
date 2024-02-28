@@ -1,4 +1,5 @@
-./main.py:    #TODO Fix the buttons so that they don't glitch
+./main.py:            with st.chat_message("AI"): #TODO Needs avatar eventually
+./main.py:#TODO: "Processing feedback" bug in the Feedback Screen. 
 ./main.py:#TODO Feedback sometimes throws errors, mismatched number of output labels as input strings. Reproducible with low number of messages
 ./website_classes.py:#TODO Make data for rest of classes "private" + getters and setters?
 ./website_classes.py:#TODO Move each class to its own separate file for cleanliness' sake. I'm lazy, u got it Rey

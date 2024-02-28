@@ -1,6 +1,7 @@
 from lookups import *
 import json
 from openai import OpenAI
+import datetime as date
 
 #TODO Make data for rest of classes "private" + getters and setters?
 
@@ -304,9 +305,10 @@ class Interview:
 
     #TODO Where are the grades :skull:
     def get_dict(self):
+        currentDateTime=date.datetime.now()
         conversation_dict={} #Wrapper dictionary
         messages_dict=[] # List of messages
-
+        conversation_dict["date_time"]=str(currentDateTime)
         conversation_dict["username"]=self.get_username()
         conversation_dict["patient"]=self.get_patient().get_dict()
         for message in self.__messages:

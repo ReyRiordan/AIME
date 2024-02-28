@@ -125,18 +125,18 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
 
     button_columns=st.columns(5)
 
-    if button_columns[1].button("Previous"):
-        if st.session_state["interview_display_index"] == 0:
-            st.write("No more interviews available.")
-        else: 
-            st.session_state["interview_display_index"] -= 1
-            st.rerun()
-    if button_columns[3].button("Next"):
-        if st.session_state["interview_display_index"] >= len(st.session_state["all_interviews"])-1:
-            st.write("No more interviews available")
-        else: 
-            st.session_state["interview_display_index"] += 1
-            st.rerun()
+    # if button_columns[1].button("Previous"):
+    #     if st.session_state["interview_display_index"] == 0:
+    #         st.write("No more interviews available.")
+    #     else: 
+    #         st.session_state["interview_display_index"] -= 1
+    #         st.rerun()
+    # if button_columns[3].button("Next"):
+    #     if st.session_state["interview_display_index"] >= len(st.session_state["all_interviews"])-1:
+    #         st.write("No more interviews available")
+    #     else: 
+    #         st.session_state["interview_display_index"] += 1
+    #         st.rerun()
 
     button_columns[2].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])
 

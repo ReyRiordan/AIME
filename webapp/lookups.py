@@ -48,27 +48,23 @@ PATIENTS = {
                      "ECG": "./Patient_Info/JackieSmith_ECG.png"}
 }
 
-CATEGORIES = {
-    "gen": {"tab": "data", 
-            "type": "input", 
+DATACATEGORIES = {
+    "gen": {"type": "input", 
             "header": "General Questions", 
             "color": "blue", 
             "highlight": "#bae1ff", # light blue
             "desc": "./Prompts/desc_gen.json"}, 
-    "dims": {"tab": "data", 
-             "type": "output", 
+    "dims": {"type": "output", 
              "header": "Dimensions of Chief Concern", 
              "color": "red", 
              "highlight": "#ffb3ba", # light red
              "desc": "./Prompts/desc_dims.json"}, 
-    "asoc": {"tab": "data", 
-             "type": "input", 
+    "asoc": {"type": "input", 
              "header": "Associated Symptoms Questions", 
              "color": "orange", 
              "highlight": "#ffdfba", # light orange
              "desc": "./Prompts/desc_asoc.json"}, 
-    "risk": {"tab": "data", 
-             "type": "input", 
+    "risk": {"type": "input", 
              "header": "Risk Factor Questions", 
              "color": "violet", 
              "highlight": "#f1cbff", # light violet

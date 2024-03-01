@@ -96,3 +96,12 @@ def get_chat_output(LLM: OpenAI, convo_memory: list[dict[str, str]], user_input:
         summary = summarizer(LLM, convo_memory)
         convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
     return convo_memory, output
+
+
+def match_diagnosis(LLM: OpenAI, prompt: str, user_input: str) -> str:
+    raw_output = LLM.chat.completions.create(model = DIAG_MODEL, 
+                                                    temperature = DIAG_TEMP, 
+                                                    messages = [{"role": "system", "content": prompt}, 
+                                                                {"role": "user", "content": user_input}])
+    matched_condition = raw_output.choices[0].message.content
+    return matched_condition

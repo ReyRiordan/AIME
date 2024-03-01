@@ -1,6 +1,7 @@
 from lookups import *
 import json
 from openai import OpenAI
+from LLM_methods import *
 from patient import *
 from message import *
 
@@ -26,22 +27,15 @@ class Diagnosis:
         main_prompt = DIAG_PROMPT
         for condition in self.checklists["Main"]:
             main_prompt += condition + "\n"
-        raw_output = client.chat.completions.create(model = DIAG_MODEL, 
-                                                    temperature = DIAG_TEMP, 
-                                                    messages = [{"role": "system", "content": main_prompt}, 
-                                                                {"role": "user", "content": userdiagnosis["main_diagnosis"]}])
-        matched_condition = raw_output.choices[0].message.content
+        matched_condition = match_diagnosis(client, main_prompt, userdiagnosis["main_diagnosis"])
         if matched_condition in self.checklists["Main"]:
             self.checklists["Main"][matched_condition] = True
+        
         secondary_prompt = DIAG_PROMPT
         for condition in self.checklists["Secondary"]:
             secondary_prompt += condition + "\n"
         for diagnosis in userdiagnosis["secondary_diagnoses"]:
-            raw_output = client.chat.completions.create(model = DIAG_MODEL, 
-                                                        temperature = DIAG_TEMP, 
-                                                        messages = [{"role": "system", "content": secondary_prompt}, 
-                                                                    {"role": "user", "content": diagnosis}])
-            matched_condition = raw_output.choices[0].message.content
+            matched_condition = match_diagnosis(client, secondary_prompt, diagnosis)
             if matched_condition in self.checklists["Secondary"]:
                 self.checklists["Secondary"][matched_condition] = True
         

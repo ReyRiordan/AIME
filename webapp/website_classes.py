@@ -12,12 +12,11 @@ class Patient:
     def __init__(self, name):
         # Attributes
         self.name = name      # str
-        self.convo_prompt     # str
-        self.HPI              # list[dict{str, str/bool}]
-        self.physical         # str path
-        self.ECG              # str path
         self.case             # dict{str, list[dict{str, str/bool}]}
         self.grading          # dict{str, dict{str, dict{str, int}}}
+        self.physical         # str path
+        self.ECG              # str path
+        self.convo_prompt     # str
 
         # Create virtual patient prompt
         with open(PATIENTS[name]["base"], "r", encoding="utf8") as base_prompt:
@@ -26,7 +25,6 @@ class Patient:
         self.convo_prompt = str(base)
         with open(PATIENTS[name]["case"], "r") as case_json:
             self.case = json.load(case_json)
-        self.HPI = self.case["History of Present Illness"]
         self.convo_prompt += self.process_case(self.case)
 
         # Assign physical and ECG data paths for patient for website display use
@@ -61,10 +59,12 @@ class Patient:
         return case_prompt
 
     def get_dict(self):
-        patient_dict={}
-        patient_dict["name"]=self.name
-        patient_dict["weights"]=self.weights_data
-        return patient_dict
+        to_return = {"name": self.name, 
+                     "case": self.case, 
+                     "grading": self.grading, 
+                     "physical": self.physical, 
+                     "ECG": self.ECG}
+        return to_return
 
 
 class DataCategory:
@@ -102,7 +102,14 @@ class DataCategory:
         for label in self.used_label_descs:
             self.class_prompt += "[" + label.replace(" ", "_") + "] " + self.used_label_descs[label] + "\n"
         self.class_prompt += base_split[1] + self.example + base_split[2]
-        
+    
+    def get_dict(self):
+        to_return = {"name": self.name, 
+                     "type": self.type, 
+                     "header": self.header, 
+                     "color": self.color, 
+                     "highlight": self.highlight}
+        return to_return
 
 class Message:
     #TODO Just a thought, perhaps arranging these all into one big dict? See get_dict
@@ -112,8 +119,8 @@ class Message:
         self.role = role        # str  
         self.content = content  # str
         self.labels = {}        # dict{str, list[str]}
-        self.highlight          # str
         self.annotation         # str
+        self.highlight          # str
 
     def add_highlight(self):
         if self.labels:
@@ -131,17 +138,19 @@ class Message:
         return self.content
     
     def get_dict(self): 
-        message_dict={}
-        message_dict["type"] = self.type
-        message_dict["role"] = self.role
-        message_dict["content"]=self.content
-        message_dict["labels"]=self.labels
-        return message_dict
+        to_return = {"type": self.type, 
+                     "role": self.role, 
+                     "content": self.content, 
+                     "labels": self.labels, 
+                     "annotation": self.annotation, 
+                     "highlight": self.highlight}
+        return to_return
 
 
 class DataAcquisition:
 
     def __init__(self, patient: Patient, messages: list[Message]):
+        # Attributes
         self.datacategories  # list[DataCategory]
         self.weights     # dict{str, dict{str, int}}
         self.checklists  # dict{str, dict{str, bool}}
@@ -195,16 +204,18 @@ class DataAcquisition:
         return max
     
     def get_dict(self):
-        to_return={}
-        to_return["scores"]=self.scores
-        to_return["max_scores"]=self.max_scores
-        to_return["label_checklist"]=self.label_checklist
+        to_return = {"datacategories": [category.get_dict() for category in self.datacategories], 
+                     "weights": self.weights, 
+                     "checklists": self.checklists, 
+                     "scores": self.scores, 
+                     "maxscores": self.maxscores}
         return to_return
 
 
 class Diagnosis:
 
     def __init__(self, patient: Patient, userdiagnosis: dict[str, str]):
+        # Attributes
         self.weights = patient.grading["Diagnosis"]  # dict{str, dict{str, int}}
         self.checklists                              # dict{str, dict{str, bool}}
         self.score                                   # int
@@ -251,20 +262,32 @@ class Diagnosis:
         for condition in self.checklists["Secondary"]:
             if self.checklists["Secondary"][condition]:
                 self.score += self.weights["Secondary"][condition]
+    
+    def get_dict(self):
+        to_return = {"weights": self.weights, 
+                     "checklists": self.checklists, 
+                     "score": self.score, 
+                     "maxscore": self.maxscore}
+        return to_return
 
             
 class Feedback:
 
     def __init__(self, patient: Patient, messages: list[Message], userdiagnosis: dict[str, str]):
-        self.patient = patient
-        self.messages = messages
+        # Attributes
         self.DataAcquisition = DataAcquisition(patient, messages)
         self.Diagnosis = Diagnosis(patient, userdiagnosis)
+    
+    def get_dict(self):
+        to_return = {"DataAcquisition": self.DataAcquisition.get_dict(), 
+                     "Diagnosis": self.Diagnosis.get_dict()}
+        return to_return
 
 
 class Interview:
 
     def __init__(self, username: str, patient: Patient):
+        #Attributes
         self.__username = username                              # str
         self.__patient = patient                                # Patient
         self.__messages = []                                    # list[Message]
@@ -272,9 +295,7 @@ class Interview:
                                 "main_rationale": None, 
                                 "secondary_diagnosis": None}
         self.__feedback                                         # Feedback
-        
-        # Diagnosis added once user provides
-    
+            
     def add_feedback(self):
         self.__feedback = Feedback(self.__patient, self.__messages, self.__userdiagnosis)
     
@@ -298,21 +319,19 @@ class Interview:
     
     def get_userdiagnosis(self) -> dict[str, str]:
         return self.__userdiagnosis
+    
+    def get_feedback(self) -> Feedback:
+        return self.__feedback
 
-    #TODO Where are the grades :skull:
     def get_dict(self):
         currentDateTime=date.datetime.now()
-        conversation_dict={} #Wrapper dictionary
-        messages_dict=[] # List of messages
-        conversation_dict["date_time"]=str(currentDateTime)
-        conversation_dict["username"]=self.get_username()
-        conversation_dict["patient"]=self.get_patient().get_dict()
-        for message in self.__messages:
-            messages_dict.append(message.get_dict())
-        conversation_dict["messages"]=messages_dict
-        conversation_dict["data_grades"]=self.get_datagrades().get_dict()
-
-        return conversation_dict
+        to_return = {"date_time": str(currentDateTime), 
+                     "username": self.__username, 
+                     "patient": self.__patient.get_dict(), 
+                     "messages": [message.get_dict() for message in self.__messages], 
+                     "userdiagnosis": self.__userdiagnosis, 
+                     "feedback": self.__feedback.get_dict()}
+        return to_return
 
     def get_json(self):
         return json.dumps(self.get_dict(),indent=4)

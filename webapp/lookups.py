@@ -1,3 +1,12 @@
+import os
+
+# SECRETS
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+LOGIN_PASS = os.getenv("LOGIN_PASS")
+DB_URI=os.getenv("DB_URI")
+DATABASE_USERNAME=os.getenv("DATABASE_USERNAME")
+DATABASE_PASSWORD=os.getenv("DATABASE_PASSWORD")
+
 # Streamlit stages
 LOGIN_PAGE = 0
 SETTINGS = 1

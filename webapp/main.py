@@ -14,7 +14,7 @@ from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
 from lookups import *
-from website_methods import *
+from webapp.web_methods import *
 from website_classes import *
 from audiorecorder import audiorecorder
 from openai import OpenAI
@@ -28,13 +28,6 @@ from pymongo.server_api import ServerApi
 
 # load_dotenv()
 
-
-# SECRETS
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-LOGIN_PASS = os.getenv("LOGIN_PASS")
-DB_URI=os.getenv("DB_URI")
-DATABASE_USERNAME=os.getenv("DATABASE_USERNAME")
-DATABASE_PASSWORD=os.getenv("DATABASE_PASSWORD")
 
 ############## DATABASE
 

@@ -1,5 +1,5 @@
 {
-  "data": {
+  "DataAcquisition": {
     "gen": {
       "Introduction": 5,
       "Confirm Identity": 5,
@@ -52,7 +52,7 @@
       "Sedentary": 1
     }
   },
-  "diagnosis": {
+  "Diagnosis": {
     "Main": {
       "Acute coronary syndrome (ACS)": 8, 
       "Non-ST-elevation myocardial infarction (NSTEMI)": 8, 

@@ -1,5 +1,5 @@
 {
-  "data": {
+  "DataAcquisition": {
     "gen": {
       "Introduction": 5,
       "Confirm Identity": 5,
@@ -50,7 +50,7 @@
       "Radiation": 1
     }
   },
-  "diagnosis": {
+  "Diagnosis": {
     "Main": {
       "Acute pericarditis": 8
     },

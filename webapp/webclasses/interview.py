@@ -4,6 +4,8 @@ from openai import OpenAI
 import datetime as date
 from patient import *
 from message import *
+from data_acquisition import *
+from diagnosis import *
 from feedback import *
 
 class Interview:

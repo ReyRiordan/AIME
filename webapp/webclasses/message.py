@@ -1,7 +1,6 @@
 from lookups import *
 
 class Message:
-    #TODO Just a thought, perhaps arranging these all into one big dict? See get_dict
     def __init__(self, type: str, role: str, content: str):
         # Attributes
         self.type = type        # str

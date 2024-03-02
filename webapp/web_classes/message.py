@@ -7,8 +7,8 @@ class Message:
         self.role = role        # str  
         self.content = content  # str
         self.labels = {}        # dict{str, list[str]}
-        self.annotation         # str
-        self.highlight          # str
+        self.annotation = None  # str
+        self.highlight = None   # str
 
     def add_highlight(self):
         if self.labels:

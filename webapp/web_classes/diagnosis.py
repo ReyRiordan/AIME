@@ -11,9 +11,9 @@ class Diagnosis:
     def __init__(self, patient: Patient, userdiagnosis: dict[str, str]):
         # Attributes
         self.weights = patient.grading["Diagnosis"]  # dict{str, dict{str, int}}
-        self.checklists                              # dict{str, dict{str, bool}}
-        self.score                                   # int
-        self.maxscore                                # int
+        self.checklists = None                       # dict{str, dict{str, bool}}
+        self.score = None                            # int
+        self.maxscore = None                         # int
 
         # Intialize the checklists
         self.checklists = {"Main": {}, 

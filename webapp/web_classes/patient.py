@@ -7,12 +7,12 @@ class Patient:
 
     def __init__(self, name):
         # Attributes
-        self.name = name      # str
-        self.case             # dict{str, list[dict{str, str/bool}]}
-        self.grading          # dict{str, dict{str, dict{str, int}}}
-        self.physical         # str path
-        self.ECG              # str path
-        self.convo_prompt     # str
+        self.name = name            # str
+        self.case = None            # dict{str, list[dict{str, str/bool}]}
+        self.grading = None         # dict{str, dict{str, dict{str, int}}}
+        self.physical = None        # str path
+        self.ECG = None             # str path
+        self.convo_prompt = None    # str
 
         # Create virtual patient prompt
         with open(PATIENTS[name]["base"], "r", encoding="utf8") as base_prompt:

@@ -11,11 +11,11 @@ class DataAcquisition:
 
     def __init__(self, patient: Patient, messages: list[Message]):
         # Attributes
-        self.datacategories  # list[DataCategory]
-        self.weights     # dict{str, dict{str, int}}
-        self.checklists  # dict{str, dict{str, bool}}
-        self.scores      # dict{str, int}
-        self.maxscores   # dict{str, int}
+        self.datacategories = None  # list[DataCategory]
+        self.weights = None         # dict{str, dict{str, int}}
+        self.checklists = None      # dict{str, dict{str, bool}}
+        self.scores = None          # dict{str, int}
+        self.maxscores = None       # dict{str, int}
 
         # Only data categories for patient
         self.datacategories = []

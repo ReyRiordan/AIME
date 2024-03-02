@@ -111,7 +111,9 @@ if st.session_state["stage"] == DIAGNOSIS:
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
-    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
+    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
+                                                       st.session_state["interview"].get_patient().name, 
+                                                       [message.get_dict() for message in st.session_state["interview"].get_messages()])
     st.session_state["convo_file"].save(bio)
     
     button_columns = st.columns(6)

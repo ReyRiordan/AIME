@@ -13,10 +13,10 @@ class DataCategory:
         self.header = DATACATEGORIES[name]["header"]        # str
         self.color = DATACATEGORIES[name]["color"]          # str
         self.highlight = DATACATEGORIES[name]["highlight"]  # str
-        self.all_label_descs                                # dict{str, str}
-        self.example                                        # str
-        self.used_label_descs                               # dict{str, str}
-        self.class_prompt                                   # str
+        self.all_label_descs = None                         # dict{str, str}
+        self.example = None                                 # str
+        self.used_label_descs = None                        # dict{str, str}
+        self.class_prompt = None                            # str
 
         # Create classification prompt (patient dependent)
         class_base = CLASS_INPUT if self.type == "input" else CLASS_OUTPUT

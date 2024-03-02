@@ -11,11 +11,11 @@ class Interview:
 
     def __init__(self, username: str, patient: Patient):
         #Attributes
-        self.__username = username  # str
-        self.__patient = patient    # Patient
-        self.__messages = []        # list[Message]
-        self.__userdiagnosis        # dict{str, str/list[str]}
-        self.__feedback             # Feedback
+        self.__username = username      # str
+        self.__patient = patient        # Patient
+        self.__messages = []            # list[Message]
+        self.__userdiagnosis = None     # dict{str, str/list[str]}
+        self.__feedback = None          # Feedback
             
     def add_feedback(self):
         self.__feedback = Feedback(self.__patient, self.__messages, self.__userdiagnosis)

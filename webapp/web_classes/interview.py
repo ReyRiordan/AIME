@@ -24,7 +24,7 @@ class Interview:
     def add_userdiagnosis(self, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
         self.__userdiagnosis = {"main_diagnosis": main_diagnosis, 
                                 "main_rationale": main_rationale, 
-                                "secondary_diagnosis": secondary_diagnoses}
+                                "secondary_diagnoses": secondary_diagnoses}
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:

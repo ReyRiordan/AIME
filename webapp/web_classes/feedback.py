@@ -14,6 +14,6 @@ class Feedback:
         self.Diagnosis = Diagnosis(patient, userdiagnosis)
     
     def get_dict(self):
-        to_return = {"DataAcquisition": self.DataAcquisition.get_dict(), 
+        to_return = {"Data Acquisition": self.DataAcquisition.get_dict(), 
                      "Diagnosis": self.Diagnosis.get_dict()}
         return to_return

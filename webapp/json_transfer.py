@@ -14,7 +14,7 @@ from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
 from lookups import *
-from website_methods import *
+from webapp.web_methods import *
 from website_classes import *
 from audiorecorder import audiorecorder
 from openai import OpenAI

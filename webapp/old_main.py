@@ -16,7 +16,7 @@ from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
 from webapp.lookups import *
-import website_methods as methods
+import webapp.web_methods as methods
 import unused.descriptions as descriptions
 
 

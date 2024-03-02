@@ -14,7 +14,7 @@ import os
 import sys
 sys.path.append('/Users/reyriordan/Documents/Research/Artificial-Intelligence-in-Medical-Education-AIME-/')
 from webapp.lookups import *
-from webapp.website_methods import *
+from webapp.web_methods import *
 
 KEY = os.getenv("OPENAI_API_KEY")
 #MODEL = "gpt-4-0125-preview"

@@ -71,21 +71,55 @@ def display_DataCategory(category: dict[str, str], checklist: dict[str, bool], w
     annotated_text(display_labels)
 
 
+def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
+    chat_container = st.container(height=300)
+    for message in messages:
+            with chat_container:
+                with st.chat_message(message["role"]):
+                    if message["annotation"] is None:
+                        st.markdown(message["content"])
+                    else:
+                        annotated_text((message["content"], message["annotation"], message["highlight"]))
+
+    for category in data["datacategories"]:
+        cat_name = category["name"]
+        display_DataCategory(category, data["checklists"][cat_name], data["weights"][cat_name], data["scores"][cat_name], data["maxscores"][cat_name])
+
+
+def display_Diagnosis(diagnosis: dict, userdiagnosis: dict) -> None:
+    score = diagnosis["score"]
+    maxscore = diagnosis["score"]
+    st.header(f"Diagnosis: {score}/{maxscore}")
+    st.divider()
+    st.write("Main Diagnosis: " + userdiagnosis["main_diagnosis"])
+    st.write("Main Rationale: " + userdiagnosis["main_rationale"])
+    st.write("Secondary Diagnoses: " + ", ".join(userdiagnosis["secondary_diagnoses"]))
+
+
 # TODO: @Rey since you have an aesthetically pleasing way of doing it please display all of the data from any given Interview instance. This method should take in an Interview and display all relavant data
 
-def display_interview(interview: Interview):
-    st.subheader("Username: " + interview.get_username())
-    chat_container = st.container(height=300)
-    for message in interview.get_messages():
+def display_Interview(interview: dict) -> None:
+    st.write(interview["username"] + " @ " + interview["date_time"])
+
+    if interview["feedback"]:
+        data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
+        with data:
+            display_DataAcquisition(interview["feedback"]["Data Acquisition"], interview["messages"])
+        with diagnosis:
+            display_Diagnosis(interview["feedback"]["Diagnosis"], interview["userdiagnosis"])
+    else:
+        chat_container = st.container(height=300)
+        for message in st.session_state["interview"]["messages"]:
             with chat_container:
-                with st.chat_message(message.role):
-                    if message.annotation is None:
-                        st.markdown(message.content)
-                    else:
-                        annotated_text((message.content, message.annotation, message.highlight))
-    # for category in interview.get_categories():
-    #         if category.tab == "data":
-    #             display_datagrades(interview.get_datagrades(), category)
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+        if interview["userdiagnosis"]:
+            userdiagnosis = interview["userdiagnosis"]
+            st.divider()
+            st.write("Main Diagnosis: " + userdiagnosis["main_diagnosis"])
+            st.write("Main Rationale: " + userdiagnosis["main_rationale"])
+            st.write("Secondary Diagnoses: " + ", ".join(userdiagnosis["secondary_diagnoses"]))
+
 
 def dict_to_patient(json_dict):
     to_return=Patient(json_dict["name"])

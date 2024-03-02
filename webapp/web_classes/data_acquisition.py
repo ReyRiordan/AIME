@@ -3,6 +3,7 @@ import json
 from openai import OpenAI
 from patient import *
 from message import *
+from LLM_methods import *
 
 class DataCategory:
 
@@ -64,6 +65,14 @@ class DataAcquisition:
         for category in patient.grading["DataAcquisition"]:
             self.datacategories.append(DataCategory(category, patient))
         self.weights = patient.grading["DataAcquisition"]
+
+        # Label all messages according to categories
+        for category in self.datacategories:
+            classifier(category, messages, OPENAI_API_KEY)
+        # Add annotations after classifying is done
+        for message in messages:
+            message.add_highlight()
+            message.add_annotation()
         
         # Initialize all grades for each category to label: False
         self.checklists = {}

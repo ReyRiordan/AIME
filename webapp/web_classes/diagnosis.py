@@ -1,9 +1,10 @@
 from lookups import *
 import json
 from openai import OpenAI
-from LLM_methods import *
-from patient import *
-from message import *
+
+from .patient import *
+from .message import *
+import web_methods
 
 class Diagnosis:
 
@@ -27,7 +28,7 @@ class Diagnosis:
         main_prompt = DIAG_PROMPT
         for condition in self.checklists["Main"]:
             main_prompt += condition + "\n"
-        matched_condition = match_diagnosis(client, main_prompt, userdiagnosis["main_diagnosis"])
+        matched_condition = web_methods.match_diagnosis(client, main_prompt, userdiagnosis["main_diagnosis"])
         if matched_condition in self.checklists["Main"]:
             self.checklists["Main"][matched_condition] = True
         
@@ -35,7 +36,7 @@ class Diagnosis:
         for condition in self.checklists["Secondary"]:
             secondary_prompt += condition + "\n"
         for diagnosis in userdiagnosis["secondary_diagnoses"]:
-            matched_condition = match_diagnosis(client, secondary_prompt, diagnosis)
+            matched_condition = web_methods.match_diagnosis(client, secondary_prompt, diagnosis)
             if matched_condition in self.checklists["Secondary"]:
                 self.checklists["Secondary"][matched_condition] = True
         

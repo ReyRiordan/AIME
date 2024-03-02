@@ -14,21 +14,20 @@ import streamlit as st
 from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
-from lookups import *
-from web_classes import *
 from annotated_text import annotated_text
 import json
 
+from lookups import *
 
-def create_convo_file(interview: Interview) -> Document:
+def create_convo_file(username: str, patientname: str, messages: list[dict[str, str]]) -> Document:
     convo = Document()
-    heading = convo.add_paragraph("User: " + interview.get_username() + ", ")
+    heading = convo.add_paragraph("User: " + username + ", ")
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     heading.add_run("Date: " + date_time + ", ")
-    heading.add_run("Patient: " + interview.get_patient().name)
-    for message in interview.get_messages():
-        convo.add_paragraph(message.role + ": " + message.content)
+    heading.add_run("Patient: " + patientname)
+    for message in messages:
+        convo.add_paragraph(message["role"] + ": " + message["content"])
     
     return convo
 

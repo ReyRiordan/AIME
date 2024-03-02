@@ -1,10 +1,11 @@
 from lookups import *
 import json
 from openai import OpenAI
-from patient import *
-from message import *
-from data_acquisition import *
-from diagnosis import *
+
+from .patient import *
+from .message import *
+from .data_acquisition import *
+from .diagnosis import *
             
 class Feedback:
 

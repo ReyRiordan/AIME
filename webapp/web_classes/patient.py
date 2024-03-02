@@ -1,5 +1,7 @@
-from lookups import *
 import json
+
+from lookups import *
+
 
 class Patient:
 

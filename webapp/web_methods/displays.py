@@ -18,7 +18,6 @@ import json
 import tempfile
 
 from lookups import *
-from web_classes import *
 
 
 def get_webtext(content: str) -> str:
@@ -29,7 +28,7 @@ def get_webtext(content: str) -> str:
 
 
 def display_DataCategory(category: dict[str, str], checklist: dict[str, bool], weights: dict[str, int], score: int, maxscore: int) -> None:
-    st.header(f":{category["color"]}[{category["header"]}]: {score}/{maxscore}", divider = category["color"])
+    st.header(f":{category['color']}[{category['header']}]: {score}/{maxscore}", divider = category['color'])
     display_labels = [(key, str(weights[key]), "#baffc9" if value else "#ffb3ba") for key, value in checklist.items()]
     annotated_text(display_labels)
 

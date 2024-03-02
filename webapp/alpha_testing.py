@@ -23,7 +23,6 @@ from pymongo.server_api import ServerApi
 from lookups import *
 from web_classes import *
 from web_methods import *
-
 # from dotenv import load_dotenv
 
 # load_dotenv()
@@ -152,51 +151,31 @@ if st.session_state["stage"] == ECG_SCREEN:
 
 
 if st.session_state["stage"] == FEEDBACK_SETUP:
-    st.write("Processing feedback...")
-    annotate(st.session_state["interview"], OPENAI_API_KEY)
-    st.session_state["interview"].add_datagrades()
-    st.session_state["interview"].add_diagnosisgrades()
+    st.title("Processing feedback...")
+    st.write("This might take a few minutes.")
+    st.session_state["interview"].add_feedback()
+    st.session_state["interview_dict"] = st.session_state["interview"].get_dict()
     
     set_stage(FEEDBACK_SCREEN)
+    st.rerun()
 
 
 if st.session_state["stage"] == FEEDBACK_SCREEN:
-    # tabs for feedback types
-    data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
-    
-    with data:
-        chat_container = st.container(height=300)
-        for message in st.session_state["interview"].get_messages():
-                with chat_container:
-                    with st.chat_message(message.role):
-                        if message.annotation is None:
-                            st.markdown(message.content)
-                        else:
-                            annotated_text((message.content, message.annotation, message.highlight))
+    # Let the display methods cook
+    display_Interview(st.session_state["interview_dict"])
 
-        for category in st.session_state["interview"].get_categories():
-            if category.tab == "data":
-                display_datagrades(st.session_state["interview"].get_datagrades(), category)
-    
-    with diagnosis:
-        diagnosis = st.session_state["interview"].get_diagnosis()
-        score = st.session_state["interview"].get_diagnosisgrades().score
-        maxscore = st.session_state["interview"].get_diagnosisgrades().maxscore
-        st.header(f"Diagnosis: {score}/{maxscore}")
-        st.divider()
-        st.write("Main Diagnosis: " + diagnosis.main_diagnosis)
-        st.write("Main Rationale: " + diagnosis.main_rationale)
-        st.write("Secondary Diagnoses: " + ", ".join(diagnosis.secondary_diagnoses))
+    st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
-if st.session_state["stage"]==VIEW_INTERVIEWS:
-    display_interview(dict_to_interview(all_interviews[st.session_state["interview_display_index"]]))
 
-    button_columns=st.columns(5) 
+# if st.session_state["stage"]==VIEW_INTERVIEWS:
+#     display_interview(dict_to_interview(all_interviews[st.session_state["interview_display_index"]]))
 
-    if button_columns[0].button("Previous Interview") and st.session_state["interview_display_index"]>0:
-        st.session_state["interview_display_index"]-=1
-    if button_columns[4].button("Next Interview") and st.session_state["interview_display_index"]<len(all_interviews)-1:
-        st.session_state["interview_display_index"]+=1
-        print(st.session_state["interview_display_index"])
+#     button_columns=st.columns(5) 
 
-    button_columns[2].button("Back to previous page", on_click=set_stage, args=[DIAGNOSIS])
+#     if button_columns[0].button("Previous Interview") and st.session_state["interview_display_index"]>0:
+#         st.session_state["interview_display_index"]-=1
+#     if button_columns[4].button("Next Interview") and st.session_state["interview_display_index"]<len(all_interviews)-1:
+#         st.session_state["interview_display_index"]+=1
+#         print(st.session_state["interview_display_index"])
+
+#     button_columns[2].button("Back to previous page", on_click=set_stage, args=[DIAGNOSIS])

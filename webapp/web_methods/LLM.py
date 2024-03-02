@@ -14,10 +14,12 @@ import streamlit as st
 from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
-from lookups import *
-from web_classes import *
 from annotated_text import annotated_text
 import json
+
+from lookups import *
+from web_classes.data_category import DataCategory
+from web_classes.message import Message
 
 
 def transcribe_voice(voice_input):

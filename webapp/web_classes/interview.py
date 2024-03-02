@@ -2,11 +2,10 @@ from lookups import *
 import json
 from openai import OpenAI
 import datetime as date
-from patient import *
-from message import *
-from data_acquisition import *
-from diagnosis import *
-from feedback import *
+
+from .patient import *
+from .message import *
+from .feedback import *
 
 class Interview:
 

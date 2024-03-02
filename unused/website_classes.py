@@ -1,4 +1,4 @@
-from lookups import *
+from webapp.lookups import *
 import json
 from openai import OpenAI
 import datetime as date

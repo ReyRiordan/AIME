@@ -14,7 +14,7 @@ import streamlit as st
 from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
-from lookups import *
+from webapp.lookups import *
 from unused.website_classes import *
 from annotated_text import annotated_text
 import json

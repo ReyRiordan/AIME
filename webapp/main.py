@@ -251,7 +251,9 @@ if st.session_state["stage"] == DIAGNOSIS:
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
-    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
+    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
+                                                       st.session_state["interview"].get_patient().name, 
+                                                       [message.get_dict() for message in st.session_state["interview"].get_messages()])
     st.session_state["convo_file"].save(bio)
     
     button_columns = st.columns(6)
@@ -261,7 +263,7 @@ if st.session_state["stage"] == DIAGNOSIS:
                     file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
     if button_columns[3].button("Get Feedback"):
-        st.session_state["interview"].add_diagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
+        st.session_state["interview"].add_userdiagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
         set_stage(FEEDBACK_SETUP)
         st.rerun()
 
@@ -293,7 +295,6 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
     st.title("Processing feedback...")
     st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback()
-    st.session_state["interview_dict"] = st.session_state["interview"].get_dict()
     
     set_stage(FEEDBACK_SCREEN)
     st.rerun()
@@ -302,7 +303,7 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 #TODO Feedback sometimes throws errors, mismatched number of output labels as input strings. Reproducible with low number of messages
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     # Let the display methods cook
-    display_Interview(st.session_state["interview_dict"])
+    display_Interview(st.session_state["interview"].get_dict())
 
     st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
@@ -313,7 +314,9 @@ if st.session_state["stage"] == FINAL_SCREEN:
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
-    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"])
+    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
+                                                       st.session_state["interview"].get_patient().name, 
+                                                       [message.get_dict() for message in st.session_state["interview"].get_messages()])
     st.session_state["convo_file"].save(bio)
     
     button_columns = st.columns(5)

@@ -13,9 +13,6 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
     FileType, Disposition, ContentId)
-from lookups import *
-from website_methods import *
-from website_classes import *
 from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
@@ -23,36 +20,37 @@ from annotated_text import annotated_text
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-from dotenv import load_dotenv
+from lookups import *
+from web_classes import *
+from web_methods import *
 
-load_dotenv()
+# from dotenv import load_dotenv
 
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-DB_URI=os.getenv("DB_URI")
-
-client = MongoClient(DB_URI,server_api=ServerApi('1'))
-
-try:
-    client.admin.command('ping')
-    print("connection successful")
-except Exception as e:
-    print(e)
-
-@st.cache_data(ttl=1200)
-def get_data():
-    db=client["AIME"]
-    items=db["Conversation"].find()
-    items = list(items)
-    return items
+# load_dotenv()
 
 
-collection=client["AIME"]["Conversation"]
-all_interviews=get_data()
-if "interview_display_index" not in st.session_state:
-    st.session_state["interview_display_index"]=0
+# client = MongoClient(DB_URI,server_api=ServerApi('1'))
 
-some_conversation=Interview("Rey Riordan",Patient("John Smith"))
+# try:
+#     client.admin.command('ping')
+#     print("connection successful")
+# except Exception as e:
+#     print(e)
+
+# @st.cache_data(ttl=1200)
+# def get_data():
+#     db=client["AIME"]
+#     items=db["Conversation"].find()
+#     items = list(items)
+#     return items
+
+
+# collection=client["AIME"]["Conversation"]
+# all_interviews=get_data()
+# if "interview_display_index" not in st.session_state:
+#     st.session_state["interview_display_index"]=0
+
+# some_conversation=Interview("Rey Riordan",Patient("John Smith"))
 
 # collection.insert_one(some_conversation.get_dict())
  

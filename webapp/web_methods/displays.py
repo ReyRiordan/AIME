@@ -50,7 +50,7 @@ def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
 
 def display_Diagnosis(diagnosis: dict, userdiagnosis: dict) -> None:
     score = diagnosis["score"]
-    maxscore = diagnosis["score"]
+    maxscore = diagnosis["maxscore"]
     st.header(f"Diagnosis: {score}/{maxscore}")
     st.divider()
     st.write("Main Diagnosis: " + userdiagnosis["main_diagnosis"])

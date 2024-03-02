@@ -123,11 +123,9 @@ if st.session_state["stage"] == DIAGNOSIS:
                     file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                     mime = "docx")
     if button_columns[3].button("Get Feedback"):
-        st.session_state["interview"].add_diagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
+        st.session_state["interview"].add_userdiagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
         set_stage(FEEDBACK_SETUP)
         st.rerun()
-    button_columns[4].button("My name is Dr. Corbett",on_click=set_stage, args=[VIEW_INTERVIEWS])
-        
 
 
 if st.session_state["stage"] == PHYSICAL_SCREEN:

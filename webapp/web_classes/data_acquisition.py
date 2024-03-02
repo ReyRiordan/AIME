@@ -25,7 +25,7 @@ class DataAcquisition:
 
         # Label all messages according to categories
         for category in self.datacategories:
-            classifier(category, messages, OPENAI_API_KEY)
+            classifier(category, messages)
         # Add annotations after classifying is done
         for message in messages:
             message.add_highlight()

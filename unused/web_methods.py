@@ -15,10 +15,10 @@ from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
 from lookups import *
-from website_classes import *
+from unused.website_classes import *
 from annotated_text import annotated_text
 import json
-from LLM_methods import *
+from webapp.web_methods.LLM import *
 
 
 def get_webtext(content: str) -> str:

@@ -51,23 +51,23 @@ def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
 def display_Diagnosis(diagnosis: dict, userdiagnosis: dict) -> None:
     score = diagnosis["score"]
     maxscore = diagnosis["maxscore"]
-    st.title(f"Diagnosis: {score}/{maxscore}")
+    st.header(f"Diagnosis: {score}/{maxscore}", divider = "grey")
 
     classified = diagnosis["classified"]
     checklists = diagnosis["checklists"]
     weights = diagnosis["weights"]
 
-    st.header("Main Diagnosis: ")
+    st.subheader("Main Diagnosis: ")
     user_maindiagnosis = [(key, value, "#baffc9" if value in checklists["Main"] else "#ffb3ba") for key, value in classified["Main"].items()]
     annotated_text("Your answer(s): ", user_maindiagnosis)
     valid_maindiagnosis = [(key, str(weights["Main"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Main"].items()]
     annotated_text("Valid answer(s): ", valid_maindiagnosis)
 
-    st.header("Main Rationale: ")
+    st.subheader("Main Rationale: ")
     st.write("Your answer: " + userdiagnosis["main_rationale"])
     st.write("Example answer: " + "COMING SOON!")
 
-    st.header("Secondary Diagnoses: " + ", ".join(userdiagnosis["secondary_diagnoses"]))
+    st.subheader("Secondary Diagnoses: ")
     user_secondarydiagnoses = [(key, value, "#baffc9" if value in checklists["Secondary"] else "#ffb3ba") for key, value in classified["Secondary"].items()]
     annotated_text(["Your answer(s): "] + user_secondarydiagnoses)
     valid_secondarydiagnoses = [(key, str(weights["Secondary"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Secondary"].items()]

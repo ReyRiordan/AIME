@@ -59,6 +59,7 @@ class Diagnosis:
     
     def get_dict(self):
         to_return = {"weights": self.weights, 
+                     "classified": self.classified, 
                      "checklists": self.checklists, 
                      "score": self.score, 
                      "maxscore": self.maxscore}

@@ -11,10 +11,15 @@ class Diagnosis:
     def __init__(self, patient: Patient, userdiagnosis: dict[str, str]):
         # Attributes
         self.weights = patient.grading["Diagnosis"]  # dict{str, dict{str, int}}
+        self.classified = None                       # dict{str, dict{str, str}}
         self.checklists = None                       # dict{str, dict{str, bool}}
         self.score = None                            # int
         self.maxscore = None                         # int
 
+        # Dict to see user input and corresponding matched conditions
+        self.classified = {"Main": {}, 
+                           "Secondary": {}}
+        
         # Intialize the checklists
         self.checklists = {"Main": {}, 
                            "Secondary": {}}
@@ -29,6 +34,7 @@ class Diagnosis:
         for condition in self.checklists["Main"]:
             main_prompt += condition + "\n"
         matched_condition = web_methods.match_diagnosis(client, main_prompt, userdiagnosis["main_diagnosis"])
+        self.classified["Main"][userdiagnosis["main_diagnosis"]] = matched_condition
         if matched_condition in self.checklists["Main"]:
             self.checklists["Main"][matched_condition] = True
         
@@ -37,6 +43,7 @@ class Diagnosis:
             secondary_prompt += condition + "\n"
         for diagnosis in userdiagnosis["secondary_diagnoses"]:
             matched_condition = web_methods.match_diagnosis(client, secondary_prompt, diagnosis)
+            self.classified["Secondary"][diagnosis] = matched_condition
             if matched_condition in self.checklists["Secondary"]:
                 self.checklists["Secondary"][matched_condition] = True
         

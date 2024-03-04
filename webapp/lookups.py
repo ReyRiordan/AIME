@@ -1,4 +1,5 @@
 import os
+from openai import OpenAI
 
 # SECRETS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -23,6 +24,7 @@ FINAL_SCREEN = 11
 VIEW_INTERVIEWS=12
 
 # LLM related
+LLM = OpenAI()
 CONVO_MODEL = "gpt-4"
 CHAT_TEMP = 0.0
 CLASS_MODEL = "gpt-4-0125-preview"
@@ -41,9 +43,6 @@ DIAG_TEMP = 0.0
 # Email API
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
-# Classification base prompts
-CLASS_INPUT = "./Prompts/Class_Input_3-3.txt"
-CLASS_OUTPUT = "./Prompts/Class_Output_2-13.txt"
 
 PATIENTS = {
     "John Smith": {"base": "./Prompts/Base_2-23.txt", 
@@ -57,6 +56,11 @@ PATIENTS = {
                      "physical": "./Patient_Info/JackieSmith_physical.docx", 
                      "ECG": "./Patient_Info/JackieSmith_ECG.png"}
 }
+
+
+# Classification base prompts
+CLASS_INPUT = "./Prompts/Class_Input_3-3.txt"
+CLASS_OUTPUT = "./Prompts/Class_Output_3-3.txt"
 
 DATACATEGORIES = {
     "gen": {"type": "input", 

@@ -25,7 +25,7 @@ class DataAcquisition:
 
         # Label all messages according to categories
         for category in self.datacategories:
-            classifier(LLM, category, messages)
+            classifier(category, messages)
         # Add annotations after classifying is done
         for message in messages:
             message.add_highlight()

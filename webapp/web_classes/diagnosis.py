@@ -29,11 +29,10 @@ class Diagnosis:
             self.checklists["Secondary"][condition] = False
         
         # Grade the checklists
-        client = OpenAI()
         main_prompt = DIAG_PROMPT
         for condition in self.checklists["Main"]:
             main_prompt += condition + "\n"
-        matched_condition = web_methods.match_diagnosis(client, main_prompt, userdiagnosis["main_diagnosis"])
+        matched_condition = web_methods.match_diagnosis(main_prompt, userdiagnosis["main_diagnosis"])
         self.classified["Main"][userdiagnosis["main_diagnosis"]] = matched_condition
         if matched_condition in self.checklists["Main"]:
             self.checklists["Main"][matched_condition] = True
@@ -42,7 +41,7 @@ class Diagnosis:
         for condition in self.checklists["Secondary"]:
             secondary_prompt += condition + "\n"
         for diagnosis in userdiagnosis["secondary_diagnoses"]:
-            matched_condition = web_methods.match_diagnosis(client, secondary_prompt, diagnosis)
+            matched_condition = web_methods.match_diagnosis(secondary_prompt, diagnosis)
             self.classified["Secondary"][diagnosis] = matched_condition
             if matched_condition in self.checklists["Secondary"]:
                 self.checklists["Secondary"][matched_condition] = True

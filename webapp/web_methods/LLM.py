@@ -23,18 +23,17 @@ from web_classes.message import Message
 
 
 def transcribe_voice(voice_input):
-    client = OpenAI()
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     voice_input.export(temp_audio_file.name, format="wav")
     with open(temp_audio_file.name, "rb") as file:
-        transcription = client.audio.transcriptions.create(model="whisper-1", 
+        transcription = LLM.audio.transcriptions.create(model="whisper-1", 
                                                     file=file, 
                                                     response_format="text")
     
     return transcription
 
 
-def classifier(LLM: OpenAI, category: DataCategory, messages: list[Message]) -> None:    
+def classifier(category: DataCategory, messages: list[Message]) -> None:    
     # Get the base class prompt for the category
     prompt_system = category.class_prompt
 
@@ -43,8 +42,6 @@ def classifier(LLM: OpenAI, category: DataCategory, messages: list[Message]) -> 
     for message in messages:
         if message.type == category.type:
             applicable_messages.append(message)
-            # message_content = message.content.rstrip() + "||"
-            # prompt_input += message_content
     message_list = [message.content for message in applicable_messages]
     prompt_user = json.dumps(message_list)
 
@@ -60,8 +57,6 @@ def classifier(LLM: OpenAI, category: DataCategory, messages: list[Message]) -> 
 
     print("LLM output: " + output + "\n\n")
 
-    # raw_classification = conversation.predict(input=prompt_input)
-
     raw_classifications = json.loads(output)
     classifications = raw_classifications["output"]
     classifications = [[label for label in classification if label != "Other"] for classification in classifications] # Remove "Other" labels
@@ -76,7 +71,7 @@ def classifier(LLM: OpenAI, category: DataCategory, messages: list[Message]) -> 
             applicable_messages[i].labels[category.name] = classifications[i]
 
 
-def summarizer(LLM: OpenAI, convo_memory: list[dict[str, str]]) -> str:
+def summarizer(convo_memory: list[dict[str, str]]) -> str:
     messages = [{"role": "system", "content": SUM_PROMPT}]
     dialogue = ""
     for message in convo_memory[1:]:
@@ -94,7 +89,7 @@ def summarizer(LLM: OpenAI, convo_memory: list[dict[str, str]]) -> str:
     return summary
 
 
-def get_chat_output(LLM: OpenAI, convo_memory: list[dict[str, str]], user_input: str) -> list[list[dict[str, str]], str]:
+def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list[list[dict[str, str]], str]:
     convo_memory.append({"role": "user", "content": user_input})
     response = LLM.chat.completions.create(model = CONVO_MODEL, 
                                            temperature = CHAT_TEMP, 
@@ -102,12 +97,12 @@ def get_chat_output(LLM: OpenAI, convo_memory: list[dict[str, str]], user_input:
     output = response.choices[0].message.content
     convo_memory.append({"role": "assistant", "content": output})
     if len(convo_memory) >= 10:
-        summary = summarizer(LLM, convo_memory)
+        summary = summarizer(convo_memory)
         convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
     return convo_memory, output
 
 
-def match_diagnosis(LLM: OpenAI, prompt: str, user_input: str) -> str:
+def match_diagnosis(prompt: str, user_input: str) -> str:
     raw_output = LLM.chat.completions.create(model = DIAG_MODEL, 
                                                     temperature = DIAG_TEMP, 
                                                     messages = [{"role": "system", "content": prompt}, 

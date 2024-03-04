@@ -76,6 +76,7 @@ def display_Diagnosis(diagnosis: dict, userdiagnosis: dict) -> None:
 
 def display_Interview(interview: dict) -> None:
     st.write(interview["username"] + " @ " + interview["date_time"])
+    st.write("Patient: " + interview["patient"]["name"])
 
     if interview["feedback"]:
         data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])

@@ -44,7 +44,7 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
             applicable_messages.append(message)
     message_list = [message.content for message in applicable_messages]
     prompt_user = json.dumps(message_list)
-    
+
     # Classify
     response = LLM.chat.completions.create(model = CLASS_MODEL, 
                                            temperature = CLASS_TEMP, 
@@ -52,6 +52,8 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
                                            messages = [{"role": "system", "content": prompt_system}, 
                                                        {"role": "user", "content": prompt_user}])
     output = response.choices[0].message.content
+
+    print(output)
 
     raw_classifications = json.loads(output)
     classifications = raw_classifications["output"]

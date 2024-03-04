@@ -11,5 +11,5 @@
     "Radiation": "Responses about other areas that the main symptom/concern may have spread to. For example, \"When the pain was at its worst, I also felt an aching in my jaw and shoulders.\"",
     "Severity": "Only specific responses about quantifications of severity on a scale from 1 to 10. For example, \"I'd say it had a severity of 9 out of 10 when it first started, but it's a 5 now.\""
   },
-  "example": "Inputs: Hi, I'm John Smith and I'm 64 years old.||I'm having this pressure in my chest, it started yesterday and it's right in the center of my chest.||My feet have also been swelling up a bit.||The pain gets worse when I walk around.||I've also noticed some pain in my shoulders.||I've felt something similar in the past when I was lifting weights.||\nOutput: Other||Timing Location||Other||Exacerbating||Radiation||Prior_History||"
+  "example": "Input: [\"Hi, I'm John Smith and I'm 64 years old.\", \"I'm having this pressure in my chest, it started yesterday and it's right in the center of my chest.\", \"My feet have also been swelling up a bit.\", \"The pain gets worse when I walk around.\", \"I've also noticed some pain in my shoulders.\", \"I've felt something similar in the past when I was lifting weights.\"] \nOutput: [[\"Other\"], [\"Timing\", \"Location\"], [\"Other\"], [\"Exacerbating\"], [\"Radiation\"], [\"Prior_History\"]]"
 }

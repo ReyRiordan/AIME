@@ -42,6 +42,8 @@ class DataAcquisition:
                 if category.name in message.labels:
                     labels = message.labels[category.name]
                     for label in labels:
+                        if label not in self.checklists[category.name]: # handle weird generated label name cases
+                            raise ValueError(label + " is an unknown label.")
                         self.checklists[category.name][label] = True
 
         # Calculate scoring for each category

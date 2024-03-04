@@ -34,39 +34,46 @@ def transcribe_voice(voice_input):
     return transcription
 
 
-def classifier(category: DataCategory, messages: list[Message]) -> None:
-    # Create GPT instance
-    llm = ChatOpenAI(api_key=OPENAI_API_KEY, model=CLASS_MODEL, temperature=0.0)
-    conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
-    
+def classifier(LLM: OpenAI, category: DataCategory, messages: list[Message]) -> None:    
     # Get the base class prompt for the category
-    prompt_input = category.class_prompt
+    prompt_system = category.class_prompt
 
     # Append applicable messages to prompt
     applicable_messages = []
     for message in messages:
         if message.type == category.type:
             applicable_messages.append(message)
-            message_content = message.content.rstrip() + "||"
-            prompt_input += message_content
+            # message_content = message.content.rstrip() + "||"
+            # prompt_input += message_content
+    message_list = [message.content for message in applicable_messages]
+    prompt_user = json.dumps(message_list)
+
+    print("System prompt: \n" + prompt_system + "\n\nUser prompt: \n" + prompt_user + "\n\n")
 
     # Classify
-    raw_classification = conversation.predict(input=prompt_input)
-    classifications = raw_classification.split("||")[:-1] # Remove empty classification at the end
-    all_classifications = [] # list[list[str]]
-    for classification in classifications:
-        class_list = classification.split() # Split into individual labels by spaces
-        for i in range(len(class_list)):
-            class_list[i] = class_list[i].replace("_", " ") # Remove underscores from labels
-        class_list = [label for label in class_list if label != "Other"] # Remove "Other" labels
-        all_classifications.append(class_list) # Appends list of labels (one for each message)
+    response = LLM.chat.completions.create(model = CLASS_MODEL, 
+                                           temperature = CLASS_TEMP, 
+                                           response_format = { "type": "json_object" }, 
+                                           messages = [{"role": "system", "content": prompt_system}, 
+                                                       {"role": "user", "content": prompt_user}])
+    output = response.choices[0].message.content
+
+    print("LLM output: " + output + "\n\n")
+
+    # raw_classification = conversation.predict(input=prompt_input)
+
+    raw_classifications = json.loads(output)
+    classifications = raw_classifications["output"]
+    classifications = [[label for label in classification if label != "Other"] for classification in classifications] # Remove "Other" labels
     
     # Assign labels to each message accordingly
-    if len(applicable_messages) != len(all_classifications):
+    if len(applicable_messages) != len(classifications):
+        print(applicable_messages)
+        print(classifications)
         raise ValueError("Number of classifications must match number of applicable messages.")
     for i in range(len(applicable_messages)):
-        if all_classifications[i]: # If not an empty list with no labels
-            applicable_messages[i].labels[category.name] = all_classifications[i]
+        if classifications[i]: # If not an empty list with no labels
+            applicable_messages[i].labels[category.name] = classifications[i]
 
 
 def summarizer(LLM: OpenAI, convo_memory: list[dict[str, str]]) -> str:

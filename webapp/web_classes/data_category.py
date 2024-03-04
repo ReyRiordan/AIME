@@ -23,8 +23,8 @@ class DataCategory:
         with open(class_base, "r", encoding="utf8") as class_base_file:
             base_raw = class_base_file.read()
             base_split = base_raw.split("|PATIENT DEPENDENT|")
-            if len(base_split) != 3:
-                raise ValueError("Base classification prompt should have 3 parts.")
+            if len(base_split) != 2:
+                raise ValueError("Base classification prompt should have 2 parts.")
 
         with open(DATACATEGORIES[name]["desc"], "r") as desc_json:
             full_desc = json.load(desc_json)
@@ -37,8 +37,8 @@ class DataCategory:
         
         self.class_prompt = base_split[0]
         for label in self.used_label_descs:
-            self.class_prompt += "[" + label.replace(" ", "_") + "] " + self.used_label_descs[label] + "\n"
-        self.class_prompt += base_split[1] + self.example + base_split[2]
+            self.class_prompt += "[" + label + "] " + self.used_label_descs[label] + "\n"
+        self.class_prompt += base_split[1] + self.example
     
     def get_dict(self):
         to_return = {"name": self.name, 

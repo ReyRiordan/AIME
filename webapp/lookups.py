@@ -24,8 +24,9 @@ VIEW_INTERVIEWS=12
 
 # LLM related
 CONVO_MODEL = "gpt-4"
-CLASS_MODEL = "gpt-4"
 CHAT_TEMP = 0.0
+CLASS_MODEL = "gpt-4-0125-preview"
+CLASS_TEMP = 0.0
 
 SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
@@ -41,7 +42,7 @@ DIAG_TEMP = 0.0
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
 # Classification base prompts
-CLASS_INPUT = "./Prompts/Class_Input_2-13.txt"
+CLASS_INPUT = "./Prompts/Class_Input_3-3.txt"
 CLASS_OUTPUT = "./Prompts/Class_Output_2-13.txt"
 
 PATIENTS = {

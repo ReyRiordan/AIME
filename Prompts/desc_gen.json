@@ -15,5 +15,5 @@
     "Employment": "Any question about the patient's employment status or work history.",
     "Social Support": "Any question about the patient's social support system, such as those they live with or friends they can rely on."
   },
-  "example": "Inputs: Hi, I'm Dr. Corbett. Before we begin, could you please confirm your full name and date of birth for me?||How would you prefer to be addressed?||What brings you in today?||Can you describe the sensation for me?||Have you ever had surgery before?||Have you ever smoked or used drugs recreationally?|| \nOutput: Introduction Confirm_Identity||Other||Establish_Chief_Concern||Other||Surgery_Hospitalization||Alcohol Smoking||"
+  "example": "Input: [\"Hi, I'm Dr. Corbett. Before we begin, could you please confirm your full name and date of birth for me?\", \"How would you prefer to be addressed?\", \"What brings you in today?\", \"Can you describe the sensation for me?\", \"Have you ever had surgery before?\", \"Have you ever smoked or used drugs recreationally?\"] \nOutput: [[\"Introduction\", \"Confirm Identity\"], [\"Other\"], [\"Establish_Chief_Concern\"], [\"Other\"], [\"Surgery Hospitalization\"], [\"Alcohol\", \"Smoking\"]]"
 }

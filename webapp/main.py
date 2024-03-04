@@ -141,6 +141,7 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["interview"] = None
     st.session_state["convo_memory"] = None
     st.session_state["convo_file"] = None
+    st.session_state["sent"] = False
 
     chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
                              ["Text", "Voice"],
@@ -324,12 +325,14 @@ if st.session_state["stage"] == FINAL_SCREEN:
                     mime = "docx")
     
     # Store interview in database and send email as backup
-    collection.insert_one(st.session_state["interview"].get_dict())
-    send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
+    if st.session_state["sent"] == False:
+        collection.insert_one(st.session_state["interview"].get_dict())
+        send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
+        st.session_state["sent"] = True
         
     # st.download_button("Download JSON",
     #             data=st.session_state["interview"].get_json(),
-    #             file_name = st.session_state["interview"].get_username() + "_"+date_time + ".json",
+    #             file_name = st.session_state ["interview"].get_username() + "_"+date_time + ".json",
     #             mime="json")
 
     button_columns[2].button("New Interview", on_click=set_stage, args=[SETTINGS])

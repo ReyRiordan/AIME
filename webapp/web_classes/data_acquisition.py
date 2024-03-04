@@ -1,6 +1,8 @@
 from lookups import *
 import json
 from openai import OpenAI
+import streamlit as st
+import time
 
 from .patient import *
 from .message import *
@@ -23,9 +25,24 @@ class DataAcquisition:
             self.datacategories.append(DataCategory(category, patient))
         self.weights = patient.grading["DataAcquisition"]
 
+        # Split messages into batches if needed
+        if len(messages) > BATCH_MAX:
+            num_batches = -(-len(messages) // BATCH_MAX) # Round up int division
+            batch_size = -(-len(messages) // num_batches)
+            batches = [messages[i*batch_size : (i+1)*batch_size] for i in range(num_batches)]
+        else:
+            batches = [messages]
+
+        # 1 min estimated wait per batch
+        st.write(f"{len(messages)} split into {len(batches)} batches, estimated wait time: {len(batches)} minutes.")
+
         # Label all messages according to categories
-        for category in self.datacategories:
-            classifier(category, messages)
+        for i, batch in enumerate(batches):
+            for category in self.datacategories:
+                classifier(category, batch)
+            st.write(f"Batch {i} complete.")
+            time.sleep(BATCH_DELAY)
+        
         # Add annotations after classifying is done
         for message in messages:
             message.add_highlight()

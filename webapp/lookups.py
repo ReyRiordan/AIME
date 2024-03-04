@@ -1,12 +1,14 @@
 import os
 from openai import OpenAI
 
+
 # SECRETS
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 DB_URI=os.getenv("DB_URI")
 DATABASE_USERNAME=os.getenv("DATABASE_USERNAME")
 DATABASE_PASSWORD=os.getenv("DATABASE_PASSWORD")
+
 
 # Streamlit stages
 LOGIN_PAGE = 0
@@ -23,12 +25,16 @@ FEEDBACK_SCREEN = 10
 FINAL_SCREEN = 11
 VIEW_INTERVIEWS=12
 
+
 # LLM related
 LLM = OpenAI()
 CONVO_MODEL = "gpt-4"
 CHAT_TEMP = 0.0
+
 CLASS_MODEL = "gpt-4-0125-preview"
 CLASS_TEMP = 0.0
+BATCH_MAX = 10
+BATCH_DELAY = 50
 
 SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
@@ -39,6 +45,7 @@ DIAG_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:
     DIAG_PROMPT = grader_file.read()
 DIAG_TEMP = 0.0
+
 
 # Email API
 EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]

@@ -44,9 +44,7 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
             applicable_messages.append(message)
     message_list = [message.content for message in applicable_messages]
     prompt_user = json.dumps(message_list)
-
-    print("System prompt: \n" + prompt_system + "\n\nUser prompt: \n" + prompt_user + "\n\n")
-
+    
     # Classify
     response = LLM.chat.completions.create(model = CLASS_MODEL, 
                                            temperature = CLASS_TEMP, 
@@ -55,16 +53,14 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
                                                        {"role": "user", "content": prompt_user}])
     output = response.choices[0].message.content
 
-    print("LLM output: " + output + "\n\n")
-
     raw_classifications = json.loads(output)
     classifications = raw_classifications["output"]
     classifications = [[label for label in classification if label != "Other"] for classification in classifications] # Remove "Other" labels
     
     # Assign labels to each message accordingly
     if len(applicable_messages) != len(classifications):
-        print(applicable_messages)
-        print(classifications)
+        print(prompt_user)
+        print(output)
         raise ValueError("Number of classifications must match number of applicable messages.")
     for i in range(len(applicable_messages)):
         if classifications[i]: # If not an empty list with no labels

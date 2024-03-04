@@ -163,13 +163,12 @@ if st.session_state["stage"] == SETTINGS:
 if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}, 
                                         {"role": "system", "content": "Summary of conversation so far: None"}]
-
-    st.session_state["interview"].add_message(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself."))
     
     set_stage(st.session_state["chat_mode"])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
+    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
     st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
     # st.session_state["start_time"] = date.datetime.now()
 
@@ -197,6 +196,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
+    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
     st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
              Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 

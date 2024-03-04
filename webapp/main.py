@@ -228,7 +228,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")
-    st.write("Use the interview transcription and additional patient information to provide a differential diagnosis.")
+    st.write(f"Use the interview transcription and additional patient information to provide a differential diagnosis for {st.session_state["interview"].get_patient().name}.")
 
     chat_container = st.container(height=300)
     for message in st.session_state["interview"].get_messages():

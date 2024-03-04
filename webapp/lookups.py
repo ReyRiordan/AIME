@@ -40,6 +40,7 @@ SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
 SUM_TEMP = 0.0
+MAX_MESSAGES = 10
 
 DIAG_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:

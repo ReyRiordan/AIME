@@ -94,7 +94,7 @@ def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list
                                            messages = convo_memory)
     output = response.choices[0].message.content
     convo_memory.append({"role": "assistant", "content": output})
-    if len(convo_memory) >= 10:
+    if len(convo_memory) >= MAX_MESSAGES:
         summary = summarizer(convo_memory)
         convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
     return convo_memory, output

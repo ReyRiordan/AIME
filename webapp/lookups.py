@@ -33,8 +33,8 @@ CHAT_TEMP = 0.0
 
 CLASS_MODEL = "gpt-4-0125-preview"
 CLASS_TEMP = 0.0
-BATCH_MAX = 10
-BATCH_DELAY = 50
+BATCH_MAX = 20
+BATCH_DELAY = 30
 
 SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:

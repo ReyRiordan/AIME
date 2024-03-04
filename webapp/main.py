@@ -292,7 +292,6 @@ if st.session_state["stage"] == ECG_SCREEN:
     
 if st.session_state["stage"] == FEEDBACK_SETUP:
     st.title("Processing feedback...")
-    st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback()
     
     set_stage(FEEDBACK_SCREEN)

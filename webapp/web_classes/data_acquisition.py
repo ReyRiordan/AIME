@@ -34,14 +34,14 @@ class DataAcquisition:
             batches = [messages]
 
         # 1 min estimated wait per batch
-        st.write(f"{len(messages)} split into {len(batches)} batches, estimated wait time: {len(batches)} minutes.")
+        st.write(f"{len(messages)} messages split into {len(batches)} batches, estimated wait time: {len(batches)} minutes.")
 
         # Label all messages according to categories
         for i, batch in enumerate(batches):
+            if i > 0: time.sleep(BATCH_DELAY)
             for category in self.datacategories:
                 classifier(category, batch)
-            st.write(f"Batch {i} complete.")
-            time.sleep(BATCH_DELAY)
+            st.write(f"Batch {i+1} complete.")
         
         # Add annotations after classifying is done
         for message in messages:

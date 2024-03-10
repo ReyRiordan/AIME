@@ -54,10 +54,39 @@ if st.session_state["stage"] == CHAT_SETUP:
 
     st.session_state["interview"].add_message(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself."))
     
-    set_stage(CHAT_INTERFACE_VOICE)
+    set_stage(CHAT_INTERFACE_TEXT)
+
+
+if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
+    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+    st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
+    # st.session_state["start_time"] = date.datetime.now()
+
+    container = st.container(height=300)
+
+    for message in st.session_state["interview"].get_messages():
+        with container:
+            with st.chat_message(message.role):
+                st.markdown(message.content)
+
+    if user_input := st.chat_input("Type here..."):
+        with container:
+            with st.chat_message("User"):
+                st.markdown(user_input)
+        st.session_state["interview"].add_message(Message("input", "User", user_input))
+        st.session_state["convo_memory"], output = get_chat_output(st.session_state["convo_memory"], user_input)
+        with container:
+            with st.chat_message("AI"): #TODO Needs avatar eventually
+                st.markdown(output)
+        st.session_state["interview"].add_message(Message("output", "AI", output))
+
+    columns = st.columns(4)
+    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
+    columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
+    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
     st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
              Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 
@@ -71,12 +100,12 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
                 st.markdown(message.content)
 
     if len(audio) > 0:
-        user_input = transcribe_voice(audio, OPENAI_API_KEY)
+        user_input = transcribe_voice(audio)
         with container:
             with st.chat_message("User"):
                 st.markdown(user_input)
         st.session_state["interview"].add_message(Message("input", "User", user_input))
-        st.session_state["convo_memory"], output = get_chat_output(st.session_state["LLM"], st.session_state["convo_memory"], user_input)
+        st.session_state["convo_memory"], output = get_chat_output(st.session_state["convo_memory"], user_input)
         with container:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(output)

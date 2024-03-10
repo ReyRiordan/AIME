@@ -29,7 +29,7 @@ VIEW_INTERVIEWS=12
 # LLM related
 LLM = OpenAI()
 CONVO_MODEL = "gpt-4"
-CHAT_TEMP = 0.0
+CHAT_TEMP = 0.7
 
 CLASS_MODEL = "gpt-4-0125-preview"
 CLASS_TEMP = 0.0
@@ -40,7 +40,7 @@ SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
 SUM_TEMP = 0.0
-MAX_MESSAGES = 10
+MAX_MESSAGES = 99 # no limit rn
 
 DIAG_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:
@@ -53,7 +53,7 @@ EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
 
 PATIENTS = {
-    "John Smith": {"base": "./Prompts/Base_2-23.txt", 
+    "John Smith": {"base": "./Prompts/Base_3-10.txt", 
                    "case": "./Patient_Info/JohnSmith_case.json", 
                    "grading": "./Patient_Info/JohnSmith_grading.json", 
                    "physical": "./Patient_Info/JohnSmith_physical.docx", 

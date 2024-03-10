@@ -65,7 +65,7 @@ def display_Diagnosis(diagnosis: dict, userdiagnosis: dict) -> None:
 
     st.subheader("Main Rationale: ")
     st.write("Your answer: " + userdiagnosis["main_rationale"])
-    st.write("Example answer: " + "COMING SOON!")
+    st.write("Example answer: " + "COMING SOON")
 
     st.subheader("Secondary Diagnoses: ")
     user_secondarydiagnoses = [(key, value, "#baffc9" if value in checklists["Secondary"] else "#ffb3ba") for key, value in classified["Secondary"].items()]

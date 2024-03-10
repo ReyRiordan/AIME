@@ -35,7 +35,7 @@
     {
       "lock": false,
       "dim": "Quality",
-      "line": "heaviness in chest"
+      "line": "heaviness, like a weight on the chest"
     },
     {
       "lock": false,
@@ -60,7 +60,7 @@
     {
       "lock": true,
       "dim": "Prior History",
-      "line": "You have never had chest pain or pressure like you are experiencing now. However, you have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, you would take an antacid and feel better. Walking program is 2 miles 3-4 times a week, started 3-4 months ago for weight loss."
+      "line": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, you would take an antacid and feel better. Walking program is 2 miles 3-4 times a week, started 3-4 months ago for weight loss."
     },
     {
       "lock": true,
@@ -82,10 +82,6 @@
     {
       "lock": false,
       "line": "You were feeling slightly nauseated and sweaty prior to arriving in the Emergency Department, but you feel better now."
-    },
-    {
-      "lock": false,
-      "line": "You occasionally get burning in your chest after eating too much, but your current symptoms feel different than this burning."
     },
     {
       "lock": true,

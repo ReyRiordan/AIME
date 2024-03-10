@@ -2,7 +2,7 @@
   "labels": {
     "Onset": "Responses about how the symptom appeared (severity, all of a sudden or gradually, etc) and what they were doing when it came on. For example, \"The pain came on all of a sudden.\" \"I was seated at home when it appeared.\"",
     "Quality": "Responses about the quality/sensation of the symptom, describing what it feels like. For example, \"It's a sharp and stabbing pain in my chest.\"",
-    "Location": "Responses about the location of the main symptom.",
+    "Location": "Responses about the specific location of the main symptom.",
     "Timing": "Responses about when the symptom started, how long it's been going on, or the duration of the symptom.",
     "Pattern": "Responses about whether the symptom is constant or coming and going.",
     "Exacerbating": "Responses about what makes the symptom worse. ",

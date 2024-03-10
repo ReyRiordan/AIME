@@ -33,7 +33,7 @@ CHAT_TEMP = 0.7
 
 CLASS_MODEL = "gpt-4-0125-preview"
 CLASS_TEMP = 0.0
-BATCH_MAX = 20
+BATCH_MAX = 99 # no limit rn
 BATCH_DELAY = 30
 
 SUM_MODEL = "gpt-3.5-turbo-0125"

@@ -39,16 +39,16 @@
       "Fever": 1,
       "Cough": 1,
       "URI": 1,
-      "Heartburn": 3
+      "Stomach Pain": 3
     },
     "risk": {
-      "Coronary Artery": 5,
-      "Peripheral Vascular": 3,
+      "CAD": 5,
+      "PVD": 3,
       "Hypertension": 5,
       "Hyperlipidemia": 5,
       "Smoking": 5,
       "Diabetes": 5,
-      "Relative Cardiovascular": 5,
+      "Relative Heart": 5,
       "Sedentary": 1
     }
   },

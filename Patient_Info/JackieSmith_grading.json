@@ -39,7 +39,7 @@
       "Fever": 5,
       "Cough": 1,
       "URI": 5,
-      "Heartburn": 1
+      "Stomach Pain": 1
     },
     "risk": {
       "Viral Illness": 5,

@@ -10,7 +10,7 @@
     "Fever": "Any question about fevers.",
     "Cough": "Any question about cough.",
     "URI": "Any question about upper respiratory infections or related conditions.",
-    "Heartburn": "Any question about upper abdominal pain or heartburn unrelated to food."
+    "Stomach Pain": "Any question about upper abdominal pain or heartburn unrelated to food."
   },
   "example": "Inputs: [\"Hi, I'm Dr. Corbett. Before we begin, could you please confirm your full name and date of birth for me?\", \"What brings you in today?\", \"Are you aware of any problems with your blood pressure?\", \"Have you felt nauseated or sweaty?\", \"Have you noticed your heart racing or any skipped heart beats?\", \"Have you ever smoked or used drugs recreationally?\"] \nOutput: [[\"Other\"], [\"Other\"], [\"Other\"], [\"Nausea\", \"Sweating\"], [\"Palpitations\"], [\"Other\"]]"
 }

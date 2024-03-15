@@ -36,7 +36,7 @@ AUDIO_IN = OpenAI()
 
 
 # LLM related
-HOST = "anthropic"
+HOST = "openai"
 if HOST == "openai":
     CLIENT = OpenAI()
     CONVO_MODEL = "gpt-4"

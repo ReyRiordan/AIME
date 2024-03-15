@@ -74,10 +74,15 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             with st.chat_message("User"):
                 st.markdown(user_input)
         st.session_state["interview"].add_message(Message("input", "User", user_input))
-        st.session_state["convo_memory"], output = get_chat_output(st.session_state["convo_memory"], user_input)
+        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
+        output = generate_response(model = CONVO_MODEL, 
+                                   temperature = CHAT_TEMP, 
+                                   system = st.session_state["convo_memory"][0]["content"], 
+                                   messages = st.session_state["convo_memory"][1:])
+        st.session_state["convo_memory"].append({"role": "assistant", "content": output})
         with container:
             with st.chat_message("AI"): #TODO Needs avatar eventually
-                st.markdown(output)
+                st.write_stream(output)
         st.session_state["interview"].add_message(Message("output", "AI", output))
 
     columns = st.columns(4)

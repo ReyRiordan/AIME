@@ -13,6 +13,7 @@ import io
 import streamlit as st
 from audiorecorder import audiorecorder
 from openai import OpenAI
+from anthropic import Anthropic
 import tempfile
 from annotated_text import annotated_text
 import json
@@ -22,11 +23,35 @@ from web_classes.data_category import DataCategory
 from web_classes.message import Message
 
 
+def generate_output(model: str, temp: float, format: str, system: str, messages: list[dict[str, str]]) -> str:
+    if HOST == "openai":
+        messages = [{"role": "system", "content": system}] + messages
+        if format: response = CLIENT.chat.completions.create(model = model, 
+                                                             temperature = temp, 
+                                                             response_format = {"type": format}, 
+                                                             messages = messages)
+        else: response = CLIENT.chat.completions.create(model = model,
+                                                        temperature = temp, 
+                                                        messages = messages)
+        return response.choices[0].message.content
+    elif HOST == "anthropic":
+        if format: response = CLIENT.messages.create(model = model,
+                                                     temperature = temp,
+                                                     system = system,
+                                                     messages = messages + [{"role": "assistant", "content": "{\"output\": "}]) # prefill tech
+        else: response = CLIENT.messages.create(model = model,
+                                                temperature = temp, 
+                                                system = system,
+                                                messages = messages)
+        return response.content
+    return "ERROR: NO HOST?"
+
+
 def transcribe_voice(voice_input):
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     voice_input.export(temp_audio_file.name, format="wav")
     with open(temp_audio_file.name, "rb") as file:
-        transcription = LLM.audio.transcriptions.create(model="whisper-1", 
+        transcription = CLIENT.audio.transcriptions.create(model="whisper-1", 
                                                     file=file, 
                                                     response_format="text")
     
@@ -46,14 +71,19 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
     prompt_user = json.dumps(message_list)
 
     # Classify
-    response = LLM.chat.completions.create(model = CLASS_MODEL, 
+    # output = generate_output(model = CLASS_MODEL, 
+    #                          temp = CLASS_TEMP, 
+    #                          format = "json_object", 
+    #                          system = prompt_system, 
+    #                          messages = [{"role": "user", "content": prompt_user}])
+    response = CLIENT.chat.completions.create(model = CLASS_MODEL, 
                                            temperature = CLASS_TEMP, 
                                            response_format = { "type": "json_object" }, 
                                            messages = [{"role": "system", "content": prompt_system}, 
                                                        {"role": "user", "content": prompt_user}])
     output = response.choices[0].message.content
 
-    print(output)
+    print("Classifications: " + output + "\n")
 
     raw_classifications = json.loads(output)
     classifications = raw_classifications["output"]
@@ -78,30 +108,39 @@ def summarizer(convo_memory: list[dict[str, str]]) -> str:
         elif message["role"] == "user":
             dialogue += "User: " + message["content"] + " \n"
         elif message["role"] == "assistant":
-            dialogue += "AI: " + message["content"] + "\n"
+            dialogue += "Patient: " + message["content"] + "\n"
     messages.append({"role": "user", "content": dialogue})
-    raw_summary = LLM.chat.completions.create(model = SUM_MODEL, 
+    # summary = generate_output(model = SUM_MODEL, 
+    #                           temp = SUM_TEMP, 
+    #                           format = None, 
+    #                           system = SUM_PROMPT, 
+    #                           messages = messages[1:])
+    raw_summary = CLIENT.chat.completions.create(model = SUM_MODEL, 
                                               temperature = SUM_TEMP, 
                                               messages = messages)
     summary = raw_summary.choices[0].message.content
+    print("Summary: " + summary + "\n")
     return summary
 
 
 def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list[list[dict[str, str]], str]:
     convo_memory.append({"role": "user", "content": user_input})
-    response = LLM.chat.completions.create(model = CONVO_MODEL, 
-                                           temperature = CHAT_TEMP, 
-                                           messages = convo_memory)
-    output = response.choices[0].message.content
+    output = generate_output(model = CONVO_MODEL, 
+                             temp = CHAT_TEMP, 
+                             messages = convo_memory)
+    # response = CLIENT.chat.completions.create(model = CONVO_MODEL, 
+    #                                        temperature = CHAT_TEMP, 
+    #                                        messages = convo_memory)
+    # output = response.choices[0].message.content
     convo_memory.append({"role": "assistant", "content": output})
-    if len(convo_memory) >= MAX_MESSAGES:
-        summary = summarizer(convo_memory)
-        convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
+    # if len(convo_memory) >= MAX_MESSAGES:
+    #     summary = summarizer(convo_memory)
+    #     convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
     return convo_memory, output
 
 
 def match_diagnosis(prompt: str, user_input: str) -> str:
-    raw_output = LLM.chat.completions.create(model = DIAG_MODEL, 
+    raw_output = CLIENT.chat.completions.create(model = DIAG_MODEL, 
                                                     temperature = DIAG_TEMP, 
                                                     messages = [{"role": "system", "content": prompt}, 
                                                                 {"role": "user", "content": user_input}])

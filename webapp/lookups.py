@@ -1,5 +1,6 @@
 import os
 from openai import OpenAI
+from anthropic import Anthropic
 
 
 # SECRETS
@@ -27,25 +28,37 @@ VIEW_INTERVIEWS=12
 
 
 # LLM related
-LLM = OpenAI()
-CONVO_MODEL = "gpt-4"
-CHAT_TEMP = 0.7
+HOST = "openai"
+if HOST == "openai":
+    CLIENT = OpenAI()
+    CONVO_MODEL = "gpt-4"
+    CHAT_TEMP = 0.7
+    CLASS_MODEL = "gpt-4-0125-preview"
+    CLASS_TEMP = 0.0
+    SUM_MODEL = "gpt-3.5-turbo-0125"
+    SUM_TEMP = 0.0
+    DIAG_MODEL = "gpt-3.5-turbo-0125"
+    DIAG_TEMP = 0.0
+elif HOST == "anthropic":
+    CLIENT = Anthropic()
+    CONVO_MODEL = "claude-3-opus-20240229"
+    CHAT_TEMP = 1.0
+    CLASS_MODEL = "claude-3-opus-20240229"
+    CLASS_TEMP = 0.0
+    SUM_MODEL = "claude-3-haiku-20240307"
+    SUM_TEMP = 0.0
+    DIAG_MODEL = "claude-3-haiku-20240307"
+    DIAG_TEMP = 0.0
 
-CLASS_MODEL = "gpt-4-0125-preview"
-CLASS_TEMP = 0.0
 BATCH_MAX = 99 # no limit rn
 BATCH_DELAY = 30
 
-SUM_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
-SUM_TEMP = 0.0
 MAX_MESSAGES = 99 # no limit rn
 
-DIAG_MODEL = "gpt-3.5-turbo-0125"
 with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:
     DIAG_PROMPT = grader_file.read()
-DIAG_TEMP = 0.0
 
 
 # Email API

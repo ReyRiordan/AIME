@@ -15,9 +15,7 @@ class Patient:
         self.convo_prompt = None    # str
 
         # Create virtual patient prompt
-        with open(PATIENTS[name]["base"], "r", encoding="utf8") as base_prompt:
-            base = base_prompt.read()
-            base = base.replace("{patient}", name)
+        base = BASE_PROMPT.replace("{patient}", name)
         self.convo_prompt = str(base)
         with open(PATIENTS[name]["case"], "r") as case_json:
             self.case = json.load(case_json)

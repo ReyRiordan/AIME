@@ -53,7 +53,7 @@ def transcribe_voice(voice_input):
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     voice_input.export(temp_audio_file.name, format="wav")
     with open(temp_audio_file.name, "rb") as file:
-        transcription = CLIENT.audio.transcriptions.create(model="whisper-1", 
+        transcription = AUDIO_IN.audio.transcriptions.create(model="whisper-1", 
                                                     file=file, 
                                                     response_format="text")
     

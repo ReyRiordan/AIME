@@ -4,11 +4,14 @@ from anthropic import Anthropic
 
 
 # SECRETS
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 DB_URI=os.getenv("DB_URI")
 DATABASE_USERNAME=os.getenv("DATABASE_USERNAME")
 DATABASE_PASSWORD=os.getenv("DATABASE_PASSWORD")
+
+
+# Email API
+EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
 
 # Streamlit stages
@@ -25,6 +28,11 @@ FEEDBACK_SETUP = 9
 FEEDBACK_SCREEN = 10
 FINAL_SCREEN = 11
 VIEW_INTERVIEWS=12
+
+
+# Audio related
+AUDIO_IN = OpenAI()
+# AUDIO_OUT = ElevenLabs()
 
 
 # LLM related
@@ -60,19 +68,16 @@ MAX_MESSAGES = 99 # no limit rn
 with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:
     DIAG_PROMPT = grader_file.read()
 
-
-# Email API
-EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
-
+BASE_PATH = "./Prompts/Base_3-14_anth.txt"
+with open(BASE_PATH, "r", encoding="utf8") as base_file:
+    BASE_PROMPT = base_file.read()
 
 PATIENTS = {
-    "John Smith": {"base": "./Prompts/Base_3-14_anth.txt", 
-                   "case": "./Patient_Info/JohnSmith_case.json", 
+    "John Smith": {"case": "./Patient_Info/JohnSmith_case.json", 
                    "grading": "./Patient_Info/JohnSmith_grading.json", 
                    "physical": "./Patient_Info/JohnSmith_physical.docx", 
                    "ECG": "./Patient_Info/JohnSmith_ECG.png"}, 
-    "Jackie Smith": {"base": "./Prompts/Base_2-23.txt", 
-                     "case": "./Patient_Info/JackieSmith_case.json", 
+    "Jackie Smith": {"case": "./Patient_Info/JackieSmith_case.json", 
                      "grading": "./Patient_Info/JackieSmith_grading.json", 
                      "physical": "./Patient_Info/JackieSmith_physical.docx", 
                      "ECG": "./Patient_Info/JackieSmith_ECG.png"}

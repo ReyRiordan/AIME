@@ -49,7 +49,7 @@ if HOST == "openai":
     DIAG_TEMP = 0.0
 elif HOST == "anthropic":
     CLIENT = Anthropic()
-    CONVO_MODEL = "claude-3-opus-20240229"
+    CONVO_MODEL = "claude-3-sonnet-20240229"
     CHAT_TEMP = 1.0
     CLASS_MODEL = "claude-3-opus-20240229"
     CLASS_TEMP = 0.0

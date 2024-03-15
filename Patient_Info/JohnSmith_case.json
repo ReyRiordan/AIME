@@ -33,9 +33,9 @@
       "line": "heaviness came on gradually, seated at desk at home when symptoms appeared"
     },
     {
-      "lock": false,
+      "lock": true,
       "dim": "Quality",
-      "line": "heaviness, like a weight on the chest"
+      "line": "like a weight on the chest"
     },
     {
       "lock": false,
@@ -48,19 +48,19 @@
       "line": "started around 2 hours ago"
     },
     {
-      "lock": false,
+      "lock": true,
       "dim": "Pattern",
       "line": "constant"
     },
     {
       "lock": false,
       "dim": "Severity",
-      "line": "the pain was pretty severe when it first started; the pain has gradually improved and the pressure is much better but it is still there"
+      "line": "it was pretty severe when it first started, gradually improved and the pressure is much better but it is still there"
     },
     {
       "lock": true,
       "dim": "Prior History",
-      "line": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, you would take an antacid and feel better. Walking program is 2 miles 3-4 times a week, started 3-4 months ago for weight loss."
+      "line": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, where you would take an antacid and feel better."
     },
     {
       "lock": true,
@@ -114,8 +114,8 @@
   ],
   "Medications": [
     {
-      "lock": false,
-      "line": "If asked about medications, you will state that the medications are written on your phone. Then read the list: \u201cHydrochlorothiazide, Amlodipine, Atorvastatin\u201d."
+      "lock": true,
+      "line": "Read this list from your phone if asked for specific medications: \u201cHydrochlorothiazide, Amlodipine, Atorvastatin\u201d."
     }
   ],
   "Allergies": [

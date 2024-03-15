@@ -23,27 +23,29 @@ from web_classes.data_category import DataCategory
 from web_classes.message import Message
 
 
-def generate_output(model: str, temp: float, format: str, system: str, messages: list[dict[str, str]]) -> str:
+def generate_output(model: str, temperature: float, system: str, messages: list[dict[str, str]], format = None, max_tokens = 1000) -> str:
     if HOST == "openai":
         messages = [{"role": "system", "content": system}] + messages
         if format: response = CLIENT.chat.completions.create(model = model, 
-                                                             temperature = temp, 
+                                                             temperature = temperature, 
                                                              response_format = {"type": format}, 
                                                              messages = messages)
         else: response = CLIENT.chat.completions.create(model = model,
-                                                        temperature = temp, 
+                                                        temperature = temperature, 
                                                         messages = messages)
         return response.choices[0].message.content
     elif HOST == "anthropic":
         if format: response = CLIENT.messages.create(model = model,
-                                                     temperature = temp,
+                                                     temperature = temperature,
+                                                     max_tokens = max_tokens,
                                                      system = system,
                                                      messages = messages + [{"role": "assistant", "content": "{\"output\": "}]) # prefill tech
         else: response = CLIENT.messages.create(model = model,
-                                                temperature = temp, 
+                                                temperature = temperature, 
+                                                max_tokens = max_tokens,
                                                 system = system,
                                                 messages = messages)
-        return response.content
+        return response.content[0].text
     return "ERROR: NO HOST?"
 
 
@@ -126,8 +128,11 @@ def summarizer(convo_memory: list[dict[str, str]]) -> str:
 def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list[list[dict[str, str]], str]:
     convo_memory.append({"role": "user", "content": user_input})
     output = generate_output(model = CONVO_MODEL, 
-                             temp = CHAT_TEMP, 
-                             messages = convo_memory)
+                             temperature = CHAT_TEMP, 
+                             max_tokens = 1000, 
+                             format = None,
+                             system = convo_memory[0]["content"], 
+                             messages = convo_memory[1:])
     # response = CLIENT.chat.completions.create(model = CONVO_MODEL, 
     #                                        temperature = CHAT_TEMP, 
     #                                        messages = convo_memory)

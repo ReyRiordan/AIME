@@ -28,7 +28,7 @@ VIEW_INTERVIEWS=12
 
 
 # LLM related
-HOST = "openai"
+HOST = "anthropic"
 if HOST == "openai":
     CLIENT = OpenAI()
     CONVO_MODEL = "gpt-4"
@@ -66,7 +66,7 @@ EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
 
 PATIENTS = {
-    "John Smith": {"base": "./Prompts/Base_3-10.txt", 
+    "John Smith": {"base": "./Prompts/Base_3-14_anth.txt", 
                    "case": "./Patient_Info/JohnSmith_case.json", 
                    "grading": "./Patient_Info/JohnSmith_grading.json", 
                    "physical": "./Patient_Info/JohnSmith_physical.docx", 

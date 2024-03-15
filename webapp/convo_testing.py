@@ -49,8 +49,8 @@ if st.session_state["stage"] == SETTINGS:
 
 if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["LLM"] = OpenAI()
-    st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}, 
-                                        {"role": "system", "content": "Summary of conversation so far: None"}]
+    st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}]
+                                        # {"role": "system", "content": "Summary of conversation so far: None"}
 
     st.session_state["interview"].add_message(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself."))
     
@@ -116,8 +116,18 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 if st.session_state["stage"] == DIAGNOSIS:
-    st.download_button("Download JSON",
-                    data=json.dumps(st.session_state["interview"].get_dict(),indent=4),
-                    file_name = st.session_state["interview"].get_username() + "_" + ".json",
-                    mime="json")
+    currentDateAndTime = date.datetime.now()
+    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    bio = io.BytesIO()
+    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
+                                                       st.session_state["interview"].get_patient().name, 
+                                                       [message.get_dict() for message in st.session_state["interview"].get_messages()])
+    st.session_state["convo_file"].save(bio)
+    
+    button_columns = st.columns(6)
+    button_columns[1].button("New Interview", on_click=set_stage, args=[SETTINGS])
+    button_columns[2].download_button("Download interview", 
+                    data = bio.getvalue(),
+                    file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
+                    mime = "docx")
 

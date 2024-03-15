@@ -139,8 +139,6 @@ def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list
     convo_memory.append({"role": "user", "content": user_input})
     output = generate_response(model = CONVO_MODEL, 
                              temperature = CHAT_TEMP, 
-                             max_tokens = 1000, 
-                             format = None,
                              system = convo_memory[0]["content"], 
                              messages = convo_memory[1:])
     # response = CLIENT.chat.completions.create(model = CONVO_MODEL, 

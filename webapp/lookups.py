@@ -36,16 +36,16 @@ AUDIO_IN = OpenAI()
 
 
 # LLM related
-HOST = "openai"
+HOST = "anthropic"
 if HOST == "openai":
     CLIENT = OpenAI()
     CONVO_MODEL = "gpt-4"
     CHAT_TEMP = 0.7
     CLASS_MODEL = "gpt-4-0125-preview"
     CLASS_TEMP = 0.0
-    SUM_MODEL = "gpt-3.5-turbo-0125"
+    SUM_MODEL = "gpt-4-0125-preview"
     SUM_TEMP = 0.0
-    DIAG_MODEL = "gpt-3.5-turbo-0125"
+    DIAG_MODEL = "gpt-4-0125-preview"
     DIAG_TEMP = 0.0
 elif HOST == "anthropic":
     CLIENT = Anthropic()
@@ -53,9 +53,9 @@ elif HOST == "anthropic":
     CHAT_TEMP = 0.5
     CLASS_MODEL = "claude-3-opus-20240229"
     CLASS_TEMP = 0.0
-    SUM_MODEL = "claude-3-haiku-20240307"
+    SUM_MODEL = "claude-3-sonnet-20240229"
     SUM_TEMP = 0.0
-    DIAG_MODEL = "claude-3-haiku-20240307"
+    DIAG_MODEL = "claude-3-sonnet-20240229"
     DIAG_TEMP = 0.0
 
 BATCH_MAX = 99 # no limit rn

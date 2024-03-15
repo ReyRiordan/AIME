@@ -35,10 +35,8 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
         messages = [{"role": "system", "content": system}] + messages
         response = CLIENT.chat.completions.create(model = model, 
                                                   temperature = temperature, 
-                                                  messages = messages, 
-                                                  stream = True)
-        # return response.choices[0].message.content
-        return response
+                                                  messages = messages)
+        return response.choices[0].message.content
     return "ERROR: NO HOST?"
 
 

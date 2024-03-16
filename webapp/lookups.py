@@ -68,7 +68,7 @@ MAX_MESSAGES = 99 # no limit rn
 with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:
     DIAG_PROMPT = grader_file.read()
 
-BASE_PATH = "./Prompts/Base_3-14_anth.txt"
+BASE_PATH = "./Prompts/Base_3-14.txt"
 with open(BASE_PATH, "r", encoding="utf8") as base_file:
     BASE_PROMPT = base_file.read()
 

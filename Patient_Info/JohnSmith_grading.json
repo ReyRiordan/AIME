@@ -52,6 +52,27 @@
       "Sedentary": 1
     }
   },
+  "Summary": {
+    "Onset": 3,
+    "Quality": 5,
+    "Location": 5,
+    "Timing": 3,
+    "Pattern": 5,
+    "Radiation": 5,
+    "Prior History": 3,
+    "Nausea": 2,
+    "Sweatiness": 2,
+    "Breathing": 2,
+    "Syncope": 2,
+    "Palpitations": 2,
+    "Hypertension": 2,
+    "Hyperlipidemia": 2,
+    "Diabetes": 2,
+    "Smoking": 5,
+    "Relative Heart": 5,
+    "ED": 1,
+    "Leg Pain": 1
+  },
   "Diagnosis": {
     "Main": {
       "Acute coronary syndrome (ACS)": 8, 

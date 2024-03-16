@@ -21,9 +21,9 @@ class DataAcquisition:
 
         # Only data categories for patient
         self.datacategories = []
-        for category in patient.grading["DataAcquisition"]:
+        for category in patient.grading["Data Acquisition"]:
             self.datacategories.append(DataCategory(category, patient))
-        self.weights = patient.grading["DataAcquisition"]
+        self.weights = patient.grading["Data Acquisition"]
 
         # Split messages into batches if needed
         if len(messages) > BATCH_MAX:

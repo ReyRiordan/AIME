@@ -89,7 +89,7 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")
-    st.write("Use the interview transcription and additional patient information to provide a differential diagnosis.")
+    st.write("Use the interview transcription and additional patient information to provide an interpretive summary and differential diagnosis.")
 
     # 2 column full width layout
     layout1 = st.columns([1, 1])
@@ -105,7 +105,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     # 3 buttons at bottom
     layout12 = layout1[0].columns([1, 1, 1])
     # Get Feedback
-    if layout12[0].button("Get Feedback"):
+    if layout12[0].button("Get Feedback"): 
         st.session_state["interview"].add_userdiagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
         set_stage(FEEDBACK_SETUP)
         st.rerun()

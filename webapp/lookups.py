@@ -58,19 +58,24 @@ elif HOST == "anthropic":
     DIAG_MODEL = "claude-3-sonnet-20240229"
     DIAG_TEMP = 0.0
 
-BATCH_MAX = 99 # no limit rn
-BATCH_DELAY = 30
 
+# Convo related
+BASE_PATH = "./Prompts/Base_3-14.txt"
+with open(BASE_PATH, "r", encoding="utf8") as base_file:
+    BASE_PROMPT = base_file.read()
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
 MAX_MESSAGES = 99 # no limit rn
 
+
+# Grading related
+BATCH_MAX = 99 # no limit rn
+BATCH_DELAY = 30
+CLASS_INPUT = "./Prompts/Grade_DataIn_3-16.txt"
+CLASS_OUTPUT = "./Prompts/Grade_DataOut_3-16.txt"
 with open("./Prompts/Grade_Diag_3-16.txt", "r", encoding="utf8") as grader_file:
     DIAG_PROMPT = grader_file.read()
 
-BASE_PATH = "./Prompts/Base_3-14.txt"
-with open(BASE_PATH, "r", encoding="utf8") as base_file:
-    BASE_PROMPT = base_file.read()
 
 PATIENTS = {
     "John Smith": {"case": "./Patient_Info/JohnSmith_case.json", 
@@ -82,11 +87,6 @@ PATIENTS = {
                      "physical": "./Patient_Info/JackieSmith_physical.docx", 
                      "ECG": "./Patient_Info/JackieSmith_ECG.png"}
 }
-
-
-# Classification base prompts
-CLASS_INPUT = "./Prompts/Grade_DataIn_3-16.txt"
-CLASS_OUTPUT = "./Prompts/Grade_DataOut_3-16.txt"
 
 DATACATEGORIES = {
     "gen": {"type": "input", 

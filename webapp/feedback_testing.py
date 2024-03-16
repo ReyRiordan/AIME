@@ -91,23 +91,27 @@ if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")
     st.write("Use the interview transcription and additional patient information to provide a differential diagnosis.")
 
-    chat_container = st.container(height=300)
-    for message in st.session_state["interview"].get_messages():
-        with chat_container:
-            with st.chat_message(message.role):
-                st.markdown(message.content)
-    
-    info_columns = st.columns(5)
-    info_columns[1].button("View Physical", on_click=set_stage, args=[PHYSICAL_SCREEN])
-    info_columns[3].button("View ECG", on_click=set_stage, args=[ECG_SCREEN])
+    # 2 column full width layout
+    layout1 = st.columns([1, 1])
 
-    main_diagnosis = st.text_input(label = "Main Diagnosis:", placeholder = "Condition name")
-    main_rationale = st.text_area(label = "Rationale:", placeholder = "Rationale for main diagnosis")
+    # User inputs
+    interpretive_summary = layout1[0].text_area(label = "Interpretive Summary:", placeholder = "Interpretive summary for patient", height = 200)
+    main_diagnosis = layout1[0].text_input(label = "Main Diagnosis:", placeholder = "Condition name")
+    main_rationale = layout1[0].text_area(label = "Rationale:", placeholder = "Rationale for main diagnosis")
+    layout11 = layout1[0].columns([1, 1])
+    secondary1 = layout11[0].text_input(label = "Secondary Diagnoses:", placeholder = "Condition name")
+    secondary2 = layout11[1].text_input(label = "None", placeholder = "Condition name", label_visibility = "hidden")
 
-    input_columns = st.columns(2)
-    secondary1 = input_columns[0].text_input(label = "Secondary Diagnoses:", placeholder = "Condition name")
-    secondary2 = input_columns[1].text_input(label = "None", placeholder = "Condition name", label_visibility = "hidden")
-
+    # 3 buttons at bottom
+    layout12 = layout1[0].columns([1, 1, 1])
+    # Get Feedback
+    if layout12[0].button("Get Feedback"):
+        st.session_state["interview"].add_userdiagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
+        set_stage(FEEDBACK_SETUP)
+        st.rerun()
+    # New Interview
+    layout12[1].button("New Interview", on_click=set_stage, args=[SETTINGS])
+    # Download Interview
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     bio = io.BytesIO()
@@ -115,39 +119,25 @@ if st.session_state["stage"] == DIAGNOSIS:
                                                        st.session_state["interview"].get_patient().name, 
                                                        [message.get_dict() for message in st.session_state["interview"].get_messages()])
     st.session_state["convo_file"].save(bio)
+    layout12[2].download_button("Download interview", 
+                                data = bio.getvalue(), 
+                                file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx", 
+                                mime = "docx")
     
-    button_columns = st.columns(6)
-    button_columns[1].button("New Interview", on_click=set_stage, args=[SETTINGS])
-    button_columns[2].download_button("Download interview", 
-                    data = bio.getvalue(),
-                    file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
-                    mime = "docx")
-    if button_columns[3].button("Get Feedback"):
-        st.session_state["interview"].add_userdiagnosis(main_diagnosis, main_rationale, [secondary1, secondary2])
-        set_stage(FEEDBACK_SETUP)
-        st.rerun()
-
-
-if st.session_state["stage"] == PHYSICAL_SCREEN:
-    st.header("Physical Examination Findings")
-    st.write("Here is the full physical examination for " + st.session_state["interview"].get_patient().name + ". Click the \"Back\" button to go back once you're done.")
-    
-    physical = st.container(border = True)
-    with physical:
+    # Interview transcription
+    chat_container = layout1[1].container(height=400)
+    for message in st.session_state["interview"].get_messages():
+        with chat_container:
+            with st.chat_message(message.role):
+                st.markdown(message.content)
+    # Physical Examination
+    with layout1[1].expander("Physical Examination"):
         physical_exam_doc = Document(st.session_state["interview"].get_patient().physical)
         for paragraph in physical_exam_doc.paragraphs:
             st.write(paragraph.text)
-    
-    st.button("Back", on_click=set_stage, args=[DIAGNOSIS])
-    
-
-if st.session_state["stage"] == ECG_SCREEN:
-    st.header("ECG Chart")
-    st.write("Here is the ECG for " + st.session_state["interview"].get_patient().name + ". Click the \"Back\" button to go back once you're done.")
-    
-    st.image(st.session_state["interview"].get_patient().ECG)
-
-    st.button("Back", on_click=set_stage, args=[DIAGNOSIS])
+    # ECG
+    with layout1[1].expander("ECG"):
+        st.image(st.session_state["interview"].get_patient().ECG)
 
 
 if st.session_state["stage"] == FEEDBACK_SETUP:

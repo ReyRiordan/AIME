@@ -40,22 +40,42 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
     return "ERROR: NO HOST?"
 
 
-def generate_classifications(model: str, temperature: float, system: str, messages_json: str, max_tokens = 1000) -> str:
+def generate_classifications(system: str, messages_json: str) -> str:
     if HOST == "anthropic":
-        response = CLIENT.messages.create(model = model, 
-                                          temperature = temperature, 
+        response = CLIENT.messages.create(model = CLASS_MODEL, 
+                                          temperature = CLASS_TEMP, 
                                           max_tokens = 1000, 
                                           system = system, 
                                           messages = [{"role": "user", "content": messages_json}, 
-                                                      {"role": "assistant", "content": "{\"output\": "}]) # prefill tech
-        return response.content[0].text
+                                                      {"role": "assistant", "content": "{\"output\": ["}]) # prefill tech
+        print(f"\nRAW CLASSIFICATION: {response.content}\n")
+        return "{\"output\": [" + response.content[0].text
     elif HOST == "openai":
-        response = CLIENT.chat.completions.create(model = model, 
-                                                  temperature = temperature, 
+        response = CLIENT.chat.completions.create(model = CLASS_MODEL, 
+                                                  temperature = CLASS_TEMP, 
                                                   response_format = {"type": "json_object"}, 
                                                   messages = [{"role": "system", "content": system}, 
                                                               {"role": "user", "content": messages_json}])
         return response.choices[0].message.content
+    return "ERROR: NO HOST?"
+
+
+def generate_matches(prompt: str, inputs: str) -> str:
+    if HOST == "anthropic":
+        matches = CLIENT.messages.create(model = DIAG_MODEL, 
+                                          temperature = DIAG_TEMP, 
+                                          max_tokens = 1000, 
+                                          system = prompt, 
+                                          messages = [{"role": "user", "content": inputs}, 
+                                                      {"role": "assistant", "content": "{\"output\": {"}]) # prefill tech
+        return "{\"output\": {" + matches.content[0].text
+    elif HOST == "openai":
+        matches = CLIENT.chat.completions.create(model = DIAG_MODEL, 
+                                                  temperature = DIAG_TEMP, 
+                                                  response_format = {"type": "json_object"}, 
+                                                  messages = [{"role": "system", "content": prompt}, 
+                                                              {"role": "user", "content": inputs}])
+        return matches.choices[0].message.content
     return "ERROR: NO HOST?"
 
 
@@ -80,22 +100,19 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
         if message.type == category.type:
             applicable_messages.append(message)
     message_list = [message.content for message in applicable_messages]
-    prompt_user = json.dumps(message_list)
+    messages_json = json.dumps(message_list)
 
     # Classify
-    # output = generate_output(model = CLASS_MODEL, 
-    #                          temp = CLASS_TEMP, 
-    #                          format = "json_object", 
-    #                          system = prompt_system, 
-    #                          messages = [{"role": "user", "content": prompt_user}])
-    response = CLIENT.chat.completions.create(model = CLASS_MODEL, 
-                                           temperature = CLASS_TEMP, 
-                                           response_format = { "type": "json_object" }, 
-                                           messages = [{"role": "system", "content": prompt_system}, 
-                                                       {"role": "user", "content": prompt_user}])
-    output = response.choices[0].message.content
+    output = generate_classifications(system = prompt_system, 
+                                      messages_json = messages_json)
+    # response = CLIENT.chat.completions.create(model = CLASS_MODEL, 
+    #                                        temperature = CLASS_TEMP, 
+    #                                        response_format = { "type": "json_object" }, 
+    #                                        messages = [{"role": "system", "content": prompt_system}, 
+    #                                                    {"role": "user", "content": prompt_user}])
+    # output = response.choices[0].message.content
 
-    print("Classifications: " + output + "\n")
+    print(f"Classifications for {category.name}: {output}\n")
 
     raw_classifications = json.loads(output)
     classifications = raw_classifications["output"]
@@ -103,7 +120,7 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
     
     # Assign labels to each message accordingly
     if len(applicable_messages) != len(classifications):
-        print(prompt_user)
+        print(messages_json)
         print(output)
         raise ValueError("Number of classifications must match number of applicable messages.")
     for i in range(len(applicable_messages)):
@@ -150,12 +167,3 @@ def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list
     #     summary = summarizer(convo_memory)
     #     convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
     return convo_memory, output
-
-
-def match_diagnosis(prompt: str, user_input: str) -> str:
-    raw_output = CLIENT.chat.completions.create(model = DIAG_MODEL, 
-                                                    temperature = DIAG_TEMP, 
-                                                    messages = [{"role": "system", "content": prompt}, 
-                                                                {"role": "user", "content": user_input}])
-    matched_condition = raw_output.choices[0].message.content
-    return matched_condition

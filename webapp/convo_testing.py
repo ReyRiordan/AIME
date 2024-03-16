@@ -35,7 +35,6 @@ def set_stage(stage):
 
 if st.session_state["stage"] == SETTINGS:
     st.session_state["interview"] = None
-    st.session_state["LLM"] = None
     st.session_state["convo_memory"] = None
     st.session_state["convo_file"] = None
     patient_name = st.selectbox("Which patient would you like to interview?", 
@@ -48,11 +47,8 @@ if st.session_state["stage"] == SETTINGS:
 
 
 if st.session_state["stage"] == CHAT_SETUP:
-    st.session_state["LLM"] = OpenAI()
     st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}]
                                         # {"role": "system", "content": "Summary of conversation so far: None"}
-
-    st.session_state["interview"].add_message(Message("N/A", "Assistant", "You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself."))
     
     set_stage(CHAT_INTERFACE_VOICE)
 

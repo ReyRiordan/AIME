@@ -65,7 +65,7 @@ with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_f
     SUM_PROMPT = summarizer_file.read()
 MAX_MESSAGES = 99 # no limit rn
 
-with open("./Prompts/Diagnosis_Grader_2-25.txt", "r", encoding="utf8") as grader_file:
+with open("./Prompts/Grade_Diag_3-16.txt", "r", encoding="utf8") as grader_file:
     DIAG_PROMPT = grader_file.read()
 
 BASE_PATH = "./Prompts/Base_3-14.txt"
@@ -85,8 +85,8 @@ PATIENTS = {
 
 
 # Classification base prompts
-CLASS_INPUT = "./Prompts/Class_Input_3-3.txt"
-CLASS_OUTPUT = "./Prompts/Class_Output_3-3.txt"
+CLASS_INPUT = "./Prompts/Grade_DataIn_3-16.txt"
+CLASS_OUTPUT = "./Prompts/Grade_DataOut_3-16.txt"
 
 DATACATEGORIES = {
     "gen": {"type": "input", 

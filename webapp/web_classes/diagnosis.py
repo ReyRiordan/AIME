@@ -30,21 +30,27 @@ class Diagnosis:
         
         # Grade the checklists
         main_prompt = DIAG_PROMPT
+        valid_conditions = []
         for condition in self.checklists["Main"]:
-            main_prompt += condition + "\n"
-        matched_condition = web_methods.match_diagnosis(main_prompt, userdiagnosis["main_diagnosis"])
-        self.classified["Main"][userdiagnosis["main_diagnosis"]] = matched_condition
-        if matched_condition in self.checklists["Main"]:
-            self.checklists["Main"][matched_condition] = True
-        
-        secondary_prompt = DIAG_PROMPT
+            if condition not in valid_conditions:
+                valid_conditions.append(condition)
         for condition in self.checklists["Secondary"]:
-            secondary_prompt += condition + "\n"
+            if condition not in valid_conditions:
+                valid_conditions.append(condition)
+        main_prompt += json.dumps(valid_conditions)
+        user_inputs = [userdiagnosis["main_diagnosis"]] + [diagnosis for diagnosis in userdiagnosis["secondary_diagnoses"]]
+        print(f"User inputs: {user_inputs}\n")
+        output = web_methods.generate_matches(main_prompt, json.dumps(user_inputs))
+        matches = json.loads(output)["output"]
+        print(f"Matches: {matches}\n")
+
+        self.classified["Main"][userdiagnosis["main_diagnosis"]] = matches[userdiagnosis["main_diagnosis"]]
+        if matches[userdiagnosis["main_diagnosis"]] in self.checklists["Main"]:
+            self.checklists["Main"][matches[userdiagnosis["main_diagnosis"]]] = True
         for diagnosis in userdiagnosis["secondary_diagnoses"]:
-            matched_condition = web_methods.match_diagnosis(secondary_prompt, diagnosis)
-            self.classified["Secondary"][diagnosis] = matched_condition
-            if matched_condition in self.checklists["Secondary"]:
-                self.checklists["Secondary"][matched_condition] = True
+            self.classified["Secondary"][diagnosis] = matches[diagnosis]
+            if matches[diagnosis] in self.checklists["Secondary"]:
+                self.checklists["Secondary"][matches[diagnosis]] = True
         
         # Calculate scoring
         self.score = 0

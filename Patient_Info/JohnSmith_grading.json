@@ -71,8 +71,7 @@
       "Diabetes": 2,
       "Smoking": 5,
       "Relative Heart": 5,
-      "ED": 1,
-      "Leg Pain": 1
+      "PVD": 2
     },
     "Main": {
       "Acute coronary syndrome (ACS)": 8, 

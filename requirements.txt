@@ -3,6 +3,7 @@ langchain-community
 langchain-openai
 datetime
 openai
+anthropic
 python-docx
 streamlit
 sendgrid

@@ -13,7 +13,7 @@ class DataCategory:
         self.header = DATACATEGORIES[name]["header"]        # str
         self.color = DATACATEGORIES[name]["color"]          # str
         self.highlight = DATACATEGORIES[name]["highlight"]  # str
-        self.example = None                                 # str
+        # self.example = None                                 # str
         self.class_prompt = None                            # str
 
         # Create classification prompt (patient dependent)
@@ -24,12 +24,14 @@ class DataCategory:
             if len(base_split) != 2:
                 raise ValueError("Base classification prompt should have 2 parts.")
 
-        self.example = LABEL_EXAMPLES[name]
+        # self.example = LABEL_EXAMPLES[name]
         
         self.class_prompt = base_split[0]
         for label in patient.grading["Data Acquisition"][name]:
             self.class_prompt += "[" + label + "] " + LABEL_DESCS[label] + "\n"
-        self.class_prompt += base_split[1] + self.example
+        self.class_prompt += base_split[1]
+        
+        print(f"\n\n{self.class_prompt}\n\n") # debugging
     
     def get_dict(self):
         to_return = {"name": self.name, 

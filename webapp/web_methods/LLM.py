@@ -40,13 +40,13 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
     return "ERROR: NO HOST?"
 
 
-def generate_classifications(system: str, messages_json: str) -> str:
+def generate_classifications(system: str, user_input: str) -> str:
     if HOST == "anthropic":
         response = CLIENT.messages.create(model = CLASS_MODEL, 
                                           temperature = CLASS_TEMP, 
                                           max_tokens = 1000, 
                                           system = system, 
-                                          messages = [{"role": "user", "content": messages_json}, 
+                                          messages = [{"role": "user", "content": user_input}, 
                                                       {"role": "assistant", "content": "{\"output\": ["}]) # prefill tech
         print(f"\nRAW CLASSIFICATION: {response.content}\n")
         return "{\"output\": [" + response.content[0].text
@@ -55,7 +55,7 @@ def generate_classifications(system: str, messages_json: str) -> str:
                                                   temperature = CLASS_TEMP, 
                                                   response_format = {"type": "json_object"}, 
                                                   messages = [{"role": "system", "content": system}, 
-                                                              {"role": "user", "content": messages_json}])
+                                                              {"role": "user", "content": user_input}])
         return response.choices[0].message.content
     return "ERROR: NO HOST?"
 
@@ -104,15 +104,7 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
 
     # Classify
     output = generate_classifications(system = prompt_system, 
-                                      messages_json = messages_json)
-    # response = CLIENT.chat.completions.create(model = CLASS_MODEL, 
-    #                                        temperature = CLASS_TEMP, 
-    #                                        response_format = { "type": "json_object" }, 
-    #                                        messages = [{"role": "system", "content": prompt_system}, 
-    #                                                    {"role": "user", "content": prompt_user}])
-    # output = response.choices[0].message.content
-
-    print(f"Classifications for {category.name}: {output}\n")
+                                      user_input = messages_json)
 
     raw_classifications = json.loads(output)
     classifications = raw_classifications["output"]
@@ -158,10 +150,6 @@ def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list
                              temperature = CHAT_TEMP, 
                              system = convo_memory[0]["content"], 
                              messages = convo_memory[1:])
-    # response = CLIENT.chat.completions.create(model = CONVO_MODEL, 
-    #                                        temperature = CHAT_TEMP, 
-    #                                        messages = convo_memory)
-    # output = response.choices[0].message.content
     convo_memory.append({"role": "assistant", "content": output})
     # if len(convo_memory) >= MAX_MESSAGES:
     #     summary = summarizer(convo_memory)

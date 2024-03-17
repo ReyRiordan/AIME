@@ -50,21 +50,21 @@
       "Exposure": 1
     }
   },
-  "Summary": {
-    "Onset": 3,
-    "Quality": 5,
-    "Location": 5,
-    "Radiation": 5,
-    "Exacerbating": 5,
-    "Relieving": 5,
-    "Severity": 3,
-    "Fever": 2,
-    "Breathing": 2,
-    "Fatigue": 2,
-    "Cough": 1,
-    "Phlegm": 1
-  },
   "Diagnosis": {
+    "Summary": {
+      "Onset": 3,
+      "Quality": 5,
+      "Location": 5,
+      "Radiation": 5,
+      "Exacerbating": 5,
+      "Relieving": 5,
+      "Severity": 3,
+      "Fever": 2,
+      "Breathing": 2,
+      "Fatigue": 2,
+      "Cough": 1,
+      "Phlegm": 1
+    },
     "Main": {
       "Acute pericarditis": 8
     },

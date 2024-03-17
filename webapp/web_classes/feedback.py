@@ -9,10 +9,10 @@ from .diagnosis import *
             
 class Feedback:
 
-    def __init__(self, patient: Patient, messages: list[Message], userdiagnosis: dict[str, str]):
+    def __init__(self, patient: Patient, messages: list[Message], user_diagnosis: dict[str, str]):
         # Attributes
         self.DataAcquisition = DataAcquisition(patient, messages)
-        self.Diagnosis = Diagnosis(patient, userdiagnosis)
+        self.Diagnosis = Diagnosis(patient, user_diagnosis)
     
     def get_dict(self):
         to_return = {"Data Acquisition": self.DataAcquisition.get_dict(), 

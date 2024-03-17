@@ -28,13 +28,23 @@ def get_webtext(content: str) -> str:
 
 
 def display_DataCategory(category: dict[str, str], checklist: dict[str, bool], weights: dict[str, int], score: int, maxscore: int) -> None:
-    st.header(f":{category['color']}[{category['header']}]: {score}/{maxscore}", divider = category['color'])
+    st.subheader(f":{category['color']}[{category['header']}]: {score}/{maxscore}", divider = category['color'])
     display_labels = [(key, str(weights[key]), "#baffc9" if value else "#ffb3ba") for key, value in checklist.items()]
     annotated_text(display_labels)
 
 
 def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
-    chat_container = st.container(height=300)
+    layout1 = st.columns([4, 5])
+    with layout1[0]:
+        for category in data["datacategories"]:
+            cat_name = category["name"]
+            display_DataCategory(category, 
+                                 data["checklists"][cat_name], 
+                                 data["weights"][cat_name], 
+                                 data["scores"][cat_name], 
+                                 data["maxscores"][cat_name])
+    
+    chat_container = layout1[1].container(height=500)
     for message in messages:
             with chat_container:
                 with st.chat_message(message["role"]):
@@ -43,56 +53,64 @@ def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
                     else:
                         annotated_text((message["content"], message["annotation"], message["highlight"]))
 
-    for category in data["datacategories"]:
-        cat_name = category["name"]
-        display_DataCategory(category, data["checklists"][cat_name], data["weights"][cat_name], data["scores"][cat_name], data["maxscores"][cat_name])
 
-
-def display_Diagnosis(diagnosis: dict, userdiagnosis: dict) -> None:
-    score = diagnosis["score"]
-    maxscore = diagnosis["maxscore"]
-    st.header(f"Diagnosis: {score}/{maxscore}", divider = "grey")
-
+def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
+    scores = diagnosis["scores"]
+    maxscores = diagnosis["maxscores"]
     classified = diagnosis["classified"]
     checklists = diagnosis["checklists"]
     weights = diagnosis["weights"]
 
-    st.subheader("Main Diagnosis: ")
-    user_maindiagnosis = [(key, value, "#baffc9" if value in checklists["Main"] else "#ffb3ba") for key, value in classified["Main"].items()]
-    annotated_text("Your answer(s): ", user_maindiagnosis)
-    valid_maindiagnosis = [(key, str(weights["Main"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Main"].items()]
-    annotated_text("Valid answer(s): ", valid_maindiagnosis)
+    layout1 = st.columns([1, 1])
 
-    st.subheader("Main Rationale: ")
-    st.write("Your answer: " + userdiagnosis["main_rationale"])
-    st.write("Example answer: " + "COMING SOON")
+    with layout1[0].container(border = True):
+        st.subheader(f"Interpretative Summary: {scores['Summary']}/{maxscores['Summary']}", divider = "grey")
+        st.write(inputs["Summary"])
+        display_labels = [(key, str(weights["Summary"][key]), "#baffc9" if value else "#ffb3ba") for key, value in checklists["Summary"].items()]
+        annotated_text(display_labels)
 
-    st.subheader("Secondary Diagnoses: ")
-    user_secondarydiagnoses = [(key, value, "#baffc9" if value in checklists["Secondary"] else "#ffb3ba") for key, value in classified["Secondary"].items()]
-    annotated_text(["Your answer(s): "] + user_secondarydiagnoses)
-    valid_secondarydiagnoses = [(key, str(weights["Secondary"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Secondary"].items()]
-    annotated_text(["Valid answer(s): "] + valid_secondarydiagnoses)
+    with layout1[0].container(border = True):
+        st.subheader(f"Main Diagnosis: {scores['Main']}/{maxscores['Main']}", divider = "grey")
+        user_main = [(key, value, "#baffc9" if value in checklists["Main"] else "#ffb3ba") for key, value in classified["Main"].items()]
+        annotated_text("Your answer(s): ", user_main)
+        valid_main = [(key, str(weights["Main"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Main"].items()]
+        annotated_text("Valid answer(s): ", valid_main)
+
+    with layout1[0].container(border = True):
+        st.subheader("Main Rationale: ")
+        st.write("Your answer: " + inputs["Main"])
+        st.write("Example answer: " + "COMING SOON")
+
+    with layout1[0].container(border = True):
+        st.subheader(f"Secondary Diagnoses: {scores['Secondary']}/{maxscores['Secondary']}", divider = "grey")
+        user_secondary = [(key, value, "#baffc9" if value in checklists["Secondary"] else "#ffb3ba") for key, value in classified["Secondary"].items()]
+        annotated_text(["Your answer(s): "] + user_secondary)
+        valid_secondary = [(key, str(weights["Secondary"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Secondary"].items()]
+        annotated_text(["Valid answer(s): "] + valid_secondary)
+
+    with layout1[1].container():
+        st.write("Insert explanations, examples, or additional feedback here...")
 
 
 def display_Interview(interview: dict) -> None:
-    st.write(interview["username"] + " @ " + interview["date_time"])
-    st.write("Patient: " + interview["patient"]["name"])
+    st.write(f"{interview['username']} @ {interview['date_time']}, Patient: {interview['patient']['name']}")
 
     if interview["feedback"]:
         data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
         with data:
             display_DataAcquisition(interview["feedback"]["Data Acquisition"], interview["messages"])
         with diagnosis:
-            display_Diagnosis(interview["feedback"]["Diagnosis"], interview["userdiagnosis"])
+            display_Diagnosis(interview["feedback"]["Diagnosis"], interview["user_diagnosis"])
     else:
         chat_container = st.container(height=300)
         for message in st.session_state["interview"]["messages"]:
             with chat_container:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
-        if interview["userdiagnosis"]:
-            userdiagnosis = interview["userdiagnosis"]
+        if interview["user_diagnosis"]:
+            user_diagnosis = interview["user_diagnosis"]
             st.divider()
-            st.write("Main Diagnosis: " + userdiagnosis["main_diagnosis"])
-            st.write("Main Rationale: " + userdiagnosis["main_rationale"])
-            st.write("Secondary Diagnoses: " + ", ".join(userdiagnosis["secondary_diagnoses"]))
+            st.write("Interpretative Summary: " + user_diagnosis["Summary"])
+            st.write("Main Diagnosis: " + user_diagnosis["Main"])
+            st.write("Main Rationale: " + user_diagnosis["Rationale"])
+            st.write("Secondary Diagnoses: " + ", ".join(user_diagnosis["Secondary"]))

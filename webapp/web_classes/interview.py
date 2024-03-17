@@ -14,16 +14,17 @@ class Interview:
         self.__username = username      # str
         self.__patient = patient        # Patient
         self.__messages = []            # list[Message]
-        self.__userdiagnosis = None     # dict{str, str/list[str]}
+        self.__user_diagnosis = None     # dict{str, str/list[str]}
         self.__feedback = None          # Feedback
             
     def add_feedback(self):
-        self.__feedback = Feedback(self.__patient, self.__messages, self.__userdiagnosis)
+        self.__feedback = Feedback(self.__patient, self.__messages, self.__user_diagnosis)
     
-    def add_userdiagnosis(self, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
-        self.__userdiagnosis = {"main_diagnosis": main_diagnosis, 
-                                "main_rationale": main_rationale, 
-                                "secondary_diagnoses": secondary_diagnoses}
+    def add_user_diagnosis(self, summary: str, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
+        self.__user_diagnosis = {"Summary": summary, 
+                                 "Main": main_diagnosis, 
+                                 "Rationale": main_rationale, 
+                                 "Secondary": secondary_diagnoses}
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
@@ -38,8 +39,8 @@ class Interview:
     def get_messages(self) -> list[Message]:
         return self.__messages
     
-    def get_userdiagnosis(self) -> dict[str, str]:
-        return self.__userdiagnosis
+    def get_user_diagnosis(self) -> dict[str, str]:
+        return self.__user_diagnosis
     
     def get_feedback(self) -> Feedback:
         return self.__feedback
@@ -50,7 +51,7 @@ class Interview:
                      "username": self.__username, 
                      "patient": self.__patient.get_dict(), 
                      "messages": [message.get_dict() for message in self.__messages], 
-                     "userdiagnosis": self.__userdiagnosis if self.__userdiagnosis else None, 
+                     "user_diagnosis": self.__user_diagnosis if self.__user_diagnosis else None, 
                      "feedback": self.__feedback.get_dict() if self.__feedback else None}
         return to_return
 

@@ -1,6 +1,7 @@
 import os
 from openai import OpenAI
 from anthropic import Anthropic
+import json
 
 
 # SECRETS
@@ -71,6 +72,10 @@ MAX_MESSAGES = 99 # no limit rn
 # Grading related
 BATCH_MAX = 99 # no limit rn
 BATCH_DELAY = 30
+with open("./Prompts/label_descs.json", "r") as label_descs_json:
+    LABEL_DESCS = json.loads(label_descs_json)
+with open("./Prompts/datacategory_examples.json", "r") as cat_examples_json:
+    LABEL_EXAMPLES = json.loads(cat_examples_json)
 CLASS_INPUT = "./Prompts/Grade_DataIn_3-16.txt"
 CLASS_OUTPUT = "./Prompts/Grade_DataOut_3-16.txt"
 with open("./Prompts/Grade_Diag_3-16.txt", "r", encoding="utf8") as grader_file:

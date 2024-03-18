@@ -59,6 +59,8 @@ collection=client["AIME"]["Conversation"]
 
 ######### WEBSITE 
 
+st.set_page_config(page_title = "AIME", page_icon = "🧑‍⚕️", layout = "wide")
+
 if "stage" not in st.session_state:
     st.session_state["stage"] = LOGIN_PAGE
 

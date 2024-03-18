@@ -69,7 +69,7 @@ def set_stage(stage):
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
-    layout1 = st.columns([1, 1, 1])
+    layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Medical Interview Simulation (BETA)")
         st.write("For beta testing use only.")
@@ -142,14 +142,15 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
 
 
 if st.session_state["stage"] == SETTINGS:
-    st.title("Patient Settings")
     st.session_state["interview"] = None
     st.session_state["convo_memory"] = None
     st.session_state["convo_file"] = None
     st.session_state["sent"] = False
 
-    layout1 = st.columns([1, 1, 1])
+    layout1 = st.columns([1, 3, 1])
     with layout1[1]:
+        st.title("Patient Settings")
+
         chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
                                 ["Text", "Voice"],
                                 index = None,
@@ -175,15 +176,15 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
-    st.title("Chat Interface")
-    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
-    st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
     # st.session_state["start_time"] = date.datetime.now()
 
-    layout1 = st.columns([1, 1, 1])
+    layout1 = st.columns([1, 3, 1])
     with layout1[1]:
-        container = st.container(height=300)
+        st.title("Chat Interface")
+        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+        st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
 
+        container = st.container(height=300)
         for message in st.session_state["interview"].get_messages():
             with container:
                 with st.chat_message(message.role):
@@ -218,12 +219,14 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     # st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
     #          Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 
-    layout1 = st.columns([1, 1, 1])
+    layout1 = st.columns([1, 3, 1])
     with layout1[1]:
+        st.title("Chat Interface")
+        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+
         audio = audiorecorder("Start Recording", "Stop")
         
         container = st.container(height=300)
-
         for message in st.session_state["interview"].get_messages():
             with container:
                 with st.chat_message(message.role):

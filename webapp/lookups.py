@@ -1,8 +1,18 @@
 import os
+import streamlit as st
 from openai import OpenAI
 from anthropic import Anthropic
 import json
 
+
+# if "lookups" not in st.session_state:
+#     st.session_state.lookups = {
+#         "LOGIN_PASS": os.getenv("LOGIN_PASS"), 
+#         "DB_URI": os.getenv("DB_URI"), 
+#         "DATABASE_USERNAME": os.getenv("DATABASE_USERNAME"), 
+#         "DATABASE_PASSWORD": os.getenv("DATABASE_PASSWORD"), 
+#         "EMAIL_TO_SEND": [('rutgers.aime@gmail.com')], 
+#         "CLIENT": }
 
 # SECRETS
 LOGIN_PASS = os.getenv("LOGIN_PASS")

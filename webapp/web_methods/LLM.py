@@ -83,11 +83,31 @@ def transcribe_voice(voice_input):
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     voice_input.export(temp_audio_file.name, format="wav")
     with open(temp_audio_file.name, "rb") as file:
-        transcription = AUDIO_IN.audio.transcriptions.create(model="whisper-1", 
+        transcription = STT.audio.transcriptions.create(model="whisper-1", 
                                                     file=file, 
                                                     response_format="text")
     
     return transcription
+
+
+def generate_voice(text_input: str) -> io.BytesIO:
+    bio = io.BytesIO()
+    speech = TTS.audio.speech.create(model = TTS_MODEL, 
+                                     voice = "onyx", 
+                                     response_format = "wav", 
+                                     input = text_input)
+    bio.write(speech.content)
+    return bio
+
+def play_voice(bio: io.BytesIO) -> None:
+    # Convert the audio data in the BytesIO buffer to base64
+    audio_base64 = base64.b64encode(bio.getvalue()).decode('utf-8')
+
+    # Generate the HTML audio tag with autoplay
+    audio_tag = f'<audio autoplay="true" src="data:audio/wav;base64,{audio_base64}">'
+
+    # Display the audio tag using Streamlit markdown
+    st.markdown(audio_tag, unsafe_allow_html=True)
 
 
 def classifier(category: DataCategory, messages: list[Message]) -> None:    

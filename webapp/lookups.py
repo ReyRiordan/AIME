@@ -42,7 +42,9 @@ VIEW_INTERVIEWS=12
 
 
 # Audio related
-AUDIO_IN = OpenAI()
+STT = OpenAI()
+TTS = OpenAI()
+TTS_MODEL = "tts-1"
 # AUDIO_OUT = ElevenLabs()
 
 

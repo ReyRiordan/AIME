@@ -69,31 +69,33 @@ def set_stage(stage):
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
-    st.title("Medical Interview Simulation (BETA)")
-    st.write("For beta testing use only.")
-    
-    username = st.text_input("Enter any username (does not have to be your real name):")
-    password = st.text_input("Enter the password you were provided:", type = "password")
+    layout1 = st.columns([1, 1, 1])
+    with layout1[1]:
+        st.title("Medical Interview Simulation (BETA)")
+        st.write("For beta testing use only.")
+        
+        username = st.text_input("Enter any username (does not have to be your real name):")
+        password = st.text_input("Enter the password you were provided:", type = "password")
 
-    login_buttons = st.columns(5)
-    if login_buttons[1].button("Log in"):
-        if username and password == LOGIN_PASS:
-            st.session_state["username"] = username
-            st.write("Authentication successful!")
-            time.sleep(1)
-            set_stage(SETTINGS)
-            st.rerun()
-        else:
-            st.write("Password incorect.")
-    
-    if login_buttons[2].button("Admin Login"):
-        if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
-            st.write("Authentication successful!")
-            time.sleep(1)
-            set_stage(VIEW_INTERVIEWS)
-            st.rerun()
-        else:
-            st.write("Password incorrect.")
+        login_buttons = layout1[1].columns(5)
+        if login_buttons[1].button("Log in"):
+            if username and password == LOGIN_PASS:
+                st.session_state["username"] = username
+                st.write("Authentication successful!")
+                time.sleep(1)
+                set_stage(SETTINGS)
+                st.rerun()
+            else:
+                st.write("Password incorect.")
+        
+        if login_buttons[2].button("Admin Login"):
+            if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
+                st.write("Authentication successful!")
+                time.sleep(1)
+                set_stage(VIEW_INTERVIEWS)
+                st.rerun()
+            else:
+                st.write("Password incorrect.")
 
 
 if st.session_state["stage"]==VIEW_INTERVIEWS:
@@ -146,21 +148,23 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["convo_file"] = None
     st.session_state["sent"] = False
 
-    chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
-                             ["Text", "Voice"],
-                             index = None,
-                             placeholder = "Select interview mode...")
-    if chat_mode == "Text": st.session_state["chat_mode"] = CHAT_INTERFACE_TEXT
-    elif chat_mode == "Voice": st.session_state["chat_mode"] = CHAT_INTERFACE_VOICE
-    else: st.session_state["chat_mode"] = None
+    layout1 = st.columns([1, 1, 1])
+    with layout1[1]:
+        chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
+                                ["Text", "Voice"],
+                                index = None,
+                                placeholder = "Select interview mode...")
+        if chat_mode == "Text": st.session_state["chat_mode"] = CHAT_INTERFACE_TEXT
+        elif chat_mode == "Voice": st.session_state["chat_mode"] = CHAT_INTERFACE_VOICE
+        else: st.session_state["chat_mode"] = None
 
-    patient_name = st.selectbox("Which patient would you like to interview?", 
-                                               ["John Smith", "Jackie Smith"],
-                                               index = None,
-                                               placeholder = "Select patient...")
-    if patient_name: st.session_state["interview"] = Interview(st.session_state["username"], Patient(patient_name))
+        patient_name = st.selectbox("Which patient would you like to interview?", 
+                                                ["John Smith", "Jackie Smith"],
+                                                index = None,
+                                                placeholder = "Select patient...")
+        if patient_name: st.session_state["interview"] = Interview(st.session_state["username"], Patient(patient_name))
 
-    if st.session_state["chat_mode"] and st.session_state["interview"]: st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
+        if st.session_state["chat_mode"] and st.session_state["interview"]: st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
 
 if st.session_state["stage"] == CHAT_SETUP:
@@ -176,34 +180,36 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
     # st.session_state["start_time"] = date.datetime.now()
 
-    container = st.container(height=300)
+    layout1 = st.columns([1, 1, 1])
+    with layout1[1]:
+        container = st.container(height=300)
 
-    for message in st.session_state["interview"].get_messages():
-        with container:
-            with st.chat_message(message.role):
-                st.markdown(message.content)
+        for message in st.session_state["interview"].get_messages():
+            with container:
+                with st.chat_message(message.role):
+                    st.markdown(message.content)
 
-    if user_input := st.chat_input("Type here..."):
-        with container:
-            with st.chat_message("User"):
-                st.markdown(user_input)
-        st.session_state["interview"].add_message(Message("input", "User", user_input))
-        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-        response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CHAT_TEMP, 
-                                   system = st.session_state["convo_memory"][0]["content"], 
-                                   messages = st.session_state["convo_memory"][1:])
-        voice = generate_voice(response)
-        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
-        with container:
-            with st.chat_message("AI"): #TODO Needs avatar eventually
-                st.markdown(response)
-                play_voice(voice)
-        st.session_state["interview"].add_message(Message("output", "AI", response))
+        if user_input := st.chat_input("Type here..."):
+            with container:
+                with st.chat_message("User"):
+                    st.markdown(user_input)
+            st.session_state["interview"].add_message(Message("input", "User", user_input))
+            st.session_state["convo_memory"].append({"role": "user", "content": user_input})
+            response = generate_response(model = CONVO_MODEL, 
+                                    temperature = CHAT_TEMP, 
+                                    system = st.session_state["convo_memory"][0]["content"], 
+                                    messages = st.session_state["convo_memory"][1:])
+            voice = generate_voice(response)
+            st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+            with container:
+                with st.chat_message("AI"): #TODO Needs avatar eventually
+                    st.markdown(response)
+                    play_voice(voice)
+            st.session_state["interview"].add_message(Message("output", "AI", response))
 
-    columns = st.columns(4)
-    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-    columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+        columns = layout1[1].columns(4)
+        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
+        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
@@ -212,37 +218,39 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     # st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
     #          Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 
-    audio = audiorecorder("Start Recording", "Stop")
-    
-    container = st.container(height=300)
+    layout1 = st.columns([1, 1, 1])
+    with layout1[1]:
+        audio = audiorecorder("Start Recording", "Stop")
+        
+        container = st.container(height=300)
 
-    for message in st.session_state["interview"].get_messages():
-        with container:
-            with st.chat_message(message.role):
-                st.markdown(message.content)
+        for message in st.session_state["interview"].get_messages():
+            with container:
+                with st.chat_message(message.role):
+                    st.markdown(message.content)
 
-    if len(audio) > 0:
-        user_input = transcribe_voice(audio)
-        with container:
-            with st.chat_message("User"):
-                st.markdown(user_input)
-        st.session_state["interview"].add_message(Message("input", "User", user_input))
-        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-        response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CHAT_TEMP, 
-                                   system = st.session_state["convo_memory"][0]["content"], 
-                                   messages = st.session_state["convo_memory"][1:])
-        voice = generate_voice(response)
-        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
-        with container:
-            with st.chat_message("AI"): # Needs avatar eventually
-                st.markdown(response)
-                play_voice(voice)
-        st.session_state["interview"].add_message(Message("output", "AI", response))
+        if len(audio) > 0:
+            user_input = transcribe_voice(audio)
+            with container:
+                with st.chat_message("User"):
+                    st.markdown(user_input)
+            st.session_state["interview"].add_message(Message("input", "User", user_input))
+            st.session_state["convo_memory"].append({"role": "user", "content": user_input})
+            response = generate_response(model = CONVO_MODEL, 
+                                    temperature = CHAT_TEMP, 
+                                    system = st.session_state["convo_memory"][0]["content"], 
+                                    messages = st.session_state["convo_memory"][1:])
+            voice = generate_voice(response)
+            st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+            with container:
+                with st.chat_message("AI"): # Needs avatar eventually
+                    st.markdown(response)
+                    play_voice(voice)
+            st.session_state["interview"].add_message(Message("output", "AI", response))
 
-    columns = st.columns(4)
-    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-    columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+        columns = layout1[1].columns(4)
+        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
+        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == DIAGNOSIS:

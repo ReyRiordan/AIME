@@ -214,8 +214,6 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
-    st.title("Chat Interface")
-    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
     # st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
     #          Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 

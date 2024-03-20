@@ -75,7 +75,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
                                    temperature = CHAT_TEMP, 
                                    system = st.session_state["convo_memory"][0]["content"], 
                                    messages = st.session_state["convo_memory"][1:])
-        speech = generate_voice(response)
+        speech = generate_voice(st.session_state["interview"].get_patient(), response)
         st.session_state["convo_memory"].append({"role": "assistant", "content": response})
         with container:
             with st.chat_message("AI"): #TODO Needs avatar eventually
@@ -114,7 +114,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
                                    temperature = CHAT_TEMP, 
                                    system = st.session_state["convo_memory"][0]["content"], 
                                    messages = st.session_state["convo_memory"][1:])
-        speech = generate_voice(response)
+        speech = generate_voice(st.session_state["interview"].get_patient(), response)
         st.session_state["convo_memory"].append({"role": "assistant", "content": response})
         with container:
             with st.chat_message("AI"): # Needs avatar eventually

@@ -21,6 +21,7 @@ import json
 from lookups import *
 from web_classes.data_category import DataCategory
 from web_classes.message import Message
+from web_classes.patient import Patient
 
 
 def generate_response(model: str, temperature: float, system: str, messages: list[dict[str, str]]) -> str:
@@ -90,22 +91,21 @@ def transcribe_voice(voice_input):
     return transcription
 
 
-def generate_voice(text_input: str) -> io.BytesIO:
+def generate_voice(patient: Patient, text_input: str) -> io.BytesIO:
     bio = io.BytesIO()
-    speech = TTS.audio.speech.create(model = TTS_MODEL, 
-                                     voice = "onyx", 
+    speech = TTS.audio.speech.create(model = patient.speech["model"], 
+                                     voice = patient.speech["voice"], 
                                      response_format = "wav", 
                                      input = text_input)
     bio.write(speech.content)
     return bio
 
+
 def play_voice(bio: io.BytesIO) -> None:
     # Convert the audio data in the BytesIO buffer to base64
     audio_base64 = base64.b64encode(bio.getvalue()).decode('utf-8')
-
     # Generate the HTML audio tag with autoplay
     audio_tag = f'<audio autoplay="true" src="data:audio/wav;base64,{audio_base64}">'
-
     # Display the audio tag using Streamlit markdown
     st.markdown(audio_tag, unsafe_allow_html=True)
 

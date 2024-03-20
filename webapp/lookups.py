@@ -73,9 +73,6 @@ elif HOST == "anthropic":
 
 
 # Convo related
-BASE_PATH = "./Prompts/Base_3-14.txt"
-with open(BASE_PATH, "r", encoding="utf8") as base_file:
-    BASE_PROMPT = base_file.read()
 with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
 MAX_MESSAGES = 99 # no limit rn
@@ -97,14 +94,8 @@ with open("./Prompts/Grade_Diag_3-16.txt", "r", encoding="utf8") as grade_diag_f
 
 
 PATIENTS = {
-    "John Smith": {"case": "./Patient_Info/JohnSmith_case.json", 
-                   "grading": "./Patient_Info/JohnSmith_grading.json", 
-                   "physical": "./Patient_Info/JohnSmith_physical.docx", 
-                   "ECG": "./Patient_Info/JohnSmith_ECG.png"}, 
-    "Jackie Smith": {"case": "./Patient_Info/JackieSmith_case.json", 
-                     "grading": "./Patient_Info/JackieSmith_grading.json", 
-                     "physical": "./Patient_Info/JackieSmith_physical.docx", 
-                     "ECG": "./Patient_Info/JackieSmith_ECG.png"}
+    "John Smith": "./Patient_Info/JohnSmith.json", 
+    "Jackie Smith": "./Patient_Info/JackieSmith.json"
 }
 
 DATACATEGORIES = {

@@ -74,11 +74,12 @@ if st.session_state["stage"] == LOGIN_PAGE:
         st.title("Medical Interview Simulation (BETA)")
         st.write("For beta testing use only.")
         
-        username = st.text_input("Enter any username (does not have to be your real name):")
-        password = st.text_input("Enter the password you were provided:", type = "password")
+        layout12a = layout1[1].columns([1, 3, 1])
+        username = layout12a[1].text_input("Enter any username (does not have to be your real name):")
+        password = layout12a[1].text_input("Enter the password you were provided:", type = "password")
 
-        login_buttons = layout1[1].columns(5)
-        if login_buttons[1].button("Log in"):
+        layout12b = layout1[1].columns(5)
+        if layout12b[2].button("Log in"):
             if username and password == LOGIN_PASS:
                 st.session_state["username"] = username
                 st.write("Authentication successful!")
@@ -88,7 +89,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
             else:
                 st.write("Password incorect.")
         
-        if login_buttons[2].button("Admin Login"):
+        if layout12b[3].button("Admin Login"):
             if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
                 st.write("Authentication successful!")
                 time.sleep(1)
@@ -200,7 +201,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
                                     temperature = CHAT_TEMP, 
                                     system = st.session_state["convo_memory"][0]["content"], 
                                     messages = st.session_state["convo_memory"][1:])
-            voice = generate_voice(response)
+            voice = generate_voice(st.session_state["interview"].get_patient(), response)
             st.session_state["convo_memory"].append({"role": "assistant", "content": response})
             with container:
                 with st.chat_message("AI"): #TODO Needs avatar eventually
@@ -241,7 +242,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
                                     temperature = CHAT_TEMP, 
                                     system = st.session_state["convo_memory"][0]["content"], 
                                     messages = st.session_state["convo_memory"][1:])
-            voice = generate_voice(response)
+            voice = generate_voice(st.session_state["interview"].get_patient(), response)
             st.session_state["convo_memory"].append({"role": "assistant", "content": response})
             with container:
                 with st.chat_message("AI"): # Needs avatar eventually

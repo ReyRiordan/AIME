@@ -13,21 +13,29 @@ class Patient:
         self.physical = None        # str path
         self.ECG = None             # str path
         self.convo_prompt = None    # str
+        self.speech = None          # dict{str, str}
+
+        with open(PATIENTS[name], "r") as json_file:
+            JSON = json.load(json_file)
 
         # Create virtual patient prompt
-        base = BASE_PROMPT.replace("{patient}", name)
+        with open(JSON["prompt"]["file"], "r") as base_file:
+            base = base_file.read()
+        base = base.replace("{patient}", name)
         self.convo_prompt = str(base)
-        with open(PATIENTS[name]["case"], "r") as case_json:
-            self.case = json.load(case_json)
+        self.case = JSON["case"]
         self.convo_prompt += self.process_case(self.case)
 
-        # Assign physical and ECG data paths for patient for website display use
-        self.physical = PATIENTS[name]["physical"]
-        self.ECG = PATIENTS[name]["ECG"]
-
         # Extract grading for patient
-        with open(PATIENTS[name]["grading"], "r") as grading_json:
-            self.grading = json.load(grading_json)
+        self.grading = JSON["grading"]
+
+        # Assign physical and ECG data paths for patient for website display use
+        self.physical = JSON["physical"]
+        self.ECG = JSON["ECG"]
+
+        # Extract speech settings
+        self.speech = JSON["speech"]
+
 
     def process_case(self, case: dict[str, list[dict[str]]]) -> str:
         case_prompt = ""

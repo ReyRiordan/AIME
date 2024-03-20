@@ -72,31 +72,26 @@ if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Medical Interview Simulation (BETA)")
-        
-        layout12a = layout1[1].columns([1, 3, 1])
-        layout12a[1].write("For beta testing use only.")
-        username = layout12a[1].text_input("Enter any username (does not have to be your real name):")
-        password = layout12a[1].text_input("Enter the password you were provided:", type = "password")
+        st.write("For beta testing use only.")
+
+        username = st.text_input("Enter any username (does not have to be your real name):")
+        password = st.text_input("Enter the password you were provided:", type = "password")
 
         layout12b = layout1[1].columns(5)
-        if layout12b[1].button("Log in"):
+        if layout12b[2].button("Log in"):
             if username and password == LOGIN_PASS:
                 st.session_state["username"] = username
                 st.write("Authentication successful!")
                 time.sleep(1)
                 set_stage(SETTINGS)
                 st.rerun()
-            else:
-                st.write("Password incorect.")
-        
-        if layout12b[2].button("Admin Login"):
             if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
                 st.write("Authentication successful!")
                 time.sleep(1)
                 set_stage(VIEW_INTERVIEWS)
                 st.rerun()
             else:
-                st.write("Password incorrect.")
+                st.write("Password incorect.")
 
 
 if st.session_state["stage"]==VIEW_INTERVIEWS:

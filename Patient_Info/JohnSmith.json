@@ -1,0 +1,255 @@
+{
+  "name": "John Smith",
+  "speech": {
+    "host": "openai",
+    "model": "tts-1",
+    "voice": "onyx"
+  },
+  "prompt": {
+    "type": "default",
+    "file": "./Prompts/Base_3-14.txt"
+  },
+  "case": {
+    "Personal Details": [
+      {
+        "detail": "Sex",
+        "line": "Male"
+      },
+      {
+        "detail": "Name",
+        "line": "John Smith"
+      },
+      {
+        "detail": "Birthdate",
+        "line": "December 5th 1959"
+      },
+      {
+        "detail": "Tone",
+        "line": "Worried and nervous"
+      }
+    ],
+    "Chief Concern": "You came to the hospital because you are experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
+    "History of Present Illness": [
+      {
+        "lock": false,
+        "dim": "Onset",
+        "line": "heaviness came on gradually, seated at desk at home when symptoms appeared"
+      },
+      {
+        "lock": true,
+        "dim": "Quality",
+        "line": "like a weight on the chest"
+      },
+      {
+        "lock": false,
+        "dim": "Location",
+        "line": "center of chest"
+      },
+      {
+        "lock": false,
+        "dim": "Timing",
+        "line": "started around 2 hours ago"
+      },
+      {
+        "lock": true,
+        "dim": "Pattern",
+        "line": "constant"
+      },
+      {
+        "lock": false,
+        "dim": "Severity",
+        "line": "it was pretty severe when it first started, gradually improved and the pressure is much better but it is still there"
+      },
+      {
+        "lock": true,
+        "dim": "Prior History",
+        "line": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, where you would take an antacid and feel better."
+      },
+      {
+        "lock": true,
+        "dim": "Radiation",
+        "line": "You also felt an aching pain in your jaw and both shoulders when the pressure was at its worst"
+      },
+      {
+        "lock": true,
+        "dim": "Exacerbating",
+        "line": "you have not noticed anything that makes the heaviness worse"
+      },
+      {
+        "lock": true,
+        "dim": "Relieving",
+        "line": "you took two or three tums but had no relief"
+      }
+    ],
+    "Associated Symptoms": [
+      {
+        "lock": false,
+        "line": "You were feeling slightly nauseated and sweaty prior to arriving in the Emergency Department, but you feel better now."
+      },
+      {
+        "lock": true,
+        "line": "You have been stressed about your finances recently."
+      }
+    ],
+    "Medical History": [
+      {
+        "lock": true,
+        "line": "Hypertension: You've had high blood pressure since you were 50. You take a water pill for that and were recently started on another new medication."
+      },
+      {
+        "lock": true,
+        "line": "Hyperlipidemia: You've had high cholesterol for many years and take a statin for this."
+      },
+      {
+        "lock": true,
+        "line": "Diabetes: On your most recent visit to your doctor, she said you have pre-diabetes - you are not sure what this means, but she recommended you lose weight.  To lose weight, you started a walking program; this was about 6 months ago."
+      },
+      {
+        "lock": false,
+        "line": "You have been fully boosted for COVID, but do not always get a flu vaccine."
+      }
+    ],
+    "Surgical History": [
+      {
+        "lock": false,
+        "line": "You had a hernia in your groin that was repaired when you were 26."
+      }
+    ],
+    "Medications": [
+      {
+        "lock": true,
+        "line": "Read this list from your phone if asked for specific medications: \u201cHydrochlorothiazide, Amlodipine, Atorvastatin\u201d."
+      }
+    ],
+    "Allergies": [
+      {
+        "lock": false,
+        "line": "You do not have any allergies that you are aware of."
+      }
+    ],
+    "Family History": [
+      {
+        "lock": false,
+        "line": "Your father died suddenly of a heart attack when he was 50 years old."
+      },
+      {
+        "lock": false,
+        "line": "Your mother passed away from breast cancer two years ago."
+      }
+    ],
+    "Social History": [
+      {
+        "lock": true,
+        "line": "You are a former smoker. You started smoking when you were in college at 19 years old and quit about 5 years ago. You smoked about one pack per day."
+      },
+      {
+        "lock": true,
+        "line": "You drink about 2 glasses of wine or a cocktail during the week, more on the weekend."
+      }
+    ],
+    "Other Symptoms": [
+      {
+        "lock": false,
+        "line": "You have had difficulty maintaining an erection for the past 2 years and have considered speaking to your doctor about this."
+      },
+      {
+        "lock": false,
+        "line": "You do get pain in your left leg when you walk, a cramp in the calf. It goes away when you stop walking."
+      }
+    ]
+  },
+  "grading": {
+    "Data Acquisition": {
+      "gen": {
+        "Introduction": 5,
+        "Confirm Identity": 5,
+        "Establish Chief Concern": 5,
+        "Additional Information": 5,
+        "Medical History": 5,
+        "Surgery Hospitalization": 5,
+        "Medication": 5,
+        "Allergies": 5,
+        "Family History": 5,
+        "Alcohol": 2,
+        "Smoking": 2,
+        "Drug Use": 2,
+        "Employment": 1,
+        "Social Support": 1
+      },
+      "dims": {
+        "Onset": 5,
+        "Quality": 5,
+        "Location": 5,
+        "Timing": 5,
+        "Pattern": 5,
+        "Exacerbating": 5,
+        "Relieving": 5,
+        "Prior History": 5,
+        "Radiation": 5,
+        "Severity": 5
+      },
+      "asoc": {
+        "Breathing": 5,
+        "Sweating": 3,
+        "Nausea": 5,
+        "Syncope": 4,
+        "Fatigue": 2,
+        "Palpitations": 2,
+        "Leg Swelling": 2,
+        "Fever": 1,
+        "Cough": 1,
+        "URI": 1,
+        "Stomach Pain": 3
+      },
+      "risk": {
+        "CAD": 5,
+        "PVD": 3,
+        "Hypertension": 5,
+        "Hyperlipidemia": 5,
+        "Smoking": 5,
+        "Diabetes": 5,
+        "Relative Heart": 5,
+        "Sedentary": 1
+      }
+    },
+    "Diagnosis": {
+      "Summary": {
+        "Onset": 3,
+        "Quality": 5,
+        "Location": 5,
+        "Timing": 3,
+        "Pattern": 5,
+        "Radiation": 5,
+        "Prior History": 3,
+        "Nausea": 2,
+        "Sweating": 2,
+        "Breathing": 2,
+        "Syncope": 2,
+        "Palpitations": 2,
+        "Hypertension": 2,
+        "Hyperlipidemia": 2,
+        "Diabetes": 2,
+        "Smoking": 5,
+        "Relative Heart": 5,
+        "PVD": 2
+      },
+      "Main": {
+        "Acute coronary syndrome (ACS)": 8,
+        "Non-ST-elevation myocardial infarction (NSTEMI)": 8,
+        "Unstable Angina": 8
+      },
+      "Secondary": {
+        "Acute coronary syndrome (ACS)": 1,
+        "Non-ST-elevation myocardial infarction (NSTEMI)": 1,
+        "Unstable Angina": 1,
+        "Aortic dissection": 1,
+        "Acute pericarditis": 1,
+        "Gastroesophageal reflux disease (GERD)": 1,
+        "Pulmonary embolism": 1,
+        "Pneumonia": 1
+      }
+    }
+  },
+  "physical": "./Patient_Info/JohnSmith_physical.docx",
+  "ECG": "./Patient_Info/JohnSmith_ECG.png"
+}

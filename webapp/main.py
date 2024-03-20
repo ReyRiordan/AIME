@@ -72,7 +72,6 @@ if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Medical Interview Simulation (BETA)")
-        st.write("For beta testing use only.")
         
         layout12a = layout1[1].columns([1, 3, 1])
         layout12a[1].write("For beta testing use only.")

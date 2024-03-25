@@ -69,9 +69,9 @@ def set_stage(stage):
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
-    layout1 = st.columns([1, 3, 1])
+    layout1 = st.columns([2, 3, 2])
     with layout1[1]:
-        st.title("Medical Interview Simulation (BETA)")
+        st.title("Virtual Patient (BETA)")
         st.write("For beta testing use only.")
 
         username = st.text_input("Enter any username (does not have to be your real name):")

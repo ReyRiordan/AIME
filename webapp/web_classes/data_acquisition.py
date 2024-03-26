@@ -3,27 +3,36 @@ import json
 from openai import OpenAI
 import streamlit as st
 import time
+import pydantic
+from typing import Optional, List
 
 from .patient import *
 from .message import *
 from .data_category import DataCategory
 from web_methods.LLM import classifier
 
-class DataAcquisition:
+class DataAcquisition(pydantic.BaseModel):
 
+    datacategories: List[DataCategory]      # list[DataCategory]
+    weights : Optional[List]                # dict{str, dict{str, int}}
+    checklists : Optional[dict]             # dict{str, dict{str, bool}}
+    scores :  Optional[dict]                 # dict{str, int}
+    maxscores : Optional[dict]              # dict{str, int}
+    
     def __init__(self, patient: Patient, messages: list[Message]):
         # Attributes
-        self.datacategories = None  # list[DataCategory]
-        self.weights = None         # dict{str, dict{str, int}}
-        self.checklists = None      # dict{str, dict{str, bool}}
-        self.scores = None          # dict{str, int}
-        self.maxscores = None       # dict{str, int}
+        # self.datacategories = None  # list[DataCategory]
+        # self.weights = None         # dict{str, dict{str, int}}
+        # self.checklists = None      # dict{str, dict{str, bool}}
+        # self.scores = None          # dict{str, int}
+        # self.maxscores = None       # dict{str, int}
 
         # Only data categories for patient
-        self.datacategories = []
+        datacategories= []
         for category in patient.grading["Data Acquisition"]:
-            self.datacategories.append(DataCategory(category, patient))
-        self.weights = patient.grading["Data Acquisition"]
+            datacategories.append(DataCategory(name=category, patient=patient))
+        weights = patient.grading["Data Acquisition"]
+
 
         # Split messages into batches if needed
         if len(messages) > BATCH_MAX:
@@ -39,7 +48,7 @@ class DataAcquisition:
         # Label all messages according to categories
         for i, batch in enumerate(batches):
             if i > 0: time.sleep(BATCH_DELAY)
-            for category in self.datacategories:
+            for category in datacategories:
                 classifier(category, batch)
             st.write(f"Batch {i+1} complete.")
         
@@ -49,30 +58,34 @@ class DataAcquisition:
             message.add_annotation()
         
         # Initialize all grades for each category to label: False
-        self.checklists = {}
-        for category in self.datacategories:
-            self.checklists[category.name] = {label: False for label in self.weights[category.name]}
+        checklists = {}
+        for category in datacategories:
+            checklists[category.name] = {label: False for label in weights[category.name]}
 
         # Iterate through messages and grade checklists
         for message in messages:
-            for category in self.datacategories:
+            for category in datacategories:
                 if category.name in message.labels:
                     labels = message.labels[category.name]
                     for label in labels:
-                        if label not in self.checklists[category.name]: # handle weird generated label name cases
+                        if label not in checklists[category.name]: # handle weird generated label name cases
                             raise ValueError(label + " is an unknown label.")
-                        self.checklists[category.name][label] = True
+                        checklists[category.name][label] = True
 
         # Calculate scoring for each category
-        self.scores = {}
-        self.maxscores = {}
-        for category in self.datacategories:
-            self.scores[category.name] = self.get_score(category)
-            self.maxscores[category.name] = self.get_maxscore(category)
+        scores = {}
+        maxscores = {}
+        for category in datacategories:
+            scores[category.name] = self.get_score(weights,category)
+            maxscores[category.name] = self.get_maxscore(weights,category)
         
-    def get_score(self, category: DataCategory) -> int:
+        super().__init__(datacategories=datacategories,weights=weights,checklists=checklists,scores=scores,maxscores=maxscores)
+
+    def get_score(self, weights, category: DataCategory) -> int:
         # Get weights from patient and grades from self
-        weights = self.weights[category.name]
+        # note: slight change to account for pydantic 
+        
+        weights = weights[category.name]
         label_checklist = self.checklists[category.name]
         # Calculate score from weights and grades
         score = 0
@@ -81,9 +94,9 @@ class DataAcquisition:
                 score += weights[label]
         return score
     
-    def get_maxscore(self, category: DataCategory) -> int:
+    def get_maxscore(self, weights, category: DataCategory) -> int:
         # Get weights from patient
-        weights = self.weights[category.name]
+        weights = weights[category.name]
         # Calculate max score from weights
         max = 0
         for label in weights:

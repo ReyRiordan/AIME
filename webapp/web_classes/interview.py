@@ -2,48 +2,56 @@ from lookups import *
 import json
 from openai import OpenAI
 import datetime as date
+import pydantic 
+from typing import Optional, List
 
 from .patient import *
 from .message import *
 from .feedback import *
 
-class Interview:
-
+class Interview(pydantic.BaseModel):
+    date_time :str = str(date.datetime.now())       
+    username :str                                   # str
+    patient : Patient                               # Patient
+    messages : Optional[List[Message]]    = []       # list[Message]
+    user_diagnosis : Optional[dict]       = None     # dict{str, str/list[str]}
+    feedback : Optional[dict]             = None    # Feedback
+    
     def __init__(self, username: str, patient: Patient):
         #Attributes
-        self.__username = username      # str
-        self.__patient = patient        # Patient
-        self.__messages = []            # list[Message]
-        self.__user_diagnosis = None     # dict{str, str/list[str]}
-        self.__feedback = None          # Feedback
+        # messages = []            # list[Message]
+        # user_diagnosis = None     # dict{str, str/list[str]}
+        # feedback = None          # Feedback
+
+        super().__init__(username=username,patient=patient) 
             
     def add_feedback(self):
-        self.__feedback = Feedback(self.__patient, self.__messages, self.__user_diagnosis)
-    
+        self.feedback = Feedback(patient=self.patient, messages=self.messages, user_diagnosis=self.user_diagnosis)
+
     def add_user_diagnosis(self, summary: str, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
-        self.__user_diagnosis = {"Summary": summary, 
+        self.user_diagnosis = {"Summary": summary, 
                                  "Main": main_diagnosis, 
                                  "Rationale": main_rationale, 
                                  "Secondary": secondary_diagnoses}
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
-            self.__messages.append(message)
+            self.messages.append(message)
     
     def get_username(self) -> str:
-        return self.__username
+        return self.username
     
     def get_patient(self) -> Patient:
-        return self.__patient
+        return self.patient
     
     def get_messages(self) -> list[Message]:
-        return self.__messages
+        return self.messages
     
     def get_user_diagnosis(self) -> dict[str, str]:
-        return self.__user_diagnosis
+        return self.user_diagnosis
     
     def get_feedback(self) -> Feedback:
-        return self.__feedback
+        return self.feedback
 
     def get_dict(self):
         currentDateTime=date.datetime.now()

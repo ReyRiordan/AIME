@@ -1,14 +1,24 @@
 from lookups import *
+import pydantic
+from typing import Optional,List
 
-class Message:
-    def __init__(self, type: str, role: str, content: str):
-        # Attributes
-        self.type = type        # str
-        self.role = role        # str  
-        self.content = content  # str
-        self.labels = {}        # dict{str, list[str]}
-        self.annotation = None  # str
-        self.highlight = None   # str
+class Message(pydantic.BaseModel):
+
+    type: str
+    role : str
+    content : str
+    labels: Optional[dict] = {}
+    annotation: Optional[str] = None
+    highlight: Optional[str] = None
+
+    # # Attributes
+    #     self.type = type        # str
+    #     self.role = role        # str  
+    #     self.content = content  # str
+    #     self.labels = {}        # dict{str, list[str]}
+    #     self.annotation = None  # str
+    #     self.highlight = None   # str
+        
 
     def add_highlight(self):
         if self.labels:

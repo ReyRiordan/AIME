@@ -23,9 +23,10 @@ from pymongo.server_api import ServerApi
 from lookups import *
 from web_classes import *
 from web_methods import *
-# from dotenv import load_dotenv
 
-# load_dotenv()
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # client = MongoClient(DB_URI,server_api=ServerApi('1'))
@@ -76,13 +77,14 @@ if st.session_state["stage"] == CHAT_SETUP:
                 {"role": "AI", "content": "Yes, my father died suddenly of a heart attack when he was 50 years old. And my mother was diagnosed with breast cancer two years ago."}, 
                 {"role": "User", "content": "Do you drink or smoke?"}, 
                 {"role": "AI", "content": "No, I've never smoked. I do enjoy a glass of wine or a cocktail during the week, but that's about it."}]
-
-    st.session_state["interview"] = Interview("TEST", Patient("Jackie Smith"))
+    st.session_state["random_patient"]=Patient(name="Jackie Smith")
+    st.session_state["interview"] = Interview(username="TEST", patient=Patient(name="Jackie Smith"))
     for message in messages:
         if message["role"] == "User":
-            st.session_state["interview"].add_message(Message("input", message["role"], message["content"]))
+            st.session_state["interview"].add_message(Message(type="input", role=message["role"], content=message["content"]))
+            
         elif message["role"] == "AI":
-            st.session_state["interview"].add_message(Message("output", message["role"], message["content"]))
+            st.session_state["interview"].add_message(Message(type="output", role=message["role"], content=message["content"]))
     
     set_stage(DIAGNOSIS)
 

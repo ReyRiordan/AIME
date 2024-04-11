@@ -4,10 +4,9 @@ from openai import OpenAI
 from anthropic import Anthropic
 import json
 
+# from dotenv import load_dotenv
 
-from dotenv import load_dotenv
-
-load_dotenv()
+# load_dotenv()
 
 # if "lookups" not in st.session_state:
 #     st.session_state.lookups = {
@@ -52,27 +51,17 @@ TTS_MODEL = "tts-1"
 
 
 # LLM related
-HOST = "openai"
-if HOST == "openai":
-    CLIENT = OpenAI()
-    CONVO_MODEL = "gpt-4"
-    CHAT_TEMP = 0.7
-    CLASS_MODEL = "gpt-4-0125-preview"
-    CLASS_TEMP = 0.0
-    SUM_MODEL = "gpt-4-0125-preview"
-    SUM_TEMP = 0.0
-    DIAG_MODEL = "gpt-4-0125-preview"
-    DIAG_TEMP = 0.0
-elif HOST == "anthropic":
-    CLIENT = Anthropic()
-    CONVO_MODEL = "claude-3-sonnet-20240229"
-    CHAT_TEMP = 0.5
-    CLASS_MODEL = "claude-3-opus-20240229"
-    CLASS_TEMP = 0.0
-    SUM_MODEL = "claude-3-sonnet-20240229"
-    SUM_TEMP = 0.0
-    DIAG_MODEL = "claude-3-sonnet-20240229"
-    DIAG_TEMP = 0.0
+CHAT_CLIENT = Anthropic()
+CONVO_MODEL = "claude-3-sonnet-20240229"
+CONVO_TEMP = 0.5
+SUM_MODEL = "claude-3-sonnet-20240229"
+SUM_TEMP = 0.0
+
+GRADE_CLIENT = OpenAI()
+CLASS_MODEL = "gpt-4-turbo-2024-04-09"
+CLASS_TEMP = 0.0
+DIAG_MODEL = "gpt-4-turbo-2024-04-09"
+DIAG_TEMP = 0.0
 
 
 # Convo related

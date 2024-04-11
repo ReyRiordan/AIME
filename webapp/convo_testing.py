@@ -72,7 +72,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         st.session_state["interview"].add_message(Message("input", "User", user_input))
         st.session_state["convo_memory"].append({"role": "user", "content": user_input})
         response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CHAT_TEMP, 
+                                   temperature = CONVO_TEMP, 
                                    system = st.session_state["convo_memory"][0]["content"], 
                                    messages = st.session_state["convo_memory"][1:])
         speech = generate_voice(st.session_state["interview"].get_patient(), response)
@@ -111,7 +111,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         st.session_state["interview"].add_message(Message("input", "User", user_input))
         st.session_state["convo_memory"].append({"role": "user", "content": user_input})
         response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CHAT_TEMP, 
+                                   temperature = CONVO_TEMP, 
                                    system = st.session_state["convo_memory"][0]["content"], 
                                    messages = st.session_state["convo_memory"][1:])
         speech = generate_voice(st.session_state["interview"].get_patient(), response)

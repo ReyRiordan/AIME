@@ -25,59 +25,45 @@ from web_classes.patient import Patient
 
 
 def generate_response(model: str, temperature: float, system: str, messages: list[dict[str, str]]) -> str:
-    if HOST == "anthropic":
-        response = CLIENT.messages.create(model = model, 
-                                          temperature = temperature, 
-                                          max_tokens = 1000,
-                                          system = system, 
-                                          messages = messages)
-        return response.content[0].text
-    elif HOST == "openai":
-        messages = [{"role": "system", "content": system}] + messages
-        response = CLIENT.chat.completions.create(model = model, 
-                                                  temperature = temperature, 
-                                                  messages = messages)
-        return response.choices[0].message.content
-    return "ERROR: NO HOST?"
+    response = CHAT_CLIENT.messages.create(model = model, 
+                                           temperature = temperature, 
+                                           max_tokens = 1000, 
+                                           system = system, 
+                                           messages = messages)
+    return response.content[0].text
 
 
 def generate_classifications(system: str, user_input: str) -> str:
-    if HOST == "anthropic":
-        response = CLIENT.messages.create(model = CLASS_MODEL, 
-                                          temperature = CLASS_TEMP, 
-                                          max_tokens = 1000, 
-                                          system = system, 
-                                          messages = [{"role": "user", "content": user_input}, 
-                                                      {"role": "assistant", "content": "{\"output\": ["}]) # prefill tech
-        print(f"\nRAW CLASSIFICATION: {response.content}\n")
-        return "{\"output\": [" + response.content[0].text
-    elif HOST == "openai":
-        response = CLIENT.chat.completions.create(model = CLASS_MODEL, 
-                                                  temperature = CLASS_TEMP, 
-                                                  response_format = {"type": "json_object"}, 
-                                                  messages = [{"role": "system", "content": system}, 
-                                                              {"role": "user", "content": user_input}])
-        return response.choices[0].message.content
-    return "ERROR: NO HOST?"
+    # response = CLIENT.messages.create(model = CLASS_MODEL, 
+    #                                       temperature = CLASS_TEMP, 
+    #                                       max_tokens = 1000, 
+    #                                       system = system, 
+    #                                       messages = [{"role": "user", "content": user_input}, 
+    #                                                   {"role": "assistant", "content": "{\"output\": ["}]) # prefill tech
+    # print(f"\nRAW CLASSIFICATION: {response.content}\n")
+    # return "{\"output\": [" + response.content[0].text
+    response = GRADE_CLIENT.chat.completions.create(model = CLASS_MODEL, 
+                                                    temperature = CLASS_TEMP, 
+                                                    response_format = {"type": "json_object"}, 
+                                                    messages = [{"role": "system", "content": system}, 
+                                                                {"role": "user", "content": user_input}])
+    return response.choices[0].message.content
 
 
 def generate_matches(prompt: str, inputs: str) -> str:
-    if HOST == "anthropic":
-        matches = CLIENT.messages.create(model = DIAG_MODEL, 
-                                          temperature = DIAG_TEMP, 
-                                          max_tokens = 1000, 
-                                          system = prompt, 
-                                          messages = [{"role": "user", "content": inputs}, 
-                                                      {"role": "assistant", "content": "{\"output\": {"}]) # prefill tech
-        return "{\"output\": {" + matches.content[0].text
-    elif HOST == "openai":
-        matches = CLIENT.chat.completions.create(model = DIAG_MODEL, 
-                                                  temperature = DIAG_TEMP, 
-                                                  response_format = {"type": "json_object"}, 
-                                                  messages = [{"role": "system", "content": prompt}, 
-                                                              {"role": "user", "content": inputs}])
-        return matches.choices[0].message.content
-    return "ERROR: NO HOST?"
+    # matches = CLIENT.messages.create(model = DIAG_MODEL, 
+    #                                       temperature = DIAG_TEMP, 
+    #                                       max_tokens = 1000, 
+    #                                       system = prompt, 
+    #                                       messages = [{"role": "user", "content": inputs}, 
+    #                                                   {"role": "assistant", "content": "{\"output\": {"}]) # prefill tech
+    # return "{\"output\": {" + matches.content[0].text
+    matches = GRADE_CLIENT.chat.completions.create(model = DIAG_MODEL, 
+                                                   temperature = DIAG_TEMP, 
+                                                   response_format = {"type": "json_object"}, 
+                                                   messages = [{"role": "system", "content": prompt}, 
+                                                               {"role": "user", "content": inputs}])
+    return matches.choices[0].message.content
 
 
 def transcribe_voice(voice_input):
@@ -156,7 +142,7 @@ def summarizer(convo_memory: list[dict[str, str]]) -> str:
     #                           format = None, 
     #                           system = SUM_PROMPT, 
     #                           messages = messages[1:])
-    raw_summary = CLIENT.chat.completions.create(model = SUM_MODEL, 
+    raw_summary = CHAT_CLIENT.chat.completions.create(model = SUM_MODEL, 
                                               temperature = SUM_TEMP, 
                                               messages = messages)
     summary = raw_summary.choices[0].message.content
@@ -167,7 +153,7 @@ def summarizer(convo_memory: list[dict[str, str]]) -> str:
 def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list[list[dict[str, str]], str]:
     convo_memory.append({"role": "user", "content": user_input})
     output = generate_response(model = CONVO_MODEL, 
-                             temperature = CHAT_TEMP, 
+                             temperature = CONVO_TEMP, 
                              system = convo_memory[0]["content"], 
                              messages = convo_memory[1:])
     convo_memory.append({"role": "assistant", "content": output})

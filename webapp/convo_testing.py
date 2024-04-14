@@ -69,7 +69,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         with container:
             with st.chat_message("User"):
                 st.markdown(user_input)
-        st.session_state["interview"].add_message(Message("input", "User", user_input))
+        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
         st.session_state["convo_memory"].append({"role": "user", "content": user_input})
         response = generate_response(model = CONVO_MODEL, 
                                    temperature = CONVO_TEMP, 
@@ -81,7 +81,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             with st.chat_message("AI"): #TODO Needs avatar eventually
                 st.markdown(response)
                 play_voice(speech)
-        st.session_state["interview"].add_message(Message("output", "AI", response))
+        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
@@ -108,7 +108,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         with container:
             with st.chat_message("User"):
                 st.markdown(user_input)
-        st.session_state["interview"].add_message(Message("input", "User", user_input))
+        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
         st.session_state["convo_memory"].append({"role": "user", "content": user_input})
         response = generate_response(model = CONVO_MODEL, 
                                    temperature = CONVO_TEMP, 
@@ -120,7 +120,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(response)
                 play_voice(speech)
-        st.session_state["interview"].add_message(Message("output", "AI", response))
+        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])

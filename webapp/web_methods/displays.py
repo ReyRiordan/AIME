@@ -71,12 +71,12 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
         annotated_text(display_labels)
 
     with layout1[0].container(border = True):
-        st.subheader(f"Main Diagnosis: {scores['Main']}/{maxscores['Main']}", divider = "grey")
-        user_main = [(key, value, "#baffc9" if value in checklists["Main"] else "#ffb3ba") for key, value in classified["Main"].items()]
-        annotated_text("Your answer(s): ", user_main)
-        valid_main = [(key, str(weights["Main"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Main"].items()]
-        annotated_text("Valid answer(s): ", valid_main)
-
+        st.subheader(f"Potential Diagnoses: {scores['Potential']}/{maxscores['Potential']}", divider = "grey")
+        user_potential = [(key, value, "#baffc9" if value in checklists["Potential"] else "#ffb3ba") for key, value in classified["Potential"].items()]
+        annotated_text(["Your answers: "] + user_potential)
+        valid_potential = [(key, str(weights["Potential"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Potential"].items()]
+        annotated_text(["Valid answers: "] + valid_potential)
+    
     with layout1[0].container(border = True):
         st.subheader(f"Rationale: {scores['Rationale']}/{maxscores['Rationale']}", divider = "grey")
         st.write(inputs["Rationale"])
@@ -84,11 +84,11 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
             annotated_text((key, str(weights["Rationale"][key]), "#baffc9" if value else "#ffb3ba"))
 
     with layout1[0].container(border = True):
-        st.subheader(f"Secondary Diagnoses: {scores['Secondary']}/{maxscores['Secondary']}", divider = "grey")
-        user_secondary = [(key, value, "#baffc9" if value in checklists["Secondary"] else "#ffb3ba") for key, value in classified["Secondary"].items()]
-        annotated_text(["Your answer(s): "] + user_secondary)
-        valid_secondary = [(key, str(weights["Secondary"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Secondary"].items()]
-        annotated_text(["Valid answer(s): "] + valid_secondary)
+        st.subheader(f"Final Diagnosis: {scores['Final']}/{maxscores['Final']}", divider = "grey")
+        user_final = [(key, value, "#baffc9" if value in checklists["Final"] else "#ffb3ba") for key, value in classified["Final"].items()]
+        annotated_text("Your answer: ", user_final)
+        valid_final = [(key, str(weights["Final"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Final"].items()]
+        annotated_text("Valid answer(s): ", valid_final)
 
     with layout1[1].container():
         st.write("Insert explanations, examples, or additional feedback here...")
@@ -102,20 +102,20 @@ def display_Interview(interview: dict) -> None:
         with data:
             display_DataAcquisition(interview["feedback"]["Data Acquisition"], interview["messages"])
         with diagnosis:
-            display_Diagnosis(interview["feedback"]["Diagnosis"], interview["user_diagnosis"])
+            display_Diagnosis(interview["feedback"]["Diagnosis"], interview["diagnosis_inputs"])
     else:
         chat_container = st.container(height=300)
         for message in st.session_state["interview"]["messages"]:
             with chat_container:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
-        if interview["user_diagnosis"]:
-            user_diagnosis = interview["user_diagnosis"]
+        if interview["diagnosis_inputs"]:
+            diagnosis_inputs = interview["diagnosis_inputs"]
             st.divider()
-            st.write("Interpretative Summary: " + user_diagnosis["Summary"])
-            st.write("Main Diagnosis: " + user_diagnosis["Main"])
-            st.write("Main Rationale: " + user_diagnosis["Rationale"])
-            st.write("Secondary Diagnoses: " + ", ".join(user_diagnosis["Secondary"]))
+            st.write("Interpretative Summary: " + diagnosis_inputs["Summary"])
+            st.write("Potential Diagnoses: " + ", ".join(diagnosis_inputs["Potential"]))
+            st.write("Rationale: " + diagnosis_inputs["Rationale"])
+            st.write("Final Diagnosis: " + diagnosis_inputs["Final"])
 
 #TODO: NOT EVEN CLOSE TO DONE, PROBLEM FOR @ALI
 

@@ -97,12 +97,13 @@ if st.session_state["stage"] == DIAGNOSIS:
     layout1 = st.columns([1, 1])
 
     # User inputs
-    interpretative_summary = layout1[0].text_area(label = "Interpretive Summary:", placeholder = "Interpretive summary for patient", height = 200)
-    main_diagnosis = layout1[0].text_input(label = "Main Diagnosis:", placeholder = "Condition name")
-    main_rationale = layout1[0].text_area(label = "Rationale:", placeholder = "Rationale for main diagnosis")
-    layout11 = layout1[0].columns([1, 1])
-    secondary1 = layout11[0].text_input(label = "Secondary Diagnoses:", placeholder = "Condition name")
-    secondary2 = layout11[1].text_input(label = "None", placeholder = "Condition name", label_visibility = "hidden")
+    summary = layout1[0].text_area(label = "Interpretive Summary:", placeholder = "Interpretive summary for patient", height = 200)
+    layout11 = layout1[0].columns([1, 1, 1])
+    potential1 = layout11[0].text_input(label = "Potential Diagnoses:", placeholder = "First condition name")
+    potential2 = layout11[1].text_input(label = "None", placeholder = "Second condition name", label_visibility = "hidden")
+    potential3 = layout11[2].text_input(label = "None", placeholder = "Third condition name", label_visibility = "hidden")
+    rationale = layout1[0].text_area(label = "Rationale:", placeholder = "Rationale for diagnosis")
+    final = layout1[0].text_input(label = "Final Diagnosis:", placeholder = "Condition name")
 
     # 3 buttons at bottom
     layout12 = layout1[0].columns([1, 1, 1])
@@ -122,7 +123,7 @@ if st.session_state["stage"] == DIAGNOSIS:
                                 mime = "docx")
     # Get Feedback
     if layout12[2].button("Get Feedback"): 
-        st.session_state["interview"].add_user_diagnosis(interpretative_summary, main_diagnosis, main_rationale, [secondary1, secondary2])
+        st.session_state["interview"].add_diagnosis_inputs(summary, [potential1, potential2, potential3], rationale, final)
         set_stage(FEEDBACK_SETUP)
         st.rerun()
     

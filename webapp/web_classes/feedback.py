@@ -15,11 +15,11 @@ class Feedback(pydantic.BaseModel):
     diagnosis: Optional[Diagnosis]             = None  #Diagnosis
 
     @classmethod
-    def build(cls, patient: Patient, messages: list[Message], user_diagnosis: dict[str, str]):
+    def build(cls, patient: Patient, messages: list[Message], diagnosis_inputs: dict[str, str]):
         # Attributes
-        to_return_data_acquisition=DataAcquisition.build(patient=patient,messages=messages)
+        to_return_data_acquisition = DataAcquisition.build(patient=patient, messages=messages)
         st.json(to_return_data_acquisition.model_dump_json())
-        return cls(data_acquisition = to_return_data_acquisition,diagnosis=Diagnosis.build(patient=patient,inputs=user_diagnosis))
+        return cls(data_acquisition=to_return_data_acquisition, diagnosis=Diagnosis.build(patient=patient, inputs=diagnosis_inputs))
 
         # self.data_acquisition = DataAcquisition(patient, messages)
         # self.diagnosis = Diagnosis(patient, user_diagnosis)

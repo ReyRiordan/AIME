@@ -14,7 +14,7 @@ class Interview(pydantic.BaseModel):
     username :str                                   # str
     patient : Patient                               # Patient
     messages : Optional[List[Message]]    = []       # list[Message]
-    user_diagnosis : Optional[dict]       = None     # dict{str, str/list[str]}
+    diagnosis_inputs : Optional[dict]       = None     # dict{str, str/list[str]}
     feedback : Optional[Feedback]             = None    # Feedback
     
     @classmethod
@@ -27,13 +27,13 @@ class Interview(pydantic.BaseModel):
         return cls(username=username,patient=patient) 
             
     def add_feedback(self):
-        self.feedback = Feedback.build(patient=self.patient, messages=self.messages, user_diagnosis=self.user_diagnosis)
+        self.feedback = Feedback.build(patient=self.patient, messages=self.messages, diagnosis_inputs=self.diagnosis_inputs)
 
-    def add_user_diagnosis(self, summary: str, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
-        self.user_diagnosis = {"Summary": summary, 
-                               "Main": main_diagnosis, 
-                               "Rationale": main_rationale, 
-                               "Secondary": secondary_diagnoses}
+    def add_diagnosis_inputs(self, summary: str, potential: list[str], rationale: str, final: str):
+        self.diagnosis_inputs = {"Summary": summary, 
+                                 "Potential": potential, 
+                                 "Rationale": rationale, 
+                                 "Final": final}
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
@@ -48,8 +48,8 @@ class Interview(pydantic.BaseModel):
     def get_messages(self) -> list[Message]:
         return self.messages
     
-    def get_user_diagnosis(self) -> dict[str, str]:
-        return self.user_diagnosis
+    def get_diagnosis_inputs(self) -> dict[str, str]:
+        return self.diagnosis_inputs
     
     def get_feedback(self) -> Feedback:
         return self.feedback
@@ -60,7 +60,7 @@ class Interview(pydantic.BaseModel):
                      "username": self.username, 
                      "patient": self.patient.get_dict(), 
                      "messages": [message.get_dict() for message in self.messages], 
-                     "user_diagnosis": self.user_diagnosis if self.user_diagnosis else None, 
+                     "diagnosis_inputs": self.diagnosis_inputs if self.diagnosis_inputs else None, 
                      "feedback": self.feedback.get_dict() if self.feedback else None}
         return to_return
 

@@ -31,16 +31,16 @@ class Diagnosis(pydantic.BaseModel):
         # Intialize the checklists
         checklists = {"Summary": {}, 
                       "Rationale": {}, 
-                      "Main": {}, 
-                      "Secondary": {}}
+                      "Potential": {}, 
+                      "Final": {}}
         for label in weights["Summary"]:
             checklists["Summary"][label] = False
         for statement in weights["Rationale"]:
             checklists["Rationale"][statement] = False
-        for condition in weights["Main"]:
-            checklists["Main"][condition] = False
-        for condition in weights["Secondary"]:
-            checklists["Secondary"][condition] = False
+        for condition in weights["Potential"]:
+            checklists["Potential"][condition] = False
+        for condition in weights["Final"]:
+            checklists["Final"][condition] = False
         
         # Grade the summary
         sum_prompt = GRADE_SUM_PROMPT
@@ -70,45 +70,45 @@ class Diagnosis(pydantic.BaseModel):
                 checklists["Rationale"][statement] = True
 
         # Dict to see user input and corresponding matched conditions
-        classified = {"Main": {}, 
-                      "Secondary": {}}
+        classified = {"Potential": {}, 
+                      "Final": {}}
         
         # Grade the conditions
         main_prompt = GRADE_DIAG_PROMPT
         valid_conditions = []
-        for condition in checklists["Main"]:
+        for condition in checklists["Potential"]:
             if condition not in valid_conditions:
                 valid_conditions.append(condition)
-        for condition in checklists["Secondary"]:
+        for condition in checklists["Final"]:
             if condition not in valid_conditions:
                 valid_conditions.append(condition)
         main_prompt += json.dumps(valid_conditions)
-        user_inputs = [inputs["Main"]] + [diagnosis for diagnosis in inputs["Secondary"]]
-        print(f"User inputs: {user_inputs}\n")
+        user_inputs = [diagnosis for diagnosis in inputs["Potential"]] + [inputs["Final"]]
+        # print(f"User inputs: {user_inputs}\n")
         output = web_methods.generate_matches(main_prompt, json.dumps(user_inputs))
         print(output + "\n\n")
         matches = json.loads(output)["output"]
         print(f"Matches: {matches}\n")
 
-        classified["Main"][inputs["Main"]] = matches[inputs["Main"]]
-        if matches[inputs["Main"]] in checklists["Main"]:
-            checklists["Main"][matches[inputs["Main"]]] = True
-        for diagnosis in inputs["Secondary"]:
-            classified["Secondary"][diagnosis] = matches[diagnosis]
-            if matches[diagnosis] in checklists["Secondary"]:
-                checklists["Secondary"][matches[diagnosis]] = True
+        for diagnosis in inputs["Potential"]:
+            classified["Potential"][diagnosis] = matches[diagnosis]
+            if matches[diagnosis] in checklists["Potential"]:
+                checklists["Potential"][matches[diagnosis]] = True
+        classified["Final"][inputs["Final"]] = matches[inputs["Final"]]
+        if matches[inputs["Final"]] in checklists["Final"]:
+            checklists["Final"][matches[inputs["Final"]]] = True
 
         # print(checklists)
         
         # Calculate scoring
         scores = {"Summary": 0,
                   "Rationale": 0,
-                  "Main": 0,
-                  "Secondary": 0}
+                  "Potential": 0,
+                  "Final": 0}
         maxscores = {"Summary": 0,
                      "Rationale": 0,
-                    "Main": 8,
-                    "Secondary": 2}
+                     "Potential": 3,
+                     "Final": 8}
         for label in checklists["Summary"]:
             if checklists["Summary"][label]:
                 scores["Summary"] += weights["Summary"][label]
@@ -117,12 +117,12 @@ class Diagnosis(pydantic.BaseModel):
             if checklists["Rationale"][statement]:
                 scores["Rationale"] += weights["Rationale"][statement]
             maxscores["Rationale"] += weights["Rationale"][statement]
-        for condition in checklists["Main"]:
-            if checklists["Main"][condition]:
-                scores["Main"] += weights["Main"][condition]
-        for condition in checklists["Secondary"]:
-            if checklists["Secondary"][condition]:
-                scores["Secondary"] += weights["Secondary"][condition]
+        for condition in checklists["Potential"]:
+            if checklists["Potential"][condition]:
+                scores["Potential"] += weights["Potential"][condition]
+        for condition in checklists["Final"]:
+            if checklists["Final"][condition]:
+                scores["Final"] += weights["Final"][condition]
 
         return cls(weights=weights,classified=classified,checklists=checklists,scores=scores,maxscores=maxscores)
 

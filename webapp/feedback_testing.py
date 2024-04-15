@@ -77,8 +77,8 @@ if st.session_state["stage"] == CHAT_SETUP:
                 {"role": "AI", "content": "Yes, my father died suddenly of a heart attack when he was 50 years old. And my mother was diagnosed with breast cancer two years ago."}, 
                 {"role": "User", "content": "Do you drink or smoke?"}, 
                 {"role": "AI", "content": "No, I've never smoked. I do enjoy a glass of wine or a cocktail during the week, but that's about it."}]
-    st.session_state["random_patient"]=Patient(name="Jackie Smith")
-    st.session_state["interview"] = Interview(username="TEST", patient=Patient(name="Jackie Smith"))
+    st.session_state["random_patient"]=Patient.build(name="Jackie Smith")
+    st.session_state["interview"] = Interview.build(username="TEST", patient=Patient.build(name="Jackie Smith"))
     for message in messages:
         if message["role"] == "User":
             st.session_state["interview"].add_message(Message(type="input", role=message["role"], content=message["content"]))
@@ -146,6 +146,7 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
     st.title("Processing feedback...")
     st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback()
+    st.json(st.session_state["interview"].model_dump_json())
     st.session_state["interview_dict"] = st.session_state["interview"].get_dict()
     
     set_stage(FEEDBACK_SCREEN)

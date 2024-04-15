@@ -22,8 +22,9 @@ class Patient(pydantic.BaseModel):
         # self.ECG = None             # str path
         # self.convo_prompt = None    # str
         # self.speech = None          # dict{str, str}
-
-    def __init__(self, name:str):
+    
+    @classmethod
+    def build(cls, name:str):
         
         with open(PATIENTS[name], "r") as json_file:
             JSON = json.load(json_file)
@@ -34,7 +35,7 @@ class Patient(pydantic.BaseModel):
         base = base.replace("{patient}", name)
         convo_prompt = str(base)
         case = JSON["case"]
-        convo_prompt += self.process_case(case)
+        convo_prompt += cls.process_case(case)
 
         # Extract grading for patient
         grading = JSON["grading"]
@@ -46,10 +47,10 @@ class Patient(pydantic.BaseModel):
         # Extract speech settings
         speech = JSON["speech"]
 
-        super().__init__(name=name,case=case,grading=grading,physical=physical,ECG=ECG,convo_prompt=convo_prompt,speech=speech)
+        return cls(name=name,case=case,grading=grading,physical=physical,ECG=ECG,convo_prompt=convo_prompt,speech=speech)
 
-
-    def process_case(self, case: dict[str, list[dict[str]]]) -> str:
+    @classmethod
+    def process_case(cls,case: dict[str, list[dict[str]]]) -> str:
         case_prompt = ""
         for category in case: 
             case_prompt += "[" + category + "] \n"

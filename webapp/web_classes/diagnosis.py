@@ -14,7 +14,7 @@ class Diagnosis(pydantic.BaseModel):
     classified : Optional[dict]
     checklists: Optional[dict]
     scores : Optional[dict]
-    maxscores : Optional[dict]
+    maxscores : Optional[dict] 
 
 
     # Attributes
@@ -23,8 +23,9 @@ class Diagnosis(pydantic.BaseModel):
         # checklists = None                       # dict{str, dict{str, bool}}
         # score = None                            # dict{int}
         # maxscore = None                         # dict{int}
-
-    def __init__(self, patient: Patient, inputs: dict[str, str]):
+    
+    @classmethod
+    def build(cls, patient: Patient, inputs: dict[str, str]):
         weights = patient.grading["Diagnosis"]
                 
         # Intialize the checklists
@@ -93,8 +94,8 @@ class Diagnosis(pydantic.BaseModel):
         for condition in checklists["Secondary"]:
             if checklists["Secondary"][condition]:
                 scores["Secondary"] += weights["Secondary"][condition]
-
-        super().__init__(weights=weights,classified=classified,checklists=checklists,scores=scores,masxscores=maxscores)
+        print("These are the maxscores, ", maxscores)
+        return cls(weights=weights,classified=classified,checklists=checklists,scores=scores,maxscores=maxscores)
 
     def get_dict(self):
         to_return = {"weights": self.weights, 

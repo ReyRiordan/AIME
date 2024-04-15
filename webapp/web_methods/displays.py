@@ -78,9 +78,10 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
         annotated_text("Valid answer(s): ", valid_main)
 
     with layout1[0].container(border = True):
-        st.subheader("Main Rationale: ")
-        st.write("Your answer: " + inputs["Main"])
-        st.write("Example answer: " + "COMING SOON")
+        st.subheader(f"Rationale: {scores['Rationale']}/{maxscores['Rationale']}", divider = "grey")
+        st.write(inputs["Rationale"])
+        for key, value in checklists["Rationale"].items():
+            annotated_text((key, str(weights["Rationale"][key]), "#baffc9" if value else "#ffb3ba"))
 
     with layout1[0].container(border = True):
         st.subheader(f"Secondary Diagnoses: {scores['Secondary']}/{maxscores['Secondary']}", divider = "grey")

@@ -31,9 +31,9 @@ class Interview(pydantic.BaseModel):
 
     def add_user_diagnosis(self, summary: str, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
         self.user_diagnosis = {"Summary": summary, 
-                                 "Main": main_diagnosis, 
-                                 "Rationale": main_rationale, 
-                                 "Secondary": secondary_diagnoses}
+                               "Main": main_diagnosis, 
+                               "Rationale": main_rationale, 
+                               "Secondary": secondary_diagnoses}
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:

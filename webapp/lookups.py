@@ -73,14 +73,18 @@ MAX_MESSAGES = 99 # no limit rn
 # Grading related
 BATCH_MAX = 99 # no limit rn
 BATCH_DELAY = 30
-with open("./Prompts/Grade_Sum_4-14.txt", "r", encoding="utf8") as grade_sum_file:
-    GRADE_SUM_PROMPT = grade_sum_file.read()
+
 with open("./Prompts/label_descs.json", "r") as label_descs_json:
     LABEL_DESCS = json.loads(label_descs_json.read())
 with open("./Prompts/datacategory_examples.json", "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())
 CLASS_INPUT = "./Prompts/Grade_DataIn_4-14.txt"
 CLASS_OUTPUT = "./Prompts/Grade_DataOut_4-14.txt"
+
+with open("./Prompts/Grade_Sum_4-14.txt", "r", encoding="utf8") as grade_sum_file:
+    GRADE_SUM_PROMPT = grade_sum_file.read()
+with open("./Prompts/Grade_Rat_4-14.txt", "r", encoding="utf8") as grade_rat_file:
+    GRADE_RAT_PROMPT = grade_rat_file.read()
 with open("./Prompts/Grade_Diag_3-16.txt", "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()
 

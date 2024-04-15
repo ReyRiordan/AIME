@@ -278,5 +278,6 @@
     }
   },
   "physical": "./Patient_Info/JohnSmith_physical.docx",
-  "ECG": "./Patient_Info/JohnSmith_ECG.png"
+  "ECG": "./Patient_Info/JohnSmith_ECG.png",
+  "explanation": "./Patient_Info/JohnSmith_explanation.pdf"
 }

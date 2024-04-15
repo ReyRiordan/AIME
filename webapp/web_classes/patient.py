@@ -11,6 +11,7 @@ class Patient(pydantic.BaseModel):
     grading: Optional[dict]
     physical : Optional[str]
     ECG: Optional[str]
+    explanation: Optional[str]
     convo_prompt: Optional[str]
     speech: Optional[dict]
 
@@ -40,14 +41,22 @@ class Patient(pydantic.BaseModel):
         # Extract grading for patient
         grading = JSON["grading"]
 
-        # Assign physical and ECG data paths for patient for website display use
+        # Assign physical, ECG, explanation data paths for patient for website display use
         physical = JSON["physical"]
         ECG = JSON["ECG"]
+        explanation = JSON["explanation"]
 
         # Extract speech settings
         speech = JSON["speech"]
 
-        return cls(name=name,case=case,grading=grading,physical=physical,ECG=ECG,convo_prompt=convo_prompt,speech=speech)
+        return cls(name=name, 
+                   case=case, 
+                   grading=grading, 
+                   physical=physical, 
+                   ECG=ECG, 
+                   explanation=explanation,
+                   convo_prompt=convo_prompt, 
+                   speech=speech)
 
     @classmethod
     def process_case(cls,case: dict[str, list[dict[str]]]) -> str:

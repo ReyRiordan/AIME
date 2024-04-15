@@ -77,7 +77,7 @@ if st.session_state["stage"] == CHAT_SETUP:
                 {"role": "AI", "content": "I don't use any drugs, but I do drink socially - maybe 2 glasses of wine or a cocktail during the week and a bit more on weekends."}, 
                 {"role": "User", "content": "Alright, just last thing, are there any other symptoms that you think I might need to know about? Any other medical issues that you'd like to make me aware of?"}, 
                 {"role": "AI", "content": "Well, I've had some difficulty maintaining an erection for the past 2 years that I've been meaning to talk to my doctor about. And I do get pain and cramping in my left calf when I walk for a while, but it goes away when I stop walking."}]
-    st.session_state["random_patient"]=Patient.build(name="Jackie Smith")
+    
     st.session_state["interview"] = Interview.build(username="TEST", patient=Patient.build(name="John Smith"))
     for message in messages:
         if message["role"] == "User":

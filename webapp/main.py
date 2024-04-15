@@ -200,7 +200,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
             st.session_state["convo_memory"].append({"role": "user", "content": user_input})
             response = generate_response(model = CONVO_MODEL, 
-                                    temperature = CHAT_TEMP, 
+                                    temperature = CONVO_TEMP, 
                                     system = st.session_state["convo_memory"][0]["content"], 
                                     messages = st.session_state["convo_memory"][1:])
             voice = generate_voice(st.session_state["interview"].get_patient(), response)
@@ -241,7 +241,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
             st.session_state["convo_memory"].append({"role": "user", "content": user_input})
             response = generate_response(model = CONVO_MODEL, 
-                                    temperature = CHAT_TEMP, 
+                                    temperature = CONVO_TEMP, 
                                     system = st.session_state["convo_memory"][0]["content"], 
                                     messages = st.session_state["convo_memory"][1:])
             voice = generate_voice(st.session_state["interview"].get_patient(), response)
@@ -265,12 +265,13 @@ if st.session_state["stage"] == DIAGNOSIS:
     layout1 = st.columns([1, 1])
 
     # User inputs
-    interpretative_summary = layout1[0].text_area(label = "Interpretive Summary:", placeholder = "Interpretive summary for patient", height = 200)
-    main_diagnosis = layout1[0].text_input(label = "Main Diagnosis:", placeholder = "Condition name")
-    main_rationale = layout1[0].text_area(label = "Rationale:", placeholder = "Rationale for main diagnosis")
-    layout11 = layout1[0].columns([1, 1])
-    secondary1 = layout11[0].text_input(label = "Secondary Diagnoses:", placeholder = "Condition name")
-    secondary2 = layout11[1].text_input(label = "None", placeholder = "Condition name", label_visibility = "hidden")
+    summary = layout1[0].text_area(label = "Interpretive Summary:", placeholder = "Interpretive summary for patient", height = 200)
+    layout11 = layout1[0].columns([1, 1, 1])
+    potential1 = layout11[0].text_input(label = "Potential Diagnoses:", placeholder = "First condition name")
+    potential2 = layout11[1].text_input(label = "None", placeholder = "Second condition name", label_visibility = "hidden")
+    potential3 = layout11[2].text_input(label = "None", placeholder = "Third condition name", label_visibility = "hidden")
+    rationale = layout1[0].text_area(label = "Rationale:", placeholder = "Rationale for diagnosis")
+    final = layout1[0].text_input(label = "Final Diagnosis:", placeholder = "Condition name")
 
     # 3 buttons at bottom
     layout12 = layout1[0].columns([1, 1, 1])
@@ -290,7 +291,7 @@ if st.session_state["stage"] == DIAGNOSIS:
                                 mime = "docx")
     # Get Feedback
     if layout12[2].button("Get Feedback"): 
-        st.session_state["interview"].add_user_diagnosis(interpretative_summary, main_diagnosis, main_rationale, [secondary1, secondary2])
+        st.session_state["interview"].add_diagnosis_inputs(summary, [potential1, potential2, potential3], rationale, final)
         set_stage(FEEDBACK_SETUP)
         st.rerun()
     
@@ -309,11 +310,13 @@ if st.session_state["stage"] == DIAGNOSIS:
     with layout1[1].expander("ECG"):
         st.image(st.session_state["interview"].get_patient().ECG)
 
-#TODO: "Processing feedback" bug in the Feedback Screen. 
     
 if st.session_state["stage"] == FEEDBACK_SETUP:
     st.title("Processing feedback...")
+    st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback()
+    st.json(st.session_state["interview"].model_dump_json())
+    st.session_state["interview_dict"] = st.session_state["interview"].get_dict()
     
     set_stage(FEEDBACK_SCREEN)
     st.rerun()
@@ -321,10 +324,12 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     st.title("Feedback")
+    layout1 = st.columns([7, 1])
+    layout1[0].write("blah blah blah")
+    layout1[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
+    
     # Let the display methods cook
-    display_Interview(st.session_state["interview"].get_dict())
-
-    st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
+    display_Interview(st.session_state["interview_dict"])
 
 
 if st.session_state["stage"] == FINAL_SCREEN: 

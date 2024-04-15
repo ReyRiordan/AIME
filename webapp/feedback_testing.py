@@ -156,10 +156,12 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     st.title("Feedback")
+    layout1 = st.columns([7, 1])
+    layout1[0].write("blah blah blah")
+    layout1[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
+    
     # Let the display methods cook
     display_Interview(st.session_state["interview_dict"])
-
-    st.button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 
 # if st.session_state["stage"]==VIEW_INTERVIEWS:

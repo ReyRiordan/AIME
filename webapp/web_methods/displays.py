@@ -29,9 +29,13 @@ def get_webtext(content: str) -> str:
 
 
 def display_DataCategory(category: dict[str, str], checklist: dict[str, bool], weights: dict[str, int], score: int, maxscore: int) -> None:
-    st.subheader(f":{category['color']}[{category['header']}]: {score}/{maxscore}", divider = category['color'])
-    display_labels = [(key, str(weights[key]), "#baffc9" if value else "#ffb3ba") for key, value in checklist.items()]
-    annotated_text(display_labels)
+    with st.container(border = True):
+        st.subheader(f":{category['color']}[{category['header']}]: {score}/{maxscore}", divider = category['color'])
+        display_labels = [(key, str(weights[key]), "#baffc9" if value else "#ffb3ba") for key, value in checklist.items()]
+        annotated_text(display_labels)
+        with st.expander("Label Descriptions:"):
+            for key, value in checklist.items():
+                annotated_text([(key, "", "#baffc9" if value else "#ffb3ba"), " " + LABEL_DESCS[key]])
 
 
 def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
@@ -45,7 +49,7 @@ def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
                                  data["scores"][cat_name], 
                                  data["maxscores"][cat_name])
     
-    chat_container = layout1[1].container(height=500)
+    chat_container = layout1[1].container(height=700)
     for message in messages:
             with chat_container:
                 with st.chat_message(message["role"]):
@@ -69,6 +73,9 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
         st.write(inputs["Summary"])
         display_labels = [(key, str(weights["Summary"][key]), "#baffc9" if value else "#ffb3ba") for key, value in checklists["Summary"].items()]
         annotated_text(display_labels)
+        with st.expander("Label Descriptions:"):
+            for key, value in checklists["Summary"].items():
+                annotated_text([(key, "", "#baffc9" if value else "#ffb3ba"), " " + LABEL_DESCS[key]])
 
     with layout1[0].container(border = True):
         st.subheader(f"Potential Diagnoses: {scores['Potential']}/{maxscores['Potential']}", divider = "grey")
@@ -76,7 +83,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
         annotated_text(["Your answers: "] + user_potential)
         valid_potential = [(key, str(weights["Potential"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Potential"].items()]
         annotated_text(["Valid answers: "] + valid_potential)
-    
+        
     with layout1[0].container(border = True):
         st.subheader(f"Rationale: {scores['Rationale']}/{maxscores['Rationale']}", divider = "grey")
         st.write(inputs["Rationale"])

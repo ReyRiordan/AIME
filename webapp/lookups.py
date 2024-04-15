@@ -58,7 +58,7 @@ SUM_MODEL = "claude-3-sonnet-20240229"
 SUM_TEMP = 0.0
 
 GRADE_CLIENT = OpenAI()
-CLASS_MODEL = "gpt-4-turbo-2024-04-09"
+CLASS_MODEL = "gpt-4"
 CLASS_TEMP = 0.0
 DIAG_MODEL = "gpt-4-turbo-2024-04-09"
 DIAG_TEMP = 0.0
@@ -73,14 +73,14 @@ MAX_MESSAGES = 99 # no limit rn
 # Grading related
 BATCH_MAX = 99 # no limit rn
 BATCH_DELAY = 30
-with open("./Prompts/Grade_Sum_3-16.txt", "r", encoding="utf8") as grade_sum_file:
+with open("./Prompts/Grade_Sum_4-14.txt", "r", encoding="utf8") as grade_sum_file:
     GRADE_SUM_PROMPT = grade_sum_file.read()
 with open("./Prompts/label_descs.json", "r") as label_descs_json:
     LABEL_DESCS = json.loads(label_descs_json.read())
 with open("./Prompts/datacategory_examples.json", "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())
-CLASS_INPUT = "./Prompts/Grade_DataIn_3-16.txt"
-CLASS_OUTPUT = "./Prompts/Grade_DataOut_3-16.txt"
+CLASS_INPUT = "./Prompts/Grade_DataIn_4-14.txt"
+CLASS_OUTPUT = "./Prompts/Grade_DataOut_4-14.txt"
 with open("./Prompts/Grade_Diag_3-16.txt", "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()
 

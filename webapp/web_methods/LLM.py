@@ -44,7 +44,6 @@ def generate_classifications(system: str, user_input: str) -> str:
     # return "{\"output\": [" + response.content[0].text
     response = GRADE_CLIENT.chat.completions.create(model = CLASS_MODEL, 
                                                     temperature = CLASS_TEMP, 
-                                                    response_format = {"type": "json_object"}, 
                                                     messages = [{"role": "system", "content": system}, 
                                                                 {"role": "user", "content": user_input}])
     return response.choices[0].message.content
@@ -111,9 +110,10 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
     # Classify
     output = generate_classifications(system = prompt_system, 
                                       user_input = messages_json)
-
-    raw_classifications = json.loads(output)
-    classifications = raw_classifications["output"]
+    print(output + "\n\n")
+    # raw_classifications = json.loads(output)
+    # classifications = raw_classifications["output"]
+    classifications = json.loads(output)
     classifications = [[label for label in classification if label != "Other"] for classification in classifications] # Remove "Other" labels
     
     # Assign labels to each message accordingly

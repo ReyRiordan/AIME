@@ -44,14 +44,15 @@ class Diagnosis(pydantic.BaseModel):
         for label in weights["Summary"]:
             sum_prompt += f"[{label}]\n{LABEL_DESCS[label]}\n"
         output = web_methods.generate_classifications(sum_prompt, inputs["Summary"])
-        sum_labels = json.loads(output)["output"]
+        print(output + "\n\n")
+        sum_labels = json.loads(output)
         for label in sum_labels:
             if label in checklists["Summary"]:
                 checklists["Summary"][label] = True
 
         # Dict to see user input and corresponding matched conditions
         classified = {"Main": {}, 
-                           "Secondary": {}}
+                      "Secondary": {}}
         
         # Grade the conditions
         main_prompt = GRADE_DIAG_PROMPT
@@ -66,6 +67,7 @@ class Diagnosis(pydantic.BaseModel):
         user_inputs = [inputs["Main"]] + [diagnosis for diagnosis in inputs["Secondary"]]
         print(f"User inputs: {user_inputs}\n")
         output = web_methods.generate_matches(main_prompt, json.dumps(user_inputs))
+        print(output + "\n\n")
         matches = json.loads(output)["output"]
         print(f"Matches: {matches}\n")
 
@@ -76,6 +78,8 @@ class Diagnosis(pydantic.BaseModel):
             classified["Secondary"][diagnosis] = matches[diagnosis]
             if matches[diagnosis] in checklists["Secondary"]:
                 checklists["Secondary"][matches[diagnosis]] = True
+
+        # print(checklists)
         
         # Calculate scoring
         scores = {"Summary": 0,
@@ -94,7 +98,7 @@ class Diagnosis(pydantic.BaseModel):
         for condition in checklists["Secondary"]:
             if checklists["Secondary"][condition]:
                 scores["Secondary"] += weights["Secondary"][condition]
-        print("These are the maxscores, ", maxscores)
+
         return cls(weights=weights,classified=classified,checklists=checklists,scores=scores,maxscores=maxscores)
 
     def get_dict(self):

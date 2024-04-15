@@ -41,7 +41,7 @@ class DataCategory(pydantic.BaseModel):
             class_prompt += "[" + label + "] " + LABEL_DESCS[label] + "\n"
         class_prompt += base_split[1]
         
-        print(f"\n\n{class_prompt}\n\n") # debugging
+        # print(f"\n\n{class_prompt}\n\n") # debugging
 
         return cls(name=name,type=type,header=header,color=color,highlight=highlight,class_prompt=class_prompt)
     

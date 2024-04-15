@@ -116,6 +116,7 @@ def display_Interview(interview: dict) -> None:
             st.write("Main Rationale: " + user_diagnosis["Rationale"])
             st.write("Secondary Diagnoses: " + ", ".join(user_diagnosis["Secondary"]))
 
+#TODO: NOT EVEN CLOSE TO DONE, PROBLEM FOR @ALI
 
 def display_Interview_NEW(interview:Interview)->None:
     st.write(f"{interview.username} @ {interview.date_time}, Patient {interview.patient.name}")

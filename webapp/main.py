@@ -69,12 +69,16 @@ def set_stage(stage):
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
+    st.write("Welcome, and thank you for volunteering to participate in this beta test! This is an application where you will virtually simulate an interview with a patient, provide a differential diagnosis for them, and then automatically receive grading and feedback based on your performance.")
+    st.write("Please follow the directions on each page to work through the whole application, and take notes on where there is potential room for improvement.")
+    st.write("Begin by logging in!")
+    
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
         st.title("Virtual Patient (BETA)")
         st.write("For beta testing use only.")
 
-        username = st.text_input("Enter any username (does not have to be your real name):")
+        username = st.text_input("Enter any username (full name):")
         password = st.text_input("Enter the password you were provided:", type = "password")
 
         layout12b = layout1[1].columns(5)
@@ -138,6 +142,8 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
 
 
 if st.session_state["stage"] == SETTINGS:
+    st.write("Select your preferred settings for your interview with the virtual patient. Currently we have only made \"John Smith\" available, and voice input is highly encouraged.")
+    
     st.session_state["interview"] = None
     st.session_state["convo_memory"] = None
     st.session_state["convo_file"] = None
@@ -156,9 +162,9 @@ if st.session_state["stage"] == SETTINGS:
         else: st.session_state["chat_mode"] = None
 
         patient_name = st.selectbox("Which patient would you like to interview?", 
-                                                ["John Smith", "Jackie Smith"],
-                                                index = None,
-                                                placeholder = "Select patient...")
+                                    ["John Smith"],
+                                    index = None,
+                                    placeholder = "Select patient...")
         if patient_name: st.session_state["interview"] = Interview.build(username=st.session_state["username"], patient=Patient.build(patient_name))
         print(st.session_state["interview"])
         if st.session_state["chat_mode"]:
@@ -254,7 +260,8 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")
-    st.write("Use the interview transcription and additional patient information to provide an interpretative summary and differential diagnosis.")
+    st.write("Use the interview transcription and additional patient information (physical examination and ECG) to provide an interpretative summary, a list of potential diagnoses, a rationale reasoning through which diagnoses are more/less likely, and a final diagnosis.")
+    st.write("Click the \"Get Feedback\" button once you are all done to automatically receive grading and feedback on your interview and diagnosis.")
 
     # 2 column full width layout
     layout1 = st.columns([1, 1])
@@ -320,14 +327,20 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     st.title("Feedback")
     layout1 = st.columns([7, 1])
-    layout1[0].write("blah blah blah")
-    layout1[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
+    layout1[0].write("This is the WIP (the UI especially) feedback screen. There are 3 tabs of grading/feedback available. \"Data Acquisition\" looks through your interview with the patient and grades you on what information you asked for and what information you obtained from the patient. \"Diagnosis\" is self explanatory, grading you on your summary, diagnoses, and rationale. \"Case Explanation\" provides you with a PDF of a detailed explanation of the John Smith case written by Dr. Corbett.")
+    layout1[0].write("Click the \"Go to Survey\" button on the right once you are done looking through the grading/feedback; the next (final) screen will take you through a brief survey on your experience with the application")
+    layout1[1].button("Go to Survey", on_click=set_stage, args=[SURVEY])
     
     # Let the display methods cook
     display_Interview(st.session_state["interview_dict"])
 
 
+if st.session_state["stage"] == SURVEY:
+    st.button("Go to Survey", on_click=set_stage, args=[FINAL_SCREEN])
+
+
 if st.session_state["stage"] == FINAL_SCREEN: 
+    st.write("All done! Thank you for helping us test our application.")
     st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
     
     currentDateAndTime = date.datetime.now()

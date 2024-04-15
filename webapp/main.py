@@ -172,89 +172,84 @@ if st.session_state["stage"] == SETTINGS:
 
 
 if st.session_state["stage"] == CHAT_SETUP:
-    st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}, 
-                                        {"role": "system", "content": "Summary of conversation so far: None"}]
-    
+    st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}]
+                                        # {"role": "system", "content": "Summary of conversation so far: None"}
+        
     set_stage(st.session_state["chat_mode"])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
+    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+    st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
     # st.session_state["start_time"] = date.datetime.now()
 
-    layout1 = st.columns([1, 3, 1])
-    with layout1[1]:
-        st.title("Chat Interface")
-        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
-        st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
+    container = st.container(height=300)
 
-        container = st.container(height=300)
-        for message in st.session_state["interview"].get_messages():
-            with container:
-                with st.chat_message(message.role):
-                    st.markdown(message.content)
+    for message in st.session_state["interview"].get_messages():
+        with container:
+            with st.chat_message(message.role):
+                st.markdown(message.content)
 
-        if user_input := st.chat_input("Type here..."):
-            with container:
-                with st.chat_message("User"):
-                    st.markdown(user_input)
-            st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
-            st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-            response = generate_response(model = CONVO_MODEL, 
-                                    temperature = CONVO_TEMP, 
-                                    system = st.session_state["convo_memory"][0]["content"], 
-                                    messages = st.session_state["convo_memory"][1:])
-            voice = generate_voice(st.session_state["interview"].get_patient(), response)
-            st.session_state["convo_memory"].append({"role": "assistant", "content": response})
-            with container:
-                with st.chat_message("AI"): #TODO Needs avatar eventually
-                    st.markdown(response)
-                    play_voice(voice)
-            st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
+    if user_input := st.chat_input("Type here..."):
+        with container:
+            with st.chat_message("User"):
+                st.markdown(user_input)
+        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
+        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
+        response = generate_response(model = CONVO_MODEL, 
+                                   temperature = CONVO_TEMP, 
+                                   system = st.session_state["convo_memory"][0]["content"], 
+                                   messages = st.session_state["convo_memory"][1:])
+        speech = generate_voice(st.session_state["interview"].get_patient(), response)
+        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+        with container:
+            with st.chat_message("AI"): #TODO Needs avatar eventually
+                st.markdown(response)
+                play_voice(speech)
+        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
-        columns = layout1[1].columns(4)
-        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+    columns = st.columns(4)
+    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
+    columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
-    # st.write("""Click the Start Recording button to start recording your voice input to the virtual patient. The button will then turn into a Stop button, which you can click when you are done talking.
-    #          Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
+    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+    st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
+             The button will then turn into a Stop button, which you can click when you are done talking.
+             Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 
-    layout1 = st.columns([1, 3, 1])
-    with layout1[1]:
-        st.title("Chat Interface")
-        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+    audio = audiorecorder("Start Recording", "Stop")
+    
+    container = st.container(height=300)
 
-        audio = audiorecorder("Start Recording", "Stop")
-        
-        container = st.container(height=300)
-        for message in st.session_state["interview"].get_messages():
-            with container:
-                with st.chat_message(message.role):
-                    st.markdown(message.content)
+    for message in st.session_state["interview"].get_messages():
+        with container:
+            with st.chat_message(message.role):
+                st.markdown(message.content)
 
-        if len(audio) > 0:
-            user_input = transcribe_voice(audio)
-            with container:
-                with st.chat_message("User"):
-                    st.markdown(user_input)
-            st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
-            st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-            response = generate_response(model = CONVO_MODEL, 
-                                    temperature = CONVO_TEMP, 
-                                    system = st.session_state["convo_memory"][0]["content"], 
-                                    messages = st.session_state["convo_memory"][1:])
-            voice = generate_voice(st.session_state["interview"].get_patient(), response)
-            st.session_state["convo_memory"].append({"role": "assistant", "content": response})
-            with container:
-                with st.chat_message("AI"): # Needs avatar eventually
-                    st.markdown(response)
-                    play_voice(voice)
-            st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
+    if len(audio) > 0:
+        user_input = transcribe_voice(audio)
+        with container:
+            with st.chat_message("User"):
+                st.markdown(user_input)
+        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
+        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
+        response = generate_response(model = CONVO_MODEL, 
+                                   temperature = CONVO_TEMP, 
+                                   system = st.session_state["convo_memory"][0]["content"], 
+                                   messages = st.session_state["convo_memory"][1:])
+        speech = generate_voice(st.session_state["interview"].get_patient(), response)
+        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+        with container:
+            with st.chat_message("AI"): # Needs avatar eventually
+                st.markdown(response)
+                play_voice(speech)
+        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
-        columns = layout1[1].columns(4)
-        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+    columns = st.columns(4)
+    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
+    columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == DIAGNOSIS:

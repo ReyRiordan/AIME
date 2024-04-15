@@ -11,17 +11,20 @@ from .diagnosis import *
             
 class Feedback(pydantic.BaseModel):
 
-    data_acquisiton: Optional[DataAcquisition] = None   #DataAcquisition
-    diagnosis: Optional[Diagnosis] = None               #Diagnosis
+    data_acquisition: Optional[DataAcquisition] = None  #DataAcquisition
+    diagnosis: Optional[Diagnosis]             = None  #Diagnosis
 
-    def __init__(self, patient: Patient, messages: list[Message], user_diagnosis: dict[str, str]):
+    @classmethod
+    def build(cls, patient: Patient, messages: list[Message], user_diagnosis: dict[str, str]):
         # Attributes
-        super().__init__(data_acquisition = DataAcquisition(patient=patient,messages=messages),diagnosis=Diagnosis(patient=patient,inputs=user_diagnosis))
+        to_return_data_acquisition=DataAcquisition.build(patient=patient,messages=messages)
+        st.json(to_return_data_acquisition.model_dump_json())
+        return cls(data_acquisition = to_return_data_acquisition,diagnosis=Diagnosis.build(patient=patient,inputs=user_diagnosis))
 
         # self.data_acquisition = DataAcquisition(patient, messages)
         # self.diagnosis = Diagnosis(patient, user_diagnosis)
     
     def get_dict(self):
-        to_return = {"Data Acquisition": self.data_acquisiton.get_dict(), 
+        to_return = {"Data Acquisition": self.data_acquisition.get_dict(), 
                      "Diagnosis": self.diagnosis.get_dict()}
         return to_return

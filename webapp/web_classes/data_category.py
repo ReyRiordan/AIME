@@ -15,7 +15,8 @@ class DataCategory(pydantic.BaseModel):
     highlight: str
     class_prompt : Optional[str]    
 
-    def __init__(self, name: str, patient: Patient):
+    @classmethod
+    def build(cls, name: str, patient: Patient):
         # Attributes
         name = name                                    # str
         type = DATACATEGORIES[name]["type"]            # str
@@ -42,7 +43,7 @@ class DataCategory(pydantic.BaseModel):
         
         print(f"\n\n{class_prompt}\n\n") # debugging
 
-        super().__init__(name=name,type=type,header=header,color=color,highlight=highlight,class_prompt=class_prompt)
+        return cls(name=name,type=type,header=header,color=color,highlight=highlight,class_prompt=class_prompt)
     
     def get_dict(self):
         to_return = {"name": self.name, 

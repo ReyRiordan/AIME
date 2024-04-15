@@ -16,6 +16,7 @@ from openai import OpenAI
 from annotated_text import annotated_text
 import json
 import tempfile
+from web_classes import *
 
 from lookups import *
 
@@ -114,3 +115,49 @@ def display_Interview(interview: dict) -> None:
             st.write("Main Diagnosis: " + user_diagnosis["Main"])
             st.write("Main Rationale: " + user_diagnosis["Rationale"])
             st.write("Secondary Diagnoses: " + ", ".join(user_diagnosis["Secondary"]))
+
+
+def display_Interview_NEW(interview:Interview)->None:
+    st.write(f"{interview.username} @ {interview.date_time}, Patient {interview.patient.name}")
+
+    if interview.feedback:
+        data, diagnosis, empathy = st.tabs(["Data Acquisition", "Diagnosis", "Empathy"])
+        with data:
+            display_DataAcquisition_NEW(interview.feedback.data_acquisition, interview.messages)
+        with diagnosis:
+            display_Diagnosis_NEW(interview.feedback.diagnosis, interview.user_diagnosis)
+    else:
+        chat_container = st.container(height=300)
+        for message in interview.messages:
+            with chat_container:
+                with st.chat_message(message.role):
+                    st.markdown(message.content)
+        #TODO @Rey preferably make the user diagnosis its own object. Especially since we can expect to add more parts to the user diagnosis and expect several modifications
+                    
+        if interview.user_diagnosis:
+            user_diagnosis = interview.user_diagnosis
+            st.divider()
+            st.write("Interpretative Summary: " + user_diagnosis["Summary"])
+            st.write("Main Diagnosis: " + user_diagnosis["Main"])
+            st.write("Main Rationale: " + user_diagnosis["Rationale"])
+            st.write("Secondary Diagnoses: " + ", ".join(user_diagnosis["Secondary"]))
+
+def display_DataAcquisition_NEW(data:DataAcquisition, messages:List[Message])->None:
+    layout1 = st.columns([4, 5])
+    with layout1[0]:
+        for category in data.datacategories:
+            cat_name = category.name
+            display_DataCategory(category, 
+                                 data.checklists[cat_name], 
+                                 data["weights"][cat_name], 
+                                 data["scores"][cat_name], 
+                                 data["maxscores"][cat_name])
+    
+    chat_container = layout1[1].container(height=500)
+    for message in messages:
+            with chat_container:
+                with st.chat_message(message["role"]):
+                    if message["annotation"] is None:
+                        st.markdown(message["content"])
+                    else:
+                        annotated_text((message["content"], message["annotation"], message["highlight"]))

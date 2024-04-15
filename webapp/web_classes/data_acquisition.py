@@ -14,12 +14,13 @@ from web_methods.LLM import classifier
 class DataAcquisition(pydantic.BaseModel):
 
     datacategories: List[DataCategory]      # list[DataCategory]
-    weights : Optional[List]                # dict{str, dict{str, int}}
+    weights : Optional[dict]                # dict{str, dict{str, int}}
     checklists : Optional[dict]             # dict{str, dict{str, bool}}
     scores :  Optional[dict]                 # dict{str, int}
     maxscores : Optional[dict]              # dict{str, int}
     
-    def __init__(self, patient: Patient, messages: list[Message]):
+    @classmethod
+    def build(cls, patient: Patient, messages: list[Message]):
         # Attributes
         # self.datacategories = None  # list[DataCategory]
         # self.weights = None         # dict{str, dict{str, int}}
@@ -30,7 +31,7 @@ class DataAcquisition(pydantic.BaseModel):
         # Only data categories for patient
         datacategories= []
         for category in patient.grading["Data Acquisition"]:
-            datacategories.append(DataCategory(name=category, patient=patient))
+            datacategories.append(DataCategory.build(name=category, patient=patient))
         weights = patient.grading["Data Acquisition"]
 
 
@@ -76,17 +77,17 @@ class DataAcquisition(pydantic.BaseModel):
         scores = {}
         maxscores = {}
         for category in datacategories:
-            scores[category.name] = self.get_score(weights,category)
-            maxscores[category.name] = self.get_maxscore(weights,category)
-        
-        super().__init__(datacategories=datacategories,weights=weights,checklists=checklists,scores=scores,maxscores=maxscores)
-
-    def get_score(self, weights, category: DataCategory) -> int:
+            scores[category.name] = cls.get_score(weights=weights, category=category, checklists=checklists)
+            maxscores[category.name] = cls.get_maxscore(weights=weights,category=category)
+        return cls(datacategories=datacategories,weights=weights,checklists=checklists,scores=scores,maxscores=maxscores)
+    
+    @classmethod
+    def get_score(cls, weights, category: DataCategory, checklists) -> int:
         # Get weights from patient and grades from self
         # note: slight change to account for pydantic 
         
         weights = weights[category.name]
-        label_checklist = self.checklists[category.name]
+        label_checklist = checklists[category.name]
         # Calculate score from weights and grades
         score = 0
         for label in weights:
@@ -94,7 +95,8 @@ class DataAcquisition(pydantic.BaseModel):
                 score += weights[label]
         return score
     
-    def get_maxscore(self, weights, category: DataCategory) -> int:
+    @classmethod
+    def get_maxscore(cls, weights, category: DataCategory) -> int:
         # Get weights from patient
         weights = weights[category.name]
         # Calculate max score from weights

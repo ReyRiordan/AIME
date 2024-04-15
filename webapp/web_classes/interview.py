@@ -15,18 +15,19 @@ class Interview(pydantic.BaseModel):
     patient : Patient                               # Patient
     messages : Optional[List[Message]]    = []       # list[Message]
     user_diagnosis : Optional[dict]       = None     # dict{str, str/list[str]}
-    feedback : Optional[dict]             = None    # Feedback
+    feedback : Optional[Feedback]             = None    # Feedback
     
-    def __init__(self, username: str, patient: Patient):
+    @classmethod
+    def build(cls, username: str, patient: Patient):
         #Attributes
         # messages = []            # list[Message]
         # user_diagnosis = None     # dict{str, str/list[str]}
         # feedback = None          # Feedback
 
-        super().__init__(username=username,patient=patient) 
+        return cls(username=username,patient=patient) 
             
     def add_feedback(self):
-        self.feedback = Feedback(patient=self.patient, messages=self.messages, user_diagnosis=self.user_diagnosis)
+        self.feedback = Feedback.build(patient=self.patient, messages=self.messages, user_diagnosis=self.user_diagnosis)
 
     def add_user_diagnosis(self, summary: str, main_diagnosis: str, main_rationale: str, secondary_diagnoses: list[str]):
         self.user_diagnosis = {"Summary": summary, 
@@ -56,11 +57,11 @@ class Interview(pydantic.BaseModel):
     def get_dict(self):
         currentDateTime=date.datetime.now()
         to_return = {"date_time": str(currentDateTime), 
-                     "username": self.__username, 
-                     "patient": self.__patient.get_dict(), 
-                     "messages": [message.get_dict() for message in self.__messages], 
-                     "user_diagnosis": self.__user_diagnosis if self.__user_diagnosis else None, 
-                     "feedback": self.__feedback.get_dict() if self.__feedback else None}
+                     "username": self.username, 
+                     "patient": self.patient.get_dict(), 
+                     "messages": [message.get_dict() for message in self.messages], 
+                     "user_diagnosis": self.user_diagnosis if self.user_diagnosis else None, 
+                     "feedback": self.feedback.get_dict() if self.feedback else None}
         return to_return
 
     def get_json(self):

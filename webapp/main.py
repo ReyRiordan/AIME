@@ -141,17 +141,15 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
     button_columns[2].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])
 
 
-if st.session_state["stage"] == SETTINGS:
-    st.title("Patient Settings")
-    st.write("Select your preferred settings for your interview with the virtual patient. Currently we have only made \"John Smith\" available, and voice input is highly encouraged.")
-    
+if st.session_state["stage"] == SETTINGS:    
     st.session_state["interview"] = None
     st.session_state["convo_memory"] = None
     st.session_state["convo_file"] = None
     st.session_state["sent"] = False
 
-    layout1 = st.columns([1, 3, 1])
-    with layout1[1]:
+    with st.columns([1, 3, 1]):
+        st.title("Patient Settings")
+        st.write("Select your preferred settings for your interview with the virtual patient. Currently we have only made \"John Smith\" available, and voice input is highly encouraged.")
         chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
                                 ["Text", "Voice"],
                                 index = None,
@@ -184,79 +182,81 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
-    st.title("Interview")
-    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
-    st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
-    # st.session_state["start_time"] = date.datetime.now()
+    with st.columns([1, 3, 1]):
+        st.title("Interview")
+        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+        st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
+        # st.session_state["start_time"] = date.datetime.now()
 
-    container = st.container(height=300)
+        container = st.container(height=300)
 
-    for message in st.session_state["interview"].get_messages():
-        with container:
-            with st.chat_message(message.role):
-                st.markdown(message.content)
+        for message in st.session_state["interview"].get_messages():
+            with container:
+                with st.chat_message(message.role):
+                    st.markdown(message.content)
 
-    if user_input := st.chat_input("Type here..."):
-        with container:
-            with st.chat_message("User"):
-                st.markdown(user_input)
-        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
-        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-        response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CONVO_TEMP, 
-                                   system = st.session_state["convo_memory"][0]["content"], 
-                                   messages = st.session_state["convo_memory"][1:])
-        speech = generate_voice(st.session_state["interview"].get_patient(), response)
-        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
-        with container:
-            with st.chat_message("AI"): #TODO Needs avatar eventually
-                st.markdown(response)
-                play_voice(speech)
-        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
+        if user_input := st.chat_input("Type here..."):
+            with container:
+                with st.chat_message("User"):
+                    st.markdown(user_input)
+            st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
+            st.session_state["convo_memory"].append({"role": "user", "content": user_input})
+            response = generate_response(model = CONVO_MODEL, 
+                                    temperature = CONVO_TEMP, 
+                                    system = st.session_state["convo_memory"][0]["content"], 
+                                    messages = st.session_state["convo_memory"][1:])
+            speech = generate_voice(st.session_state["interview"].get_patient(), response)
+            st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+            with container:
+                with st.chat_message("AI"): #TODO Needs avatar eventually
+                    st.markdown(response)
+                    play_voice(speech)
+            st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
-    columns = st.columns(4)
-    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-    columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+        columns = st.columns(4)
+        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
+        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
-    st.title("Interview")
-    st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
-    st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
-             The button will then turn into a Stop button, which you can click when you are done talking.
-             Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
+    with st.columns([1, 3, 1]):
+        st.title("Interview")
+        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+        st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
+                The button will then turn into a Stop button, which you can click when you are done talking.
+                Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
 
-    audio = audiorecorder("Start Recording", "Stop")
-    
-    container = st.container(height=300)
+        audio = audiorecorder("Start Recording", "Stop")
+        
+        container = st.container(height=300)
 
-    for message in st.session_state["interview"].get_messages():
-        with container:
-            with st.chat_message(message.role):
-                st.markdown(message.content)
+        for message in st.session_state["interview"].get_messages():
+            with container:
+                with st.chat_message(message.role):
+                    st.markdown(message.content)
 
-    if len(audio) > 0:
-        user_input = transcribe_voice(audio)
-        with container:
-            with st.chat_message("User"):
-                st.markdown(user_input)
-        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
-        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-        response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CONVO_TEMP, 
-                                   system = st.session_state["convo_memory"][0]["content"], 
-                                   messages = st.session_state["convo_memory"][1:])
-        speech = generate_voice(st.session_state["interview"].get_patient(), response)
-        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
-        with container:
-            with st.chat_message("AI"): # Needs avatar eventually
-                st.markdown(response)
-                play_voice(speech)
-        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
+        if len(audio) > 0:
+            user_input = transcribe_voice(audio)
+            with container:
+                with st.chat_message("User"):
+                    st.markdown(user_input)
+            st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
+            st.session_state["convo_memory"].append({"role": "user", "content": user_input})
+            response = generate_response(model = CONVO_MODEL, 
+                                    temperature = CONVO_TEMP, 
+                                    system = st.session_state["convo_memory"][0]["content"], 
+                                    messages = st.session_state["convo_memory"][1:])
+            speech = generate_voice(st.session_state["interview"].get_patient(), response)
+            st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+            with container:
+                with st.chat_message("AI"): # Needs avatar eventually
+                    st.markdown(response)
+                    play_voice(speech)
+            st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
-    columns = st.columns(4)
-    columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-    columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+        columns = st.columns(4)
+        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
+        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
 
 
 if st.session_state["stage"] == DIAGNOSIS:
@@ -337,7 +337,12 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 
 
 if st.session_state["stage"] == SURVEY:
-    st.button("Go to Survey", on_click=set_stage, args=[FINAL_SCREEN])
+    with st.columns([1, 3, 1]):
+        answer1 = st.text_area(label = "Question 1", height = 200)
+        answer2 = st.text_area(label = "Question 2", height = 200)
+        answer3 = st.text_area(label = "Question 3", height = 200)
+        columns = st.columns(3)
+        columns[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 
 if st.session_state["stage"] == FINAL_SCREEN: 

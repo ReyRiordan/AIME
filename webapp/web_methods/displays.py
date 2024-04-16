@@ -72,11 +72,13 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
         st.subheader(f"Interpretative Summary: {scores['Summary']}/{maxscores['Summary']}", divider = "grey")
         layout1 = st.columns([1, 1])
         with layout1[0]:
+            st.write("**Your answer:**")
             st.write(inputs["Summary"])
         with layout1[1]:
+            st.write("**Scoring:**")
             display_labels = [(key, str(weights["Summary"][key]), "#baffc9" if value else "#ffb3ba") for key, value in checklists["Summary"].items()]
             annotated_text(display_labels)
-            with st.expander("Label Descriptions:"):
+            with st.expander("**Label Descriptions:**"):
                 for key, value in checklists["Summary"].items():
                     annotated_text([(key, "", "#baffc9" if value else "#ffb3ba"), " " + LABEL_DESCS[key]])
 
@@ -84,30 +86,44 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
         st.subheader(f"Potential Diagnoses: {scores['Potential']}/{maxscores['Potential']}", divider = "grey")
         layout2 = st.columns([1, 1])
         with layout2[0]:
+            st.write("**Your answer(s):**")
             user_potential = [(key, value, "#baffc9" if value in checklists["Potential"] else "#ffb3ba") for key, value in classified["Potential"].items()]
-            annotated_text(["Your answers: "] + user_potential)
+            annotated_text(user_potential)
         with layout2[1]:
+            st.write("**Valid answers:**")
             valid_potential = [(key, str(weights["Potential"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Potential"].items()]
-            annotated_text(["Valid answers: "] + valid_potential)
+            annotated_text(valid_potential)
         
     with st.container(border = True):
         st.subheader(f"Rationale: {scores['Rationale']}/{maxscores['Rationale']}", divider = "grey")
         layout3 = st.columns([1, 1])
         with layout3[0]:
+            st.write("**Your answer:**")
             st.write(inputs["Rationale"])
         with layout3[1]:
-            for key, value in checklists["Rationale"].items():
-                annotated_text((key, str(weights["Rationale"][key]), "#baffc9" if value else "#ffb3ba"))
+            st.write("**Scoring:**")
+            for condition in weights["Rationale"]:
+                if condition in checklists["Rationale"]:
+                    with st.expander(f"**{condition}:**"):
+                        for statement, checked in checklists["Rationale"][condition].items():
+                            annotated_text((statement, str(weights["Rationale"][condition][statement]), "#baffc9" if checked else "#ffb3ba"))
+            with st.expander("**Reasoning for potential diagnoses you didn't list:**"):
+                for condition in weights["Rationale"]:
+                    if condition not in checklists["Rationale"]:
+                        for statement, weight in weights["Rationale"][condition].items():
+                            annotated_text((statement, str(weight)))
 
     with st.container(border = True):
         st.subheader(f"Final Diagnosis: {scores['Final']}/{maxscores['Final']}", divider = "grey")
         layout4 = st.columns([1, 1])
         with layout4[0]:
+            st.write("**Your answer:**")
             user_final = [(key, value, "#baffc9" if value in checklists["Final"] else "#ffb3ba") for key, value in classified["Final"].items()]
             annotated_text("Your answer: ", user_final)
         with layout4[1]:
+            st.write("**Valid answer(s):**")
             valid_final = [(key, str(weights["Final"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Final"].items()]
-            annotated_text("Valid answer(s): ", valid_final)
+            annotated_text(valid_final)
 
 
 def display_Interview(interview: dict) -> None:

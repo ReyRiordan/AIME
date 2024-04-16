@@ -142,6 +142,7 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
 
 
 if st.session_state["stage"] == SETTINGS:
+    st.title("Patient Settings")
     st.write("Select your preferred settings for your interview with the virtual patient. Currently we have only made \"John Smith\" available, and voice input is highly encouraged.")
     
     st.session_state["interview"] = None
@@ -151,8 +152,6 @@ if st.session_state["stage"] == SETTINGS:
 
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
-        st.title("Patient Settings")
-
         chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
                                 ["Text", "Voice"],
                                 index = None,
@@ -185,6 +184,7 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
+    st.title("Interview")
     st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
     st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
     # st.session_state["start_time"] = date.datetime.now()
@@ -220,6 +220,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
+    st.title("Interview")
     st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
     st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
              The button will then turn into a Stop button, which you can click when you are done talking.

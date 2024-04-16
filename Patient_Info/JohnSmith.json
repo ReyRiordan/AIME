@@ -244,7 +244,7 @@
       },
       "Rationale": {
         "Acute coronary syndrome (ACS)": {"location of symptom -> myocardial ischemia, ACS": 1,
-        "pain spread to jaw/shoulders -> myocardial ischemia, ACS": 1,
+        "radiation (spread to jaw/shoulders) -> myocardial ischemia, ACS": 1,
         "onset of symptom -> myocardial ischemia, ACS": 1,
         "associated symptoms (nausea/sweatiness) -> myocardial ischemia, ACS": 1,
         "family history of heart problems (father) -> atherosclerosis, ACS": 2,

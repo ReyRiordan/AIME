@@ -355,6 +355,7 @@ if st.session_state["stage"] == SURVEY:
 if st.session_state["stage"] == FINAL_SCREEN: 
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
+        st.title("Thank you! :heart:")
         st.write("All done! Thank you so much for takign the time to help us test our application. Your interview, diagnosis, and survey has been recorded and sent to us automatically.")
         st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
         

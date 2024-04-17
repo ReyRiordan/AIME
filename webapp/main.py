@@ -268,13 +268,13 @@ if st.session_state["stage"] == DIAGNOSIS:
     layout1 = st.columns([1, 1])
 
     # User inputs
-    summary = layout1[0].text_area(label = "Interpretive Summary:", placeholder = "Interpretive summary for patient", height = 200)
+    summary = layout1[0].text_area(label = "Write an interpretative summary for the patient, recording the key details of the case:", placeholder = "Interpretive summary for patient", height = 200)
     layout11 = layout1[0].columns([1, 1, 1])
-    potential1 = layout11[0].text_input(label = "Potential Diagnoses:", placeholder = "First condition name")
+    potential1 = layout11[0].text_input(label = "List 3 potential diagnoses for the patient:", placeholder = "First condition name")
     potential2 = layout11[1].text_input(label = "None", placeholder = "Second condition name", label_visibility = "hidden")
     potential3 = layout11[2].text_input(label = "None", placeholder = "Third condition name", label_visibility = "hidden")
-    rationale = layout1[0].text_area(label = "Rationale:", placeholder = "Rationale for diagnosis")
-    final = layout1[0].text_input(label = "Final Diagnosis:", placeholder = "Condition name")
+    rationale = layout1[0].text_area(label = "Write a rationale reasoning through the potential diagnoses you listed in order to determine what is the best diagnosis for the patient:", placeholder = "Rationale for diagnosis")
+    final = layout1[0].text_input(label = "Based on your rationale, write your final diagnosis:", placeholder = "Condition name")
 
     # 3 buttons at bottom
     layout12 = layout1[0].columns([1, 1, 1])
@@ -338,41 +338,43 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 
 if st.session_state["stage"] == SURVEY:
     with st.columns([1, 3, 1]):
-        answer1 = st.text_area(label = "Question 1", height = 200)
-        answer2 = st.text_area(label = "Question 2", height = 200)
-        answer3 = st.text_area(label = "Question 3", height = 200)
+        answer1 = st.text_area(label = "Were there any issues you encountered while interviewing the virtual patient or writing your diagnosis? What could be improved?", height = 200)
+        answer2 = st.text_area(label = "Were there any issues you encountered in your grading and feedback? What could be improved?", height = 200)
+        answer3 = st.text_area(label = "Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc.", height = 200)
+        #TODO STORE THESE WITH THE INTERVIEW PLS
         columns = st.columns(3)
         columns[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
 
 if st.session_state["stage"] == FINAL_SCREEN: 
-    st.write("All done! Thank you for helping us test our application.")
-    st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
-    
-    currentDateAndTime = date.datetime.now()
-    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
-    bio = io.BytesIO()
-    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
-                                                       st.session_state["interview"].get_patient().name, 
-                                                       [message.get_dict() for message in st.session_state["interview"].get_messages()])
-    st.session_state["convo_file"].save(bio)
-    
-    button_columns = st.columns(5)
-    button_columns[1].download_button("Download interview", 
-                    data = bio.getvalue(),
-                    file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
-                    mime = "docx")
-    
-    # Store interview in database and send email as backup
-    if st.session_state["sent"] == False:
-        collection.insert_one(st.session_state["interview"].get_dict())
-        send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
-        st.session_state["sent"] = True
+    with st.columns([1, 3, 1]):
+        st.write("All done! Thank you so much for takign the time to help us test our application. Your interview, diagnosis, and survey has been recorded and sent to us automatically.")
+        st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
         
-    # st.download_button("Download JSON",
-    #             data=st.session_state["interview"].get_json(),
-    #             file_name = st.session_state ["interview"].get_username() + "_"+date_time + ".json",
-    #             mime="json")
+        currentDateAndTime = date.datetime.now()
+        date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+        bio = io.BytesIO()
+        st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
+                                                        st.session_state["interview"].get_patient().name, 
+                                                        [message.get_dict() for message in st.session_state["interview"].get_messages()])
+        st.session_state["convo_file"].save(bio)
+        
+        button_columns = st.columns(5)
+        button_columns[1].download_button("Download interview", 
+                        data = bio.getvalue(),
+                        file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
+                        mime = "docx")
+        
+        # Store interview in database and send email as backup
+        if st.session_state["sent"] == False:
+            collection.insert_one(st.session_state["interview"].get_dict())
+            send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
+            st.session_state["sent"] = True
+            
+        # st.download_button("Download JSON",
+        #             data=st.session_state["interview"].get_json(),
+        #             file_name = st.session_state ["interview"].get_username() + "_"+date_time + ".json",
+        #             mime="json")
 
-    button_columns[2].button("New Interview", on_click=set_stage, args=[SETTINGS])
-    button_columns[3].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])
+        button_columns[2].button("New Interview", on_click=set_stage, args=[SETTINGS])
+        button_columns[3].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])

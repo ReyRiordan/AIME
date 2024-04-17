@@ -342,9 +342,11 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 if st.session_state["stage"] == SURVEY:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
-        answer1 = st.text_area(label = "Were there any issues you encountered while interviewing the virtual patient or writing your diagnosis? What could be improved?", height = 200)
-        answer2 = st.text_area(label = "Were there any issues you encountered in your grading and feedback? What could be improved?", height = 200)
-        answer3 = st.text_area(label = "Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc.", height = 200)
+        st.title("Survey")
+        st.write("Please take the time to give us some feedback and constructive criticism so that we can improve this application.")
+        answer1 = st.text_area(label = "Were there any issues you encountered while interviewing the virtual patient or writing your diagnosis? What could be improved?", height = 150)
+        answer2 = st.text_area(label = "Were there any issues you encountered in your grading and feedback? What could be improved?", height = 150)
+        answer3 = st.text_area(label = "Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc.", height = 150)
         #TODO STORE THESE WITH THE INTERVIEW PLS
         columns = st.columns(3)
         columns[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])

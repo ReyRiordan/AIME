@@ -367,7 +367,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
                                                         [message.get_dict() for message in st.session_state["interview"].get_messages()])
         st.session_state["convo_file"].save(bio)
         
-        button_columns = st.columns(5)
+        button_columns = st.columns(3)
         button_columns[1].download_button("Download interview", 
                         data = bio.getvalue(),
                         file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",

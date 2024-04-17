@@ -368,7 +368,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.session_state["convo_file"].save(bio)
         
         button_columns = st.columns(3)
-        button_columns[1].download_button("Download interview", 
+        button_columns[0].download_button("Download interview", 
                         data = bio.getvalue(),
                         file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
                         mime = "docx")
@@ -384,5 +384,5 @@ if st.session_state["stage"] == FINAL_SCREEN:
         #             file_name = st.session_state ["interview"].get_username() + "_"+date_time + ".json",
         #             mime="json")
 
-        button_columns[2].button("New Interview", on_click=set_stage, args=[SETTINGS])
-        button_columns[3].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])
+        button_columns[1].button("New Interview", on_click=set_stage, args=[SETTINGS])
+        button_columns[2].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])

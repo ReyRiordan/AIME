@@ -272,8 +272,9 @@ if st.session_state["stage"] == DIAGNOSIS:
 
     # User inputs
     summary = layout1[0].text_area(label = "Write an interpretative summary for the patient, recording the key details of the case:", placeholder = "Interpretive summary for patient", height = 200)
+    layout1[0].write("List 3 potential diagnoses for the patient:")
     layout11 = layout1[0].columns([1, 1, 1])
-    potential1 = layout11[0].text_input(label = "List 3 potential diagnoses for the patient:", placeholder = "First condition name")
+    potential1 = layout11[0].text_input(label = "None", placeholder = "First condition name", label_visibility = "hidden")
     potential2 = layout11[1].text_input(label = "None", placeholder = "Second condition name", label_visibility = "hidden")
     potential3 = layout11[2].text_input(label = "None", placeholder = "Third condition name", label_visibility = "hidden")
     rationale = layout1[0].text_area(label = "Write a rationale reasoning through the potential diagnoses you listed in order to determine what is the best diagnosis for the patient:", placeholder = "Rationale for diagnosis")

@@ -111,7 +111,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
                 for condition in weights["Rationale"]:
                     if condition not in checklists["Rationale"]:
                         for statement, weight in weights["Rationale"][condition].items():
-                            annotated_text((statement, str(weight)))
+                            annotated_text((statement, str(weight), "#ffffff"))
 
     with st.container(border = True):
         st.subheader(f"Final Diagnosis: {scores['Final']}/{maxscores['Final']}", divider = "grey")

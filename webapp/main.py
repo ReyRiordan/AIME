@@ -57,6 +57,10 @@ def get_data():
 
 collection=client["AIME"]["Conversation"]
 
+# Collection for surveys for FIRST BETATEST
+
+survey = {}
+
 ######### WEBSITE 
 
 st.set_page_config(page_title = "AIME", page_icon = "🧑‍⚕️", layout = "wide")
@@ -344,10 +348,23 @@ if st.session_state["stage"] == SURVEY:
     with layout1[1]:
         st.title("Survey")
         st.write("Please take the time to give us some feedback and constructive criticism so that we can improve this application.")
-        answer1 = st.text_area(label = "Were there any issues you encountered while interviewing the virtual patient or writing your diagnosis? What could be improved?", height = 100)
-        answer2 = st.text_area(label = "Were there any issues you encountered in your grading and feedback? What could be improved?", height = 100)
-        answer3 = st.text_area(label = "Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc.", height = 100)
-        #TODO STORE THESE WITH THE INTERVIEW PLS
+
+        #QUESTION 1
+        question1="Were there any issues you encountered while interviewing the virtual patient or writing your diagnosis? What could be improved?"
+        answer1 = st.text_area(label = question1, height = 100)
+        #QUESTION 2
+        question2="Were there any issues you encountered in your grading and feedback? What could be improved?"
+        answer2 = st.text_area(label = question2, height = 100)
+        #QUESTION 3
+        question3="Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc."
+        answer3 = st.text_area(label = question3, height = 100)
+
+        #STORING INTERVIEWS IN SEPARATE QUESTIONS DB
+        survey["question1"]=[question1,answer1]
+        survey["question2"]=[question2,answer2]
+        survey["question3"]=[question3,answer3]
+
+        st.session_state["interview"].survey=survey
         columns = st.columns(3)
         columns[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 
@@ -371,7 +388,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         button_columns[0].download_button("Download interview", 
                         data = bio.getvalue(),
                         file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
-                        mime = "docx")
+                        mime = "docx")  
         
         # Store interview in database and send email as backup
         if st.session_state["sent"] == False:

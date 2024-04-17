@@ -147,7 +147,8 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["convo_file"] = None
     st.session_state["sent"] = False
 
-    with st.columns([1, 3, 1]):
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
         st.title("Patient Settings")
         st.write("Select your preferred settings for your interview with the virtual patient. Currently we have only made \"John Smith\" available, and voice input is highly encouraged.")
         chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
@@ -182,7 +183,8 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
-    with st.columns([1, 3, 1]):
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
         st.title("Interview")
         st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
         st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
@@ -219,7 +221,8 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
-    with st.columns([1, 3, 1]):
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
         st.title("Interview")
         st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
         st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
@@ -337,7 +340,8 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 
 
 if st.session_state["stage"] == SURVEY:
-    with st.columns([1, 3, 1]):
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
         answer1 = st.text_area(label = "Were there any issues you encountered while interviewing the virtual patient or writing your diagnosis? What could be improved?", height = 200)
         answer2 = st.text_area(label = "Were there any issues you encountered in your grading and feedback? What could be improved?", height = 200)
         answer3 = st.text_area(label = "Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc.", height = 200)
@@ -347,7 +351,8 @@ if st.session_state["stage"] == SURVEY:
 
 
 if st.session_state["stage"] == FINAL_SCREEN: 
-    with st.columns([1, 3, 1]):
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
         st.write("All done! Thank you so much for takign the time to help us test our application. Your interview, diagnosis, and survey has been recorded and sent to us automatically.")
         st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
         

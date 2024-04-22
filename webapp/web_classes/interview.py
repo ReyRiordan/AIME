@@ -16,6 +16,7 @@ class Interview(pydantic.BaseModel):
     messages : Optional[List[Message]]    = []       # list[Message]
     diagnosis_inputs : Optional[dict]       = None     # dict{str, str/list[str]}
     feedback : Optional[Feedback]             = None    # Feedback
+    survey : Optional[dict] = None
     
     @classmethod
     def build(cls, username: str, patient: Patient):
@@ -61,7 +62,8 @@ class Interview(pydantic.BaseModel):
                      "patient": self.patient.get_dict(), 
                      "messages": [message.get_dict() for message in self.messages], 
                      "diagnosis_inputs": self.diagnosis_inputs if self.diagnosis_inputs else None, 
-                     "feedback": self.feedback.get_dict() if self.feedback else None}
+                     "feedback": self.feedback.get_dict() if self.feedback else None,
+                     "survey":self.survey if self.survey else None}
         return to_return
 
     def get_json(self):

@@ -72,7 +72,7 @@ MAX_MESSAGES = 99 # no limit rn
 
 
 # Grading related
-BATCH_MAX = 99 # no limit rn
+BATCH_MAX = 20
 BATCH_DELAY = 30
 
 with open("./Prompts/label_descs.json", "r") as label_descs_json:

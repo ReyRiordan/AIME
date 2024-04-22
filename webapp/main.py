@@ -286,7 +286,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     # 3 buttons at bottom
     layout12 = layout1[0].columns([1, 1, 1])
     # New Interview
-    layout12[0].button("New Interview", on_click=set_stage, args=[SETTINGS])
+    # layout12[0].button("New Interview", on_click=set_stage, args=[SETTINGS])
     # Download Interview
     currentDateAndTime = date.datetime.now()
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
@@ -300,7 +300,7 @@ if st.session_state["stage"] == DIAGNOSIS:
                                 file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx", 
                                 mime = "docx")
     # Get Feedback
-    if layout12[2].button("Get Feedback"): 
+    if layout12[2].button("Get Feedback [CLICK ME!!!]"): 
         st.session_state["interview"].add_diagnosis_inputs(summary, [potential1, potential2, potential3], rationale, final)
         set_stage(FEEDBACK_SETUP)
         st.rerun()
@@ -358,11 +358,16 @@ if st.session_state["stage"] == SURVEY:
         #QUESTION 3
         question3="Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc."
         answer3 = st.text_area(label = question3, height = 100)
+        
+        question4="How helpful do you think practicing an interview would be in learning cardiovascular pathophisiology?"
+        answer4= st.text_area(label = question4, height = 100)
+
 
         #STORING INTERVIEWS IN SEPARATE QUESTIONS DB
         survey["question1"]=[question1,answer1]
         survey["question2"]=[question2,answer2]
         survey["question3"]=[question3,answer3]
+        survey["question4"]=[question4,answer4]
 
         st.session_state["interview"].survey=survey
         columns = st.columns(3)

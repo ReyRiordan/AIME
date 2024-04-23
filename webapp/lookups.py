@@ -86,7 +86,7 @@ with open("./Prompts/Grade_Sum_4-14.txt", "r", encoding="utf8") as grade_sum_fil
     GRADE_SUM_PROMPT = grade_sum_file.read()
 with open("./Prompts/Grade_Rat_4-14.txt", "r", encoding="utf8") as grade_rat_file:
     GRADE_RAT_PROMPT = grade_rat_file.read()
-with open("./Prompts/Grade_Diag_3-16.txt", "r", encoding="utf8") as grade_diag_file:
+with open("./Prompts/Grade_Diag_4-23.txt", "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()
 
 
@@ -118,11 +118,11 @@ DATACATEGORIES = {
              "desc": "./Prompts/desc_risk.json"}
 }
 
-WEBSITE_TEXT = {
-        "intro" : "./webapp/website_text/intro.txt",
-        "selection" : "./webapp/website_text/selection.txt",
-        "interview" : "./webapp/website_text/interview.txt",
-        "post" : "./webapp/website_text/post.txt",
-        "feedback" : "./webapp/website_text/feedback.txt",
-        "final": "./webapp/website_text/final.txt"
-}
+# WEBSITE_TEXT = {
+#         "intro" : "./webapp/website_text/intro.txt",
+#         "selection" : "./webapp/website_text/selection.txt",
+#         "interview" : "./webapp/website_text/interview.txt",
+#         "post" : "./webapp/website_text/post.txt",
+#         "feedback" : "./webapp/website_text/feedback.txt",
+#         "final": "./webapp/website_text/final.txt"
+# }

@@ -69,8 +69,8 @@ class Diagnosis(pydantic.BaseModel):
         # print(f"User inputs: {user_inputs}\n")
         output = web_methods.generate_matches(main_prompt, json.dumps(user_inputs))
         print(output + "\n\n")
-        matches = json.loads(output)["output"]
-        print(f"Matches: {matches}\n")
+        matches = json.loads(output)
+        print(f"Matches: {matches}\n\n")
 
         for diagnosis in inputs["Potential"]:
             classified["Potential"][diagnosis] = matches[diagnosis]

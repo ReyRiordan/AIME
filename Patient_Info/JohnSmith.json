@@ -234,7 +234,7 @@
         "PVD": 2
       },
       "Potential": {
-        "Acute coronary syndrome (ACS)": 1,
+        "Acute coronary syndrome": 1,
         "Aortic dissection": 1,
         "Acute pericarditis": 1,
         "Pulmonary embolism": 1,
@@ -243,7 +243,7 @@
         "Esophageal spasm": 1
       },
       "Rationale": {
-        "Acute coronary syndrome (ACS)": {"location of symptom -> myocardial ischemia, ACS": 1,
+        "Acute coronary syndrome": {"location of symptom -> myocardial ischemia, ACS": 1,
         "radiation (spread to jaw/shoulders) -> myocardial ischemia, ACS": 1,
         "onset of symptom -> myocardial ischemia, ACS": 1,
         "associated symptoms (nausea/sweatiness) -> myocardial ischemia, ACS": 1,
@@ -270,7 +270,7 @@
         "Esophageal spasm": {"not with meal -/> esophageal spasm": 1}
       },
       "Final": {
-        "Acute coronary syndrome (ACS), NSTEMI or unstable angina": 8
+        "Acute coronary syndrome": 8
       }
     }
   },

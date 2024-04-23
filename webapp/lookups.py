@@ -66,9 +66,9 @@ DIAG_TEMP = 0.0
 
 
 # Convo related
-with open("./Prompts/Summarizer_2-25.txt", "r", encoding="utf8") as summarizer_file:
+with open("./Prompts/Summarizer_4-22.txt", "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
-MAX_MESSAGES = 99 # no limit rn
+MAX_MEMORY = 12 # no limit rn
 
 
 # Grading related

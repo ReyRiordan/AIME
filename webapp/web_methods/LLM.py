@@ -126,38 +126,30 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
             applicable_messages[i].labels[category.name] = classifications[i]
 
 
-def summarizer(convo_memory: list[dict[str, str]]) -> str:
-    messages = [{"role": "system", "content": SUM_PROMPT}]
-    dialogue = ""
-    for message in convo_memory[1:]:
-        if message["role"] == "system":
-            dialogue += message["content"] + " \n"
-        elif message["role"] == "user":
-            dialogue += "User: " + message["content"] + " \n"
-        elif message["role"] == "assistant":
-            dialogue += "Patient: " + message["content"] + "\n"
-    messages.append({"role": "user", "content": dialogue})
-    # summary = generate_output(model = SUM_MODEL, 
-    #                           temp = SUM_TEMP, 
-    #                           format = None, 
-    #                           system = SUM_PROMPT, 
-    #                           messages = messages[1:])
-    raw_summary = CHAT_CLIENT.chat.completions.create(model = SUM_MODEL, 
-                                              temperature = SUM_TEMP, 
-                                              messages = messages)
-    summary = raw_summary.choices[0].message.content
-    print("Summary: " + summary + "\n")
-    return summary
+def get_chat_output(user_input: str):
+    st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
+    st.session_state["messages"].append({"role": "user", "content": user_input})
+    st.session_state["convo_memory"].append({"role": "user", "content": user_input})
 
+    response = generate_response(model = CONVO_MODEL, 
+                            temperature = CONVO_TEMP, 
+                            system = st.session_state["convo_prompt"] + st.session_state["convo_summary"], 
+                            messages = st.session_state["convo_memory"])
+    speech = generate_voice(st.session_state["interview"].get_patient(), response)
 
-def get_chat_output(convo_memory: list[dict[str, str]], user_input: str) -> list[list[dict[str, str]], str]:
-    convo_memory.append({"role": "user", "content": user_input})
-    output = generate_response(model = CONVO_MODEL, 
-                             temperature = CONVO_TEMP, 
-                             system = convo_memory[0]["content"], 
-                             messages = convo_memory[1:])
-    convo_memory.append({"role": "assistant", "content": output})
-    # if len(convo_memory) >= MAX_MESSAGES:
-    #     summary = summarizer(convo_memory)
-    #     convo_memory = [convo_memory[0], {"role": "system", "content": ("Summary of conversation so far: \n" + summary)}]
-    return convo_memory, output
+    st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
+    st.session_state["messages"].append({"role": "assistant", "content": response})
+    st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+
+    if len(st.session_state["convo_memory"]) >= MAX_MEMORY:
+        conversation = json.dumps(st.session_state["messages"][:-2]) # exclude last 2 messages for smoother convo
+        summary = generate_response(model = SUM_MODEL, 
+                                temperature = SUM_TEMP, 
+                                system = SUM_PROMPT + conversation, 
+                                messages = [{"role": "user", "content": conversation}])
+        print("Summary: " + summary + "\n") # bug fixing
+
+        st.session_state["convo_summary"] = "\nSummary of conversation so far: \n" + summary # overwrite summary
+        st.session_state["convo_memory"] = st.session_state["convo_memory"][-2:]
+
+    return response, speech

@@ -6,4 +6,4 @@ __all__ = ["get_webtext", "display_DataCategory", "display_DataAcquisition", "di
            "create_convo_file", "send_email", 
            "generate_response", "generate_classifications", "generate_matches", 
            "transcribe_voice", "generate_voice", "play_voice", 
-           "classifier", "summarizer", "get_chat_output"]
+           "classifier", "get_chat_output"]

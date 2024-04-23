@@ -35,19 +35,22 @@ def set_stage(stage):
 
 if st.session_state["stage"] == SETTINGS:
     st.session_state["interview"] = None
-    st.session_state["convo_memory"] = None
+    st.session_state["messages"] = [] # whole convo
+    st.session_state["convo_prompt"] = ""
+    st.session_state["convo_summary"] = ""
+    st.session_state["convo_memory"] = [] # only input to LLM (not summarized)
     st.session_state["convo_file"] = None
     patient_name = st.selectbox("Which patient would you like to interview?", 
                                                 ["John Smith", "Jackie Smith"],
                                                 index = None,
                                                 placeholder = "Select patient...")
-    if patient_name: st.session_state["interview"] = Interview(st.session_state["username"], Patient(patient_name))
+    if patient_name: st.session_state["interview"] = Interview.build(username=st.session_state["username"], patient=Patient.build(patient_name))
 
     st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
 
 if st.session_state["stage"] == CHAT_SETUP:
-    st.session_state["convo_memory"] = [{"role": "system", "content": st.session_state["interview"].get_patient().convo_prompt}]
+    st.session_state["convo_prompt"] = st.session_state["interview"].get_patient().convo_prompt
                                         # {"role": "system", "content": "Summary of conversation so far: None"}
     
     set_stage(CHAT_INTERFACE_VOICE)
@@ -69,19 +72,13 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         with container:
             with st.chat_message("User"):
                 st.markdown(user_input)
-        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
-        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-        response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CONVO_TEMP, 
-                                   system = st.session_state["convo_memory"][0]["content"], 
-                                   messages = st.session_state["convo_memory"][1:])
-        speech = generate_voice(st.session_state["interview"].get_patient(), response)
-        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+
+        response, speech = get_chat_output(user_input)
+
         with container:
             with st.chat_message("AI"): #TODO Needs avatar eventually
                 st.markdown(response)
                 play_voice(speech)
-        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
@@ -108,19 +105,13 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         with container:
             with st.chat_message("User"):
                 st.markdown(user_input)
-        st.session_state["interview"].add_message(Message(type="input", role="User", content=user_input))
-        st.session_state["convo_memory"].append({"role": "user", "content": user_input})
-        response = generate_response(model = CONVO_MODEL, 
-                                   temperature = CONVO_TEMP, 
-                                   system = st.session_state["convo_memory"][0]["content"], 
-                                   messages = st.session_state["convo_memory"][1:])
-        speech = generate_voice(st.session_state["interview"].get_patient(), response)
-        st.session_state["convo_memory"].append({"role": "assistant", "content": response})
+        
+        response, speech = get_chat_output(user_input)
+
         with container:
             with st.chat_message("AI"): # Needs avatar eventually
                 st.markdown(response)
                 play_voice(speech)
-        st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
 
     columns = st.columns(4)
     columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])

@@ -10,8 +10,7 @@ from .message import *
 from .feedback import *
 
 class Interview(pydantic.BaseModel):
-    date_time :str = str(date.datetime.now())
-    end_time :str = None                            # Stores end time       
+    date_time :str = str(date.datetime.now())       
     username :str                                   # str
     patient : Patient                               # Patient
     messages : Optional[List[Message]]    = []       # list[Message]
@@ -36,8 +35,7 @@ class Interview(pydantic.BaseModel):
                                  "Potential": potential, 
                                  "Rationale": rationale, 
                                  "Final": final}
-        
-
+    
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
             self.messages.append(message)
@@ -56,12 +54,10 @@ class Interview(pydantic.BaseModel):
     
     def get_feedback(self) -> Feedback:
         return self.feedback
-    
 
     def get_dict(self):
         currentDateTime=date.datetime.now()
         to_return = {"date_time": str(currentDateTime), 
-                     "end_time" : self.end_time,
                      "username": self.username, 
                      "patient": self.patient.get_dict(), 
                      "messages": [message.get_dict() for message in self.messages], 

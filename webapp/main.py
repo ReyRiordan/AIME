@@ -147,7 +147,8 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
 
 if st.session_state["stage"] == SETTINGS:    
     st.session_state["interview"] = None
-    st.session_state["convo_memory"] = None
+    st.session_state["messages"] = []
+    st.session_state["convo_memory"] = []
     st.session_state["convo_file"] = None
     st.session_state["sent"] = False
 

@@ -128,6 +128,12 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
 
 def display_Interview(interview: dict) -> None:
     st.write(f"{interview['username']} @ {interview['date_time']}, Patient: {interview['patient']['name']}")
+    if interview['end_time']:
+        st.write(f"END TIME: {interview['end_time']}")
+        start_time=date.datetime.strptime(interview['date_time'])
+        end_time=date.datetime.strptime(interview['end_time'])
+        time_elapsed=end_time-start_time
+        st.write(f"TIME ELAPSED: {time_elapsed.total_minutes()}")   
 
     if interview["feedback"]:
         data, diagnosis, explanation = st.tabs(["Data Acquisition", "Diagnosis", "Case Explanation"])

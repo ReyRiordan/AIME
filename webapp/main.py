@@ -25,9 +25,9 @@ from web_classes import *
 from web_methods import *
 
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
 
 ############## DATABASE
@@ -255,6 +255,9 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
 
 if st.session_state["stage"] == DIAGNOSIS:
+    currentDateAndTime = date.datetime.now()
+    st.session_state["interview"].end_time=str(currentDateAndTime)
+
     st.title("Diagnosis")
     st.write("Use the interview transcription and additional patient information (physical examination and ECG) to provide an interpretative summary, a list of potential diagnoses, a rationale reasoning through which diagnoses are more/less likely, and a final diagnosis.")
     st.write("Click the \"Get Feedback\" button once you are all done to automatically receive grading and feedback on your interview and diagnosis.")
@@ -368,7 +371,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.title("Thank you! :heart:")
         st.write("All done! Thank you so much for taking the time to help us test our application. Your interview, diagnosis, and survey has been recorded and sent to us automatically.")
         st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
-        
+
         currentDateAndTime = date.datetime.now()
         date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
         bio = io.BytesIO()

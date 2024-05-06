@@ -4,9 +4,9 @@ from openai import OpenAI
 from anthropic import Anthropic
 import json
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
 # if "lookups" not in st.session_state:
 #     st.session_state.lookups = {

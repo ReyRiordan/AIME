@@ -25,9 +25,9 @@ from web_classes import *
 from web_methods import *
 
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 
 ############## DATABASE

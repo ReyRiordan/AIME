@@ -29,7 +29,7 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
                                            temperature = temperature, 
                                            max_tokens = 1000, 
                                            system = system, 
-                                           messages = messages)
+                                           messages=messages)
     return response.content[0].text
 
 
@@ -44,7 +44,7 @@ def generate_classifications(system: str, user_input: str) -> str:
     # return "{\"output\": [" + response.content[0].text
     response = GRADE_CLIENT.chat.completions.create(model = CLASS_MODEL, 
                                                     temperature = CLASS_TEMP, 
-                                                    messages = [{"role": "system", "content": system}, 
+                                                    messages = [{"role": "assistant", "content": system}, 
                                                                 {"role": "user", "content": user_input}])
     return response.choices[0].message.content
 
@@ -60,7 +60,7 @@ def generate_matches(prompt: str, inputs: str) -> str:
     matches = GRADE_CLIENT.chat.completions.create(model = DIAG_MODEL, 
                                                    temperature = DIAG_TEMP, 
                                                    response_format = {"type": "json_object"}, 
-                                                   messages = [{"role": "system", "content": prompt}, 
+                                                   messages = [{"role": "assistant", "content": prompt}, 
                                                                {"role": "user", "content": inputs}])
     return matches.choices[0].message.content
 

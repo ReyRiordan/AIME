@@ -1,6 +1,3 @@
-from langchain_community.chat_models import ChatOpenAI
-from langchain.chains.conversation.base import ConversationChain
-from langchain.memory.buffer import ConversationBufferMemory
 from docx import Document
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (

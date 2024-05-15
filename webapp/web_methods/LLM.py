@@ -1,6 +1,3 @@
-from langchain_community.chat_models import ChatOpenAI
-from langchain.chains.conversation.base import ConversationChain
-from langchain.memory.buffer import ConversationBufferMemory
 from docx import Document
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
@@ -29,7 +26,7 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
                                            temperature = temperature, 
                                            max_tokens = 1000, 
                                            system = system, 
-                                           messages=messages)
+                                           messages = messages)
     return response.content[0].text
 
 

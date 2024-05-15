@@ -1,6 +1,3 @@
-from langchain_community.chat_models import ChatOpenAI
-from langchain.chains.conversation.base import ConversationChain
-from langchain.memory.buffer import ConversationBufferMemory
 import time
 import datetime as date
 from docx import Document

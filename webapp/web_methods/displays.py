@@ -18,11 +18,11 @@ from web_classes import *
 from lookups import *
 
 
-def get_webtext(content: str) -> str:
-    path = WEBSITE_TEXT[content]
-    with open(path, 'r', encoding='utf8') as webtext:
-            text = webtext.read()
-    return text
+# def get_webtext(content: str) -> str:
+#     path = WEBSITE_TEXT[content]
+#     with open(path, 'r', encoding='utf8') as webtext:
+#             text = webtext.read()
+#     return text
 
 
 def display_DataCategory(category: dict[str, str], checklist: dict[str, bool], weights: dict[str, int], score: int, maxscore: int) -> None:

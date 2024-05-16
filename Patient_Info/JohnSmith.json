@@ -84,7 +84,7 @@
     "Associated Symptoms": [
       {
         "lock": false,
-        "line": "You were feeling slightly nauseated and sweaty prior to arriving in the Emergency Department, but you feel better now."
+        "line": "You were feeling slightly nauseated and sweaty prior to arriving, but you feel better now."
       },
       {
         "lock": true,

@@ -52,10 +52,15 @@ TTS_MODEL = "tts-1"
 
 
 # LLM related
-CHAT_CLIENT = Anthropic()
-CONVO_MODEL = "claude-3-sonnet-20240229"
-CONVO_TEMP = 0.5
-SUM_MODEL = "claude-3-sonnet-20240229"
+# CHAT_CLIENT = Anthropic()
+# CONVO_MODEL = "claude-3-sonnet-20240229"
+# CONVO_TEMP = 0.5
+# SUM_MODEL = "claude-3-sonnet-20240229"
+# SUM_TEMP = 0.0
+CHAT_CLIENT = OpenAI()
+CONVO_MODEL = "gpt-4o"
+CONVO_TEMP = 0.7
+SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
 
 GRADE_CLIENT = OpenAI()

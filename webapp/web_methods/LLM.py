@@ -22,12 +22,16 @@ from web_classes.patient import Patient
 
 
 def generate_response(model: str, temperature: float, system: str, messages: list[dict[str, str]]) -> str:
-    response = CHAT_CLIENT.messages.create(model = model, 
-                                           temperature = temperature, 
-                                           max_tokens = 1000, 
-                                           system = system, 
-                                           messages = messages)
-    return response.content[0].text
+    # response = CHAT_CLIENT.messages.create(model = model, 
+    #                                        temperature = temperature, 
+    #                                        max_tokens = 1000, 
+    #                                        system = system, 
+    #                                        messages = messages)
+    # return response.content[0].text
+    response = CHAT_CLIENT.chat.completions.create(model = model,
+                                                   temperature = temperature,
+                                                   messages = [{"role": "system", "content": system}] + messages)
+    return response.choices[0].message.content
 
 
 def generate_classifications(system: str, user_input: str) -> str:

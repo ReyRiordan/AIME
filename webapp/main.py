@@ -180,16 +180,7 @@ if st.session_state["stage"] == SETTINGS:
 
 
 if st.session_state["stage"] == CHAT_SETUP:
-    st.session_state["convo_memory"] = [{"role": "user", "content": st.session_state["interview"].get_patient().convo_prompt}]
-                                        # {"role": "system", "content": "Summary of conversation so far: None"}
-
-    starting_response=generate_response(model = CONVO_MODEL, 
-                            temperature = CONVO_TEMP, 
-                            system = st.session_state["convo_prompt"] + st.session_state["convo_summary"], 
-                            messages = st.session_state["convo_memory"])
-
-    st.session_state["messages"].append({"role": "assistant", "content": starting_response})
-    st.session_state["convo_memory"].append({"role": "assistant", "content": starting_response})
+    st.session_state["convo_prompt"] = st.session_state["interview"].get_patient().convo_prompt
         
     set_stage(st.session_state["chat_mode"])
 

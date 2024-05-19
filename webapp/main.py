@@ -216,7 +216,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
         columns = st.columns(4)
         columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+        columns[2].button("End Interview", on_click=set_stage, args=[PHYSICAL_ECG_SCREEN])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
@@ -252,8 +252,23 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
         columns = st.columns(4)
         columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=set_stage, args=[DIAGNOSIS])
+        columns[2].button("End Interview", on_click=set_stage, args=[PHYSICAL_ECG_SCREEN])
 
+if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
+    st.title("Physical and ECG Information")
+    st.write("Now that you've taken a chance to speak with the patient, you can take a chance to take a look at data obtained during a physical upon admittance to the ER. Review the following physical and ECG before proceeding.")
+
+    layout1=st.columns([1])
+
+    with layout1[0].expander("Physical Examination"):
+        physical_exam_doc = Document(st.session_state["interview"].get_patient().physical)
+        for paragraph in physical_exam_doc.paragraphs:
+            st.write(paragraph.text)
+    # ECG
+    with layout1[0].expander("ECG"):
+        st.image(st.session_state["interview"].get_patient().ECG)
+
+    st.button("Proceed to Diagnosis",on_click=set_stage,args=[DIAGNOSIS])
 
 if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")

@@ -15,7 +15,7 @@ from sendgrid.helpers.mail import (
     FileType, Disposition, ContentId)
 from constants import *
 import website_methods as methods
-import descriptions
+import unused.other.descriptions as descriptions
 from audiorecorder import audiorecorder
 import openai
 import tempfile

@@ -17,7 +17,7 @@ from sendgrid.helpers.mail import (
     FileType, Disposition, ContentId)
 from webapp.lookups import *
 import webapp.web_methods as methods
-import unused.descriptions as descriptions
+import unused.other.descriptions as descriptions
 
 
 # SECRETS

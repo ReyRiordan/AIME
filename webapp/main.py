@@ -187,6 +187,8 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     layout1 = st.columns([1, 3, 1])
+    start_time =date.datetime.now()
+    st.session_state["interview"].start_time = str(start_time)
     with layout1[1]:
         st.title("Interview")
         st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
@@ -276,7 +278,9 @@ if st.session_state["stage"] == DIAGNOSIS:
     # layout12[0].button("New Interview", on_click=set_stage, args=[SETTINGS])
     # Download Interview
     currentDateAndTime = date.datetime.now()
+    st.session_state["interview"].date_time = str(currentDateAndTime)
     date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    
     bio = io.BytesIO()
     st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
                                                        st.session_state["interview"].get_patient().name, 
@@ -367,7 +371,6 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.title("Thank you! :heart:")
         st.write("All done! Thank you so much for taking the time to help us test our application. Your interview, diagnosis, and survey has been recorded and sent to us automatically.")
         st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
-        
         currentDateAndTime = date.datetime.now()
         date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
         bio = io.BytesIO()

@@ -10,7 +10,8 @@ from .message import *
 from .feedback import *
 
 class Interview(pydantic.BaseModel):
-    date_time :str = str(date.datetime.now())       
+    start_time : Optional[str] = None
+    date_time  : Optional[str] = None
     username :str                                   # str
     patient : Patient                               # Patient
     messages : Optional[List[Message]]    = []       # list[Message]
@@ -56,8 +57,9 @@ class Interview(pydantic.BaseModel):
         return self.feedback
 
     def get_dict(self):
-        currentDateTime=date.datetime.now()
-        to_return = {"date_time": str(currentDateTime), 
+        to_return = {
+                     "start_time"  : self.start_time,
+                     "date_time": self.date_time, 
                      "username": self.username, 
                      "patient": self.patient.get_dict(), 
                      "messages": [message.get_dict() for message in self.messages], 

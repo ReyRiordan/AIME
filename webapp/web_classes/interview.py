@@ -11,12 +11,12 @@ from .feedback import *
 
 class Interview(pydantic.BaseModel):
     start_time : Optional[str] = None
-    date_time  : Optional[str] = None
-    username :str                                   # str
+    time_elapsed : Optional[str] = None
+    username : str                                  # str
     patient : Patient                               # Patient
-    messages : Optional[List[Message]]    = []       # list[Message]
-    diagnosis_inputs : Optional[dict]       = None     # dict{str, str/list[str]}
-    feedback : Optional[Feedback]             = None    # Feedback
+    messages : Optional[List[Message]] = []         # list[Message]
+    diagnosis_inputs : Optional[dict] = None        # dict{str, str/list[str]}
+    feedback : Optional[Feedback] = None            # Feedback
     survey : Optional[dict] = None
     
     @classmethod
@@ -26,7 +26,7 @@ class Interview(pydantic.BaseModel):
         # user_diagnosis = None     # dict{str, str/list[str]}
         # feedback = None          # Feedback
 
-        return cls(username=username,patient=patient) 
+        return cls(username=username, patient=patient) 
             
     def add_feedback(self):
         self.feedback = Feedback.build(patient=self.patient, messages=self.messages, diagnosis_inputs=self.diagnosis_inputs)
@@ -57,9 +57,8 @@ class Interview(pydantic.BaseModel):
         return self.feedback
 
     def get_dict(self):
-        to_return = {
-                     "start_time"  : self.start_time,
-                     "date_time": self.date_time, 
+        to_return = {"start_time": self.start_time,
+                     "time_elapsed": self.time_elapsed, 
                      "username": self.username, 
                      "patient": self.patient.get_dict(), 
                      "messages": [message.get_dict() for message in self.messages], 

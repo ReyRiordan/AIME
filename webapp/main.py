@@ -150,6 +150,7 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["convo_file"] = None
     st.session_state["convo_prompt"]=""
     st.session_state["sent"] = False
+    st.session_state["start_time"] = date.datetime.now()
 
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
@@ -183,13 +184,10 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     layout1 = st.columns([1, 3, 1])
-    start_time = date.datetime.now()
-    st.session_state["interview"].start_time = str(start_time)
     with layout1[1]:
         st.title("Interview")
         st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
         st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
-        # st.session_state["start_time"] = date.datetime.now()
 
         container = st.container(height=300)
 
@@ -384,8 +382,17 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.title("Thank you! :heart:")
         st.write("All done! Thank you so much for taking the time to help us test our application. Your interview, diagnosis, and survey has been recorded and sent to us automatically.")
         st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
-        currentDateAndTime = date.datetime.now()
+        
+        # Record time stuff
+        end_time = date.datetime.now()
         date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+        time_elapsed = end_time - st.session_state["start_time"]
+        st.session_state["interview"].start_time = str(st.session_state["start_time"])
+        st.session_state["interview"].time_elapsed = str(time_elapsed)
+        print(st.session_state["interview"].start_time + "\n")
+        print(st.session_state["interview"].time_elapsed + "\n")
+
+
         bio = io.BytesIO()
         st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
                                                         st.session_state["interview"].get_patient().name, 
@@ -395,7 +402,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         button_columns = st.columns(3)
         button_columns[0].download_button("Download interview", 
                         data = bio.getvalue(),
-                        file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx",
+                        file_name = st.session_state["interview"].get_username() + "_"+ date_time + ".docx",
                         mime = "docx")  
         
         # Store interview in database and send email as backup

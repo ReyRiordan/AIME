@@ -167,16 +167,12 @@ if st.session_state["stage"] == SETTINGS:
                                     ["John Smith"],
                                     index = None,
                                     placeholder = "Select patient...")
-        if patient_name: st.session_state["interview"] = Interview.build(username=st.session_state["username"], patient=Patient.build(patient_name))
-        print(st.session_state["interview"])
-        if st.session_state["chat_mode"]:
-            print("chat mode active")
-        if st.session_state["interview"]:
-            print("interview active")
+        if patient_name: 
+            st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
+                                                            patient = Patient.build(patient_name))
 
         if st.session_state["chat_mode"] and st.session_state["interview"]: 
             st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
-            print("Reached here!")   
 
 
 if st.session_state["stage"] == CHAT_SETUP:
@@ -187,7 +183,7 @@ if st.session_state["stage"] == CHAT_SETUP:
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     layout1 = st.columns([1, 3, 1])
-    start_time =date.datetime.now()
+    start_time = date.datetime.now()
     st.session_state["interview"].start_time = str(start_time)
     with layout1[1]:
         st.title("Interview")
@@ -377,7 +373,7 @@ if st.session_state["stage"] == SURVEY:
         survey["question3"]=[question3,answer3]
         survey["question4"]=[question4,answer4]
 
-        st.session_state["interview"].survey=survey
+        st.session_state["interview"].survey = survey
         columns = st.columns(3)
         columns[1].button("Go to End Screen", on_click=set_stage, args=[FINAL_SCREEN])
 

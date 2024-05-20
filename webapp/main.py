@@ -393,8 +393,6 @@ if st.session_state["stage"] == FINAL_SCREEN:
         time_elapsed = end_time - st.session_state["start_time"]
         st.session_state["interview"].start_time = str(st.session_state["start_time"])
         st.session_state["interview"].time_elapsed = str(time_elapsed)
-        print(st.session_state["interview"].start_time + "\n")
-        print(st.session_state["interview"].time_elapsed + "\n")
 
         # Record cost
         print(st.session_state["tokens"] + "\n")
@@ -405,7 +403,6 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.session_state["interview"].cost += (st.session_state["tokens"]["class"]["output"] / 1000000) * COSTS[CLASS_MODEL]["output"]
         st.session_state["interview"].cost += (st.session_state["tokens"]["diag"]["input"] / 1000000) * COSTS[DIAG_MODEL]["input"]
         st.session_state["interview"].cost += (st.session_state["tokens"]["diag"]["output"] / 1000000) * COSTS[DIAG_MODEL]["output"]
-        print(st.session_state["interview"].cost)
 
 
         bio = io.BytesIO()

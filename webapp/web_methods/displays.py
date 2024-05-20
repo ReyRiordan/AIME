@@ -124,7 +124,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
 
 
 def display_Interview(interview: dict) -> None:
-    st.write(f"{interview['username']}, Patient: {interview['patient']['name']}")
+    st.write(f"User: {interview['username']}, Patient: {interview['patient']['name']}")
     if 'start_time' in interview and interview['start_time']:
         st.write(f"Start Time: {interview['start_time']}")
     if 'time_elapsed' in interview and interview['time_elapsed']:

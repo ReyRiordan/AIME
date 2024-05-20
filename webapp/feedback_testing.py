@@ -83,7 +83,24 @@ if st.session_state["stage"] == CHAT_SETUP:
         elif message["role"] == "AI":
             st.session_state["interview"].add_message(Message(type="output", role=message["role"], content=message["content"]))
     
-    set_stage(DIAGNOSIS)
+    set_stage(PHYSICAL_ECG_SCREEN)
+
+
+if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
+    st.title("Physical and ECG Information")
+    layout1 = st.columns([7, 1])
+    layout1[0].write("Now that you've taken a chance to speak with the patient, you can take a chance to take a look at data obtained during a physical upon admittance to the ER. Review the following physical and ECG before proceeding.")
+    layout1[1].button("Proceed to Diagnosis", on_click=set_stage, args = [DIAGNOSIS])
+    
+    layout2 = st.columns([1, 1])
+    with layout2[0].container():
+        st.header("Physical Examination", divider = "grey")
+        physical_exam_doc = Document(st.session_state["interview"].get_patient().physical)
+        for paragraph in physical_exam_doc.paragraphs:
+            st.write(paragraph.text)
+    with layout2[1].container():
+        st.header("ECG", divider = "grey")
+        st.image(st.session_state["interview"].get_patient().ECG)
 
 
 if st.session_state["stage"] == DIAGNOSIS:

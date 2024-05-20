@@ -395,7 +395,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.session_state["interview"].time_elapsed = str(time_elapsed)
 
         # Record cost
-        print(st.session_state["tokens"] + "\n")
+        print(str(st.session_state["tokens"]) + "\n")
         st.session_state["interview"].cost = 0
         st.session_state["interview"].cost += (st.session_state["tokens"]["convo"]["input"] / 1000000) * COSTS[CONVO_MODEL]["input"]
         st.session_state["interview"].cost += (st.session_state["tokens"]["convo"]["output"] / 1000000) * COSTS[CONVO_MODEL]["output"]

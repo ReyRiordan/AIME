@@ -125,13 +125,13 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
 
 def display_Interview(interview: dict) -> None:
     st.write(f"{interview['username']}, Patient: {interview['patient']['name']}")
-    if "start_time" in interview and interview['start_time']:
+    if 'start_time' in interview and interview['start_time']:
         st.write(f"Start Time: {interview['start_time']}")
-    if "time_elapsed" in interview and interview['time_elapsed']:
+    if 'time_elapsed' in interview and interview['time_elapsed']:
         st.write(f"Time Elapsed: {interview['time_elapsed']}")
-    else:
+    if 'date_time' in interview and interview['date_time']:
         st.write(f"Time: {interview['date_time']}")
-    if "cost" in interview and interview['cost']:
+    if 'cost' in interview and interview['cost']:
         st.write(f"Estimated Cost: ${interview['cost']}")
 
     if interview["feedback"]:

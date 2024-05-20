@@ -300,6 +300,8 @@ if st.session_state["stage"] == DIAGNOSIS:
                                                        st.session_state["interview"].get_patient().name, 
                                                        [message.get_dict() for message in st.session_state["interview"].get_messages()])
     st.session_state["convo_file"].save(bio)
+
+    date_time = date.datetime.now().strftime("%d-%m-%y__%H-%M")
     layout12[1].download_button("Download interview", 
                                 data = bio.getvalue(), 
                                 file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx", 

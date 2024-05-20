@@ -132,7 +132,7 @@ def display_Interview(interview: dict) -> None:
     else:
         st.write(f"Time: {interview['date_time']}")
     if "cost" in interview:
-        st.write(f"Estimated Cost: ${interview["cost"]}")
+        st.write(f"Estimated Cost: ${interview['cost']}")
 
     if interview["feedback"]:
         data, diagnosis, explanation = st.tabs(["Data Acquisition", "Diagnosis", "Case Explanation"])

@@ -59,14 +59,14 @@ class Interview(pydantic.BaseModel):
 
     def get_dict(self):
         to_return = {"start_time": self.start_time,
-                     "time_elapsed": self.time_elapsed, 
+                     "time_elapsed": self.time_elapsed,
+                     "cost": self.cost,
                      "username": self.username, 
                      "patient": self.patient.get_dict(), 
                      "messages": [message.get_dict() for message in self.messages], 
                      "diagnosis_inputs": self.diagnosis_inputs if self.diagnosis_inputs else None, 
                      "feedback": self.feedback.get_dict() if self.feedback else None,
-                     "survey": self.survey if self.survey else None,
-                     "cost": self.cost}
+                     "survey": self.survey if self.survey else None}
         return to_return
 
     def get_json(self):

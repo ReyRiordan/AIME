@@ -125,11 +125,14 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
 
 def display_Interview(interview: dict) -> None:
     st.write(f"{interview['username']}, Patient: {interview['patient']['name']}")
-    if interview['start_time']:
+    if "start_time" in interview:
         st.write(f"Start Time: {interview['start_time']}")
-        st.write(f"End Time: {interview['date_time']}")
+    if "time_elapsed" in interview:
+        st.write(f"Time Elapsed: {interview['time_elapsed']}")
     else:
         st.write(f"Time: {interview['date_time']}")
+    if "cost" in interview:
+        st.write(f"Estimated Cost: ${interview["cost"]}")
 
     if interview["feedback"]:
         data, diagnosis, explanation = st.tabs(["Data Acquisition", "Diagnosis", "Case Explanation"])

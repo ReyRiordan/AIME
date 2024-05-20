@@ -291,9 +291,9 @@ if st.session_state["stage"] == DIAGNOSIS:
     # New Interview
     # layout12[0].button("New Interview", on_click=set_stage, args=[SETTINGS])
     # Download Interview
-    currentDateAndTime = date.datetime.now()
-    st.session_state["interview"].date_time = str(currentDateAndTime)
-    date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+    # currentDateAndTime = date.datetime.now()
+    # st.session_state["interview"].date_time = str(currentDateAndTime)
+    # date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     
     bio = io.BytesIO()
     st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
@@ -388,7 +388,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         
         # Record time
         end_time = date.datetime.now()
-        date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+        date_time = end_time.strftime("%d-%m-%y__%H-%M")
         time_elapsed = end_time - st.session_state["start_time"]
         st.session_state["interview"].start_time = str(st.session_state["start_time"])
         st.session_state["interview"].time_elapsed = str(time_elapsed)

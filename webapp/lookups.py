@@ -42,15 +42,21 @@ FINAL_SCREEN = 11
 VIEW_INTERVIEWS = 12
 SURVEY = 13
 
+COSTS = {"gpt-4o": {"input": 5, "output": 15},
+         "gpt-4-turbo": {"input": 10, "output": 30},
+         "gpt-4": {"input": 30, "output": 60},
+         "gpt-3.5-turbo-0125": {"input": 0.5, "output": 1.5}}
 
 # Audio related
 STT = OpenAI()
+STT_MODEL = "whisper-1"
 TTS = OpenAI()
 TTS_MODEL = "tts-1"
 # AUDIO_OUT = ElevenLabs()
 
 
 # LLM related
+
 # CHAT_CLIENT = Anthropic()
 # CONVO_MODEL = "claude-3-sonnet-20240229"
 # CONVO_TEMP = 0.5
@@ -65,7 +71,7 @@ SUM_TEMP = 0.0
 GRADE_CLIENT = OpenAI()
 CLASS_MODEL = "gpt-4"
 CLASS_TEMP = 0.0
-DIAG_MODEL = "gpt-4-turbo-2024-04-09"
+DIAG_MODEL = "gpt-4-turbo"
 DIAG_TEMP = 0.0
 
 

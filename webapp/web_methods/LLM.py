@@ -31,6 +31,8 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
     response = CHAT_CLIENT.chat.completions.create(model = model,
                                                    temperature = temperature,
                                                    messages = [{"role": "system", "content": system}] + messages)
+    st.session_state["tokens"]["convo"]["input"] += response.usage.prompt_tokens
+    st.session_state["tokens"]["convo"]["output"] += response.usage.completion_tokens
     return response.choices[0].message.content
 
 
@@ -47,6 +49,8 @@ def generate_classifications(system: str, user_input: str) -> str:
                                                     temperature = CLASS_TEMP, 
                                                     messages = [{"role": "assistant", "content": system}, 
                                                                 {"role": "user", "content": user_input}])
+    st.session_state["tokens"]["class"]["input"] += response.usage.prompt_tokens
+    st.session_state["tokens"]["class"]["output"] += response.usage.completion_tokens
     return response.choices[0].message.content
 
 
@@ -63,6 +67,8 @@ def generate_matches(prompt: str, inputs: str) -> str:
                                                    response_format = {"type": "json_object"}, 
                                                    messages = [{"role": "assistant", "content": prompt}, 
                                                                {"role": "user", "content": inputs}])
+    st.session_state["tokens"]["diag"]["input"] += matches.usage.prompt_tokens
+    st.session_state["tokens"]["diag"]["output"] += matches.usage.completion_tokens
     return matches.choices[0].message.content
 
 
@@ -70,10 +76,9 @@ def transcribe_voice(voice_input):
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     voice_input.export(temp_audio_file.name, format="wav")
     with open(temp_audio_file.name, "rb") as file:
-        transcription = STT.audio.transcriptions.create(model="whisper-1", 
-                                                    file=file, 
-                                                    response_format="text")
-    
+        transcription = STT.audio.transcriptions.create(model = "whisper-1", 
+                                                        file = file, 
+                                                        response_format = "text")
     return transcription
 
 

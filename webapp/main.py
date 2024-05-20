@@ -148,9 +148,12 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["convo_memory"] = []
     st.session_state["convo_summary"]=""
     st.session_state["convo_file"] = None
-    st.session_state["convo_prompt"]=""
+    st.session_state["convo_prompt"] = ""
     st.session_state["sent"] = False
     st.session_state["start_time"] = date.datetime.now()
+    st.session_state["tokens"] = {"convo": {"input": 0, "output": 0},
+                                  "class": {"input": 0, "output": 0},
+                                  "diag": {"input": 0, "output": 0}}
 
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
@@ -383,7 +386,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.write("All done! Thank you so much for taking the time to help us test our application. Your interview, diagnosis, and survey has been recorded and sent to us automatically.")
         st.write("Click the download button to download your most recent interview as a word file. Click the New Interview button to go back to the chat interface and keep testing.")
         
-        # Record time stuff
+        # Record time
         end_time = date.datetime.now()
         date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
         time_elapsed = end_time - st.session_state["start_time"]
@@ -391,6 +394,17 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.session_state["interview"].time_elapsed = str(time_elapsed)
         print(st.session_state["interview"].start_time + "\n")
         print(st.session_state["interview"].time_elapsed + "\n")
+
+        # Record cost
+        print(st.session_state["tokens"] + "\n")
+        st.session_state["interview"].cost = 0
+        st.session_state["interview"].cost += (st.session_state["tokens"]["convo"]["input"] / 1000000) * COSTS[CONVO_MODEL]["input"]
+        st.session_state["interview"].cost += (st.session_state["tokens"]["convo"]["output"] / 1000000) * COSTS[CONVO_MODEL]["output"]
+        st.session_state["interview"].cost += (st.session_state["tokens"]["class"]["input"] / 1000000) * COSTS[CLASS_MODEL]["input"]
+        st.session_state["interview"].cost += (st.session_state["tokens"]["class"]["output"] / 1000000) * COSTS[CLASS_MODEL]["output"]
+        st.session_state["interview"].cost += (st.session_state["tokens"]["diag"]["input"] / 1000000) * COSTS[DIAG_MODEL]["input"]
+        st.session_state["interview"].cost += (st.session_state["tokens"]["diag"]["output"] / 1000000) * COSTS[DIAG_MODEL]["output"]
+        print(st.session_state["interview"].cost)
 
 
         bio = io.BytesIO()

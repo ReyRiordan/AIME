@@ -12,6 +12,7 @@ from .feedback import *
 class Interview(pydantic.BaseModel):
     start_time : Optional[str] = None
     time_elapsed : Optional[str] = None
+    cost : Optional[int] = None
     username : str                                  # str
     patient : Patient                               # Patient
     messages : Optional[List[Message]] = []         # list[Message]
@@ -64,7 +65,8 @@ class Interview(pydantic.BaseModel):
                      "messages": [message.get_dict() for message in self.messages], 
                      "diagnosis_inputs": self.diagnosis_inputs if self.diagnosis_inputs else None, 
                      "feedback": self.feedback.get_dict() if self.feedback else None,
-                     "survey":self.survey if self.survey else None}
+                     "survey": self.survey if self.survey else None,
+                     "cost": self.cost}
         return to_return
 
     def get_json(self):

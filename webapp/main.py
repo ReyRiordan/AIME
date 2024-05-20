@@ -388,7 +388,6 @@ if st.session_state["stage"] == FINAL_SCREEN:
         
         # Record time
         end_time = date.datetime.now()
-        date_time = end_time.strftime("%d-%m-%y__%H-%M")
         time_elapsed = end_time - st.session_state["start_time"]
         st.session_state["interview"].start_time = str(st.session_state["start_time"])
         st.session_state["interview"].time_elapsed = str(time_elapsed)
@@ -413,6 +412,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
                                                         [message.get_dict() for message in st.session_state["interview"].get_messages()])
         st.session_state["convo_file"].save(bio)
         
+        date_time = end_time.strftime("%d-%m-%y__%H-%M")
         button_columns = st.columns(3)
         button_columns[0].download_button("Download interview", 
                         data = bio.getvalue(),

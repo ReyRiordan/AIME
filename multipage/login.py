@@ -1,5 +1,7 @@
 import streamlit as st
 
+# st.set_page_config(layout="wide")
+
 # Initialize st.session_state.role to None
 if "role" not in st.session_state:
     st.session_state.role = None

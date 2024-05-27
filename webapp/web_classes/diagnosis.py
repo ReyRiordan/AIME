@@ -136,10 +136,10 @@ class Diagnosis(pydantic.BaseModel):
 
         return cls(weights=weights,classified=classified,checklists=checklists,scores=scores,maxscores=maxscores)
 
-    def get_dict(self):
-        to_return = {"weights": self.weights, 
-                     "classified": self.classified, 
-                     "checklists": self.checklists, 
-                     "scores": self.scores, 
-                     "maxscores": self.maxscores}
-        return to_return
+    # def get_dict(self):
+    #     to_return = {"weights": self.weights, 
+    #                  "classified": self.classified, 
+    #                  "checklists": self.checklists, 
+    #                  "scores": self.scores, 
+    #                  "maxscores": self.maxscores}
+    #     return to_return

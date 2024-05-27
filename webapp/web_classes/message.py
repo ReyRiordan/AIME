@@ -11,15 +11,6 @@ class Message(pydantic.BaseModel):
     annotation: Optional[str] = None
     highlight: Optional[str] = None
 
-    # # Attributes
-    #     self.type = type        # str
-    #     self.role = role        # str  
-    #     self.content = content  # str
-    #     self.labels = {}        # dict{str, list[str]}
-    #     self.annotation = None  # str
-    #     self.highlight = None   # str
-        
-
     def add_highlight(self):
         if self.labels:
             first_datacategory = next(iter(self.labels.keys())) # Access first key in dict
@@ -32,14 +23,12 @@ class Message(pydantic.BaseModel):
         all_labels = list(dict.fromkeys(all_labels)) # Remove duplicates
         if all_labels: self.annotation = ", ".join(all_labels)
     
-    def get_content(self):
-        return self.content
     
-    def get_dict(self): 
-        to_return = {"type": self.type, 
-                     "role": self.role, 
-                     "content": self.content, 
-                     "labels": self.labels, 
-                     "annotation": self.annotation, 
-                     "highlight": self.highlight}
-        return to_return
+    # def get_dict(self): 
+    #     to_return = {"type": self.type, 
+    #                  "role": self.role, 
+    #                  "content": self.content, 
+    #                  "labels": self.labels, 
+    #                  "annotation": self.annotation, 
+    #                  "highlight": self.highlight}
+    #     return to_return

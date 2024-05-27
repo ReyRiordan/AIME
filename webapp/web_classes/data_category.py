@@ -45,10 +45,10 @@ class DataCategory(pydantic.BaseModel):
 
         return cls(name=name,type=type,header=header,color=color,highlight=highlight,class_prompt=class_prompt)
     
-    def get_dict(self):
-        to_return = {"name": self.name, 
-                     "type": self.type, 
-                     "header": self.header, 
-                     "color": self.color, 
-                     "highlight": self.highlight}
-        return to_return
+    # def get_dict(self):
+    #     to_return = {"name": self.name, 
+    #                  "type": self.type, 
+    #                  "header": self.header, 
+    #                  "color": self.color, 
+    #                  "highlight": self.highlight}
+    #     return to_return

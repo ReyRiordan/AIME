@@ -23,7 +23,11 @@ class Feedback(pydantic.BaseModel):
         # self.data_acquisition = DataAcquisition(patient, messages)
         # self.diagnosis = Diagnosis(patient, user_diagnosis)
     
-    def get_dict(self):
-        to_return = {"Data Acquisition": self.data_acquisition.get_dict(), 
-                     "Diagnosis": self.diagnosis.get_dict()}
-        return to_return
+
+    
+    # DEPRECATED get_dict() method
+
+    # def get_dict(self):
+    #     to_return = {"Data Acquisition": self.data_acquisition.get_dict(), 
+    #                  "Diagnosis": self.diagnosis.get_dict()}
+    #     return to_return

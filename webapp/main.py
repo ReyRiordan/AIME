@@ -16,11 +16,9 @@ import tempfile
 from annotated_text import annotated_text
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
 from lookups import *
 from web_classes import *
 from web_methods import *
-
 
 # from dotenv import load_dotenv
 
@@ -121,7 +119,7 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
     st.session_state["interview_display_index"] = list_of_interviews[interview_selection]
 
     st.subheader("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
-    display_Interview(st.session_state["all_interviews"][st.session_state["interview_display_index"]])
+    display_Interview_NEW(Interview.model_validate(st.session_state["all_interviews"][st.session_state["interview_display_index"]]))
 
 
     button_columns=st.columns(5)
@@ -180,7 +178,7 @@ if st.session_state["stage"] == SETTINGS:
 
 
 if st.session_state["stage"] == CHAT_SETUP:
-    st.session_state["convo_prompt"] = st.session_state["interview"].get_patient().convo_prompt
+    st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
         
     set_stage(st.session_state["chat_mode"])
 
@@ -189,12 +187,12 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+        st.write("You may now begin your interview with " + st.session_state["interview"].patient.name + ". Start by introducing yourself.")
         st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
 
         container = st.container(height=300)
 
-        for message in st.session_state["interview"].get_messages():
+        for message in st.session_state["interview"].messages:
             with container:
                 with st.chat_message(message.role):
                     st.markdown(message.content)
@@ -220,7 +218,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write("You may now begin your interview with " + st.session_state["interview"].get_patient().name + ". Start by introducing yourself.")
+        st.write("You may now begin your interview with " + st.session_state["interview"].patient.name + ". Start by introducing yourself.")
         st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
                 The button will then turn into a Stop button, which you can click when you are done talking.
                 Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
@@ -229,7 +227,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         
         container = st.container(height=300)
 
-        for message in st.session_state["interview"].get_messages():
+        for message in st.session_state["interview"].messages:
             with container:
                 with st.chat_message(message.role):
                     st.markdown(message.content)
@@ -261,12 +259,12 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
     layout2 = st.columns([1, 1])
     with layout2[0].container():
         st.header("Physical Examination", divider = "grey")
-        physical_exam_doc = Document(st.session_state["interview"].get_patient().physical)
+        physical_exam_doc = Document(st.session_state["interview"].patient.physical)
         for paragraph in physical_exam_doc.paragraphs:
             st.write(paragraph.text)
     with layout2[1].container():
         st.header("ECG", divider = "grey")
-        st.image(st.session_state["interview"].get_patient().ECG)
+        st.image(st.session_state["interview"].patient.ECG)
 
 
 if st.session_state["stage"] == DIAGNOSIS:
@@ -296,15 +294,15 @@ if st.session_state["stage"] == DIAGNOSIS:
     # date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
     
     bio = io.BytesIO()
-    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
-                                                       st.session_state["interview"].get_patient().name, 
-                                                       [message.get_dict() for message in st.session_state["interview"].get_messages()])
+    st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].username, 
+                                                       st.session_state["interview"].patient.name, 
+                                                       [message.model_dump() for message in st.session_state["interview"].messages])
     st.session_state["convo_file"].save(bio)
 
     date_time = date.datetime.now().strftime("%d-%m-%y__%H-%M")
     layout12[1].download_button("Download interview", 
                                 data = bio.getvalue(), 
-                                file_name = st.session_state["interview"].get_username() + "_"+date_time + ".docx", 
+                                file_name = st.session_state["interview"].username + "_"+date_time + ".docx", 
                                 mime = "docx")
     # Get Feedback
     if layout12[2].button("Get Feedback [CLICK ME!!!]"): 
@@ -314,18 +312,18 @@ if st.session_state["stage"] == DIAGNOSIS:
     
     # Interview transcription
     chat_container = layout1[1].container(height=400)
-    for message in st.session_state["interview"].get_messages():
+    for message in st.session_state["interview"].messages:
         with chat_container:
             with st.chat_message(message.role):
                 st.markdown(message.content)
     # Physical Examination
     with layout1[1].expander("Physical Examination"):
-        physical_exam_doc = Document(st.session_state["interview"].get_patient().physical)
+        physical_exam_doc = Document(st.session_state["interview"].patient.physical)
         for paragraph in physical_exam_doc.paragraphs:
             st.write(paragraph.text)
     # ECG
     with layout1[1].expander("ECG"):
-        st.image(st.session_state["interview"].get_patient().ECG)
+        st.image(st.session_state["interview"].patient.ECG)
 
     
 if st.session_state["stage"] == FEEDBACK_SETUP:
@@ -333,7 +331,7 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
     st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback()
     # st.json(st.session_state["interview"].model_dump_json())
-    st.session_state["interview_dict"] = st.session_state["interview"].get_dict()
+    st.session_state["interview_dict"] = st.session_state["interview"].model_dump()
     
     set_stage(FEEDBACK_SCREEN)
     st.rerun()
@@ -347,7 +345,7 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
     layout1[1].button("Go to Survey", on_click=set_stage, args=[SURVEY])
     
     # Let the display methods cook
-    display_Interview(st.session_state["interview_dict"])
+    display_Interview_NEW(st.session_state["interview"])
 
 
 if st.session_state["stage"] == SURVEY:
@@ -406,22 +404,22 @@ if st.session_state["stage"] == FINAL_SCREEN:
 
 
         bio = io.BytesIO()
-        st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].get_username(), 
-                                                        st.session_state["interview"].get_patient().name, 
-                                                        [message.get_dict() for message in st.session_state["interview"].get_messages()])
+        st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].username, 
+                                                        st.session_state["interview"].patient.name, 
+                                                        [message.model_dump() for message in st.session_state["interview"].messages])
         st.session_state["convo_file"].save(bio)
         
         date_time = end_time.strftime("%d-%m-%y__%H-%M")
         button_columns = st.columns(3)
         button_columns[0].download_button("Download interview", 
                         data = bio.getvalue(),
-                        file_name = st.session_state["interview"].get_username() + "_"+ date_time + ".docx",
+                        file_name = st.session_state["interview"].username + "_"+ date_time + ".docx",
                         mime = "docx")  
         
         # Store interview in database and send email as backup
         if st.session_state["sent"] == False:
-            collection.insert_one(st.session_state["interview"].get_dict())
-            send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].get_username(), date_time, None)
+            collection.insert_one(st.session_state["interview"].model_dump())
+            send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].username, date_time, None)
             st.session_state["sent"] = True
             
         # st.download_button("Download JSON",

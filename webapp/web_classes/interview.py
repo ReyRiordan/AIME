@@ -41,33 +41,21 @@ class Interview(pydantic.BaseModel):
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
             self.messages.append(message)
-    
-    def get_username(self) -> str:
-        return self.username
-    
-    def get_patient(self) -> Patient:
-        return self.patient
-    
-    def get_messages(self) -> list[Message]:
-        return self.messages
-    
-    def get_diagnosis_inputs(self) -> dict[str, str]:
-        return self.diagnosis_inputs
-    
-    def get_feedback(self) -> Feedback:
-        return self.feedback
 
-    def get_dict(self):
-        to_return = {"start_time": self.start_time,
-                     "time_elapsed": self.time_elapsed,
-                     "cost": self.cost,
-                     "username": self.username, 
-                     "patient": self.patient.get_dict(), 
-                     "messages": [message.get_dict() for message in self.messages], 
-                     "diagnosis_inputs": self.diagnosis_inputs if self.diagnosis_inputs else None, 
-                     "feedback": self.feedback.get_dict() if self.feedback else None,
-                     "survey": self.survey if self.survey else None}
-        return to_return
+    # DEPRECATED get_dict() method
+    # Will keep around for a week in case something breaks
+    # 
+    # def get_dict(self):
+    #     to_return = {"start_time": self.start_time,
+    #                  "time_elapsed": self.time_elapsed,
+    #                  "cost": self.cost,
+    #                  "username": self.username, 
+    #                  "patient": self.patient.get_dict(), 
+    #                  "messages": [message.get_dict() for message in self.messages], 
+    #                  "diagnosis_inputs": self.diagnosis_inputs if self.diagnosis_inputs else None, 
+    #                  "feedback": self.feedback.get_dict() if self.feedback else None,
+    #                  "survey": self.survey if self.survey else None}
+    #     return to_return
 
     def get_json(self):
         return json.dumps(self.get_dict(),indent=4)

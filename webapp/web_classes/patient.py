@@ -82,10 +82,10 @@ class Patient(pydantic.BaseModel):
                     case_prompt += line + " \n"
         return case_prompt
 
-    def get_dict(self):
-        to_return = {"name": self.name, 
-                     "case": self.case, 
-                     "grading": self.grading, 
-                     "physical": self.physical, 
-                     "ECG": self.ECG}
-        return to_return
+    # def get_dict(self):
+    #     to_return = {"name": self.name, 
+    #                  "case": self.case, 
+    #                  "grading": self.grading, 
+    #                  "physical": self.physical, 
+    #                  "ECG": self.ECG}
+    #     return to_return

@@ -105,10 +105,10 @@ class DataAcquisition(pydantic.BaseModel):
             max += weights[label]
         return max
     
-    def get_dict(self):
-        to_return = {"datacategories": [category.get_dict() for category in self.datacategories], 
-                     "weights": self.weights, 
-                     "checklists": self.checklists, 
-                     "scores": self.scores, 
-                     "maxscores": self.maxscores}
-        return to_return
+    # def get_dict(self):
+    #     to_return = {"datacategories": [category.get_dict() for category in self.datacategories], 
+    #                  "weights": self.weights, 
+    #                  "checklists": self.checklists, 
+    #                  "scores": self.scores, 
+    #                  "maxscores": self.maxscores}
+    #     return to_return

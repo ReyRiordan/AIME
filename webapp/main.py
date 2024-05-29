@@ -119,7 +119,7 @@ if st.session_state["stage"]==VIEW_INTERVIEWS:
     st.session_state["interview_display_index"] = list_of_interviews[interview_selection]
 
     st.subheader("Interview " + str(st.session_state["interview_display_index"] + 1) + "/" + str(len(st.session_state["all_interviews"])))
-    display_Interview_NEW(Interview.model_validate(st.session_state["all_interviews"][st.session_state["interview_display_index"]]))
+    display_Interview(st.session_state["all_interviews"][st.session_state["interview_display_index"]])
 
 
     button_columns=st.columns(5)

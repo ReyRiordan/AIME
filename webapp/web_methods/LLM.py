@@ -141,7 +141,7 @@ def get_chat_output(user_input: str):
                             temperature = CONVO_TEMP, 
                             system = st.session_state["convo_prompt"] + st.session_state["convo_summary"], 
                             messages = st.session_state["convo_memory"])
-    speech = generate_voice(st.session_state["interview"].get_patient(), response)
+    speech = generate_voice(st.session_state["interview"].patient, response)
 
     st.session_state["interview"].add_message(Message(type="output", role="AI", content=response))
     st.session_state["messages"].append({"role": "assistant", "content": response})

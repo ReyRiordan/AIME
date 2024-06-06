@@ -5,6 +5,7 @@ import io
 import os
 import streamlit as st
 import streamlit.components.v1 as components
+import streamlit_authenticator as auth
 import base64
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
@@ -345,7 +346,7 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
     layout1[1].button("Go to Survey", on_click=set_stage, args=[SURVEY])
     
     # Let the display methods cook
-    display_Interview_NEW(st.session_state["interview"])
+    display_Interview(st.session_state["interview"])
 
 
 if st.session_state["stage"] == SURVEY:

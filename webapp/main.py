@@ -346,7 +346,7 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
     layout1[1].button("Go to Survey", on_click=set_stage, args=[SURVEY])
     
     # Let the display methods cook
-    display_Interview(st.session_state["interview"])
+    display_Interview(st.session_state["interview"].model_dump())
 
 
 if st.session_state["stage"] == SURVEY:

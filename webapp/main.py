@@ -5,7 +5,7 @@ import io
 import os
 import streamlit as st
 import streamlit.components.v1 as components
-import streamlit_authenticator as auth
+# import streamlit_authenticator as auth
 import base64
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (

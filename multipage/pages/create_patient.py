@@ -39,7 +39,7 @@ def set_stage(stage):
     st.session_state["stage"] = stage
 
 
-# Initialization
+# Init
 if st.session_state["stage"] == INIT:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
@@ -54,3 +54,17 @@ if st.session_state["stage"] == INIT:
                 "voice": voice
             }
             set_stage(CASE)
+
+
+# Case
+if st.session_state["stage"] == CASE:
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
+        st.title("Case Description")
+        st.subheader("Personal Details")
+        name = st.text_input("Enter patient's full name:")
+        sex = st.text_input("Enter patient's sex:")
+        birthdate = st.text_input("Enter patient's birthdate:")
+        tone = st.text_input("Enter patient's tone during interview:")
+        st.subheader("Chief Concern")
+        chief_concern = st.text_input("Enter patient's chief concern in second person perspective:")

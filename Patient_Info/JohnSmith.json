@@ -13,12 +13,16 @@
   "Case": {
     "Personal Details": [
       {
+        "detail": "Name",
+        "line": "John Smith"
+      },
+      {
         "detail": "Sex",
         "line": "Male"
       },
       {
-        "detail": "Name",
-        "line": "John Smith"
+        "detail": "Race",
+        "line": "White"
       },
       {
         "detail": "Birthdate",

@@ -1,15 +1,16 @@
 {
-  "name": "John Smith",
-  "speech": {
+  "ID": "John Smith",
+  "Speech": {
     "host": "openai",
     "model": "tts-1",
     "voice": "onyx"
   },
-  "prompt": {
-    "type": "default",
-    "file": "./Prompts/Base_5-16.txt"
+  "Assets": {
+    "Physical Examination": "./Patient_Info/JohnSmith_physical.docx",
+    "ECG": "./Patient_Info/JohnSmith_ECG.png",
+    "Case Explanation": "./Patient_Info/JohnSmith_explanation.pdf"
   },
-  "case": {
+  "Case": {
     "Personal Details": [
       {
         "detail": "Sex",
@@ -29,7 +30,7 @@
       }
     ],
     "Chief Concern": "You came to the hospital because you are experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
-    "History of Present Illness": [
+    "HIPI": [
       {
         "lock": false,
         "dim": "Onset",
@@ -158,9 +159,9 @@
       }
     ]
   },
-  "grading": {
+  "Grading": {
     "Data Acquisition": {
-      "gen": {
+      "General": {
         "Introduction": 5,
         "Confirm Identity": 5,
         "Establish Chief Concern": 5,
@@ -176,7 +177,7 @@
         "Employment": 1,
         "Social Support": 1
       },
-      "dims": {
+      "Dimensions": {
         "Onset": 5,
         "Quality": 5,
         "Location": 5,
@@ -188,7 +189,7 @@
         "Radiation": 5,
         "Severity": 5
       },
-      "asoc": {
+      "Associated": {
         "Breathing": 5,
         "Sweating": 3,
         "Nausea": 5,
@@ -201,7 +202,7 @@
         "URI": 1,
         "Stomach Pain": 3
       },
-      "risk": {
+      "Risk": {
         "CAD": 5,
         "PVD": 3,
         "Hypertension": 5,
@@ -273,8 +274,5 @@
         "Acute coronary syndrome": 8
       }
     }
-  },
-  "physical": "./Patient_Info/JohnSmith_physical.docx",
-  "ECG": "./Patient_Info/JohnSmith_ECG.png",
-  "explanation": "./Patient_Info/JohnSmith_explanation.pdf"
+  }
 }

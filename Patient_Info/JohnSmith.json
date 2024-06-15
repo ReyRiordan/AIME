@@ -11,28 +11,13 @@
     "Case Explanation": "./Patient_Info/JohnSmith_explanation.pdf"
   },
   "Case": {
-    "Personal Details": [
-      {
-        "detail": "Name",
-        "line": "John Smith"
-      },
-      {
-        "detail": "Sex",
-        "line": "Male"
-      },
-      {
-        "detail": "Race",
-        "line": "White"
-      },
-      {
-        "detail": "Birthdate",
-        "line": "December 5th 1959"
-      },
-      {
-        "detail": "Tone",
-        "line": "Worried and nervous"
-      }
-    ],
+    "Personal Details": {
+      "Name": "John Smith",
+      "Sex": "Male",
+      "Race": "White",
+      "Birthdate": "December 5th 1959",
+      "Tone": "Worried and nervous"
+    },
     "Chief Concern": "You came to the hospital because you are experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
     "HIPI": [
       {
@@ -278,5 +263,25 @@
         "Acute coronary syndrome": 8
       }
     }
+  },
+  "Labels": {
+    "Breathing": "Specific mention of shortness of breath or trouble breathing (dyspnea).",
+    "Sweating": "Specific mention of sweating.",
+    "Nausea": "Specific mention of nausea.",
+    "Syncope": "Specific mention of syncope and other related symptoms such as dizziness, light-headedness, presyncope, etc.",
+    "Fatigue": "Specific mention of fatigue or weakness.",
+    "Palpitations": "Specific mention of heart palpitations or abnormal heart rhythm.",
+    "Leg Swelling": "Specific mention of swelling in the legs.",
+    "Fever": "Specific mention of fevers.",
+    "Cough": "Specific mention of cough.",
+    "URI": "Specific mention of upper respiratory infections or related conditions.",
+    "Stomach Pain": "Specific mention of upper abdominal pain or heartburn unrelated to food.",
+    "CAD": "Specific mention of patient's personal history of coronary artery disease.",
+    "PVD": "Specific mention of patient's personal history or symptoms of peripheral vascular disease. This can include legs hurting when walking, difficulty maintaining an erection, etc.",
+    "Hypertension": "Specific mention of hyptertension (high blood pressure).",
+    "Hyperlipidemia": "Specific mention of hyperlipidemia (high cholesterol/triglycerides/lipids).",
+    "Diabetes": "Specific mention of diabetes or related conditions.",
+    "Relative Heart": "Specific mention of whether the patient has any relatives with a history of cardiovascular disease or heart problems. Questions about family medical issues in general do not count.",
+    "Sedentary": "Specific mention of patient's activity level or whether their lifestyle is sedentary."
   }
 }

@@ -1,9 +1,9 @@
 {
   "ID": "John Smith",
   "Speech": {
-    "host": "openai",
-    "model": "tts-1",
-    "voice": "onyx"
+    "Host": "openai",
+    "Model": "tts-1",
+    "Voice": "onyx"
   },
   "Assets": {
     "Physical Examination": "./Patient_Info/JohnSmith_physical.docx",
@@ -233,31 +233,140 @@
         "Esophageal spasm": 1
       },
       "Rationale": {
-        "Acute coronary syndrome": {"location of symptom -> myocardial ischemia, ACS": 1,
-        "radiation (spread to jaw/shoulders) -> myocardial ischemia, ACS": 1,
-        "onset of symptom -> myocardial ischemia, ACS": 1,
-        "associated symptoms (nausea/sweatiness) -> myocardial ischemia, ACS": 1,
-        "family history of heart problems (father) -> atherosclerosis, ACS": 2,
-        "hypertension (high blood pressure) -> atherosclerosis, ACS": 1,
-        "hyperlipidemia (high cholesterol) -> atherosclerosis, ACS": 1,
-        "significant smoking history -> atherosclerosis, ACS": 1,
-        "physical findings (blood pressure, right carotid bruit, S4, pulses) -> ACS": 2,
-        "T wave inversion -> ACS": 1,
-        "T wave inversion -/> stable angina, STEMI": 1},
-        "Aortic dissection": {"onset of symptom -/> aortic dissection": 1,
-        "quality/characteristic/description/feeling of symptom -/> aortic dissection": 1,
-        "physical findings -/> aortic dissection": 1},
-        "Acute pericarditis": {"quality/characteristic/description/feeling of symptom -/> acute percarditis": 1,
-        "exacerbating/relieving factors of symptom -/> acute percarditis": 1,
-        "physical findings (no rub or fever) -/> acute percarditis": 1},
-        "Pulmonary embolism": {"shortness of breath (dyspnea) -/> pulmonary embolism": 1,
-        "physical findings (normal heart rate + oxygen, normal heart sounds, jugular pressure) -/> pulmonary embolism": 2},
-        "Pneumonia": {"quality/characteristic/description/feeling of symptom -/> pneumonia": 1,
-        "no fever or cough -/> pneumonia": 1,
-        "physical findings (normal lung) -/> pneumonia": 1},
-        "Pneumothorax": {"shortness of breath (dyspnea) -/> pneumothorax": 1,
-        "physical findings (normal lungs) -/> pneumothorax": 1},
-        "Esophageal spasm": {"not with meal -/> esophageal spasm": 1}
+        "Acute coronary syndrome": [
+          {
+            "desc": "location of symptom",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "radiation (spread to jaw/shoulders)",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "onset of symptom",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "associated symptoms (nausea/sweatiness)",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "family history of heart problems (father)",
+            "sign": true,
+            "weight": 2
+          },
+          {
+            "desc": "hypertension (high blood pressure)",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "hyperlipidemia (high cholesterol)",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "significant smoking history",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "physical findings (blood pressure, right carotid bruit, S4, pulses)",
+            "sign": true,
+            "weight": 2
+          },
+          {
+            "desc": "T wave inversion",
+            "sign": true,
+            "weight": 1
+          }
+        ],
+        "Aortic dissection": [
+          {
+            "desc": "onset of symptom",
+            "sign": true,
+            "weight": 1
+          },
+          {
+            "desc": "quality/characteristic/description/feeling of symptom",
+            "sign": false,
+            "weight": 1
+          },
+          {
+            "desc": "physical findings",
+            "sign": false,
+            "weight": 1
+          }
+        ],
+        "Acute pericarditis": [
+          {
+            "desc": "quality/characteristic/description/feeling of symptom",
+            "sign": false,
+            "weight": 1
+          },
+          {
+            "desc": "exacerbating/relieving factors of symptom",
+            "sign": false,
+            "weight": 1
+          },
+          {
+            "desc": "physical findings (no rub or fever)",
+            "sign": false,
+            "weight": 1
+          }
+        ],
+        "Pulmonary embolism": [
+          {
+            "desc": "shortness of breath (dyspnea)",
+            "sign": false,
+            "weight": 1
+          },
+          {
+            "desc": "physical findings (normal heart rate + oxygen, normal heart sounds, jugular pressure",
+            "sign": false,
+            "weight": 2
+          }
+        ],
+        "Pneumonia": [
+          {
+            "desc": "quality/characteristic/description/feeling of symptom",
+            "sign": false,
+            "weight": 1
+          },
+          {
+            "desc": "no fever or cough",
+            "sign": false,
+            "weight": 1
+          },
+          {
+            "desc": "physical findings (normal lung)",
+            "sign": false,
+            "weight": 1
+          }
+        ],
+        "Pneumothorax": [
+          {
+            "desc": "shortness of breath (dyspnea)",
+            "sign": false,
+            "weight": 1
+          },
+          {
+            "desc": "physical findings (normal lungs)",
+            "sign": false,
+            "weight": 1
+          }
+        ],
+        "Esophageal spasm": [
+          {
+            "desc": "symptom does not appear with meal",
+            "sign": false,
+            "weight": 1
+          }
+        ]
       },
       "Final": {
         "Acute coronary syndrome": 8

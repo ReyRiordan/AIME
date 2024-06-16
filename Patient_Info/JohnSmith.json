@@ -19,132 +19,122 @@
       "Tone": "Worried and nervous"
     },
     "Chief Concern": "You came to the hospital because you are experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
-    "HIPI": [
-      {
-        "lock": false,
-        "dim": "Onset",
-        "line": "heaviness came on gradually, seated at desk at home when symptoms appeared"
+    "HIPI": {
+      "Onset": {
+        "desc": "heaviness came on gradually, seated at desk at home when symptoms appeared",
+        "lock": false
       },
-      {
-        "lock": true,
-        "dim": "Quality",
-        "line": "like a weight on the chest"
+      "Quality": {
+        "desc": "like a weight on the chest",
+        "lock": true
       },
-      {
-        "lock": false,
-        "dim": "Location",
-        "line": "center of chest"
+      "Location": {
+        "desc": "center of chest",
+        "lock": false
       },
-      {
-        "lock": false,
-        "dim": "Timing",
-        "line": "started around 2 hours ago"
+      "Timing": {
+        "desc": "started around 2 hours ago",
+        "lock": false
       },
-      {
-        "lock": true,
-        "dim": "Pattern",
-        "line": "constant"
+      "Pattern": {
+        "desc": "constant",
+        "lock": true
       },
-      {
-        "lock": false,
-        "dim": "Severity",
-        "line": "it was pretty severe when it first started, gradually improved and the pressure is much better but it is still there"
+      "Severity": {
+        "desc": "it was pretty severe when it first started, gradually improved and the pressure is much better but it is still there",
+        "lock": false
       },
-      {
-        "lock": true,
-        "dim": "Prior History",
-        "line": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, where you would take an antacid and feel better."
+      "Prior History": {
+        "desc": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, where you would take an antacid and feel better.",
+        "lock": true
       },
-      {
-        "lock": true,
-        "dim": "Radiation",
-        "line": "You also felt an aching pain in your jaw and both shoulders when the pressure was at its worst"
+      "Radiation": {
+        "desc": "You also felt an aching pain in your jaw and both shoulders when the pressure was at its worst",
+        "lock": true
       },
-      {
-        "lock": true,
-        "dim": "Exacerbating",
-        "line": "you have not noticed anything that makes the heaviness worse"
+      "Exacerbating": {
+        "desc": "you have not noticed anything that makes the heaviness worse",
+        "lock": true
       },
-      {
-        "lock": true,
-        "dim": "Relieving",
-        "line": "you took two or three tums but had no relief"
+      "Relieving": {
+        "desc": "you took two or three tums but had no relief",
+        "lock": true
       }
-    ],
+    },
     "Associated Symptoms": [
       {
-        "lock": false,
-        "line": "You were feeling slightly nauseated and sweaty prior to arriving, but you feel better now."
+        "desc": "You were feeling slightly nauseated and sweaty prior to arriving, but you feel better now.",
+        "lock": false
       },
       {
-        "lock": true,
-        "line": "You have been stressed about your finances recently."
+        "desc": "You have been stressed about your finances recently.",
+        "lock": true
       }
     ],
     "Medical History": [
       {
-        "lock": true,
-        "line": "Hypertension: You've had high blood pressure since you were 50. You take a water pill for that and were recently started on another new medication."
+        "desc": "Hypertension: You've had high blood pressure since you were 50. You take a water pill for that and were recently started on another new medication.",
+        "lock": true
       },
       {
-        "lock": true,
-        "line": "Hyperlipidemia: You've had high cholesterol for many years and take a statin for this."
+        "desc": "Hyperlipidemia: You've had high cholesterol for many years and take a statin for this.",
+        "lock": true
       },
       {
-        "lock": true,
-        "line": "Diabetes: On your most recent visit to your doctor, she said you have pre-diabetes - you are not sure what this means, but she recommended you lose weight.  To lose weight, you started a walking program; this was about 6 months ago."
+        "desc": "Diabetes: On your most recent visit to your doctor, she said you have pre-diabetes - you are not sure what this means, but she recommended you lose weight.  To lose weight, you started a walking program; this was about 6 months ago.",
+        "lock": true
       },
       {
-        "lock": false,
-        "line": "You have been fully boosted for COVID, but do not always get a flu vaccine."
+        "desc": "You have been fully boosted for COVID, but do not always get a flu vaccine.",
+        "lock": false
       }
     ],
     "Surgical History": [
       {
-        "lock": false,
-        "line": "You had a hernia in your groin that was repaired when you were 26."
+        "desc": "You had a hernia in your groin that was repaired when you were 26.",
+        "lock": false
       }
     ],
     "Medications": [
       {
-        "lock": true,
-        "line": "Read this list from your phone if asked for specific medications: \u201cHydrochlorothiazide, Amlodipine, Atorvastatin\u201d."
+        "desc": "Read this list from your phone if asked for specific medications: \u201cHydrochlorothiazide, Amlodipine, Atorvastatin\u201d.",
+        "lock": true
       }
     ],
     "Allergies": [
       {
-        "lock": false,
-        "line": "You do not have any allergies that you are aware of."
+        "desc": "You do not have any allergies that you are aware of.",
+        "lock": false
       }
     ],
     "Family History": [
       {
-        "lock": false,
-        "line": "Your father died suddenly of a heart attack when he was 50 years old."
+        "desc": "Your father died suddenly of a heart attack when he was 50 years old.",
+        "lock": false
       },
       {
-        "lock": false,
-        "line": "Your mother passed away from breast cancer two years ago."
+        "desc": "Your mother passed away from breast cancer two years ago.",
+        "lock": false
       }
     ],
     "Social History": [
       {
-        "lock": true,
-        "line": "You are a former smoker. You started smoking when you were in college at 19 years old and quit about 5 years ago. You smoked about one pack per day."
+        "desc": "You are a former smoker. You started smoking when you were in college at 19 years old and quit about 5 years ago. You smoked about one pack per day.",
+        "lock": true
       },
       {
-        "lock": true,
-        "line": "You drink about 2 glasses of wine or a cocktail during the week, more on the weekend."
+        "desc": "You drink about 2 glasses of wine or a cocktail during the week, more on the weekend.",
+        "lock": true
       }
     ],
     "Other Symptoms": [
       {
-        "lock": false,
-        "line": "You have had difficulty maintaining an erection for the past 2 years and have considered speaking to your doctor about this."
+        "desc": "You have had difficulty maintaining an erection for the past 2 years and have considered speaking to your doctor about this.",
+        "lock": false
       },
       {
-        "lock": false,
-        "line": "You do get pain in your left leg when you walk, a cramp in the calf. It goes away when you stop walking."
+        "desc": "You do get pain in your left leg when you walk, a cramp in the calf. It goes away when you stop walking.",
+        "lock": false
       }
     ]
   },

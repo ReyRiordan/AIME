@@ -52,11 +52,11 @@
         "desc": "You also felt an aching pain in your jaw and both shoulders when the pressure was at its worst",
         "lock": true
       },
-      "Exacerbating": {
+      "Exacerbating Factors": {
         "desc": "you have not noticed anything that makes the heaviness worse",
         "lock": true
       },
-      "Relieving": {
+      "Relieving Factors": {
         "desc": "you took two or three tums but had no relief",
         "lock": true
       }

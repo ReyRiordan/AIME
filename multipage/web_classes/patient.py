@@ -31,9 +31,7 @@ class Patient(pydantic.BaseModel):
             JSON = json.load(json_file)
 
         # Create virtual patient prompt
-        with open(JSON["prompt"]["file"], "r") as base_file:
-            base = base_file.read()
-        base = base.replace("{patient}", name)
+        base = BASE_PROMPT.replace("{patient}", name)
         convo_prompt = str(base)
         case = JSON["case"]
         convo_prompt += cls.process_case(case)

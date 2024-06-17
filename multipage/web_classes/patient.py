@@ -57,27 +57,47 @@ class Patient(pydantic.BaseModel):
                    speech=speech)
 
     @classmethod
-    def process_case(cls,case: dict[str, list[dict[str]]]) -> str:
+    def process_case(cls, case: dict[str, list[dict[str]]]) -> str:
         case_prompt = ""
-        for category in case: 
+        for category in case:
             case_prompt += "[" + category + "] \n"
             if category == "Personal Details":
-                for element in case[category]:
-                    case_prompt += element["detail"] + ": " + element["line"] + " \n"
+                for detail, desc in case[category].items():
+                    case_prompt += detail + ": " + desc+ " \n"
             elif category == "Chief Concern":
                 case_prompt += case[category] + " \n"
-            elif category == "History of Present Illness":
-                for element in case[category]:
-                    line = element["dim"] + ": " + element["line"]
-                    if element["lock"]:
+            elif category == "HIPI":
+                for dim in case[category]:
+                    line = dim + ": " + dim["desc"]
+                    if dim["lock"]:
                         line = "<LOCKED> " + line
                     case_prompt += line + "\n"
             else:
                 for element in case[category]:
-                    line = element["line"]
+                    line = element["desc"]
                     if element["lock"]:
                         line = "<LOCKED> " + line
                     case_prompt += line + " \n"
+        
+        # for category in case: 
+        #     case_prompt += "[" + category + "] \n"
+        #     if category == "Personal Details":
+        #         for element in case[category]:
+        #             case_prompt += element["detail"] + ": " + element["line"] + " \n"
+        #     elif category == "Chief Concern":
+        #         case_prompt += case[category] + " \n"
+        #     elif category == "History of Present Illness":
+        #         for element in case[category]:
+        #             line = element["dim"] + ": " + element["line"]
+        #             if element["lock"]:
+        #                 line = "<LOCKED> " + line
+        #             case_prompt += line + "\n"
+        #     else:
+        #         for element in case[category]:
+        #             line = element["line"]
+        #             if element["lock"]:
+        #                 line = "<LOCKED> " + line
+        #             case_prompt += line + " \n"
         return case_prompt
 
     # def get_dict(self):

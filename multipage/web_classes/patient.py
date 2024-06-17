@@ -39,13 +39,14 @@ class Patient(pydantic.BaseModel):
         # Extract grading for patient
         grading = JSON["grading"]
 
-        # Assign physical, ECG, explanation data paths for patient for website display use
-        physical = JSON["physical"]
-        ECG = JSON["ECG"]
-        explanation = JSON["explanation"]
+        # Assets (hardcoded for now)
+        #TODO flexible assets
+        physical = JSON["Assets"]["Physical Examination"]
+        ECG = JSON["Assets"]["ECG"]
+        explanation = JSON["Assets"]["Case Explanation"]
 
         # Extract speech settings
-        speech = JSON["speech"]
+        speech = JSON["Speech"]
 
         return cls(name=name, 
                    case=case, 

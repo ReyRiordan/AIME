@@ -76,7 +76,7 @@ def transcribe_voice(voice_input):
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     voice_input.export(temp_audio_file.name, format="wav")
     with open(temp_audio_file.name, "rb") as file:
-        transcription = STT.audio.transcriptions.create(model = "whisper-1", 
+        transcription = STT.audio.transcriptions.create(model = STT_MODEL, 
                                                         file = file, 
                                                         response_format = "text")
     return transcription
@@ -84,8 +84,8 @@ def transcribe_voice(voice_input):
 
 def generate_voice(patient: Patient, text_input: str) -> io.BytesIO:
     bio = io.BytesIO()
-    speech = TTS.audio.speech.create(model = patient.speech["model"], 
-                                     voice = patient.speech["voice"], 
+    speech = TTS.audio.speech.create(model = patient.speech["Model"], 
+                                     voice = patient.speech["Voice"], 
                                      response_format = "wav", 
                                      input = text_input)
     bio.write(speech.content)

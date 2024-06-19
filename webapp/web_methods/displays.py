@@ -99,14 +99,18 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
             st.write(inputs["Rationale"])
         with layout3[1]:
             st.write("**Scoring:**")
-            for condition in weights["Rationale"]:
-                if condition in checklists["Rationale"]:
-                    with st.expander(f"**{condition}:**"):
-                        for statement, checked in checklists["Rationale"][condition].items():
-                            annotated_text((statement, str(weights["Rationale"][condition][statement]), "#baffc9" if checked else "#ffb3ba"))
+            if checklists["Rationale"]:
+                for condition in weights["Rationale"]:
+                    if condition in checklists["Rationale"]:
+                        with st.expander(f"**{condition}:**"):
+                            for statement, checked in checklists["Rationale"][condition].items():
+                                annotated_text((statement, str(weights["Rationale"][condition][statement]), "#baffc9" if checked else "#ffb3ba"))
+            else:
+                st.write("We currently have no way to grade your rationale if you did not list any correct potential diagnoses.")
             with st.expander("**Reasoning for potential diagnoses you didn't list:**"):
                 for condition in weights["Rationale"]:
                     if condition not in checklists["Rationale"]:
+                        st.write(f"**{condition}**")
                         for statement, weight in weights["Rationale"][condition].items():
                             annotated_text((statement, str(weight), "#ededed"))
 

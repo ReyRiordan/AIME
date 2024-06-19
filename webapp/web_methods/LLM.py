@@ -45,13 +45,31 @@ def generate_classifications(system: str, user_input: str) -> str:
     #                                                   {"role": "assistant", "content": "{\"output\": ["}]) # prefill tech
     # print(f"\nRAW CLASSIFICATION: {response.content}\n")
     # return "{\"output\": [" + response.content[0].text
-    response = GRADE_CLIENT.chat.completions.create(model = CLASS_MODEL, 
-                                                    temperature = CLASS_TEMP, 
-                                                    messages = [{"role": "assistant", "content": system}, 
-                                                                {"role": "user", "content": user_input}])
-    st.session_state["tokens"]["class"]["input"] += response.usage.prompt_tokens
-    st.session_state["tokens"]["class"]["output"] += response.usage.completion_tokens
-    return response.choices[0].message.content
+    
+    retry_count = 0
+    while retry_count <= 3:
+        response = GRADE_CLIENT.chat.completions.create(model = CLASS_MODEL, 
+                                                        temperature = CLASS_TEMP, 
+                                                        messages = [{"role": "assistant", "content": system}, 
+                                                                    {"role": "user", "content": user_input}])
+        content = response.choices[0].message.content
+
+        try:
+            json.loads(content)
+
+            # Usage
+            st.session_state["tokens"]["class"]["input"] += response.usage.prompt_tokens
+            st.session_state["tokens"]["class"]["output"] += response.usage.completion_tokens
+
+            return content
+        
+        except json.JSONDecodeError:
+            # If JSON parsing fails, print the error and retry
+            print(f"Attempt {retry_count + 1}: Response is not valid JSON. Retrying...")
+            retry_count += 1
+
+    # If max retries reached, raise an error
+    raise ValueError("Exceeded maximum retries. Unable to get valid JSON response.")
 
 
 def generate_matches(prompt: str, inputs: str) -> str:
@@ -62,14 +80,32 @@ def generate_matches(prompt: str, inputs: str) -> str:
     #                                       messages = [{"role": "user", "content": inputs}, 
     #                                                   {"role": "assistant", "content": "{\"output\": {"}]) # prefill tech
     # return "{\"output\": {" + matches.content[0].text
-    matches = GRADE_CLIENT.chat.completions.create(model = DIAG_MODEL, 
-                                                   temperature = DIAG_TEMP, 
-                                                   response_format = {"type": "json_object"}, 
-                                                   messages = [{"role": "assistant", "content": prompt}, 
-                                                               {"role": "user", "content": inputs}])
-    st.session_state["tokens"]["diag"]["input"] += matches.usage.prompt_tokens
-    st.session_state["tokens"]["diag"]["output"] += matches.usage.completion_tokens
-    return matches.choices[0].message.content
+
+    retry_count = 0
+    while retry_count <= 3:
+        matches = GRADE_CLIENT.chat.completions.create(model = DIAG_MODEL, 
+                                                    temperature = DIAG_TEMP, 
+                                                    response_format = {"type": "json_object"}, 
+                                                    messages = [{"role": "assistant", "content": prompt}, 
+                                                                {"role": "user", "content": inputs}])
+        content = matches.choices[0].message.content
+
+        try:
+            json.loads(content)
+
+            # Usage
+            st.session_state["tokens"]["diag"]["input"] += matches.usage.prompt_tokens
+            st.session_state["tokens"]["diag"]["output"] += matches.usage.completion_tokens
+
+            return content
+        
+        except json.JSONDecodeError:
+            # If JSON parsing fails, print the error and retry
+            print(f"Attempt {retry_count + 1}: Response is not valid JSON. Retrying...")
+            retry_count += 1
+
+    # If max retries reached, raise an error
+    raise ValueError("Exceeded maximum retries. Unable to get valid JSON response.")
 
 
 def transcribe_voice(voice_input):

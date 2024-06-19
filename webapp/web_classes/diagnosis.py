@@ -68,7 +68,6 @@ class Diagnosis(pydantic.BaseModel):
         user_inputs = [diagnosis for diagnosis in inputs["Potential"]] + [inputs["Final"]]
         # print(f"User inputs: {user_inputs}\n")
         output = web_methods.generate_matches(main_prompt, json.dumps(user_inputs))
-        print(output + "\n\n")
         matches = json.loads(output)
         print(f"Matches: {matches}\n\n")
 
@@ -90,22 +89,22 @@ class Diagnosis(pydantic.BaseModel):
                     used_statements.append(statement)
         
         # Grade the rationale
-        rat_prompt = GRADE_RAT_PROMPT
-        id = 0
-        for statement in used_statements:
-            rat_prompt += f"{id} {statement}\n"
-            id += 1
-        print(rat_prompt + "\n\n")
-        output = web_methods.generate_classifications(rat_prompt, inputs["Rationale"])
-        print(output + "\n\n")
-        rat_ids = json.loads(output)
-        graded_statements = [] # only statements that the user got according to grading
-        for id in rat_ids:
-            graded_statements.append(used_statements[id])
-        for condition in checklists["Rationale"]:
-            for statement in checklists["Rationale"][condition]:
-                if statement in graded_statements:
-                    checklists["Rationale"][condition][statement] = True
+        if used_statements: # only if the user got some diagnoses to grade on
+            rat_prompt = GRADE_RAT_PROMPT
+            id = 0
+            for statement in used_statements:
+                rat_prompt += f"{id} {statement}\n"
+                id += 1
+            print(rat_prompt + "\n\n")
+            output = web_methods.generate_classifications(rat_prompt, inputs["Rationale"])
+            rat_ids = json.loads(output)
+            graded_statements = [] # only statements that the user got according to grading
+            for id in rat_ids:
+                graded_statements.append(used_statements[id])
+            for condition in checklists["Rationale"]:
+                for statement in checklists["Rationale"][condition]:
+                    if statement in graded_statements:
+                        checklists["Rationale"][condition][statement] = True
 
         # print(checklists)
         

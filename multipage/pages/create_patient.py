@@ -96,6 +96,111 @@ if st.session_state["stage"] == CASE:
             layout11[1].markdown("#")
             st.session_state["file"]["Case"]["HIPI"][dim]["lock"] = layout11[1].toggle(label="lock", key=dim)
 
+        st.subheader("Associated Symptoms")
+        id = 1
+        n = 1
+        for element in st.session_state["file"]["Case"]["Associated Symptoms"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Associated Symptoms"):
+            st.session_state["file"]["Case"]["Associated Symptoms"].append({"desc": None, "lock": False})
+            st.rerun()
+
+        st.subheader("Medical History")
+        n = 1
+        for element in st.session_state["file"]["Case"]["Medical History"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Medical History"):
+            st.session_state["file"]["Case"]["Medical History"].append({"desc": None, "lock": False})
+            st.rerun()
+
+        st.subheader("Surgical History")
+        n = 1
+        for element in st.session_state["file"]["Case"]["Surgical History"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Surgical History"):
+            st.session_state["file"]["Case"]["Surgical History"].append({"desc": None, "lock": False})
+            st.rerun()
+
+        st.subheader("Medications")
+        n = 1
+        for element in st.session_state["file"]["Case"]["Medications"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Medications"):
+            st.session_state["file"]["Case"]["Medications"].append({"desc": None, "lock": False})
+            st.rerun()
+
+        st.subheader("Allergies")
+        n = 1
+        for element in st.session_state["file"]["Case"]["Allergies"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Allergies"):
+            st.session_state["file"]["Case"]["Allergies"].append({"desc": None, "lock": False})
+            st.rerun()
+
+        st.subheader("Family History")
+        n = 1
+        for element in st.session_state["file"]["Case"]["Family History"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Family History"):
+            st.session_state["file"]["Case"]["Family History"].append({"desc": None, "lock": False})
+            st.rerun()
+
+        st.subheader("Social History")
+        n = 1
+        for element in st.session_state["file"]["Case"]["Social History"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Social History"):
+            st.session_state["file"]["Case"]["Social History"].append({"desc": None, "lock": False})
+            st.rerun()
+        
+        st.subheader("Other Symptoms")
+        n = 1
+        for element in st.session_state["file"]["Case"]["Other Symptoms"]:
+            layout12 = st.columns([7, 1])
+            element["desc"] = layout12[0].text_input("Element " + str(n), key=id)
+            layout12[1].markdown("#")
+            element["lock"] = layout12[1].toggle(label="lock", key=id+999)
+            n += 1
+            id += 1
+        if st.button("Add New Element", type="primary", key="Other Symptoms"):
+            st.session_state["file"]["Case"]["Other Symptoms"].append({"desc": None, "lock": False})
+            st.rerun()
+
         if st.button("Next"):
             print(st.session_state["file"])
             print("\n\n")

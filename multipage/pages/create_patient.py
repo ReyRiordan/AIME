@@ -8,7 +8,7 @@ import streamlit as st
 INIT = 0
 CASE = 1
 GRADING_DATA = 2
-GRADING_LABELS = 3
+LABEL_DESCS = 3
 GRADING_DIAG = 4
 
 st.set_page_config(page_title = "Creation", layout = "wide")
@@ -369,8 +369,26 @@ if st.session_state["stage"] == GRADING_DATA:
     if st.button("Next"):
         print(st.session_state["file"])
         print("\n\n")
-        set_stage(GRADING_LABELS)
+        set_stage(LABEL_DESCS)
         st.rerun()
 
 
+if st.session_state["stage"] == LABEL_DESCS:
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
+        st.title("Label Descriptions")
 
+        label_list = []
+        for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"]:
+            label_list.append(label)
+        for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"]:
+            label_list.append(label)
+
+        for label in label_list:
+            st.session_state["file"]["Labels"][label] = st.text_input(label)
+        
+        if st.button("Next"):
+            print(st.session_state["file"])
+            print("\n\n")
+            set_stage(GRADING_DIAG)
+            st.rerun()

@@ -8,7 +8,8 @@ import streamlit as st
 INIT = 0
 CASE = 1
 GRADING_DATA = 2
-GRADING_DIAG = 3
+GRADING_LABELS = 3
+GRADING_DIAG = 4
 
 st.set_page_config(page_title = "Creation", layout = "wide")
 
@@ -44,7 +45,48 @@ if "file" not in st.session_state:
             "Family History": [],
             "Social History": [],
             "Other Symptoms": []
-        }
+        },
+        "Grading": {
+            "Data Acquisition": {
+                "General": {
+                    "Introduction": 0,
+                    "Confirm Identity": 0,
+                    "Establish Chief Concern": 0,
+                    "Additional Information": 0,
+                    "Medical History": 0,
+                    "Surgery Hospitalization": 0,
+                    "Medication": 0,
+                    "Allergies": 0,
+                    "Family History": 0,
+                    "Alcohol": 0,
+                    "Smoking": 0,
+                    "Drug Use": 0,
+                    "Employment": 0,
+                    "Social Support": 0
+                },
+                "Dimensions": {
+                    "Onset": 0,
+                    "Quality": 0,
+                    "Location": 0,
+                    "Timing": 0,
+                    "Pattern": 0,
+                    "Exacerbating": 0,
+                    "Relieving": 0,
+                    "Prior History": 0,
+                    "Radiation": 0,
+                    "Severity": 0
+                },
+                "Associated": {},
+                "Risk": {}
+            },
+            "Diagnosis": {
+                "Summary": {},
+                "Potential": {},
+                "Rationale": {},
+                "Final": {}
+            }
+        },
+        "Labels": {}
     }
 
 if "stage" not in st.session_state:
@@ -205,3 +247,130 @@ if st.session_state["stage"] == CASE:
             print(st.session_state["file"])
             print("\n\n")
             set_stage(GRADING_DATA)
+            st.rerun()
+
+
+if st.session_state["stage"] == GRADING_DATA:
+    st.title("Grading: Data Acquisition")
+
+    layout1 = st.columns([1, 1])
+    with layout1[0]:
+        layout11 = st.columns([1, 1])
+
+        layout11[0].subheader("General")
+        st.session_state["data_general"] = []
+        for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["General"].items():
+            st.session_state["data_general"].append({"label": label, "score": score})
+        st.session_state["data_general"] = layout11[0].data_editor(
+            data = st.session_state["data_general"],
+            width = 1000,
+            height = 528,
+            column_config = {
+                "label": st.column_config.Column(
+                    label = "Label",
+                    width = "medium",
+                    disabled = True
+                ),
+                "score": st.column_config.NumberColumn(
+                    label = "Score",
+                    width = "small",
+                    min_value = 0,
+                    step = 1
+                )
+            }
+        )
+        for element in st.session_state["data_general"]:
+            st.session_state["file"]["Grading"]["Data Acquisition"]["General"][element["label"]] = element["score"]
+
+        layout11[1].subheader("Dimensions")
+        st.session_state["data_dimensions"] = []
+        for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Dimensions"].items():
+            st.session_state["data_dimensions"].append({"label": label, "score": score})
+        st.session_state["data_dimensions"] = layout11[1].data_editor(
+            data = st.session_state["data_dimensions"],
+            width = 1000,
+            column_config = {
+                "label": st.column_config.Column(
+                    label = "Label",
+                    width = "medium",
+                    disabled = True
+                ),
+                "score": st.column_config.NumberColumn(
+                    label = "Score",
+                    width = "small",
+                    min_value = 0,
+                    step = 1
+                )
+            }
+        )
+        for element in st.session_state["data_dimensions"]:
+            st.session_state["file"]["Grading"]["Data Acquisition"]["Dimensions"][element["label"]] = element["score"]
+
+
+        layout12 = st.columns([1, 1])
+        layout12[0].subheader("Associated Symptoms")
+        st.session_state["data_associated"] = [{"label": None, "score": None}]
+        st.session_state["data_associated"] = layout12[0].data_editor(
+            data = st.session_state["data_associated"],
+            width = 1000,
+            num_rows = "dynamic",
+            hide_index = True,
+            key = "Associated",
+            column_config = {
+                "label": st.column_config.Column(
+                    label = "Label",
+                    width = "medium",
+                    required = True
+                ),
+                "score": st.column_config.NumberColumn(
+                    label = "Score",
+                    width = "small",
+                    min_value = 0,
+                    step = 1,
+                    required = True
+                )
+            }
+        )
+        for element in st.session_state["data_associated"]:
+            if element["label"] and element["score"]:
+                st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"][element["label"]] = element["score"]
+
+        layout12[1].subheader("Risk Factors")
+        st.session_state["data_risk"] = [{"label": None, "score": None}]
+        st.session_state["data_risk"] = layout12[1].data_editor(
+            data = st.session_state["data_risk"],
+            width = 1000,
+            num_rows = "dynamic",
+            hide_index = True,
+            key = "Risk",
+            column_config = {
+                "label": st.column_config.Column(
+                    label = "Label",
+                    width = "medium",
+                    required = True
+                ),
+                "score": st.column_config.NumberColumn(
+                    label = "Score",
+                    width = "small",
+                    min_value = 0,
+                    step = 1,
+                    required = True
+                )
+            }
+        )
+        for element in st.session_state["data_risk"]:
+            if element["label"] and element["score"]:
+                st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"][element["label"]] = element["score"]
+
+    with layout1[1]:
+        st.subheader("Case Description")
+        st.write("INSERT PRETTY PRINT OF CASE DESCRIPTION HERE")
+
+    if st.button("Next"):
+        print(st.session_state["file"])
+        print("\n\n")
+        set_stage(GRADING_LABELS)
+        st.rerun()
+
+
+

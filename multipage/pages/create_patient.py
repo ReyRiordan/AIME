@@ -369,8 +369,18 @@ if st.session_state["stage"] == GRADING_DATA:
     if st.button("Next"):
         print(st.session_state["file"])
         print("\n\n")
+        st.session_state["label_list"] = []
+        for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"]:
+            st.session_state["label_list"].append(label)
+        for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"]:
+            st.session_state["label_list"].append(label)
         set_stage(LABEL_DESCS)
         st.rerun()
+
+
+if st.session_state["stage"] == GRADING_DIAG:
+    st.title("Grading: Diagnosis")
+    
 
 
 if st.session_state["stage"] == LABEL_DESCS:
@@ -378,13 +388,7 @@ if st.session_state["stage"] == LABEL_DESCS:
     with layout1[1]:
         st.title("Label Descriptions")
 
-        label_list = []
-        for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"]:
-            label_list.append(label)
-        for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"]:
-            label_list.append(label)
-
-        for label in label_list:
+        for label in st.session_state["label_list"]:
             st.session_state["file"]["Labels"][label] = st.text_input(label)
         
         if st.button("Next"):

@@ -386,8 +386,12 @@ if st.session_state["stage"] == GRADING_DIAG:
         st.subheader("Interpretive Summary")
 
         for label in st.session_state["label_list"]:
-            if st.checkbox(label):
+            checked = st.checkbox(label)
+            if checked:
                 st.session_state["file"]["Grading"]["Diagnosis"]["Summary"][label] = None
+            else:
+                if label in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"]:
+                    st.session_state["file"]["Grading"]["Diagnosis"]["Summary"].pop(label)
 
         st.session_state["data_summary"] = []
         for label, score in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"].items():

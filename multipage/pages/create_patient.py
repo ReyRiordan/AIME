@@ -23,7 +23,13 @@ if "file" not in st.session_state:
         },
         "Assets": None,
         "Case": {
-            "Personal Details": {},
+            "Personal Details": {
+                "Name": None,
+                "Sex": None,
+                "Race": None,
+                "Birthdate": None,
+                "Tone": None
+            },
             "Chief Concern": None,
             "HIPI": {
                 "Onset": {"desc": None, "lock": None},
@@ -122,7 +128,7 @@ if st.session_state["stage"] == CASE:
         st.title("Case Description")
 
         st.subheader("Personal Details")
-        for detail in ["Name", "Sex", "Race", "Birthdate", "Tone"]:
+        for detail in st.session_state["file"]["Case"]["Personal Details"]:
             st.session_state["file"]["Case"]["Personal Details"][detail] = st.text_input(label = detail + ":",
                                                                                          value = st.session_state["file"]["Case"]["Personal Details"][detail])
         
@@ -172,6 +178,22 @@ if st.session_state["stage"] == CASE:
         if layout13[1].button("Next"):
             print(st.session_state["file"])
             print("\n\n")
+            st.session_state["data_general"] = []
+            for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["General"].items():
+                st.session_state["data_general"].append({"label": label, "score": score})
+            st.session_state["data_dimensions"] = []
+            for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Dimensions"].items():
+                st.session_state["data_dimensions"].append({"label": label, "score": score})
+            st.session_state["data_associated"] = []
+            for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"].items():
+                st.session_state["data_associated"].append({"label": label, "score": score})
+            if not st.session_state["data_associated"]:
+                st.session_state["data_associated"] = [{"label": None, "score": None}]
+            st.session_state["data_risk"] = []
+            for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"].items():
+                st.session_state["data_risk"].append({"label": label, "score": score})
+            if not st.session_state["data_risk"]:
+                st.session_state["data_risk"] = [{"label": None, "score": None}]
             set_stage(GRADING_DATA)
             st.rerun()
 
@@ -184,9 +206,9 @@ if st.session_state["stage"] == GRADING_DATA:
         layout11 = st.columns([1, 1])
 
         layout11[0].subheader("General")
-        st.session_state["data_general"] = []
-        for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["General"].items():
-            st.session_state["data_general"].append({"label": label, "score": score})
+        # st.session_state["data_general"] = []
+        # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["General"].items():
+        #     st.session_state["data_general"].append({"label": label, "score": score})
         st.session_state["data_general"] = layout11[0].data_editor(
             data = st.session_state["data_general"],
             width = 1000,
@@ -201,7 +223,8 @@ if st.session_state["stage"] == GRADING_DATA:
                     label = "Score",
                     width = "small",
                     min_value = 0,
-                    step = 1
+                    step = 1,
+                    required = True
                 )
             }
         )
@@ -209,9 +232,9 @@ if st.session_state["stage"] == GRADING_DATA:
             st.session_state["file"]["Grading"]["Data Acquisition"]["General"][element["label"]] = element["score"]
 
         layout11[1].subheader("Dimensions")
-        st.session_state["data_dimensions"] = []
-        for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Dimensions"].items():
-            st.session_state["data_dimensions"].append({"label": label, "score": score})
+        # st.session_state["data_dimensions"] = []
+        # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Dimensions"].items():
+        #     st.session_state["data_dimensions"].append({"label": label, "score": score})
         st.session_state["data_dimensions"] = layout11[1].data_editor(
             data = st.session_state["data_dimensions"],
             width = 1000,
@@ -225,7 +248,8 @@ if st.session_state["stage"] == GRADING_DATA:
                     label = "Score",
                     width = "small",
                     min_value = 0,
-                    step = 1
+                    step = 1,
+                    required = True
                 )
             }
         )
@@ -235,7 +259,11 @@ if st.session_state["stage"] == GRADING_DATA:
 
         layout12 = st.columns([1, 1])
         layout12[0].subheader("Associated Symptoms")
-        st.session_state["data_associated"] = [{"label": None, "score": None}]
+        # st.session_state["data_associated"] = []
+        # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"].items():
+        #     st.session_state["data_associated"].append({"label": label, "score": score})
+        # if not st.session_state["data_associated"]:
+        #     st.session_state["data_associated"] = [{"label": None, "score": None}]
         st.session_state["data_associated"] = layout12[0].data_editor(
             data = st.session_state["data_associated"],
             width = 1000,
@@ -257,12 +285,17 @@ if st.session_state["stage"] == GRADING_DATA:
                 )
             }
         )
+        st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"] = {}
         for element in st.session_state["data_associated"]:
             if element["label"] and element["score"]:
                 st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"][element["label"]] = element["score"]
 
         layout12[1].subheader("Risk Factors")
-        st.session_state["data_risk"] = [{"label": None, "score": None}]
+        # st.session_state["data_risk"] = []
+        # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"].items():
+        #     st.session_state["data_risk"].append({"label": label, "score": score})
+        # if not st.session_state["data_risk"]:
+        #     st.session_state["data_risk"] = [{"label": None, "score": None}]
         st.session_state["data_risk"] = layout12[1].data_editor(
             data = st.session_state["data_risk"],
             width = 1000,
@@ -284,6 +317,7 @@ if st.session_state["stage"] == GRADING_DATA:
                 )
             }
         )
+        st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"] = {}
         for element in st.session_state["data_risk"]:
             if element["label"] and element["score"]:
                 st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"][element["label"]] = element["score"]
@@ -295,11 +329,36 @@ if st.session_state["stage"] == GRADING_DATA:
         if layout13[1].button("Next"):
             print(st.session_state["file"])
             print("\n\n")
-            st.session_state["label_list"] = []
-            for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"]:
-                st.session_state["label_list"].append(label)
-            for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"]:
-                st.session_state["label_list"].append(label)
+            st.session_state["data_summary"] = []
+            for label, score in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"].items():
+                st.session_state["data_summary"].append({"label": label, "score": score})
+            if not st.session_state["data_summary"]:
+                st.session_state["data_summary"] = [{"label": None, "score": None}]
+            st.session_state["data_potential"] = []
+            for diagnosis, score in st.session_state["file"]["Grading"]["Diagnosis"]["Potential"].items():
+                st.session_state["data_potential"].append({"diagnosis": diagnosis, "score": score})
+            if not st.session_state["data_potential"]:
+                st.session_state["data_potential"] = [{"diagnosis": None, "score": None}]
+            for diagnosis in st.session_state["file"]["Grading"]["Diagnosis"]["Potential"]:
+                if diagnosis not in st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"]:
+                    st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis] = []
+                name = "data" + diagnosis
+                st.session_state[name] = []
+                for element in st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis]:
+                    st.session_state[name].append({"desc": element["desc"], "sign": element["sign"], "weight": element["weight"]})
+                if not st.session_state[name]:
+                    st.session_state[name] = [{"desc": None, "sign": None, "weight": None}]
+            st.session_state["data_final"] = []
+            for diagnosis, score in st.session_state["file"]["Grading"]["Diagnosis"]["Final"].items():
+                st.session_state["data_final"].append({"diagnosis": diagnosis, "score": score})
+            if not st.session_state["data_final"]:
+                st.session_state["data_final"] = [{"diagnosis": None, "score": None}]
+                
+            # st.session_state["label_list"] = []
+            # for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"]:
+            #     st.session_state["label_list"].append(label)
+            # for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"]:
+            #     st.session_state["label_list"].append(label)
             set_stage(GRADING_DIAG)
             st.rerun()
 
@@ -318,16 +377,26 @@ if st.session_state["stage"] == GRADING_DIAG:
         for label in st.session_state["label_list"]:
             checked = st.checkbox(label)
             if checked:
-                st.session_state["file"]["Grading"]["Diagnosis"]["Summary"][label] = None
+                if {"label": None, "score": None} in st.session_state["data_summary"]:
+                    st.session_state["data_summary"].remove({"label": None, "score": None})
+                in_list = False
+                for element in st.session_state["data_summary"]:
+                    if element["label"] == label:
+                        in_list = True
+                if not in_list:
+                    st.session_state["data_summary"].append({"label": label, "score": None})
             else:
-                if label in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"]:
-                    st.session_state["file"]["Grading"]["Diagnosis"]["Summary"].pop(label)
+                for element in st.session_state["data_summary"]:
+                    if element["label"] == label:
+                        st.session_state["data_summary"].remove(element)
+                if not st.session_state["data_summary"]:
+                    st.session_state["data_summary"] = [{"label": None, "score": None}]
 
-        st.session_state["data_summary"] = []
-        for label, score in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"].items():
-            st.session_state["data_summary"].append({"label": label, "score": score})
-        if not st.session_state["data_summary"]:
-            st.session_state["data_summary"] = [{"label": None, "score": None}]
+        # st.session_state["data_summary"] = []
+        # for label, score in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"].items():
+        #     st.session_state["data_summary"].append({"label": label, "score": score})
+        # if not st.session_state["data_summary"]:
+        #     st.session_state["data_summary"] = [{"label": None, "score": None}]
         st.session_state["data_summary"] = st.data_editor(
             data = st.session_state["data_summary"],
             num_rows = "dynamic",
@@ -348,12 +417,17 @@ if st.session_state["stage"] == GRADING_DIAG:
                 )
             }
         )
+        st.session_state["file"]["Grading"]["Diagnosis"]["Summary"] = {}
         for element in st.session_state["data_summary"]:
             if element["label"] and element["score"]:
                 st.session_state["file"]["Grading"]["Diagnosis"]["Summary"][element["label"]] = element["score"]
         
         st.subheader("Potential Diagnoses")
-        st.session_state["data_potential"] = [{"label": None, "score": None}]
+        # st.session_state["data_potential"] = []
+        # for diagnosis, score in st.session_state["file"]["Grading"]["Diagnosis"]["Potential"]:
+        #     st.session_state["data_potential"].append({"diagnosis": diagnosis, "score": score})
+        # if not st.session_state["data_potential"]:
+        #     st.session_state["data_potential"] = [{"diagnosis": None, "score": None}]
         st.session_state["data_potential"] = st.data_editor(
             data = st.session_state["data_potential"],
             width = 1000,
@@ -361,7 +435,7 @@ if st.session_state["stage"] == GRADING_DIAG:
             hide_index = True,
             key = "Potential",
             column_config = {
-                "label": st.column_config.Column(
+                "diagnosis": st.column_config.Column(
                     label = "Diagnosis",
                     width = "medium",
                     required = True
@@ -375,16 +449,22 @@ if st.session_state["stage"] == GRADING_DIAG:
                 )
             }
         )
+        st.session_state["file"]["Grading"]["Diagnosis"]["Potential"] = {}
         for element in st.session_state["data_potential"]:
-            if element["label"] and element["score"]:
-                st.session_state["file"]["Grading"]["Diagnosis"]["Potential"][element["label"]] = element["score"]
+            if element["diagnosis"] and element["score"]:
+                st.session_state["file"]["Grading"]["Diagnosis"]["Potential"][element["diagnosis"]] = element["score"]
         
         st.subheader("Rationale")
         for diagnosis in st.session_state["file"]["Grading"]["Diagnosis"]["Potential"]:
-            st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis] = []
+            if diagnosis not in st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"]:
+                st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis] = []
             st.write(diagnosis + ":")
             name = "data" + diagnosis
-            st.session_state[name] = [{"desc": None, "sign": None, "weight": None}]
+            st.session_state[name] = []
+            for element in st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis]:
+                st.session_state[name].append({"desc": element["desc"], "sign": element["sign"], "weight": element["weight"]})
+            if not st.session_state[name]:
+                st.session_state[name] = [{"desc": None, "sign": None, "weight": None}]
             st.session_state[name] = st.data_editor(
                 data = st.session_state[name],
                 width = 1000,
@@ -412,6 +492,7 @@ if st.session_state["stage"] == GRADING_DIAG:
                     )
                 }
             )
+            st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis] = []
             for element in st.session_state[name]:
                 if element["desc"] and element["sign"] and element["weight"]:
                     st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis].append({"desc": element["desc"],
@@ -419,7 +500,11 @@ if st.session_state["stage"] == GRADING_DIAG:
                                                                                                      "weight": element["weight"]})
         
         st.subheader("Final Diagnosis")
-        st.session_state["data_final"] = [{"label": None, "score": None}]
+        # st.session_state["data_final"] = []
+        # for diagnosis, score in st.session_state["file"]["Grading"]["Diagnosis"]["Final"]:
+        #     st.session_state["data_final"].append({"diagnosis": diagnosis, "score": score})
+        # if not st.session_state["data_final"]:
+        #     st.session_state["data_final"] = [{"diagnosis": None, "score": None}]
         st.session_state["data_final"] = st.data_editor(
             data = st.session_state["data_final"],
             width = 1000,
@@ -427,7 +512,7 @@ if st.session_state["stage"] == GRADING_DIAG:
             hide_index = True,
             key = "Final",
             column_config = {
-                "label": st.column_config.SelectboxColumn(
+                "diagnosis": st.column_config.SelectboxColumn(
                     label = "Diagnosis",
                     width = "medium",
                     default = None,
@@ -443,13 +528,39 @@ if st.session_state["stage"] == GRADING_DIAG:
                 )
             }
         )
+        st.session_state["file"]["Grading"]["Diagnosis"]["Final"] = {}
         for element in st.session_state["data_final"]:
-            if element["label"] and element["score"]:
-                st.session_state["file"]["Grading"]["Diagnosis"]["Final"][element["label"]] = element["score"]
+            if element["diagnosis"] and element["score"]:
+                st.session_state["file"]["Grading"]["Diagnosis"]["Final"][element["diagnosis"]] = element["score"]
 
-        if st.button("Next"):
+        layout11 = st.columns([1, 1])
+        if layout11[0].button("Back"):
+            # st.session_state["data_general"] = []
+            # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["General"].items():
+            #     st.session_state["data_general"].append({"label": label, "score": score})
+            # st.session_state["data_dimensions"] = []
+            # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Dimensions"].items():
+            #     st.session_state["data_dimensions"].append({"label": label, "score": score})
+            # st.session_state["data_associated"] = []
+            # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"].items():
+            #     st.session_state["data_associated"].append({"label": label, "score": score})
+            # if not st.session_state["data_associated"]:
+            #     st.session_state["data_associated"] = [{"label": None, "score": None}]
+            # st.session_state["data_risk"] = []
+            # for label, score in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"].items():
+            #     st.session_state["data_risk"].append({"label": label, "score": score})
+            # if not st.session_state["data_risk"]:
+            #     st.session_state["data_risk"] = [{"label": None, "score": None}]
+            set_stage(GRADING_DATA)
+            st.rerun()
+        if layout11[1].button("Next"):
             print(st.session_state["file"])
             print("\n\n")
+            st.session_state["label_list"] = []
+            for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Associated"]:
+                st.session_state["label_list"].append(label)
+            for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"]:
+                st.session_state["label_list"].append(label)
             for label in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"]:
                 if label not in st.session_state["label_list"]:
                     st.session_state["label_list"].append(label)
@@ -462,9 +573,15 @@ if st.session_state["stage"] == LABEL_DESCS:
     with layout1[1]:
         st.title("Label Descriptions")
 
+        labels = {}
         for label in st.session_state["label_list"]:
-            st.session_state["file"]["Labels"][label] = st.text_input(label)
+            labels[label] = st.text_input(label)
         
-        if st.button("Next"):
+        layout11 = st.columns([1, 1])
+        if layout11[0].button("Back"):
+            set_stage(GRADING_DIAG)
+            st.rerun()
+        if layout11[1].button("Next"):
+            st.session_state["file"]["Labels"] = labels
             print(st.session_state["file"])
             print("\n\n")

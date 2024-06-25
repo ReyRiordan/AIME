@@ -8,8 +8,8 @@ import streamlit as st
 INIT = 0
 CASE = 1
 GRADING_DATA = 2
-LABEL_DESCS = 3
-GRADING_DIAG = 4
+GRADING_DIAG = 3
+LABEL_DESCS = 4
 
 st.set_page_config(page_title = "Creation", layout = "wide")
 
@@ -374,13 +374,153 @@ if st.session_state["stage"] == GRADING_DATA:
             st.session_state["label_list"].append(label)
         for label in st.session_state["file"]["Grading"]["Data Acquisition"]["Risk"]:
             st.session_state["label_list"].append(label)
-        set_stage(LABEL_DESCS)
+        set_stage(GRADING_DIAG)
         st.rerun()
 
 
 if st.session_state["stage"] == GRADING_DIAG:
-    st.title("Grading: Diagnosis")
-    
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
+        st.title("Grading: Diagnosis")
+
+        st.subheader("Interpretive Summary")
+
+        for label in st.session_state["label_list"]:
+            if st.checkbox(label):
+                st.session_state["file"]["Grading"]["Diagnosis"]["Summary"][label] = None
+
+        st.session_state["data_summary"] = []
+        for label, score in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"].items():
+            st.session_state["data_summary"].append({"label": label, "score": score})
+        if not st.session_state["data_summary"]:
+            st.session_state["data_summary"] = [{"label": None, "score": None}]
+        st.session_state["data_summary"] = st.data_editor(
+            data = st.session_state["data_summary"],
+            num_rows = "dynamic",
+            key = "Summary",
+            column_config = {
+                "label": st.column_config.Column(
+                    label = "Label",
+                    width = "medium",
+                    disabled = False,
+                    required = True
+                ),
+                "score": st.column_config.NumberColumn(
+                    label = "Score",
+                    width = "small",
+                    min_value = 0,
+                    step = 1,
+                    required = True
+                )
+            }
+        )
+        for element in st.session_state["data_summary"]:
+            if element["label"] and element["score"]:
+                st.session_state["file"]["Grading"]["Diagnosis"]["Summary"][element["label"]] = element["score"]
+        
+        st.subheader("Potential Diagnoses")
+        st.session_state["data_potential"] = [{"label": None, "score": None}]
+        st.session_state["data_potential"] = st.data_editor(
+            data = st.session_state["data_potential"],
+            width = 1000,
+            num_rows = "dynamic",
+            hide_index = True,
+            key = "Potential",
+            column_config = {
+                "label": st.column_config.Column(
+                    label = "Diagnosis",
+                    width = "medium",
+                    required = True
+                ),
+                "score": st.column_config.NumberColumn(
+                    label = "Score",
+                    width = "small",
+                    min_value = 0,
+                    step = 1,
+                    required = True
+                )
+            }
+        )
+        for element in st.session_state["data_potential"]:
+            if element["label"] and element["score"]:
+                st.session_state["file"]["Grading"]["Diagnosis"]["Potential"][element["label"]] = element["score"]
+        
+        st.subheader("Rationale")
+        for diagnosis in st.session_state["file"]["Grading"]["Diagnosis"]["Potential"]:
+            st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis] = []
+            st.write(diagnosis + ":")
+            name = "data" + diagnosis
+            st.session_state[name] = [{"desc": None, "sign": None, "weight": None}]
+            st.session_state[name] = st.data_editor(
+                data = st.session_state[name],
+                width = 1000,
+                num_rows = "dynamic",
+                hide_index = True,
+                key = diagnosis,
+                column_config = {
+                    "desc": st.column_config.Column(
+                        label = "Description",
+                        width = "large",
+                        required = True
+                    ),
+                    "sign": st.column_config.CheckboxColumn(
+                        label = "Supports",
+                        width = "small",
+                        default = False,
+                        required = True
+                    ),
+                    "weight": st.column_config.NumberColumn(
+                        label = "Score",
+                        width = "small",
+                        min_value = 0,
+                        step = 1,
+                        required = True
+                    )
+                }
+            )
+            for element in st.session_state[name]:
+                if element["desc"] and element["sign"] and element["weight"]:
+                    st.session_state["file"]["Grading"]["Diagnosis"]["Rationale"][diagnosis].append({"desc": element["desc"],
+                                                                                                     "sign": element["sign"],
+                                                                                                     "weight": element["weight"]})
+        
+        st.subheader("Final Diagnosis")
+        st.session_state["data_final"] = [{"label": None, "score": None}]
+        st.session_state["data_final"] = st.data_editor(
+            data = st.session_state["data_final"],
+            width = 1000,
+            num_rows = "dynamic",
+            hide_index = True,
+            key = "Final",
+            column_config = {
+                "label": st.column_config.SelectboxColumn(
+                    label = "Diagnosis",
+                    width = "medium",
+                    default = None,
+                    options = [diagnosis for diagnosis in st.session_state["file"]["Grading"]["Diagnosis"]["Potential"]],
+                    required = True
+                ),
+                "score": st.column_config.NumberColumn(
+                    label = "Score",
+                    width = "small",
+                    min_value = 0,
+                    step = 1,
+                    required = True
+                )
+            }
+        )
+        for element in st.session_state["data_final"]:
+            if element["label"] and element["score"]:
+                st.session_state["file"]["Grading"]["Diagnosis"]["Final"][element["label"]] = element["score"]
+
+        if st.button("Next"):
+            print(st.session_state["file"])
+            print("\n\n")
+            for label in st.session_state["file"]["Grading"]["Diagnosis"]["Summary"]:
+                if label not in st.session_state["label_list"]:
+                    st.session_state["label_list"].append(label)
+            set_stage(LABEL_DESCS)
+            st.rerun()
 
 
 if st.session_state["stage"] == LABEL_DESCS:
@@ -394,5 +534,3 @@ if st.session_state["stage"] == LABEL_DESCS:
         if st.button("Next"):
             print(st.session_state["file"])
             print("\n\n")
-            set_stage(GRADING_DIAG)
-            st.rerun()

@@ -80,33 +80,32 @@ class Diagnosis(pydantic.BaseModel):
         if matches[inputs["Final"]] in checklists["Final"]:
             checklists["Final"][matches[inputs["Final"]]] = True
 
-        # Initialize rationale checklist
-        used_reasoning = [] # only statements corresponding to each of user's potential diagnoses
+        # Initialize rationale checklist and rubric
+        rationale_rubric = {} # {condition: {id: sign + desc, etc.}}
         for condition in grading["Rationale"]:
             if checklists["Potential"][condition]:
-                checklists["Rationale"][condition] = {}
+                checklists["Rationale"][condition] = {} # {condition: {desc: True/False}
+                rationale_rubric[condition] = {}
                 for reasoning in grading["Rationale"][condition]:
+                    id = 1
                     desc = reasoning["desc"]
                     checklists["Rationale"][condition][desc] = False
-                    used_reasoning.append(desc)
+                    sign = "IMPLIES: " if reasoning["sign"] else "REFUTES: "
+                    rationale_rubric[condition][id] = sign + desc
+                    id += 1
         
         # Grade the rationale
         rat_prompt = GRADE_RAT_PROMPT
-        id = 0
-        for reasoning in used_reasoning:
-            rat_prompt += f"{id} {reasoning}\n"
-            id += 1
+        for condition, reasonings in rationale_rubric.items():
+            rat_prompt += f"\"{condition}\" {reasonings}\n"
         print(rat_prompt + "\n\n")
         output = web_methods.generate_classifications(rat_prompt, inputs["Rationale"])
         print(output + "\n\n")
-        rat_ids = json.loads(output)
-        graded_reasoning = [] # only statements that the user got according to grading
-        for id in rat_ids:
-            graded_reasoning.append(used_reasoning[id])
-        for condition in checklists["Rationale"]:
-            for reasoning in checklists["Rationale"][condition]:
-                if reasoning in graded_reasoning:
-                    checklists["Rationale"][condition][reasoning] = True
+        rat_grades = json.loads(output) # {condition: [id, id, etc.]} (only ids that were present)
+        for condition in rat_grades:
+            for id in rat_grades[condition]:
+                reasoning = rationale_rubric[condition][id][9:] # take out "IMPLIES: " or "REFUTES: " (both 9 char) for just desc
+                checklists["Rationale"][condition][reasoning] = True
 
         # print(checklists)
         

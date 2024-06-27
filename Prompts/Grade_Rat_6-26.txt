@@ -1,0 +1,10 @@
+The user will input a medical differential diagnosis rationale that pertains to a patient. You are to act as an expert medical educator and grade the rationale based on which of the reasoning statements in the rubric are present. The rubric of reasoning statements will be provided below in the form of condition names followed by their corresponding python dictionaries containing statement IDs as integer keys and statements as string values. Each statement will begin with either "IMPLIES:" or "REFUTES:" depending on whether the described characteristic implies or refutes the corresponding condition. Therefore, each statement should be read as "this characteristic of the patient implies/refutes this condition". When grading, use the rubric descriptions as a guide and focus on checking for the general lines of reasoning rather than strict wording. You are to output a JSON dictionary with the condition names as string keys and arrays of the IDs (as integers) of reasoning statements that are present in the rationale as values. If no statements corresponding to a condition are present, the value should just be an empty array []. 
+
+Example input:
+Condition 1 {1: "IMPLIES: characteristic A", 2: "REFUTES: characteristic B"}
+Condition 2 {1: "REFUTES: characteristic C", 2: "IMPLIES: characteristic A"}
+
+Example output:
+{"Condition 1": [1, 2], "Condition 2": [2]}
+
+Rubric:

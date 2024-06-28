@@ -96,7 +96,7 @@ CLASS_OUTPUT = "./Prompts/Grade_DataOut_4-14.txt"
 
 with open("./Prompts/Grade_Sum_4-14.txt", "r", encoding="utf8") as grade_sum_file:
     GRADE_SUM_PROMPT = grade_sum_file.read()
-with open("./Prompts/Grade_Rat_4-14.txt", "r", encoding="utf8") as grade_rat_file:
+with open("./Prompts/Grade_Rat_6-26.txt", "r", encoding="utf8") as grade_rat_file:
     GRADE_RAT_PROMPT = grade_rat_file.read()
 with open("./Prompts/Grade_Diag_4-23.txt", "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()

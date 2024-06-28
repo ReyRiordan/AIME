@@ -123,10 +123,10 @@ class Diagnosis(pydantic.BaseModel):
                 scores["Summary"] += grading["Summary"][label]
             maxscores["Summary"] += grading["Summary"][label]
         for condition in checklists["Rationale"]:
-            for statement in checklists["Rationale"][condition]:
-                if checklists["Rationale"][condition][statement]:
-                    scores["Rationale"] += grading["Rationale"][condition][statement]
-                maxscores["Rationale"] += grading["Rationale"][condition][statement]
+            for id in checklists["Rationale"][condition]:
+                if checklists["Rationale"][condition][id]:
+                    scores["Rationale"] += grading["Rationale"][condition][id-1]["weight"] # list index starts at 0 but id starts at 1
+                maxscores["Rationale"] += grading["Rationale"][condition][id-1]["weight"]
         for condition in checklists["Potential"]:
             if checklists["Potential"][condition]:
                 scores["Potential"] += grading["Potential"][condition]

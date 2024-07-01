@@ -25,7 +25,7 @@ class Diagnosis(pydantic.BaseModel):
     @classmethod
     def build(cls, patient: Patient, inputs: dict[str, str]):
                 
-        # Intialize big grades dict
+        # Intialize big grades dict (except rationale b/c need potential grading first to initialize)
         patient_grading = patient.grading["Diagnosis"]
         grades = {"Summary": {}, # label: {weight, score}
                   "Rationale": {}, # condition: {weight, score}
@@ -35,12 +35,6 @@ class Diagnosis(pydantic.BaseModel):
             grades["Summary"][label] = {"weight": weight, "score": False}
         for condition, weight in patient_grading["Potential"].items():
             grades["Potential"][condition] = {"weight": weight, "score": False}
-        for condition in patient_grading["Rationale"]:
-            grades["Rationale"][condition] = []
-            for reasoning in patient_grading["Rationale"][condition]:
-                to_append = reasoning.copy()
-                to_append["score"] = False
-                grades["Rationale"][condition].append(to_append)
         for condition, weight in patient_grading["Final"].items():
             grades["Final"][condition] = {"weight": weight, "score": False}
         
@@ -83,6 +77,15 @@ class Diagnosis(pydantic.BaseModel):
         if input_matches[inputs["Final"]] in grades["Final"]:
             grades["Final"][input_matches[inputs["Final"]]]["score"] = True
         
+        # Initialize rationale grading based on what potential conditions user got right
+        for condition in patient_grading["Rationale"]:
+            if grades["Potential"][condition]["score"]:
+                grades["Rationale"][condition] = []
+                for reasoning in patient_grading["Rationale"][condition]:
+                    to_append = reasoning.copy()
+                    to_append["score"] = False
+                    grades["Rationale"][condition].append(to_append)
+        
         # Grade the rationale
         rat_prompt = GRADE_RAT_PROMPT
         for condition, reasonings in grades["Rationale"].items():
@@ -102,19 +105,16 @@ class Diagnosis(pydantic.BaseModel):
                 grades["Rationale"][condition][id-1]["score"] = True # prompted ids are 1 start but indices are 0 start
         
         # Calculate scoring
-        scores = {"Summary": 0,
-                  "Rationale": 0,
-                  "Potential": 0,
-                  "Final": 0}
-        maxscores = {"Summary": 0,
-                     "Rationale": 0,
-                     "Potential": 3,
-                     "Final": 8}
-        for label in checklists["Summary"]:
-            if checklists["Summary"][label]:
-                scores["Summary"] += grading["Summary"][label]
-            maxscores["Summary"] += grading["Summary"][label]
-        for condition in checklists["Rationale"]:
+        scores = {"Summary": {"raw": 0, "max": 0},
+                  "Rationale": {"raw": 0, "max": 0},
+                  "Potential": {"raw": 0, "max": 3},
+                  "Final": {"raw": 0, "max": 8}}
+        for label in grades["Summary"]:
+            weight = grades["Summary"][label]["weight"]
+            if grades["Summary"][label]["score"]:
+                scores["Summary"]["raw"] += weight
+            scores["Summary"]["max"] += weight
+        for condition in grades["Rationale"]:
             for id in checklists["Rationale"][condition]:
                 if checklists["Rationale"][condition][id]:
                     scores["Rationale"] += grading["Rationale"][condition][id-1]["weight"] # list index starts at 0 but id starts at 1

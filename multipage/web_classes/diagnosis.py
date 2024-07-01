@@ -10,17 +10,15 @@ from .message import *
 import web_methods
 
 class Diagnosis(pydantic.BaseModel):
-    matches : Optional[dict]
     grades: Optional[dict]
+    matches : Optional[dict]
     scores : Optional[dict]
-    maxscores : Optional[dict] 
 
 
     # Attributes
-        # matches = None                       # dict{str, dict{str, str}}
-        # checklists = None                       # dict{str, dict{str, bool}}
-        # score = None                            # dict{int}
-        # maxscore = None                         # dict{int}
+        # grades = None             # dict{str, dict{str, dict{?}}}
+        # matches = None            # dict{str, dict{str, str}}
+        # scores = None             # dict{str, dict{str, int}}
     
     @classmethod
     def build(cls, patient: Patient, inputs: dict[str, str]):
@@ -28,8 +26,8 @@ class Diagnosis(pydantic.BaseModel):
         # Intialize big grades dict (except rationale b/c need potential grading first to initialize)
         patient_grading = patient.grading["Diagnosis"]
         grades = {"Summary": {}, # label: {weight, score}
-                  "Rationale": {}, # condition: {weight, score}
-                  "Potential": {}, # condition: [{desc, sign, weight, score}, etc.]
+                  "Rationale": {}, # condition: [{desc, sign, weight, score}, etc.]
+                  "Potential": {}, # condition: {weight, score}
                   "Final": {}} # condition: {weight, score}
         for label, weight in patient_grading["Summary"].items():
             grades["Summary"][label] = {"weight": weight, "score": False}
@@ -104,34 +102,36 @@ class Diagnosis(pydantic.BaseModel):
             for id in rat_grades[condition]:
                 grades["Rationale"][condition][id-1]["score"] = True # prompted ids are 1 start but indices are 0 start
         
-        # Calculate scoring
+        # Initialize scoring (except rationale, individual condition scores added after potential grading)
         scores = {"Summary": {"raw": 0, "max": 0},
-                  "Rationale": {"raw": 0, "max": 0},
-                  "Potential": {"raw": 0, "max": 3},
-                  "Final": {"raw": 0, "max": 8}}
+                  "Rationale": {"total": {"raw": 0, "max": 0}},
+                  "Potential": {"raw": 0, "max": 0},
+                  "Final": {"raw": 0, "max": 0}}
+        
+        # Calculate scoring
         for label in grades["Summary"]:
             weight = grades["Summary"][label]["weight"]
             if grades["Summary"][label]["score"]:
                 scores["Summary"]["raw"] += weight
             scores["Summary"]["max"] += weight
         for condition in grades["Rationale"]:
-            for id in checklists["Rationale"][condition]:
-                if checklists["Rationale"][condition][id]:
-                    scores["Rationale"] += grading["Rationale"][condition][id-1]["weight"] # list index starts at 0 but id starts at 1
-                maxscores["Rationale"] += grading["Rationale"][condition][id-1]["weight"]
-        for condition in checklists["Potential"]:
-            if checklists["Potential"][condition]:
-                scores["Potential"] += grading["Potential"][condition]
-        for condition in checklists["Final"]:
-            if checklists["Final"][condition]:
-                scores["Final"] += grading["Final"][condition]
+            scores["Rationale"][condition] = {"raw": 0, "max": 0}
+            for reasoning in grades["Rationale"][condition]:
+                weight = reasoning["weight"]
+                if reasoning["score"]:
+                    scores["Rationale"][condition]["raw"] += weight
+                    scores["Rationale"]["total"]["raw"] += weight
+                scores["Rationale"][condition]["max"] += weight
+                scores["Rationale"]["total"]["max"] += weight
+        for condition in grades["Potential"]:
+            weight = grades["Potential"][condition]["weight"]
+            if grades["Potential"][condition]["score"]:
+                scores["Potential"]["raw"] += weight
+            scores["Potential"]["max"] += weight
+        for condition in grades["Final"]:
+            weight = grades["Final"][condition]["weight"]
+            if grades["Final"][condition]:
+                scores["Final"]["raw"] += weight
+            scores["Final"]["max"] += weight
 
-        return cls(matches=matches, grades=grades, scores=scores, maxscores=maxscores)
-
-    # def get_dict(self):
-    #     to_return = {"grading": self.grading, 
-    #                  "classified": self.classified, 
-    #                  "checklists": self.checklists, 
-    #                  "scores": self.scores, 
-    #                  "maxscores": self.maxscores}
-    #     return to_return
+        return cls(grades=grades, matches=matches, scores=scores)

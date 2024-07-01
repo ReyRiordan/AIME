@@ -59,67 +59,71 @@ def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
 
 
 def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
+    grades = diagnosis["grades"]
+    matches = diagnosis["matches"]
     scores = diagnosis["scores"]
-    maxscores = diagnosis["maxscores"]
-    classified = diagnosis["classified"]
-    checklists = diagnosis["checklists"]
-    weights = diagnosis["weights"]
+    GREEN = "#baffc9"
+    RED = "#ffb3ba"
 
     with st.container(border = True):
-        st.subheader(f"Interpretative Summary: {scores['Summary']}/{maxscores['Summary']}", divider = "grey")
+        st.subheader(f"Interpretative Summary: {scores['Summary']['raw']}/{scores['Summary']['max']}", divider = "grey")
         layout1 = st.columns([1, 1])
         with layout1[0]:
             st.write("**Your answer:**")
             st.write(inputs["Summary"])
         with layout1[1]:
             st.write("**Scoring:**")
-            display_labels = [(key, str(weights["Summary"][key]), "#baffc9" if value else "#ffb3ba") for key, value in checklists["Summary"].items()]
+            display_labels = [(label, str(value["weight"]), GREEN if value["score"] else RED) for label, value in grades["Summary"].items()]
             annotated_text(display_labels)
             with st.expander("**Label Descriptions:**"):
-                for key, value in checklists["Summary"].items():
-                    annotated_text([(key, "", "#baffc9" if value else "#ffb3ba"), " " + LABEL_DESCS[key]])
+                for label, value in grades["Summary"].items():
+                    annotated_text([(label, "", GREEN if value["score"] else RED), " " + LABEL_DESCS[label]])
 
     with st.container(border = True):
-        st.subheader(f"Potential Diagnoses: {scores['Potential']}/{maxscores['Potential']}", divider = "grey")
+        st.subheader(f"Potential Diagnoses: {scores['Potential']['raw']}/{scores['Potential']['max']}", divider = "grey")
         layout2 = st.columns([1, 1])
         with layout2[0]:
             st.write("**Your answer(s):**")
-            user_potential = [(key, value, "#baffc9" if value in checklists["Potential"] else "#ffb3ba") for key, value in classified["Potential"].items()]
+            user_potential = [(input, match, GREEN if match in grades["Potential"] else RED) for input, match in matches["Potential"].items()]
             annotated_text(user_potential)
         with layout2[1]:
             st.write("**Valid answers:**")
-            valid_potential = [(key, str(weights["Potential"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Potential"].items()]
+            valid_potential = [(condition, str(value["weight"]), GREEN if value["score"] else RED) for condition, value, in grades["Potential"].items()]
             annotated_text(valid_potential)
         
     with st.container(border = True):
-        st.subheader(f"Rationale: {scores['Rationale']}/{maxscores['Rationale']}", divider = "grey")
+        st.subheader(f"Rationale: {scores['Rationale']['total']['raw']}/{scores['Rationale']['total']['max']}", divider = "grey")
         layout3 = st.columns([1, 1])
         with layout3[0]:
             st.write("**Your answer:**")
             st.write(inputs["Rationale"])
         with layout3[1]:
             st.write("**Scoring:**")
-            for condition in weights["Rationale"]:
-                if condition in checklists["Rationale"]:
-                    with st.expander(f"**{condition}:**"):
-                        for statement, checked in checklists["Rationale"][condition].items():
-                            annotated_text((statement, str(weights["Rationale"][condition][statement]), "#baffc9" if checked else "#ffb3ba"))
-            with st.expander("**Reasoning for potential diagnoses you didn't list:**"):
-                for condition in weights["Rationale"]:
-                    if condition not in checklists["Rationale"]:
-                        for statement, weight in weights["Rationale"][condition].items():
-                            annotated_text((statement, str(weight), "#ededed"))
+            if grades["Rationale"]:
+                for condition in grades["Rationale"]:
+                    with st.expander(f"**{condition}: {scores['Rationale'][condition]['raw']}/{scores['Rationale'][condition]['max']}**"):
+                        for reasoning in grades["Rationale"][condition]:
+                            sign = ":large_green_square:" if reasoning["sign"] else ":large_red_square:"
+                            annotated_text((f"{sign} {reasoning['desc']}", str(reasoning["weight"]), GREEN if reasoning["score"] else RED))
+            else:
+                st.write("We currently have no way to grade your rationale if you did not list any correct potential diagnoses.")
+            #TODO FIGURE OUT A WAY TO DO THIS IN REVAMP (rn grades["Rationale"] only has stuff for correct potentials, not the rest)
+            # with st.expander("**Reasoning for potential diagnoses you didn't list:**"):
+            #     for condition in weights["Rationale"]:
+            #         if condition not in checklists["Rationale"]:
+            #             for statement, weight in weights["Rationale"][condition].items():
+            #                 annotated_text((statement, str(weight), "#ededed"))
 
     with st.container(border = True):
-        st.subheader(f"Final Diagnosis: {scores['Final']}/{maxscores['Final']}", divider = "grey")
+        st.subheader(f"Final Diagnosis: {scores['Final']['raw']}/{scores['Final']['max']}", divider = "grey")
         layout4 = st.columns([1, 1])
         with layout4[0]:
             st.write("**Your answer:**")
-            user_final = [(key, value, "#baffc9" if value in checklists["Final"] else "#ffb3ba") for key, value in classified["Final"].items()]
+            user_final = [(input, match, GREEN if match in grades["Final"] else RED) for input, match in matches["Final"].items()]
             annotated_text("Your answer: ", user_final)
         with layout4[1]:
             st.write("**Valid answer(s):**")
-            valid_final = [(key, str(weights["Final"][key]), "#baffc9" if value else "#ffb3ba") for key, value, in checklists["Final"].items()]
+            valid_final = [(condition, str(value["weight"]), GREEN if value["score"] else RED) for condition, value, in grades["Final"].items()]
             annotated_text(valid_final)
 
 

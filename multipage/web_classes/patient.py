@@ -6,7 +6,7 @@ from lookups import *
 
 
 class Patient(pydantic.BaseModel):
-    name: str
+    id: str
     case: Optional[dict]
     grading: Optional[dict]
     physical : Optional[str]
@@ -25,13 +25,13 @@ class Patient(pydantic.BaseModel):
         # self.speech = None          # dict{str, str}
     
     @classmethod
-    def build(cls, name:str):
+    def build(cls, id: str):
         
-        with open(PATIENTS[name], "r") as json_file:
+        with open(PATIENTS[id], "r") as json_file:
             JSON = json.load(json_file)
 
         # Create virtual patient prompt
-        base = BASE_PROMPT.replace("{patient}", name)
+        base = BASE_PROMPT.replace("{patient}", id)
         convo_prompt = str(base)
         case = JSON["case"]
         convo_prompt += cls.process_case(case)
@@ -48,7 +48,7 @@ class Patient(pydantic.BaseModel):
         # Extract speech settings
         speech = JSON["Speech"]
 
-        return cls(name=name, 
+        return cls(id=id, 
                    case=case, 
                    grading=grading, 
                    physical=physical, 

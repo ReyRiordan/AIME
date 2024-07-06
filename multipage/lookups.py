@@ -75,10 +75,22 @@ DIAG_MODEL = "gpt-4-turbo"
 DIAG_TEMP = 0.0
 
 
+# Paths for prompt files
+PATHS = {"Patient Base": "./Prompts/Base_5-16.txt",
+         "Convo Summarizer": "./Prompts/Summarizer_4-22.txt",
+         "Label Descriptions": "./Prompts/label_descs.json",
+         "Label Examples": "./Prompts/datacategory_examples.json",
+         "Input Classification": "./Prompts/Grade_DataIn_4-14.txt",
+         "Output Classification": "./Prompts/Grade_DataOut_4-14.txt",
+         "Grade Summary": "./Prompts/Grade_Sum_4-14.txt",
+         "Grade Rationale": "./Prompts/Grade_Rat_6-26.txt",
+         "Grade Diagnosis": "./Prompts/Grade_Diag_4-23.txt"}
+
+
 # Convo related
-with open("./Prompts/Base_5-16.txt", "r", encoding="utf8") as base_file:
+with open(PATHS["Patient Base"], "r", encoding="utf8") as base_file:
     BASE_PROMPT = base_file.read()
-with open("./Prompts/Summarizer_4-22.txt", "r", encoding="utf8") as summarizer_file:
+with open(PATHS["Convo Summarizer"], "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
 MAX_MEMORY = 12 # no limit rn
 
@@ -87,18 +99,18 @@ MAX_MEMORY = 12 # no limit rn
 BATCH_MAX = 20
 BATCH_DELAY = 30
 
-with open("./Prompts/label_descs.json", "r") as label_descs_json:
+with open(PATHS["Label Descriptions"], "r") as label_descs_json:
     LABEL_DESCS = json.loads(label_descs_json.read())
-with open("./Prompts/datacategory_examples.json", "r") as cat_examples_json:
+with open(PATHS["Label Examples"], "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())
-CLASS_INPUT = "./Prompts/Grade_DataIn_4-14.txt"
-CLASS_OUTPUT = "./Prompts/Grade_DataOut_4-14.txt"
+CLASS_INPUT = PATHS["Input Classification"]
+CLASS_OUTPUT = PATHS["Output Classification"]
 
-with open("./Prompts/Grade_Sum_4-14.txt", "r", encoding="utf8") as grade_sum_file:
+with open(PATHS["Grade Summary"], "r", encoding="utf8") as grade_sum_file:
     GRADE_SUM_PROMPT = grade_sum_file.read()
-with open("./Prompts/Grade_Rat_6-26.txt", "r", encoding="utf8") as grade_rat_file:
+with open(PATHS["Grade Rationale"], "r", encoding="utf8") as grade_rat_file:
     GRADE_RAT_PROMPT = grade_rat_file.read()
-with open("./Prompts/Grade_Diag_4-23.txt", "r", encoding="utf8") as grade_diag_file:
+with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()
 
 

@@ -1,5 +1,8 @@
 {
   "ID": "John Smith",
+  "Avatar": {
+    "File": false
+  },
   "Speech": {
     "Host": "openai",
     "Model": "tts-1",

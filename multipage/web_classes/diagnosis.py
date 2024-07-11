@@ -23,6 +23,12 @@ class Diagnosis(pydantic.BaseModel):
     @classmethod
     def build(cls, patient: Patient, inputs: dict[str, str]):
                 
+        # Set up label descriptions (static + patient dependent)
+        with open(PATHS["Static Label Descriptions"], "r") as label_descs_json:
+            LABEL_DESCS = json.loads(label_descs_json.read())
+        for label, desc in patient.labels.items():
+            LABEL_DESCS[label] = desc
+        
         # Intialize big grades dict (except rationale b/c need potential grading first to initialize)
         patient_grading = patient.grading["Diagnosis"]
         grades = {"Summary": {}, # label: {weight, score}
@@ -37,8 +43,8 @@ class Diagnosis(pydantic.BaseModel):
             grades["Final"][condition] = {"weight": weight, "score": False}
         
         # Initialize dict to see user input and corresponding matched conditions
-        matches = {"Potential": {}, 
-                   "Final": {}}
+        matches = {"Potential": {}, # input: match
+                   "Final": {}} # input: match
         
         # Grade the summary
         sum_prompt = GRADE_SUM_PROMPT

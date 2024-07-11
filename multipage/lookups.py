@@ -78,7 +78,7 @@ DIAG_TEMP = 0.0
 # Paths for prompt files
 PATHS = {"Patient Base": "./Prompts/Base_5-16.txt",
          "Convo Summarizer": "./Prompts/Summarizer_4-22.txt",
-         "Label Descriptions": "./Prompts/label_descs.json",
+         "Static Label Descriptions": "./Prompts/label_descs.json",
          "Label Examples": "./Prompts/datacategory_examples.json",
          "Input Classification": "./Prompts/Grade_DataIn_4-14.txt",
          "Output Classification": "./Prompts/Grade_DataOut_4-14.txt",
@@ -99,8 +99,6 @@ MAX_MEMORY = 12 # no limit rn
 BATCH_MAX = 20
 BATCH_DELAY = 30
 
-with open(PATHS["Label Descriptions"], "r") as label_descs_json:
-    LABEL_DESCS = json.loads(label_descs_json.read())
 with open(PATHS["Label Examples"], "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())
 CLASS_INPUT = PATHS["Input Classification"]

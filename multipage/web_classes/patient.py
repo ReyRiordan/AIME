@@ -33,11 +33,11 @@ class Patient(pydantic.BaseModel):
         # Create virtual patient prompt
         base = BASE_PROMPT.replace("{patient}", id)
         convo_prompt = str(base)
-        case = JSON["case"]
+        case = JSON["Case"]
         convo_prompt += cls.process_case(case)
 
         # Extract grading for patient
-        grading = JSON["grading"]
+        grading = JSON["Grading"]
 
         # Assets (hardcoded for now)
         #TODO flexible assets

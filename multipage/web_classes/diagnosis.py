@@ -22,12 +22,6 @@ class Diagnosis(pydantic.BaseModel):
     
     @classmethod
     def build(cls, patient: Patient, inputs: dict[str, str]):
-                
-        # Set up label descriptions (static + patient dependent)
-        with open(PATHS["Static Label Descriptions"], "r") as label_descs_json:
-            LABEL_DESCS = json.loads(label_descs_json.read())
-        for label, desc in patient.labels.items():
-            LABEL_DESCS[label] = desc
         
         # Intialize big grades dict (except rationale b/c need potential grading first to initialize)
         patient_grading = patient.grading["Diagnosis"]
@@ -49,7 +43,7 @@ class Diagnosis(pydantic.BaseModel):
         # Grade the summary
         sum_prompt = GRADE_SUM_PROMPT
         for label in grades["Summary"]:
-            sum_prompt += f"[{label}]\n{LABEL_DESCS[label]}\n"
+            sum_prompt += f"[{label}]\n{patient.label_descs[label]}\n"
         output = web_methods.generate_classifications(sum_prompt, inputs["Summary"])
         print(output + "\n\n")
         sum_labels = json.loads(output)

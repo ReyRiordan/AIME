@@ -38,7 +38,7 @@ class DataCategory(pydantic.BaseModel):
         
         class_prompt = base_split[0]
         for label in patient.grading["Data Acquisition"][name]:
-            class_prompt += "[" + label + "] " + LABEL_DESCS[label] + "\n"
+            class_prompt += "[" + label + "] " + patient.label_descs[label] + "\n"
         class_prompt += base_split[1]
         
         # print(f"\n\n{class_prompt}\n\n") # debugging

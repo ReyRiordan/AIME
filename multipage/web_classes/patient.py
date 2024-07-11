@@ -14,7 +14,7 @@ class Patient(pydantic.BaseModel):
     explanation: Optional[str]
     convo_prompt: Optional[str]
     speech: Optional[dict]
-    labels: Optional[dict]
+    label_descs: Optional[dict]
 
     # Attributes
         # self.name = name            # str
@@ -24,7 +24,7 @@ class Patient(pydantic.BaseModel):
         # self.ECG = None             # str path
         # self.convo_prompt = None    # str
         # self.speech = None          # dict{str, str}
-        # self.labels = None          # dict{str, str}
+        # self.label_descs = None     # dict{str, str}
     
     @classmethod
     def build(cls, id: str):
@@ -50,8 +50,11 @@ class Patient(pydantic.BaseModel):
         # Extract speech settings
         speech = JSON["Speech"]
 
-        # Extract patient dependent label descriptions
-        labels = JSON["Labels"]
+        # Extract label descriptions (static + patient dependent)
+        with open(PATHS["Static Label Descriptions"], "r") as label_descs_json:
+            label_descs = json.loads(label_descs_json.read())
+        for label, desc in JSON["Labels"]:
+            label_descs[label] = desc
 
         return cls(id=id, 
                    speech=speech,
@@ -61,7 +64,7 @@ class Patient(pydantic.BaseModel):
                    case=case, 
                    grading=grading, 
                    convo_prompt=convo_prompt, 
-                   labels=labels)
+                   label_descs=label_descs)
 
     @classmethod
     def process_case(cls, case: dict[str, list[dict[str]]]) -> str:

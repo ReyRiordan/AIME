@@ -18,13 +18,6 @@ from typing import List
 from lookups import *
 
 
-# def get_webtext(content: str) -> str:
-#     path = WEBSITE_TEXT[content]
-#     with open(path, 'r', encoding='utf8') as webtext:
-#             text = webtext.read()
-#     return text
-
-
 def display_DataCategory(category: dict[str, str], checklist: dict[str, bool], weights: dict[str, int], score: int, maxscore: int) -> None:
     with st.container(border = True):
         st.subheader(f":{category['color']}[{category['header']}]: {score}/{maxscore}", divider = category['color'])

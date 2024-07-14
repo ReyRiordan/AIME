@@ -116,26 +116,3 @@ PATIENTS = {
     "John Smith": "./Patient_Info/JohnSmith.json", 
     "Jackie Smith": "./Patient_Info/JackieSmith.json"
 }
-
-DATACATEGORIES = {
-    "gen": {"type": "input", 
-            "header": "General Questions", 
-            "color": "blue", 
-            "highlight": "#bae1ff", # light blue
-            "desc": "./Prompts/desc_gen.json"}, 
-    "dims": {"type": "output", 
-             "header": "Dimensions of Chief Concern", 
-             "color": "red", 
-             "highlight": "#ffb3ba", # light red
-             "desc": "./Prompts/desc_dims.json"}, 
-    "asoc": {"type": "input", 
-             "header": "Associated Symptoms Questions", 
-             "color": "orange", 
-             "highlight": "#ffdfba", # light orange
-             "desc": "./Prompts/desc_asoc.json"}, 
-    "risk": {"type": "input", 
-             "header": "Risk Factor Questions", 
-             "color": "violet", 
-             "highlight": "#f1cbff", # light violet
-             "desc": "./Prompts/desc_risk.json"}
-}

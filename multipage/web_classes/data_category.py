@@ -19,26 +19,22 @@ class DataCategory(pydantic.BaseModel):
     def build(cls, name: str, patient: Patient):
         # Lookup
         DATACATEGORIES = {
-            "General": {"type": "input", 
-                    "header": "General Questions", 
-                    "color": "blue", 
-                    "highlight": "#bae1ff", # light blue
-                    "desc": "./Prompts/desc_gen.json"}, 
-            "Dimensions": {"type": "output", 
-                    "header": "Dimensions of Chief Concern", 
-                    "color": "red", 
-                    "highlight": "#ffb3ba", # light red
-                    "desc": "./Prompts/desc_dims.json"}, 
-            "Associated": {"type": "input", 
-                    "header": "Associated Symptoms Questions", 
-                    "color": "orange", 
-                    "highlight": "#ffdfba", # light orange
-                    "desc": "./Prompts/desc_asoc.json"}, 
-            "Risk": {"type": "input", 
-                    "header": "Risk Factor Questions", 
-                    "color": "violet", 
-                    "highlight": "#f1cbff", # light violet
-                    "desc": "./Prompts/desc_risk.json"}
+            "General":      {"type": "input", 
+                             "header": "General Questions", 
+                             "color": "blue", 
+                             "highlight": "#bae1ff"}, # light blue
+            "Dimensions":   {"type": "output", 
+                             "header": "Dimensions of Chief Concern", 
+                             "color": "red", 
+                             "highlight": "#ffb3ba"}, # light red
+            "Associated":   {"type": "input", 
+                             "header": "Associated Symptoms Questions", 
+                             "color": "orange", 
+                             "highlight": "#ffdfba"}, # light orange
+            "Risk":         {"type": "input", 
+                             "header": "Risk Factor Questions", 
+                             "color": "violet", 
+                             "highlight": "#f1cbff"}, # light violet
         }
         
         # Attributes

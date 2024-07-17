@@ -88,30 +88,6 @@ class DataAcquisition(pydantic.BaseModel):
                    checklists=checklists,
                    scores=scores)
     
-    @classmethod
-    def get_score(cls, weights, category: DataCategory, checklists) -> int:
-        # Get weights from patient and grades from self
-        # note: slight change to account for pydantic 
-        
-        weights = weights[category.name]
-        label_checklist = checklists[category.name]
-        # Calculate score from weights and grades
-        score = 0
-        for label in weights:
-            if label_checklist[label]: 
-                score += weights[label]
-        return score
-    
-    @classmethod
-    def get_maxscore(cls, weights, category: DataCategory) -> int:
-        # Get weights from patient
-        weights = weights[category.name]
-        # Calculate max score from weights
-        max = 0
-        for label in weights:
-            max += weights[label]
-        return max
-    
     # def get_dict(self):
     #     to_return = {"datacategories": [category.get_dict() for category in self.datacategories], 
     #                  "weights": self.weights, 

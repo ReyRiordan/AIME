@@ -16,8 +16,7 @@ class DataAcquisition(pydantic.BaseModel):
     datacategories: List[DataCategory]      # list[DataCategory]
     weights : Optional[dict]                # dict{str, dict{str, int}}
     checklists : Optional[dict]             # dict{str, dict{str, bool}}
-    scores :  Optional[dict]                 # dict{str, int}
-    maxscores : Optional[dict]              # dict{str, int}
+    scores :  Optional[dict]                # dict{str, dict{str, int}}
     
     @classmethod
     def build(cls, patient: Patient, messages: list[Message]):
@@ -25,13 +24,14 @@ class DataAcquisition(pydantic.BaseModel):
         # self.datacategories = None  # list[DataCategory]
         # self.weights = None         # dict{str, dict{str, int}}
         # self.checklists = None      # dict{str, dict{str, bool}}
-        # self.scores = None          # dict{str, int}
-        # self.maxscores = None       # dict{str, int}
+        # self.scores = None          # dict{str, dict{str, int}}
 
         # Only data categories for patient
-        datacategories= []
+        datacategories = []
         for category in patient.grading["Data Acquisition"]:
             datacategories.append(DataCategory.build(name=category, patient=patient))
+
+        # Extract weights
         weights = patient.grading["Data Acquisition"]
 
 
@@ -73,13 +73,20 @@ class DataAcquisition(pydantic.BaseModel):
                             raise ValueError(label + " is an unknown label.")
                         checklists[category.name][label] = True
 
-        # Calculate scoring for each category
+        # Calculate scores
         scores = {}
-        maxscores = {}
         for category in datacategories:
-            scores[category.name] = cls.get_score(weights=weights, category=category, checklists=checklists)
-            maxscores[category.name] = cls.get_maxscore(weights=weights,category=category)
-        return cls(datacategories=datacategories,weights=weights,checklists=checklists,scores=scores,maxscores=maxscores)
+            scores[category.name] = {"raw": 0, "max": 0}
+            for label in weights[category.name]:
+                weight = weights[category.name][label]
+                if checklists[category.name]:
+                    scores[category.name]["raw"] += weight
+                scores[category.name]["max"] += weight
+
+        return cls(datacategories=datacategories,
+                   weights=weights,
+                   checklists=checklists,
+                   scores=scores)
     
     @classmethod
     def get_score(cls, weights, category: DataCategory, checklists) -> int:

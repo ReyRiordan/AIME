@@ -14,25 +14,29 @@ from web_methods.LLM import classifier
 class DataAcquisition(pydantic.BaseModel):
 
     datacategories: List[DataCategory]      # list[DataCategory]
-    weights : Optional[dict]                # dict{str, dict{str, int}}
-    checklists : Optional[dict]             # dict{str, dict{str, bool}}
+    grades : Optional[dict]                 # dict{str, dict{str, dict{?}}}
     scores :  Optional[dict]                # dict{str, dict{str, int}}
     
     @classmethod
     def build(cls, patient: Patient, messages: list[Message]):
         # Attributes
-        # self.datacategories = None  # list[DataCategory]
-        # self.weights = None         # dict{str, dict{str, int}}
-        # self.checklists = None      # dict{str, dict{str, bool}}
-        # self.scores = None          # dict{str, dict{str, int}}
+        # self.datacategories = None    # list[DataCategory]
+        # self.grades = None            # dict{str, dict{str, dict{?}}}
+        # self.scores = None            # dict{str, dict{str, int}}
 
         # Only data categories for patient
         datacategories = []
         for category in patient.grading["Data Acquisition"]:
             datacategories.append(DataCategory.build(name=category, patient=patient))
 
-        # Extract weights
+        # Extract weights for easier access
         weights = patient.grading["Data Acquisition"]
+
+        # Initialize all grades for each category to label: False
+        grades = {category.name: {} for category in datacategories} # category: {label: {weight, score}}
+        for category in datacategories:
+            for label, weight in weights[category.name].items():
+                grades[category.name][label] = {"weight": weight, "score": False}
 
 
         # Split messages into batches if needed
@@ -57,11 +61,6 @@ class DataAcquisition(pydantic.BaseModel):
         for message in messages:
             message.add_highlight()
             message.add_annotation()
-        
-        # Initialize all grades for each category to label: False
-        checklists = {}
-        for category in datacategories:
-            checklists[category.name] = {label: False for label in weights[category.name]}
 
         # Iterate through messages and grade checklists
         for message in messages:
@@ -69,23 +68,22 @@ class DataAcquisition(pydantic.BaseModel):
                 if category.name in message.labels:
                     labels = message.labels[category.name]
                     for label in labels:
-                        if label not in checklists[category.name]: # handle weird generated label name cases
+                        if label not in grades[category.name]: # handle weird generated label name cases
                             raise ValueError(label + " is an unknown label.")
-                        checklists[category.name][label] = True
+                        grades[category.name][label]["score"] = True
 
         # Calculate scores
         scores = {}
         for category in datacategories:
             scores[category.name] = {"raw": 0, "max": 0}
-            for label in weights[category.name]:
-                weight = weights[category.name][label]
-                if checklists[category.name]:
+            for label, grade in grades[category.name].items():
+                weight = grade["weight"]
+                if grade["score"]:
                     scores[category.name]["raw"] += weight
                 scores[category.name]["max"] += weight
 
         return cls(datacategories=datacategories,
-                   weights=weights,
-                   checklists=checklists,
+                   grades=grades,
                    scores=scores)
     
     # def get_dict(self):

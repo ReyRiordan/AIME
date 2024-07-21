@@ -18,26 +18,21 @@ from typing import List
 from lookups import *
 
 
-def display_DataCategory(category: dict[str, str], checklist: dict[str, bool], weights: dict[str, int], score: int, maxscore: int) -> None:
-    with st.container(border = True):
-        st.subheader(f":{category['color']}[{category['header']}]: {score}/{maxscore}", divider = category['color'])
-        display_labels = [(key, str(weights[key]), "#baffc9" if value else "#ffb3ba") for key, value in checklist.items()]
-        annotated_text(display_labels)
-        with st.expander("Label Descriptions:"):
-            for key, value in checklist.items():
-                annotated_text([(key, "", "#baffc9" if value else "#ffb3ba"), " " + LABEL_DESCS[key]])
 
-
-def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
+def display_DataAcquisition(data_acquisition: dict, messages: list[dict], label_descs: dict) -> None:
     layout1 = st.columns([4, 5])
+
     with layout1[0]:
-        for category in data["datacategories"]:
-            cat_name = category["name"]
-            display_DataCategory(category, 
-                                 data["checklists"][cat_name], 
-                                 data["weights"][cat_name], 
-                                 data["scores"][cat_name], 
-                                 data["maxscores"][cat_name])
+        for category in data_acquisition["data_categories"]:
+            grades = data_acquisition["grades"][category["name"]]
+            scores = data_acquisition["scores"][category["name"]]
+            with st.container(border = True):
+                st.subheader(f":{category['color']}[{category['header']}]: {scores['raw']}/{scores['max']}", divider = category['color'])
+                display_labels = [(label, str(value["weight"]), "#baffc9" if value["score"] else "#ffb3ba") for label, value in grades.items()]
+                annotated_text(display_labels)
+                with st.expander("Label Descriptions:"):
+                    for label, value in grades.items():
+                        annotated_text([(label, "", "#baffc9" if value["score"] else "#ffb3ba"), " " + label_descs[label]])
     
     with layout1[1]:
         st.subheader("Annotated Interview Transcript", divider = "grey")
@@ -51,7 +46,7 @@ def display_DataAcquisition(data: dict, messages: list[dict]) -> None:
                             annotated_text((message["content"], message["annotation"], message["highlight"]))
 
 
-def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
+def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
     grades = diagnosis["grades"]
     matches = diagnosis["matches"]
     scores = diagnosis["scores"]
@@ -70,7 +65,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict) -> None:
             annotated_text(display_labels)
             with st.expander("**Label Descriptions:**"):
                 for label, value in grades["Summary"].items():
-                    annotated_text([(label, "", GREEN if value["score"] else RED), " " + LABEL_DESCS[label]])
+                    annotated_text([(label, "", GREEN if value["score"] else RED), " " + label_descs[label]])
 
     with st.container(border = True):
         st.subheader(f"Potential Diagnoses: {scores['Potential']['raw']}/{scores['Potential']['max']}", divider = "grey")
@@ -135,15 +130,15 @@ def display_Interview(interview: dict) -> None:
         data, diagnosis, explanation = st.tabs(["Data Acquisition", "Diagnosis", "Case Explanation"])
         with data:
             if "data_acquisition" in interview["feedback"]:
-                display_DataAcquisition(interview["feedback"]["data_acquisition"], interview["messages"])
+                display_DataAcquisition(interview["feedback"]["data_acquisition"], interview["messages"], interview["patient"]["label_descs"])
             
             # Legacy data storage with manually made dictionaries
-            elif "Data Acquisition" in interview["feedback"]:
-                display_DataAcquisition(interview["feedback"]["Data Acquisition"], interview["messages"])
+            # elif "Data Acquisition" in interview["feedback"]:
+            #     display_DataAcquisition(interview["feedback"]["Data Acquisition"], interview["messages"])
         with diagnosis:
-            display_Diagnosis(interview["feedback"]["diagnosis"], interview["diagnosis_inputs"])
+            display_Diagnosis(interview["feedback"]["diagnosis"], interview["diagnosis_inputs"], interview["patient"]["label_descs"])
         with explanation:
-            explanation_file = st.session_state["interview"].patient.explanation
+            explanation_file = st.session_state["interview"]["patient"]["explanation"]
             with open(explanation_file, "rb") as pdf_file:
                 explanation = pdf_file.read()
                 st.download_button("Download Case Explanation (PDF)", explanation, explanation_file)

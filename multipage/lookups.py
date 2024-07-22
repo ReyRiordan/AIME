@@ -45,7 +45,8 @@ SURVEY = 13
 COSTS = {"gpt-4o": {"input": 5, "output": 15},
          "gpt-4-turbo": {"input": 10, "output": 30},
          "gpt-4": {"input": 30, "output": 60},
-         "gpt-3.5-turbo-0125": {"input": 0.5, "output": 1.5}}
+         "gpt-3.5-turbo-0125": {"input": 0.5, "output": 1.5},
+         "claude-3-5-sonnet-20240620": {"input": 3, "output": 15}}
 
 # Audio related
 STT = OpenAI()
@@ -68,9 +69,10 @@ CONVO_TEMP = 0.7
 SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
 
-GRADE_CLIENT = OpenAI()
-CLASS_MODEL = "gpt-4"
+CLASS_CLIENT = Anthropic()
+CLASS_MODEL = "claude-3-5-sonnet-20240620"
 CLASS_TEMP = 0.0
+DIAG_CLIENT = OpenAI()
 DIAG_MODEL = "gpt-4-turbo"
 DIAG_TEMP = 0.0
 

@@ -44,7 +44,7 @@ class Diagnosis(pydantic.BaseModel):
         sum_prompt = GRADE_SUM_PROMPT
         for label in grades["Summary"]:
             sum_prompt += f"[{label}]\n{patient.label_descs[label]}\n"
-        output = web_methods.generate_classifications(sum_prompt, inputs["Summary"])
+        output = web_methods.generate_classifications(sum_prompt, inputs["Summary"], "sum")
         print(output + "\n\n")
         sum_labels = json.loads(output)
         for label in sum_labels:
@@ -87,7 +87,7 @@ class Diagnosis(pydantic.BaseModel):
         
         # Grade the rationale
         if grades["Rationale"]["yes"]:
-            print(grades) # debugging
+            # print(grades) # debugging
             rat_prompt = GRADE_RAT_PROMPT
             for condition, reasonings in grades["Rationale"]["yes"].items():
                 reasonings_dict = {} # {id: "IMPLIES/REFUTES: desc"}
@@ -98,7 +98,7 @@ class Diagnosis(pydantic.BaseModel):
                     id += 1
                 rat_prompt += f"\"{condition}\" {reasonings_dict}\n"
             print(rat_prompt + "\n\n") # debugging
-            output = web_methods.generate_classifications(rat_prompt, inputs["Rationale"])
+            output = web_methods.generate_classifications(rat_prompt, inputs["Rationale"], "rat")
             print(output + "\n\n") # debugging
             rat_grades = json.loads(output) # {condition: [id, id, etc.]} (only ids that were present)
             for condition in rat_grades:

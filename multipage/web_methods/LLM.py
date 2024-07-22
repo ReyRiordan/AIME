@@ -36,22 +36,25 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
     return response.choices[0].message.content
 
 
-def generate_classifications(system: str, user_input: str) -> str:
-    # response = CLIENT.messages.create(model = CLASS_MODEL, 
-    #                                       temperature = CLASS_TEMP, 
-    #                                       max_tokens = 1000, 
-    #                                       system = system, 
-    #                                       messages = [{"role": "user", "content": user_input}, 
-    #                                                   {"role": "assistant", "content": "{\"output\": ["}]) # prefill tech
+def generate_classifications(system: str, user_input: str, type: str) -> str:
+    prefill = "[" if type == "class" or type == "sum" else "{"
+    response = CLASS_CLIENT.messages.create(model = CLASS_MODEL, 
+                                            temperature = CLASS_TEMP, 
+                                            max_tokens = 1000, 
+                                            system = system, 
+                                            messages = [{"role": "user", "content": user_input}, 
+                                                        {"role": "assistant", "content": prefill}]) # prefill tech
     # print(f"\nRAW CLASSIFICATION: {response.content}\n")
-    # return "{\"output\": [" + response.content[0].text
-    response = GRADE_CLIENT.chat.completions.create(model = CLASS_MODEL, 
-                                                    temperature = CLASS_TEMP, 
-                                                    messages = [{"role": "assistant", "content": system}, 
-                                                                {"role": "user", "content": user_input}])
-    st.session_state["tokens"]["class"]["input"] += response.usage.prompt_tokens
-    st.session_state["tokens"]["class"]["output"] += response.usage.completion_tokens
-    return response.choices[0].message.content
+    st.session_state["tokens"]["class"]["input"] += response.usage.input_tokens
+    st.session_state["tokens"]["class"]["output"] += response.usage.output_tokens
+    return prefill + response.content[0].text
+    # response = CLASS_CLIENT.chat.completions.create(model = CLASS_MODEL, 
+    #                                                 temperature = CLASS_TEMP, 
+    #                                                 messages = [{"role": "assistant", "content": system}, 
+    #                                                             {"role": "user", "content": user_input}])
+    # st.session_state["tokens"]["class"]["input"] += response.usage.prompt_tokens
+    # st.session_state["tokens"]["class"]["output"] += response.usage.completion_tokens
+    # return response.choices[0].message.content
 
 
 def generate_matches(prompt: str, inputs: str) -> str:
@@ -62,11 +65,11 @@ def generate_matches(prompt: str, inputs: str) -> str:
     #                                       messages = [{"role": "user", "content": inputs}, 
     #                                                   {"role": "assistant", "content": "{\"output\": {"}]) # prefill tech
     # return "{\"output\": {" + matches.content[0].text
-    matches = GRADE_CLIENT.chat.completions.create(model = DIAG_MODEL, 
-                                                   temperature = DIAG_TEMP, 
-                                                   response_format = {"type": "json_object"}, 
-                                                   messages = [{"role": "assistant", "content": prompt}, 
-                                                               {"role": "user", "content": inputs}])
+    matches = DIAG_CLIENT.chat.completions.create(model = DIAG_MODEL, 
+                                                  temperature = DIAG_TEMP, 
+                                                  response_format = {"type": "json_object"}, 
+                                                  messages = [{"role": "assistant", "content": prompt}, 
+                                                              {"role": "user", "content": inputs}])
     st.session_state["tokens"]["diag"]["input"] += matches.usage.prompt_tokens
     st.session_state["tokens"]["diag"]["output"] += matches.usage.completion_tokens
     return matches.choices[0].message.content
@@ -115,7 +118,8 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
 
     # Classify
     output = generate_classifications(system = prompt_system, 
-                                      user_input = messages_json)
+                                      user_input = messages_json,
+                                      type = "class")
     print(output + "\n\n")
     # raw_classifications = json.loads(output)
     # classifications = raw_classifications["output"]

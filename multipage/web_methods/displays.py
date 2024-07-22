@@ -83,7 +83,8 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
     
     # Rationale
     with st.container(border = True):
-        st.subheader(f"Rationale: {scores['Rationale']['total']['raw']}/{scores['Rationale']['total']['max']}", divider = "grey")
+        st.subheader(f"Rationale: {scores['Rationale']['total']['raw']}/{scores['Rationale']['total']['max']}", divider = "grey",
+                     help = ":large_green_square: means the reasoning SUPPORTS the diagnosis, while :large_red_square: means the opposite.")
         layout3 = st.columns([1, 1])
         with layout3[0]:
             st.write("**Your answer:**")

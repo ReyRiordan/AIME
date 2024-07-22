@@ -53,6 +53,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
     GREEN = "#baffc9"
     RED = "#ffb3ba"
 
+    # Summary
     with st.container(border = True):
         st.subheader(f"Interpretative Summary: {scores['Summary']['raw']}/{scores['Summary']['max']}", divider = "grey")
         layout1 = st.columns([1, 1])
@@ -67,6 +68,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
                 for label, value in grades["Summary"].items():
                     annotated_text([(label, "", GREEN if value["score"] else RED), " " + label_descs[label]])
 
+    # Potential diagnoses
     with st.container(border = True):
         st.subheader(f"Potential Diagnoses: {scores['Potential']['raw']}/{scores['Potential']['max']}", divider = "grey")
         layout2 = st.columns([1, 1])
@@ -78,7 +80,8 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
             st.write("**Valid answers:**")
             valid_potential = [(condition, str(value["weight"]), GREEN if value["score"] else RED) for condition, value, in grades["Potential"].items()]
             annotated_text(valid_potential)
-        
+    
+    # Rationale
     with st.container(border = True):
         st.subheader(f"Rationale: {scores['Rationale']['total']['raw']}/{scores['Rationale']['total']['max']}", divider = "grey")
         layout3 = st.columns([1, 1])
@@ -87,21 +90,22 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
             st.write(inputs["Rationale"])
         with layout3[1]:
             st.write("**Scoring:**")
-            if grades["Rationale"]:
-                for condition in grades["Rationale"]:
+            if grades["Rationale"]["yes"]:
+                for condition in grades["Rationale"]["yes"]:
                     with st.expander(f"**{condition}: {scores['Rationale'][condition]['raw']}/{scores['Rationale'][condition]['max']}**"):
                         for reasoning in grades["Rationale"][condition]:
                             sign = ":large_green_square:" if reasoning["sign"] else ":large_red_square:"
                             annotated_text((f"{sign} {reasoning['desc']}", str(reasoning["weight"]), GREEN if reasoning["score"] else RED))
             else:
                 st.write("We currently have no way to grade your rationale if you did not list any correct potential diagnoses.")
-            #TODO FIGURE OUT A WAY TO DO THIS IN REVAMP (rn grades["Rationale"] only has stuff for correct potentials, not the rest)
-            # with st.expander("**Reasoning for potential diagnoses you didn't list:**"):
-            #     for condition in weights["Rationale"]:
-            #         if condition not in checklists["Rationale"]:
-            #             for statement, weight in weights["Rationale"][condition].items():
-            #                 annotated_text((statement, str(weight), "#ededed"))
+            with st.expander("**Reasoning for potential diagnoses you didn't list:**"):
+                for condition in grades["Rationale"]["no"]:
+                    with st.expander(f"**{condition}: -/{scores['Rationale'][condition]['max']}**"):
+                        for reasoning in grades["Rationale"]["no"][condition]:
+                            sign = ":large_green_square:" if reasoning["sign"] else ":large_red_square:"
+                            annotated_text((f"{sign} {reasoning['desc']}", str(reasoning["weight"]), "#ededed"))
 
+    # Final Diagnosis
     with st.container(border = True):
         st.subheader(f"Final Diagnosis: {scores['Final']['raw']}/{scores['Final']['max']}", divider = "grey")
         layout4 = st.columns([1, 1])

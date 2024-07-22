@@ -30,34 +30,34 @@ from web_methods import *
 
 # Establish connection to server
 
-client = MongoClient(DB_URI,server_api=ServerApi('1'))
+# client = MongoClient(DB_URI,server_api=ServerApi('1'))
 
 # Ping server on startup
 
-try:
-    client.admin.command('ping')
-    print("Connection Successful")
-except Exception as e:
-    print(e)
+# try:
+#     client.admin.command('ping')
+#     print("Connection Successful")
+# except Exception as e:
+#     print(e)
 
 # Method to get data of server
 
-@st.cache_data(ttl=1200)
-def get_data():
-    db=client["AIME"]
-    items=db["Conversation"].find()
-    items = list(items)
-    return items
+# @st.cache_data(ttl=1200)
+# def get_data():
+#     db=client["AIME"]
+#     items=db["Conversation"].find()
+#     items = list(items)
+#     return items
 
 # MongoDB Collection to add to
 
-collection=client["AIME"]["Conversation"]
+# collection=client["AIME"]["Conversation"]
 
 # Collection for surveys for FIRST BETATEST
 
 survey = {}
 
-######### WEBSITE 
+######### WEBSITE #########
 
 st.set_page_config(page_title = "AIME", page_icon = "🧑‍⚕️", layout = "wide")
 
@@ -219,7 +219,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write("You may now begin your interview with " + st.session_state["interview"].patient.name + ". Start by introducing yourself.")
+        st.write("You may now begin your interview with " + st.session_state["interview"].patient.id + ". Start by introducing yourself.")
         st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
                 The button will then turn into a Stop button, which you can click when you are done talking.
                 Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
@@ -296,7 +296,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     
     bio = io.BytesIO()
     st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].username, 
-                                                       st.session_state["interview"].patient.name, 
+                                                       st.session_state["interview"].patient.id, 
                                                        [message.model_dump() for message in st.session_state["interview"].messages])
     st.session_state["convo_file"].save(bio)
 
@@ -306,7 +306,7 @@ if st.session_state["stage"] == DIAGNOSIS:
                                 file_name = st.session_state["interview"].username + "_"+date_time + ".docx", 
                                 mime = "docx")
     # Get Feedback
-    if layout12[2].button("Get Feedback [CLICK ME!!!]"): 
+    if layout12[2].button("Get Feedback"): 
         st.session_state["interview"].add_diagnosis_inputs(summary, [potential1, potential2, potential3], rationale, final)
         set_stage(FEEDBACK_SETUP)
         st.rerun()
@@ -418,10 +418,10 @@ if st.session_state["stage"] == FINAL_SCREEN:
                         mime = "docx")  
         
         # Store interview in database and send email as backup
-        if st.session_state["sent"] == False:
-            collection.insert_one(st.session_state["interview"].model_dump())
-            send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].username, date_time, None)
-            st.session_state["sent"] = True
+        # if st.session_state["sent"] == False:
+        #     collection.insert_one(st.session_state["interview"].model_dump())
+        #     send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].username, date_time, None)
+        #     st.session_state["sent"] = True
             
         # st.download_button("Download JSON",
         #             data=st.session_state["interview"].get_json(),

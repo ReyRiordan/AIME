@@ -53,7 +53,7 @@ class Patient(pydantic.BaseModel):
         # Extract label descriptions (static + patient dependent)
         with open(PATHS["Static Label Descriptions"], "r") as label_descs_json:
             label_descs = json.loads(label_descs_json.read())
-        for label, desc in JSON["Labels"]:
+        for label, desc in JSON["Labels"].items():
             label_descs[label] = desc
 
         return cls(id=id, 
@@ -77,9 +77,9 @@ class Patient(pydantic.BaseModel):
             elif category == "Chief Concern":
                 case_prompt += case[category] + " \n"
             elif category == "HIPI":
-                for dim in case[category]:
-                    line = dim + ": " + dim["desc"]
-                    if dim["lock"]:
+                for dim, dict in case[category].items():
+                    line = dim + ": " + dict["desc"]
+                    if dict["lock"]:
                         line = "<LOCKED> " + line
                     case_prompt += line + "\n"
             else:

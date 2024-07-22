@@ -188,7 +188,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write("You may now begin your interview with " + st.session_state["interview"].patient.name + ". Start by introducing yourself.")
+        st.write("You may now begin your interview with " + st.session_state["interview"].patient.id + ". Start by introducing yourself.")
         st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
 
         container = st.container(height=300)
@@ -406,7 +406,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
 
         bio = io.BytesIO()
         st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].username, 
-                                                        st.session_state["interview"].patient.name, 
+                                                        st.session_state["interview"].patient.id, 
                                                         [message.model_dump() for message in st.session_state["interview"].messages])
         st.session_state["convo_file"].save(bio)
         

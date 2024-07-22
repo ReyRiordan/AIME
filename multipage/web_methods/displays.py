@@ -94,7 +94,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
             if grades["Rationale"]["yes"]:
                 for condition in grades["Rationale"]["yes"]:
                     with st.expander(f"**{condition}: {scores['Rationale'][condition]['raw']}/{scores['Rationale'][condition]['max']}**"):
-                        for reasoning in grades["Rationale"][condition]:
+                        for reasoning in grades["Rationale"]["yes"][condition]:
                             sign = ":large_green_square:" if reasoning["sign"] else ":large_red_square:"
                             annotated_text((f"{sign} {reasoning['desc']}", str(reasoning["weight"]), GREEN if reasoning["score"] else RED))
             else:

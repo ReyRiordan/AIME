@@ -87,8 +87,9 @@ class Diagnosis(pydantic.BaseModel):
         
         # Grade the rationale
         if grades["Rationale"]["yes"]:
+            print(grades) # debugging
             rat_prompt = GRADE_RAT_PROMPT
-            for condition, reasonings in grades["Rationale"].items():
+            for condition, reasonings in grades["Rationale"]["yes"].items():
                 reasonings_dict = {} # {id: "IMPLIES/REFUTES: desc"}
                 id = 1
                 for reasoning in reasonings:
@@ -102,7 +103,7 @@ class Diagnosis(pydantic.BaseModel):
             rat_grades = json.loads(output) # {condition: [id, id, etc.]} (only ids that were present)
             for condition in rat_grades:
                 for id in rat_grades[condition]:
-                    grades["Rationale"][condition][id-1]["score"] = True # prompted ids are 1 start but indices are 0 start
+                    grades["Rationale"]["yes"][condition][id-1]["score"] = True # prompted ids are 1 start but indices are 0 start
         
         # Initialize scoring (except rationale, individual condition scores added after potential grading)
         scores = {"Summary": {"raw": 0, "max": 0},

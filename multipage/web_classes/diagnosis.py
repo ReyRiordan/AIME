@@ -83,7 +83,7 @@ class Diagnosis(pydantic.BaseModel):
                 to_append = reasoning.copy()
                 if boolean == "yes":
                     to_append["score"] = False
-                grades["Rationale"][condition].append(to_append)
+                grades["Rationale"][boolean][condition].append(to_append)
         
         # Grade the rationale
         if grades["Rationale"]["yes"]:

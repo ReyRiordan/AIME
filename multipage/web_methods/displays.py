@@ -100,10 +100,10 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
                 st.write("We currently have no way to grade your rationale if you did not list any correct potential diagnoses.")
             with st.expander("**Reasoning for potential diagnoses you didn't list:**"):
                 for condition in grades["Rationale"]["no"]:
-                    with st.expander(f"**{condition}: -/{scores['Rationale'][condition]['max']}**"):
-                        for reasoning in grades["Rationale"]["no"][condition]:
-                            sign = ":large_green_square:" if reasoning["sign"] else ":large_red_square:"
-                            annotated_text((f"{sign} {reasoning['desc']}", str(reasoning["weight"]), "#ededed"))
+                    st.write(f"**{condition}: -/{scores['Rationale'][condition]['max']}**")
+                    for reasoning in grades["Rationale"]["no"][condition]:
+                        sign = ":large_green_square:" if reasoning["sign"] else ":large_red_square:"
+                        annotated_text((f"{sign} {reasoning['desc']}", str(reasoning["weight"]), "#ededed"))
 
     # Final Diagnosis
     with st.container(border = True):
@@ -120,7 +120,7 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
 
 
 def display_Interview(interview: dict) -> None:
-    st.write(f"User: {interview['username']}, Patient: {interview['patient']['name']}")
+    st.write(f"User: {interview['username']}, Patient: {interview['patient']['id']}")
     if 'start_time' in interview and interview['start_time']:
         st.write(f"Start Time: {interview['start_time']}")
     if 'time_elapsed' in interview and interview['time_elapsed']:
@@ -142,7 +142,7 @@ def display_Interview(interview: dict) -> None:
         with diagnosis:
             display_Diagnosis(interview["feedback"]["diagnosis"], interview["diagnosis_inputs"], interview["patient"]["label_descs"])
         with explanation:
-            explanation_file = st.session_state["interview"]["patient"]["explanation"]
+            explanation_file = interview["patient"]["explanation"]
             with open(explanation_file, "rb") as pdf_file:
                 explanation = pdf_file.read()
                 st.download_button("Download Case Explanation (PDF)", explanation, explanation_file)

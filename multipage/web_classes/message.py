@@ -12,6 +12,25 @@ class Message(pydantic.BaseModel):
     highlight: Optional[str] = None
 
     def add_highlight(self):
+        DATACATEGORIES = {
+            "General":      {"type": "input", 
+                             "header": "General Questions", 
+                             "color": "blue", 
+                             "highlight": "#bae1ff"}, # light blue
+            "Dimensions":   {"type": "output", 
+                             "header": "Dimensions of Chief Concern", 
+                             "color": "red", 
+                             "highlight": "#ffb3ba"}, # light red
+            "Associated":   {"type": "input", 
+                             "header": "Associated Symptoms Questions", 
+                             "color": "orange", 
+                             "highlight": "#ffdfba"}, # light orange
+            "Risk":         {"type": "input", 
+                             "header": "Risk Factor Questions", 
+                             "color": "violet", 
+                             "highlight": "#f1cbff"}, # light violet
+        }
+
         if self.labels:
             first_datacategory = next(iter(self.labels.keys())) # Access first key in dict
             self.highlight = DATACATEGORIES[first_datacategory]["highlight"]

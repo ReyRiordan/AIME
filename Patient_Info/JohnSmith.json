@@ -21,7 +21,7 @@
       "Birthdate": "December 5th 1959",
       "Tone": "Worried and nervous"
     },
-    "Chief Concern": "You came to the hospital because you are experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
+    "Chief Concern": "You came to the hospital because you were experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
     "HIPI": {
       "Onset": {
         "desc": "heaviness came on gradually, seated at desk at home when symptoms appeared",
@@ -36,7 +36,7 @@
         "lock": false
       },
       "Timing": {
-        "desc": "started around 2 hours ago",
+        "desc": "started around 2 hours ago, got better on the way here and stopped 20-30 minutes ago",
         "lock": false
       },
       "Pattern": {
@@ -44,7 +44,7 @@
         "lock": true
       },
       "Severity": {
-        "desc": "it was pretty severe when it first started, gradually improved and the pressure is much better but it is still there",
+        "desc": "it was pretty severe when it first started, gradually improved and is now gone",
         "lock": false
       },
       "Prior History": {

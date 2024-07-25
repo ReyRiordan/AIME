@@ -402,6 +402,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
         st.session_state["interview"].cost += (st.session_state["tokens"]["class"]["output"] / 1000000) * COSTS[CLASS_MODEL]["output"]
         st.session_state["interview"].cost += (st.session_state["tokens"]["diag"]["input"] / 1000000) * COSTS[DIAG_MODEL]["input"]
         st.session_state["interview"].cost += (st.session_state["tokens"]["diag"]["output"] / 1000000) * COSTS[DIAG_MODEL]["output"]
+        st.write("Estimated cost: $" + str(st.session_state["interview"].cost))
 
 
         bio = io.BytesIO()

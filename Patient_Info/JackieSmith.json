@@ -1,13 +1,17 @@
 {
-  "name": "Jackie Smith",
-  "speech": {
-    "host": "openai",
-    "model": "tts-1",
-    "voice": "nova"
+  "ID": "Jackie Smith",
+  "Avatar": {
+    "File": false
   },
-  "prompt": {
-    "type": "default",
-    "file": "./Prompts/Base_3-14.txt"
+  "Speech": {
+    "Host": "openai",
+    "Model": "tts-1",
+    "Voice": "nova"
+  },
+  "Assets": {
+    "Physical Examination": "./Patient_Info/JackieSmith_physical.docx",
+    "ECG": "./Patient_Info/JackieSmith_ECG.png",
+    "Case Explanation": "./Patient_Info/JackieSmith_explanation.pdf"
   },
   "case": {
     "Personal Details": [

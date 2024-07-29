@@ -13,25 +13,14 @@
     "ECG": "./Patient_Info/JackieSmith_ECG.png",
     "Case Explanation": "./Patient_Info/JackieSmith_explanation.pdf"
   },
-  "case": {
-    "Personal Details": [
-      {
-        "detail": "Sex",
-        "line": "Female"
-      },
-      {
-        "detail": "Name",
-        "line": "Jackie Smith"
-      },
-      {
-        "detail": "Birthdate",
-        "line": "December 5th 1979"
-      },
-      {
-        "detail": "Tone",
-        "line": "Worried and nervous"
-      }
-    ],
+  "Case": {
+    "Personal Details": {
+      "Name": "Jackie Smith",
+      "Sex": "Female",
+      "Race": "White",
+      "Birthdate": "December 5th 1979",
+      "Tone": "Worried and nervous"
+    },
     "Chief Concern": "You came to the hospital because you are experiencing pain in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
     "History of Present Illness": [
       {

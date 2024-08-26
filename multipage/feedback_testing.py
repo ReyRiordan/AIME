@@ -62,13 +62,13 @@ def set_stage(stage):
 
 if st.session_state["stage"] == CHAT_SETUP:
     messages = [{"role": "User", "content": "Hello, I'm Dr. Corbett. What brings you in today?"},
-                {"role": "AI", "content": "I came to the hospital because I'm experiencing a heaviness in my chest. It came on gradually while I was sitting at my desk at home about 2 hours ago. I'm really worried because my father died suddenly of a heart attack when he was 50."}, 
+                {"role": "AI", "content": "I came to the hospital because I was experiencing a heaviness in my chest. It came on gradually while I was sitting at my desk at home about 2 hours ago. I'm really worried because my father died suddenly of a heart attack when he was 50."}, 
                 {"role": "User", "content": "Sorry, so sorry to hear about your father. Can you tell me more about this heaviness?"}, 
-                {"role": "AI", "content": "It started as a pretty severe heaviness or pressure in the center of my chest. It's gotten a bit better since it first started, but there's still some heaviness there. I was also feeling a little nauseated and sweaty before coming in, but I feel a bit better now."}, 
+                {"role": "AI", "content": "It started as a pretty severe heaviness or pressure in the center of my chest. It got better on the way here and now I feel okay. I was also feeling a little nauseated and sweaty before coming in, but I feel a bit better now."}, 
                 {"role": "User", "content": "I see. Have you ever had anything like this happen to you before?"}, 
                 {"role": "AI", "content": "No, I've never had chest pain or pressure like this before. Sometimes I get a milder discomfort in my chest when walking up hills, which I thought was just heartburn or a stomach issue. But nothing as severe as this heaviness I'm feeling now."}, 
-                {"role": "User", "content": "Okay, and does it seem to come and go or is it constant?"}, 
-                {"role": "AI", "content": "It's been pretty constant since it started, not really coming and going."}, 
+                {"role": "User", "content": "Okay, and did it seem to come and go or is it constant?"}, 
+                {"role": "AI", "content": "It was pretty constant when I had it, not really coming and going."}, 
                 {"role": "User", "content": "have you ever smoked?"}, 
                 {"role": "AI", "content": "Yes, I used to smoke. I started when I was 19 in college and smoked about a pack a day until I quit 5 years ago."}, 
                 {"role": "User", "content": "Okay, and any alcohol or drug use?"}, 
@@ -116,13 +116,28 @@ if st.session_state["stage"] == DIAGNOSIS:
     layout1 = st.columns([1, 1])
 
     # User inputs
-    summary = layout1[0].text_area(label = "Write an interpretative summary for the patient, recording the key details of the case:", placeholder = "Interpretive summary for patient", height = 200)
+    summary = layout1[0].text_area(label = "Write an interpretative summary for the patient, recording the key details of the case:",
+                                   placeholder = "Interpretive summary for patient",
+                                   height = 200,
+                                   value = "Patient came in worried about heaviness in the chest. Radiation to jaw and shoulders and relative having history of heart problems means this is an obvious emergency!")
     layout11 = layout1[0].columns([1, 1, 1])
-    potential1 = layout11[0].text_input(label = "List 3 potential diagnoses:", placeholder = "First condition name")
-    potential2 = layout11[1].text_input(label = "None", placeholder = "Second condition name", label_visibility = "hidden")
-    potential3 = layout11[2].text_input(label = "None", placeholder = "Third condition name", label_visibility = "hidden")
-    rationale = layout1[0].text_area(label = "Write a rationale reasoning through the potential diagnoses you listed in order to determine what is the best diagnosis for the patient:", placeholder = "Rationale for diagnosis")
-    final = layout1[0].text_input(label = "Based on your rationale, write your final diagnosis:", placeholder = "Condition name")
+    potential1 = layout11[0].text_input(label = "List 3 potential diagnoses:",
+                                        placeholder = "First condition name",
+                                        value = "ACS")
+    potential2 = layout11[1].text_input(label = "None",
+                                        placeholder = "Second condition name",
+                                        label_visibility = "hidden",
+                                        value = "pnemonia")
+    potential3 = layout11[2].text_input(label = "None",
+                                        placeholder = "Third condition name",
+                                        label_visibility = "hidden",
+                                        value = "cancer")
+    rationale = layout1[0].text_area(label = "Write a rationale reasoning through the potential diagnoses you listed in order to determine what is the best diagnosis for the patient:",
+                                     placeholder = "Rationale for diagnosis",
+                                     value = "Location and family history support ACS diagnosis, but 'heaviness' quality also supports pneumonia.")
+    final = layout1[0].text_input(label = "Based on your rationale, write your final diagnosis:",
+                                  placeholder = "Condition name",
+                                  value = "Unstable angina")
 
     # 3 buttons at bottom
     layout12 = layout1[0].columns([1, 1, 1])

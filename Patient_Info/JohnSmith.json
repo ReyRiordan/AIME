@@ -100,7 +100,7 @@
     ],
     "Medications": [
       {
-        "desc": "Read this list from your phone if asked for specific medications: \u201cHydrochlorothiazide, Amlodipine, Atorvastatin\u201d.",
+        "desc": "Read this list from your phone if asked for specific medications: \"Hydrochlorothiazide, Amlodipine, Atorvastatin\".",
         "lock": true
       }
     ],

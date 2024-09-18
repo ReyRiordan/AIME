@@ -8,4 +8,3 @@ pydub
 streamlit-audiorecorder
 st-annotated-text
 pymongo
-hashlib

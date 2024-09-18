@@ -30,28 +30,28 @@ from web_methods import *
 
 # Establish connection to server
 
-# client = MongoClient(DB_URI,server_api=ServerApi('1'))
+client = MongoClient(DB_URI,server_api=ServerApi('1'))
 
 # Ping server on startup
 
-# try:
-#     client.admin.command('ping')
-#     print("Connection Successful")
-# except Exception as e:
-#     print(e)
+try:
+    client.admin.command('ping')
+    print("Connection Successful")
+except Exception as e:
+    print(e)
 
 # Method to get data of server
 
-# @st.cache_data(ttl=1200)
-# def get_data():
-#     db=client["AIME"]
-#     items=db["Conversation"].find()
-#     items = list(items)
-#     return items
+@st.cache_data(ttl=1200)
+def get_data():
+    db=client["AIME"]
+    items=db["Conversation"].find()
+    items = list(items)
+    return items
 
 # MongoDB Collection to add to
 
-# collection=client["AIME"]["Conversation"]
+collection=client["AIME"]["Conversation"]
 
 # Collection for surveys for FIRST BETATEST
 

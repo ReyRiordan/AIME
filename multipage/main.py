@@ -5,6 +5,7 @@ import io
 import os
 import streamlit as st
 import streamlit.components.v1 as components
+import hashlib
 # import streamlit_authenticator as auth
 import base64
 from sendgrid import SendGridAPIClient
@@ -175,12 +176,20 @@ if st.session_state["stage"] == SETTINGS:
                                                             patient = Patient.build(patient_name))
 
         if st.session_state["chat_mode"] and st.session_state["interview"]: 
+            st.session_state["sent"]==False
             st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
+
 
 
 if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
-        
+    if(st.session_state["sent"]==False):
+        collection.insert_one(st.session_state["interview"].model_dump())
+        st.session_state["interview"].start_time = str(st.session_state["start_time"])
+        st.session_state["session_id"] = hash(st.session_state["interview"].model_dump())
+        st.session_state["interview"].id=st.session_state["session_id"]
+        st.session_state["sent"]==True
+
     set_stage(st.session_state["chat_mode"])
 
 
@@ -257,6 +266,10 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
     layout1[0].write("Now that you've taken a chance to speak with the patient, you can take a chance to take a look at data obtained during a physical upon admittance to the ER. Review the following physical and ECG before proceeding.")
     layout1[1].button("Proceed to Diagnosis", on_click=set_stage, args = [DIAGNOSIS])
     
+    # Update the database from before
+
+    collection.replace_one({id: st.session_state["session_id"]}, st.session_state["interview"])
+
     layout2 = st.columns([1, 1])
     with layout2[0].container():
         st.header("Physical Examination", divider = "grey")
@@ -390,7 +403,6 @@ if st.session_state["stage"] == FINAL_SCREEN:
         # Record time
         end_time = date.datetime.now()
         time_elapsed = end_time - st.session_state["start_time"]
-        st.session_state["interview"].start_time = str(st.session_state["start_time"])
         st.session_state["interview"].time_elapsed = str(time_elapsed)
 
         # Record cost
@@ -419,10 +431,10 @@ if st.session_state["stage"] == FINAL_SCREEN:
                         mime = "docx")  
         
         # Store interview in database and send email as backup
-        # if st.session_state["sent"] == False:
-        #     collection.insert_one(st.session_state["interview"].model_dump())
-        #     send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].username, date_time, None)
-        #     st.session_state["sent"] = True
+        if st.session_state["sent"] == False:
+            collection.insert_one(st.session_state["interview"].model_dump())
+            # send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].username, date_time, None)
+            st.session_state["sent"] = True
             
         # st.download_button("Download JSON",
         #             data=st.session_state["interview"].get_json(),

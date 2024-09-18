@@ -267,7 +267,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
     
     # Update the database from before
 
-    collection.replace_one({id: st.session_state["session_id"]}, st.session_state["interview"].model_dump())
+    collection.replace_one({"username":st.session_state["username"], "start_time":st.session_state["start_time"]}, st.session_state["interview"].model_dump())
 
     layout2 = st.columns([1, 1])
     with layout2[0].container():

@@ -10,7 +10,7 @@ from .message import *
 from .feedback import *
 
 class Interview(pydantic.BaseModel):
-    id: Optional[int] = None
+    id : Optional[int] = None
     start_time : Optional[str] = None
     time_elapsed : Optional[str] = None
     cost : Optional[int] = None

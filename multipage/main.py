@@ -5,7 +5,6 @@ import io
 import os
 import streamlit as st
 import streamlit.components.v1 as components
-import hashlib
 # import streamlit_authenticator as auth
 import base64
 from sendgrid import SendGridAPIClient
@@ -186,7 +185,7 @@ if st.session_state["stage"] == CHAT_SETUP:
     if(st.session_state["sent"]==False):
         collection.insert_one(st.session_state["interview"].model_dump())
         st.session_state["interview"].start_time = str(st.session_state["start_time"])
-        st.session_state["session_id"] = hash(st.session_state["interview"].model_dump())
+        st.session_state["session_id"] = hash(st.session_state["interview"].username+st.session_state["interview"].start_time)
         st.session_state["interview"].id=st.session_state["session_id"]
         st.session_state["sent"]==True
 

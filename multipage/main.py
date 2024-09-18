@@ -340,6 +340,10 @@ if st.session_state["stage"] == DIAGNOSIS:
 
     
 if st.session_state["stage"] == FEEDBACK_SETUP:
+     # Update the database from before
+
+    collection.replace_one({"username":st.session_state["interview"].username, "start_time":st.session_state["interview"].start_time}, st.session_state["interview"].model_dump())
+
     st.title("Processing feedback...")
     st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback()
@@ -362,6 +366,11 @@ if st.session_state["stage"] == FEEDBACK_SCREEN:
 
 
 if st.session_state["stage"] == SURVEY:
+
+     # Update the database from before
+
+    collection.replace_one({"username":st.session_state["interview"].username, "start_time":st.session_state["interview"].start_time}, st.session_state["interview"].model_dump())
+
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Survey")
@@ -428,12 +437,15 @@ if st.session_state["stage"] == FINAL_SCREEN:
                         data = bio.getvalue(),
                         file_name = st.session_state["interview"].username + "_"+ date_time + ".docx",
                         mime = "docx")  
-        
-        # Store interview in database and send email as backup
-        if st.session_state["sent"] == False:
-            collection.insert_one(st.session_state["interview"].model_dump())
-            # send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].username, date_time, None)
-            st.session_state["sent"] = True
+         # Update the database from before
+
+        collection.replace_one({"username":st.session_state["interview"].username, "start_time":st.session_state["interview"].start_time}, st.session_state["interview"].model_dump())
+
+        # # Store interview in database and send email as backup
+        # if st.session_state["sent"] == False:
+        #     collection.insert_one(st.session_state["interview"].model_dump())
+        #     # send_email(bio, EMAIL_TO_SEND, st.session_state["interview"].username, date_time, None)
+        #     st.session_state["sent"] = True
             
         # st.download_button("Download JSON",
         #             data=st.session_state["interview"].get_json(),

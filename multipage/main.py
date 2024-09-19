@@ -59,7 +59,10 @@ survey = {}
 
 ######### WEBSITE #########
 
-st.set_page_config(page_title = "AIME", page_icon = "🧑‍⚕️", layout = "wide")
+st.set_page_config(page_title = "AIME",
+                   page_icon = "🧑‍⚕️",
+                   layout = "wide",
+                   initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
     st.session_state["stage"] = LOGIN_PAGE

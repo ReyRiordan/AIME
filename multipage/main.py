@@ -184,7 +184,6 @@ if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
     if(st.session_state["sent"]==False):
         st.session_state["interview"].start_time = str(st.session_state["start_time"])
-        st.session_state["interview"].id=st.session_state["session_id"]
         collection.insert_one(st.session_state["interview"].model_dump())
         st.session_state["sent"]==True
 

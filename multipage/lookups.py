@@ -99,7 +99,7 @@ MAX_MEMORY = 12 # no limit rn
 
 # Grading related
 BATCH_MAX = 20
-BATCH_DELAY = 20
+BATCH_DELAY = 60
 
 with open(PATHS["Label Examples"], "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())

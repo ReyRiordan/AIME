@@ -1,0 +1,893 @@
+{
+    "_id": {
+        "$oid": "6636e20c1fc2862d3e0b26e6"
+    },
+    "date_time": "2024-05-05 01:34:04.749459",
+    "username": "Ishea Johnson",
+    "patient": {
+        "name": "John Smith",
+        "case": {
+            "Personal Details": [
+                {
+                    "detail": "Sex",
+                    "line": "Male"
+                },
+                {
+                    "detail": "Name",
+                    "line": "John Smith"
+                },
+                {
+                    "detail": "Birthdate",
+                    "line": "December 5th 1959"
+                },
+                {
+                    "detail": "Tone",
+                    "line": "Worried and nervous"
+                }
+            ],
+            "Chief Concern": "You came to the hospital because you are experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
+            "History of Present Illness": [
+                {
+                    "lock": false,
+                    "dim": "Onset",
+                    "line": "heaviness came on gradually, seated at desk at home when symptoms appeared"
+                },
+                {
+                    "lock": true,
+                    "dim": "Quality",
+                    "line": "like a weight on the chest"
+                },
+                {
+                    "lock": false,
+                    "dim": "Location",
+                    "line": "center of chest"
+                },
+                {
+                    "lock": false,
+                    "dim": "Timing",
+                    "line": "started around 2 hours ago"
+                },
+                {
+                    "lock": true,
+                    "dim": "Pattern",
+                    "line": "constant"
+                },
+                {
+                    "lock": false,
+                    "dim": "Severity",
+                    "line": "it was pretty severe when it first started, gradually improved and the pressure is much better but it is still there"
+                },
+                {
+                    "lock": true,
+                    "dim": "Prior History",
+                    "line": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, where you would take an antacid and feel better."
+                },
+                {
+                    "lock": true,
+                    "dim": "Radiation",
+                    "line": "You also felt an aching pain in your jaw and both shoulders when the pressure was at its worst"
+                },
+                {
+                    "lock": true,
+                    "dim": "Exacerbating",
+                    "line": "you have not noticed anything that makes the heaviness worse"
+                },
+                {
+                    "lock": true,
+                    "dim": "Relieving",
+                    "line": "you took two or three tums but had no relief"
+                }
+            ],
+            "Associated Symptoms": [
+                {
+                    "lock": false,
+                    "line": "You were feeling slightly nauseated and sweaty prior to arriving in the Emergency Department, but you feel better now."
+                },
+                {
+                    "lock": true,
+                    "line": "You have been stressed about your finances recently."
+                }
+            ],
+            "Medical History": [
+                {
+                    "lock": true,
+                    "line": "Hypertension: You've had high blood pressure since you were 50. You take a water pill for that and were recently started on another new medication."
+                },
+                {
+                    "lock": true,
+                    "line": "Hyperlipidemia: You've had high cholesterol for many years and take a statin for this."
+                },
+                {
+                    "lock": true,
+                    "line": "Diabetes: On your most recent visit to your doctor, she said you have pre-diabetes - you are not sure what this means, but she recommended you lose weight.  To lose weight, you started a walking program; this was about 6 months ago."
+                },
+                {
+                    "lock": false,
+                    "line": "You have been fully boosted for COVID, but do not always get a flu vaccine."
+                }
+            ],
+            "Surgical History": [
+                {
+                    "lock": false,
+                    "line": "You had a hernia in your groin that was repaired when you were 26."
+                }
+            ],
+            "Medications": [
+                {
+                    "lock": true,
+                    "line": "Read this list from your phone if asked for specific medications: “Hydrochlorothiazide, Amlodipine, Atorvastatin”."
+                }
+            ],
+            "Allergies": [
+                {
+                    "lock": false,
+                    "line": "You do not have any allergies that you are aware of."
+                }
+            ],
+            "Family History": [
+                {
+                    "lock": false,
+                    "line": "Your father died suddenly of a heart attack when he was 50 years old."
+                },
+                {
+                    "lock": false,
+                    "line": "Your mother passed away from breast cancer two years ago."
+                }
+            ],
+            "Social History": [
+                {
+                    "lock": true,
+                    "line": "You are a former smoker. You started smoking when you were in college at 19 years old and quit about 5 years ago. You smoked about one pack per day."
+                },
+                {
+                    "lock": true,
+                    "line": "You drink about 2 glasses of wine or a cocktail during the week, more on the weekend."
+                }
+            ],
+            "Other Symptoms": [
+                {
+                    "lock": false,
+                    "line": "You have had difficulty maintaining an erection for the past 2 years and have considered speaking to your doctor about this."
+                },
+                {
+                    "lock": false,
+                    "line": "You do get pain in your left leg when you walk, a cramp in the calf. It goes away when you stop walking."
+                }
+            ]
+        },
+        "grading": {
+            "Data Acquisition": {
+                "gen": {
+                    "Introduction": 5,
+                    "Confirm Identity": 5,
+                    "Establish Chief Concern": 5,
+                    "Additional Information": 5,
+                    "Medical History": 5,
+                    "Surgery Hospitalization": 5,
+                    "Medication": 5,
+                    "Allergies": 5,
+                    "Family History": 5,
+                    "Alcohol": 2,
+                    "Smoking": 2,
+                    "Drug Use": 2,
+                    "Employment": 1,
+                    "Social Support": 1
+                },
+                "dims": {
+                    "Onset": 5,
+                    "Quality": 5,
+                    "Location": 5,
+                    "Timing": 5,
+                    "Pattern": 5,
+                    "Exacerbating": 5,
+                    "Relieving": 5,
+                    "Prior History": 5,
+                    "Radiation": 5,
+                    "Severity": 5
+                },
+                "asoc": {
+                    "Breathing": 5,
+                    "Sweating": 3,
+                    "Nausea": 5,
+                    "Syncope": 4,
+                    "Fatigue": 2,
+                    "Palpitations": 2,
+                    "Leg Swelling": 2,
+                    "Fever": 1,
+                    "Cough": 1,
+                    "URI": 1,
+                    "Stomach Pain": 3
+                },
+                "risk": {
+                    "CAD": 5,
+                    "PVD": 3,
+                    "Hypertension": 5,
+                    "Hyperlipidemia": 5,
+                    "Smoking": 5,
+                    "Diabetes": 5,
+                    "Relative Heart": 5,
+                    "Sedentary": 1
+                }
+            },
+            "Diagnosis": {
+                "Summary": {
+                    "Onset": 3,
+                    "Quality": 5,
+                    "Location": 5,
+                    "Timing": 3,
+                    "Pattern": 5,
+                    "Radiation": 5,
+                    "Prior History": 3,
+                    "Nausea": 2,
+                    "Sweating": 2,
+                    "Breathing": 2,
+                    "Syncope": 2,
+                    "Palpitations": 2,
+                    "Hypertension": 2,
+                    "Hyperlipidemia": 2,
+                    "Diabetes": 2,
+                    "Smoking": 5,
+                    "Relative Heart": 5,
+                    "PVD": 2
+                },
+                "Potential": {
+                    "Acute coronary syndrome": 1,
+                    "Aortic dissection": 1,
+                    "Acute pericarditis": 1,
+                    "Pulmonary embolism": 1,
+                    "Pneumonia": 1,
+                    "Pneumothorax": 1,
+                    "Esophageal spasm": 1
+                },
+                "Rationale": {
+                    "Acute coronary syndrome": {
+                        "location of symptom -> myocardial ischemia, ACS": 1,
+                        "radiation (spread to jaw/shoulders) -> myocardial ischemia, ACS": 1,
+                        "onset of symptom -> myocardial ischemia, ACS": 1,
+                        "associated symptoms (nausea/sweatiness) -> myocardial ischemia, ACS": 1,
+                        "family history of heart problems (father) -> atherosclerosis, ACS": 2,
+                        "hypertension (high blood pressure) -> atherosclerosis, ACS": 1,
+                        "hyperlipidemia (high cholesterol) -> atherosclerosis, ACS": 1,
+                        "significant smoking history -> atherosclerosis, ACS": 1,
+                        "physical findings (blood pressure, right carotid bruit, S4, pulses) -> ACS": 2,
+                        "T wave inversion -> ACS": 1,
+                        "T wave inversion -/> stable angina, STEMI": 1
+                    },
+                    "Aortic dissection": {
+                        "onset of symptom -/> aortic dissection": 1,
+                        "quality/characteristic/description/feeling of symptom -/> aortic dissection": 1,
+                        "physical findings -/> aortic dissection": 1
+                    },
+                    "Acute pericarditis": {
+                        "quality/characteristic/description/feeling of symptom -/> acute percarditis": 1,
+                        "exacerbating/relieving factors of symptom -/> acute percarditis": 1,
+                        "physical findings (no rub or fever) -/> acute percarditis": 1
+                    },
+                    "Pulmonary embolism": {
+                        "shortness of breath (dyspnea) -/> pulmonary embolism": 1,
+                        "physical findings (normal heart rate + oxygen, normal heart sounds, jugular pressure) -/> pulmonary embolism": 2
+                    },
+                    "Pneumonia": {
+                        "quality/characteristic/description/feeling of symptom -/> pneumonia": 1,
+                        "no fever or cough -/> pneumonia": 1,
+                        "physical findings (normal lung) -/> pneumonia": 1
+                    },
+                    "Pneumothorax": {
+                        "shortness of breath (dyspnea) -/> pneumothorax": 1,
+                        "physical findings (normal lungs) -/> pneumothorax": 1
+                    },
+                    "Esophageal spasm": {
+                        "not with meal -/> esophageal spasm": 1
+                    }
+                },
+                "Final": {
+                    "Acute coronary syndrome": 8
+                }
+            }
+        },
+        "physical": "./Patient_Info/JohnSmith_physical.docx",
+        "ECG": "./Patient_Info/JohnSmith_ECG.png"
+    },
+    "messages": [
+        {
+            "type": "input",
+            "role": "User",
+            "content": "Hi, my name is Ishea Johnson and I'm a medical student at RWJMS. What brings you in?",
+            "labels": {
+                "gen": [
+                    "Introduction",
+                    "Establish Chief Concern"
+                ]
+            },
+            "annotation": "Introduction, Establish Chief Concern",
+            "highlight": "#bae1ff"
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "I came in because I'm experiencing a heaviness in my chest. It's been making me really nervous since my father died suddenly of a heart attack when he was just 50 years old. The heaviness came on gradually while I was sitting at my desk at home about 2 hours ago. I was feeling a bit nauseous and sweaty before coming in too, but I feel a little better now.",
+            "labels": {
+                "dims": [
+                    "Onset",
+                    "Quality",
+                    "Location",
+                    "Timing"
+                ]
+            },
+            "annotation": "Onset, Quality, Location, Timing",
+            "highlight": "#ffb3ba"
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "I'm glad came in today so we can figure out what's going on together.  Can you give some more information about what you were doing when the chest heaviness first started?",
+            "labels": {
+                "gen": [
+                    "Additional Information"
+                ]
+            },
+            "annotation": "Additional Information",
+            "highlight": "#bae1ff"
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "I was just sitting at my desk at home when the heaviness started. I wasn't doing anything strenuous or out of the ordinary. It came on gradually while I was seated.",
+            "labels": {
+                "dims": [
+                    "Onset",
+                    "Location"
+                ]
+            },
+            "annotation": "Onset, Location",
+            "highlight": "#ffb3ba"
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "Has this ever happened before?",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "No, I've never had chest pain or pressure like this before. But I have had some milder chest discomfort when walking up hills near the end of my walking route. I usually took an antacid thinking it was heartburn or a stomach issue, and it would go away.",
+            "labels": {
+                "dims": [
+                    "Prior History",
+                    "Relieving"
+                ]
+            },
+            "annotation": "Prior History, Relieving",
+            "highlight": "#ffb3ba"
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "Do you take medications for anything?",
+            "labels": {
+                "gen": [
+                    "Medication"
+                ]
+            },
+            "annotation": "Medication",
+            "highlight": "#bae1ff"
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "Yes, I take some medications. I'm not sure of the exact names, but I take a water pill and another new medication for high blood pressure, and I also take a statin for high cholesterol.",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "Did you experience any other symptoms along with your chest?",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "When the heaviness was at its worst, I also felt an aching pain in my jaw and both shoulders. I didn't notice anything that made the symptoms worse or better, and I took a couple of Tums but they didn't provide any relief.",
+            "labels": {
+                "dims": [
+                    "Radiation",
+                    "Exacerbating",
+                    "Relieving"
+                ]
+            },
+            "annotation": "Radiation, Exacerbating, Relieving",
+            "highlight": "#ffb3ba"
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "Are you still experiencing any discomfort now?",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "The heaviness in my chest is still there, but it's not as severe as when it first started a couple hours ago. The pressure has gradually improved since coming to the hospital, but I can still feel some lingering heaviness in the center of my chest.",
+            "labels": {
+                "dims": [
+                    "Quality",
+                    "Location",
+                    "Timing"
+                ]
+            },
+            "annotation": "Quality, Location, Timing",
+            "highlight": "#ffb3ba"
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "When you first started having pain two hours ago, how would you rate your pain on a scale of 1-10, with 10 being the worst pain you've ever felt?",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "When the heaviness and pressure first started a couple hours ago, I would rate it about an 8 out of 10 in terms of severity. It was pretty intense at first.",
+            "labels": {
+                "dims": [
+                    "Quality",
+                    "Onset",
+                    "Timing",
+                    "Severity"
+                ]
+            },
+            "annotation": "Quality, Onset, Timing, Severity",
+            "highlight": "#ffb3ba"
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "I know you mentioned taking medication for high blood pressure and high cholesterol. Do you have any other medical problems that you're aware of?",
+            "labels": {
+                "gen": [
+                    "Medical History"
+                ],
+                "risk": [
+                    "Hypertension",
+                    "Hyperlipidemia"
+                ]
+            },
+            "annotation": "Medical History, Hypertension, Hyperlipidemia",
+            "highlight": "#bae1ff"
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "At my last doctor's visit, she said I have pre-diabetes, but I'm not really sure what that means. She recommended I lose some weight though, so I started a walking program about 6 months ago to try to get healthier. Other than the high blood pressure and cholesterol issues, I don't have any other major medical problems that I'm aware of.",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "You mentioned your father died of at 50 years old. Does anyone else in your family have any medical conditions?",
+            "labels": {
+                "gen": [
+                    "Family History"
+                ],
+                "risk": [
+                    "Relative Heart"
+                ]
+            },
+            "annotation": "Family History, Relative Heart",
+            "highlight": "#bae1ff"
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "Yes, my mother passed away from breast cancer a couple years ago. But other than my father's heart attack at a young age, I'm not aware of any other major heart conditions or other illnesses in my family history.",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "Okay, thank you for sharing that. Do you smoke any cigarettes or use vape?",
+            "labels": {
+                "gen": [
+                    "Smoking"
+                ],
+                "risk": [
+                    "Smoking"
+                ]
+            },
+            "annotation": "Smoking",
+            "highlight": "#bae1ff"
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "I'm actually a former smoker. I started smoking when I was 19 in college and quit about 5 years ago. I smoked around a pack per day during that time.",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "Okay. Is there anything that I haven't asked you about that you would like to share with me?",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "Well, I have had some difficulty maintaining an erection for the past 2 years or so. It's something I've been meaning to bring up with my doctor. Oh, and I also get pain and cramping in my left calf when I'm out walking, but it goes away when I stop.",
+            "labels": {
+                "dims": [
+                    "Exacerbating",
+                    "Relieving"
+                ]
+            },
+            "annotation": "Exacerbating, Relieving",
+            "highlight": "#ffb3ba"
+        },
+        {
+            "type": "input",
+            "role": "User",
+            "content": "That is very helpful information to us to have, thank you for sharing. I'm going to go consult with the doctor and we'll both be back to come up with a plan for getting you feeling better.",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        },
+        {
+            "type": "output",
+            "role": "AI",
+            "content": "Okay, thank you. I appreciate you taking the time to listen to all my symptoms and concerns. I'll wait here for you and the doctor to come back.",
+            "labels": {},
+            "annotation": null,
+            "highlight": null
+        }
+    ],
+    "diagnosis_inputs": {
+        "Summary": "Patient is a male with a past medical history of hypertension, hypercholesterolemia, and pre-diabetes and a family history of fatal heart attack presenting with chest heaviness that began 2 hours ago. Pain was a 8/10 and started while the patient was sitting at his desk and was accompanied by nausea, diaphoresis, and jaw pain radiating to both shoulders. Patient states that he has experienced episodes like this in the past when exercising, but they have resolved, usually after taking an antacid. Patient also has been experiencing erectile dysfunction for the past 2 years and claims to have pain in his left calf when walking that subsides when he rests. Physical exam in notable for high blood pressure of 168/94 , normal lung findings, an S4 heart sound, and a 1+ left popliteal pulse. ECG shows regular rate and rhythm with diffuse ST depressions.",
+        "Potential": [
+            "Unstable Angina",
+            "NSTEMI",
+            "Pulmonary embolism"
+        ],
+        "Rationale": "The differential for this patient is Unstable Angina, NSTEMI, and Pulmonary Embolism. Unstable angina is most likely because the patient had experienced exertional chest pain in the past which has developed into chest pain at rest. Additionally, the ECG shows diffuse ST depression which support the diagnosis. NSTEMI is also a possible disgnosis given the symptom and ECG, however unstable angina is more likely because the chest pain is recurring and worsening. Pulmonary embolism is on the differential because it could result in chest pain and could result from a DVT in the leg, however the patient's erectile dysfunction and leg pain are consistent with a peripheral artery disease, which would make coronary artery disease more likely.",
+        "Final": "Unstable Angina"
+    },
+    "feedback": {
+        "Data Acquisition": {
+            "datacategories": [
+                {
+                    "name": "gen",
+                    "type": "input",
+                    "header": "General Questions",
+                    "color": "blue",
+                    "highlight": "#bae1ff"
+                },
+                {
+                    "name": "dims",
+                    "type": "output",
+                    "header": "Dimensions of Chief Concern",
+                    "color": "red",
+                    "highlight": "#ffb3ba"
+                },
+                {
+                    "name": "asoc",
+                    "type": "input",
+                    "header": "Associated Symptoms Questions",
+                    "color": "orange",
+                    "highlight": "#ffdfba"
+                },
+                {
+                    "name": "risk",
+                    "type": "input",
+                    "header": "Risk Factor Questions",
+                    "color": "violet",
+                    "highlight": "#f1cbff"
+                }
+            ],
+            "weights": {
+                "gen": {
+                    "Introduction": 5,
+                    "Confirm Identity": 5,
+                    "Establish Chief Concern": 5,
+                    "Additional Information": 5,
+                    "Medical History": 5,
+                    "Surgery Hospitalization": 5,
+                    "Medication": 5,
+                    "Allergies": 5,
+                    "Family History": 5,
+                    "Alcohol": 2,
+                    "Smoking": 2,
+                    "Drug Use": 2,
+                    "Employment": 1,
+                    "Social Support": 1
+                },
+                "dims": {
+                    "Onset": 5,
+                    "Quality": 5,
+                    "Location": 5,
+                    "Timing": 5,
+                    "Pattern": 5,
+                    "Exacerbating": 5,
+                    "Relieving": 5,
+                    "Prior History": 5,
+                    "Radiation": 5,
+                    "Severity": 5
+                },
+                "asoc": {
+                    "Breathing": 5,
+                    "Sweating": 3,
+                    "Nausea": 5,
+                    "Syncope": 4,
+                    "Fatigue": 2,
+                    "Palpitations": 2,
+                    "Leg Swelling": 2,
+                    "Fever": 1,
+                    "Cough": 1,
+                    "URI": 1,
+                    "Stomach Pain": 3
+                },
+                "risk": {
+                    "CAD": 5,
+                    "PVD": 3,
+                    "Hypertension": 5,
+                    "Hyperlipidemia": 5,
+                    "Smoking": 5,
+                    "Diabetes": 5,
+                    "Relative Heart": 5,
+                    "Sedentary": 1
+                }
+            },
+            "checklists": {
+                "gen": {
+                    "Introduction": true,
+                    "Confirm Identity": false,
+                    "Establish Chief Concern": true,
+                    "Additional Information": true,
+                    "Medical History": true,
+                    "Surgery Hospitalization": false,
+                    "Medication": true,
+                    "Allergies": false,
+                    "Family History": true,
+                    "Alcohol": false,
+                    "Smoking": true,
+                    "Drug Use": false,
+                    "Employment": false,
+                    "Social Support": false
+                },
+                "dims": {
+                    "Onset": true,
+                    "Quality": true,
+                    "Location": true,
+                    "Timing": true,
+                    "Pattern": false,
+                    "Exacerbating": true,
+                    "Relieving": true,
+                    "Prior History": true,
+                    "Radiation": true,
+                    "Severity": true
+                },
+                "asoc": {
+                    "Breathing": false,
+                    "Sweating": false,
+                    "Nausea": false,
+                    "Syncope": false,
+                    "Fatigue": false,
+                    "Palpitations": false,
+                    "Leg Swelling": false,
+                    "Fever": false,
+                    "Cough": false,
+                    "URI": false,
+                    "Stomach Pain": false
+                },
+                "risk": {
+                    "CAD": false,
+                    "PVD": false,
+                    "Hypertension": true,
+                    "Hyperlipidemia": true,
+                    "Smoking": true,
+                    "Diabetes": false,
+                    "Relative Heart": true,
+                    "Sedentary": false
+                }
+            },
+            "scores": {
+                "gen": 32,
+                "dims": 45,
+                "asoc": 0,
+                "risk": 20
+            },
+            "maxscores": {
+                "gen": 53,
+                "dims": 50,
+                "asoc": 29,
+                "risk": 34
+            }
+        },
+        "Diagnosis": {
+            "weights": {
+                "Summary": {
+                    "Onset": 3,
+                    "Quality": 5,
+                    "Location": 5,
+                    "Timing": 3,
+                    "Pattern": 5,
+                    "Radiation": 5,
+                    "Prior History": 3,
+                    "Nausea": 2,
+                    "Sweating": 2,
+                    "Breathing": 2,
+                    "Syncope": 2,
+                    "Palpitations": 2,
+                    "Hypertension": 2,
+                    "Hyperlipidemia": 2,
+                    "Diabetes": 2,
+                    "Smoking": 5,
+                    "Relative Heart": 5,
+                    "PVD": 2
+                },
+                "Potential": {
+                    "Acute coronary syndrome": 1,
+                    "Aortic dissection": 1,
+                    "Acute pericarditis": 1,
+                    "Pulmonary embolism": 1,
+                    "Pneumonia": 1,
+                    "Pneumothorax": 1,
+                    "Esophageal spasm": 1
+                },
+                "Rationale": {
+                    "Acute coronary syndrome": {
+                        "location of symptom -> myocardial ischemia, ACS": 1,
+                        "radiation (spread to jaw/shoulders) -> myocardial ischemia, ACS": 1,
+                        "onset of symptom -> myocardial ischemia, ACS": 1,
+                        "associated symptoms (nausea/sweatiness) -> myocardial ischemia, ACS": 1,
+                        "family history of heart problems (father) -> atherosclerosis, ACS": 2,
+                        "hypertension (high blood pressure) -> atherosclerosis, ACS": 1,
+                        "hyperlipidemia (high cholesterol) -> atherosclerosis, ACS": 1,
+                        "significant smoking history -> atherosclerosis, ACS": 1,
+                        "physical findings (blood pressure, right carotid bruit, S4, pulses) -> ACS": 2,
+                        "T wave inversion -> ACS": 1,
+                        "T wave inversion -/> stable angina, STEMI": 1
+                    },
+                    "Aortic dissection": {
+                        "onset of symptom -/> aortic dissection": 1,
+                        "quality/characteristic/description/feeling of symptom -/> aortic dissection": 1,
+                        "physical findings -/> aortic dissection": 1
+                    },
+                    "Acute pericarditis": {
+                        "quality/characteristic/description/feeling of symptom -/> acute percarditis": 1,
+                        "exacerbating/relieving factors of symptom -/> acute percarditis": 1,
+                        "physical findings (no rub or fever) -/> acute percarditis": 1
+                    },
+                    "Pulmonary embolism": {
+                        "shortness of breath (dyspnea) -/> pulmonary embolism": 1,
+                        "physical findings (normal heart rate + oxygen, normal heart sounds, jugular pressure) -/> pulmonary embolism": 2
+                    },
+                    "Pneumonia": {
+                        "quality/characteristic/description/feeling of symptom -/> pneumonia": 1,
+                        "no fever or cough -/> pneumonia": 1,
+                        "physical findings (normal lung) -/> pneumonia": 1
+                    },
+                    "Pneumothorax": {
+                        "shortness of breath (dyspnea) -/> pneumothorax": 1,
+                        "physical findings (normal lungs) -/> pneumothorax": 1
+                    },
+                    "Esophageal spasm": {
+                        "not with meal -/> esophageal spasm": 1
+                    }
+                },
+                "Final": {
+                    "Acute coronary syndrome": 8
+                }
+            },
+            "classified": {
+                "Potential": {
+                    "Unstable Angina": "Acute coronary syndrome",
+                    "NSTEMI": "Acute coronary syndrome",
+                    "Pulmonary embolism": "Pulmonary embolism"
+                },
+                "Final": {
+                    "Unstable Angina": "Acute coronary syndrome"
+                }
+            },
+            "checklists": {
+                "Summary": {
+                    "Onset": true,
+                    "Quality": true,
+                    "Location": true,
+                    "Timing": true,
+                    "Pattern": false,
+                    "Radiation": true,
+                    "Prior History": true,
+                    "Nausea": true,
+                    "Sweating": true,
+                    "Breathing": false,
+                    "Syncope": false,
+                    "Palpitations": false,
+                    "Hypertension": true,
+                    "Hyperlipidemia": true,
+                    "Diabetes": true,
+                    "Smoking": false,
+                    "Relative Heart": true,
+                    "PVD": true
+                },
+                "Rationale": {
+                    "Acute coronary syndrome": {
+                        "location of symptom -> myocardial ischemia, ACS": false,
+                        "radiation (spread to jaw/shoulders) -> myocardial ischemia, ACS": false,
+                        "onset of symptom -> myocardial ischemia, ACS": true,
+                        "associated symptoms (nausea/sweatiness) -> myocardial ischemia, ACS": false,
+                        "family history of heart problems (father) -> atherosclerosis, ACS": false,
+                        "hypertension (high blood pressure) -> atherosclerosis, ACS": false,
+                        "hyperlipidemia (high cholesterol) -> atherosclerosis, ACS": false,
+                        "significant smoking history -> atherosclerosis, ACS": false,
+                        "physical findings (blood pressure, right carotid bruit, S4, pulses) -> ACS": false,
+                        "T wave inversion -> ACS": false,
+                        "T wave inversion -/> stable angina, STEMI": false
+                    },
+                    "Pulmonary embolism": {
+                        "shortness of breath (dyspnea) -/> pulmonary embolism": false,
+                        "physical findings (normal heart rate + oxygen, normal heart sounds, jugular pressure) -/> pulmonary embolism": false
+                    }
+                },
+                "Potential": {
+                    "Acute coronary syndrome": true,
+                    "Aortic dissection": false,
+                    "Acute pericarditis": false,
+                    "Pulmonary embolism": true,
+                    "Pneumonia": false,
+                    "Pneumothorax": false,
+                    "Esophageal spasm": false
+                },
+                "Final": {
+                    "Acute coronary syndrome": true
+                }
+            },
+            "scores": {
+                "Summary": 41,
+                "Rationale": 1,
+                "Potential": 2,
+                "Final": 8
+            },
+            "maxscores": {
+                "Summary": 57,
+                "Rationale": 16,
+                "Potential": 3,
+                "Final": 8
+            }
+        }
+    },
+    "survey": {
+        "question1": [
+            "Were there any issues you encountered while interviewing the virtual patient or writing your diagnosis? What could be improved?",
+            "There were no issues with the virtual patient. I think it might be nice if there was an option to change the speed that the virtual patient talks, it seemed a little slow for me."
+        ],
+        "question2": [
+            "Were there any issues you encountered in your grading and feedback? What could be improved?",
+            "For some sections of the grading, it didn't give points even though I mentioned the things in the interview. For example, I asked about smoking and vaping, but I didn't get points for recreational drug use. Also, in the summary I mentioned the physical exam results of high blood pressure, etc, but didn't receive points there."
+        ],
+        "question3": [
+            "Do you have any other suggestions or areas for improvement? This could include ideas for new features, feedback sections, etc.",
+            "If the goal is to simulate the OSCE, the program does a great job. It would be fun to have another response prompt that asks what would next steps be (ie. labs, imaging, etc) if this isn't strictly to mirror OSCEs. User interface was good. Response time of the virtual patient was good. It might be helpful to provide a rubric/outline of things to ask the patient about (if this isn't meant for OSCE simulation, some people (potentially outside of RWJ) might not realize that this is an HPI + asking about all the other OSCE talking point). Also, it would be helpful if the program provided the short rundown of the patient prior to the start of the interview (John Smith, age, present with \"problem\"), just to orient people."
+        ],
+        "question4": [
+            "How helpful do you think practicing an interview would be in learning cardiovascular pathophisiology?",
+            "I think it's pretty helpful to \"see\" what a presentation of the illness might be like in a real person since you sorta just have a list of problems that you learn in class. Also, it helps to think about multiple pathologies and the questions you need to ask to distinguish between them."
+        ]
+    }
+}

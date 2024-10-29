@@ -70,7 +70,7 @@ SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
 
 CLASS_CLIENT = Anthropic()
-CLASS_MODEL = "claude-3-5-sonnet-20240620"
+CLASS_MODEL = "claude-3-5-sonnet-20241022"
 CLASS_TEMP = 0.0
 DIAG_CLIENT = OpenAI()
 DIAG_MODEL = "gpt-4-turbo"

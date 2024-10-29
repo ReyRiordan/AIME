@@ -116,6 +116,9 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
         if message.type == category.type:
             applicable_messages.append(message)
     message_list = [message.content for message in applicable_messages]
+
+    print(message_list)
+    
     messages_json = json.dumps(message_list)
 
     # Classify

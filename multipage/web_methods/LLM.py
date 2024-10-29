@@ -108,6 +108,8 @@ def classifier(category: DataCategory, messages: list[Message]) -> None:
     # Get the base class prompt for the category
     prompt_system = category.class_prompt
 
+    print(prompt_system + "\n")
+
     # Append applicable messages to prompt
     applicable_messages = []
     for message in messages:

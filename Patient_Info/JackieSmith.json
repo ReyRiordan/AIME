@@ -1,86 +1,69 @@
 {
-  "name": "Jackie Smith",
-  "speech": {
-    "host": "openai",
-    "model": "tts-1",
-    "voice": "nova"
+  "ID": "Jackie Smith",
+  "Avatar": {
+    "File": false
   },
-  "prompt": {
-    "type": "default",
-    "file": "./Prompts/Base_3-14.txt"
+  "Speech": {
+    "Host": "openai",
+    "Model": "tts-1",
+    "Voice": "nova"
   },
-  "case": {
-    "Personal Details": [
-      {
-        "detail": "Sex",
-        "line": "Female"
-      },
-      {
-        "detail": "Name",
-        "line": "Jackie Smith"
-      },
-      {
-        "detail": "Birthdate",
-        "line": "December 5th 1979"
-      },
-      {
-        "detail": "Tone",
-        "line": "Worried and nervous"
-      }
-    ],
+  "Assets": {
+    "Physical Examination": "./Patient_Info/JackieSmith_physical.docx",
+    "ECG": "./Patient_Info/JackieSmith_ECG.png",
+    "Case Explanation": "./Patient_Info/JackieSmith_explanation.pdf"
+  },
+  "Case": {
+    "Personal Details": {
+      "Name": "Jackie Smith",
+      "Sex": "Female",
+      "Race": "White",
+      "Birthdate": "December 5th 1979",
+      "Tone": "Worried and nervous"
+    },
     "Chief Concern": "You came to the hospital because you are experiencing pain in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
-    "History of Present Illness": [
-      {
-        "lock": false,
-        "dim": "Onset",
-        "line": "pain it was very mild at first and has gotten much worse over the day today. You weren\u2019t really doing anything in particular when you first noticed the pain."
+    "HIPI": {
+      "Onset": {
+        "desc": "pain was very mild at first and has gotten much worse over the day today. You weren't really doing anything in particular when you first noticed the pain.",
+        "lock": false
       },
-      {
-        "lock": true,
-        "dim": "Quality",
-        "line": "sharp, stabbing pain in chest"
+      "Quality": {
+        "desc": "sharp, stabbing pain in chest",
+        "lock": true
       },
-      {
-        "lock": false,
-        "dim": "Location",
-        "line": "center of chest"
+      "Location": {
+        "desc": "center of chest",
+        "lock": false
       },
-      {
-        "lock": false,
-        "dim": "Timing",
-        "line": "experiencing chest pain for about a day and half"
+      "Timing": {
+        "desc": "have been experiencing chest pain for about a day and a half",
+        "lock": false
       },
-      {
-        "lock": false,
-        "dim": "Pattern",
-        "line": "constant"
+      "Pattern": {
+        "desc": "constant",
+        "lock": false
       },
-      {
-        "lock": false,
-        "dim": "Severity",
-        "line": "the pain is very severe"
+      "Severity": {
+        "desc": "the pain is very severe",
+        "lock": false
       },
-      {
-        "lock": true,
-        "dim": "Prior History",
-        "line": "you've never had chest pain like you are experiencing now"
+      "Prior History": {
+        "desc": "you've never had chest pain like you are experiencing now",
+        "lock": true
       },
-      {
-        "lock": true,
-        "dim": "Radiation",
-        "line": "you also notice a pain in along the upper part of your back along both shoulders"
+      "Radiation": {
+        "desc": "you also notice a pain in along the upper part of your back along both shoulders",
+        "lock": true
       },
-      {
-        "lock": true,
-        "dim": "Exacerbating",
-        "line": "the pain is worse when you breathe in or cough"
+      "Exacerbating Factors": {
+        "desc": "the pain is worse when you breathe in or cough",
+        "lock": true
       },
-      {
-        "lock": true,
-        "dim": "Relieving",
-        "line": "the pain seems to be better when you are sitting up right rather than lying down"
+      "Relieving Factors": {
+        "desc": "the pain seems to be better when you are sitting up right rather than lying down",
+        "lock": true
       }
-    ],
+    },
     "Associated Symptoms": [
       {
         "lock": false,

@@ -18,75 +18,75 @@
         "Birthdate": "September 5th 1959",
         "Tone": "Worried and nervous"
       },
-      "Chief Concern": "You came to the hospital because you were experiencing a heaviness in your chest. You are nervous about your symptoms because your father died suddenly of a heart attack when he was 50.",
-      "HIPI": {
+      "Chief Concern": "pressure-like burning sensation in chest, you are not experiencing it right now",
+      "HPI": {
         "Onset": {
-          "desc": "heaviness came on gradually, seated at desk at home when symptoms appeared",
-          "lock": false
+          "desc": "Burning usually comes on after eating but also occurs with walking and sometimes when you are emotionally stressed. Once or twice you feel it has come “out of nowhere” when you were not doing anything.",
+          "lock": true
         },
         "Quality": {
-          "desc": "like a weight on the chest",
+          "desc": "pressure-like burning sensation, like indigestion",
           "lock": true
         },
         "Location": {
-          "desc": "center of chest",
-          "lock": false
+          "desc": "burning is located in the center of the chest beneath your breast bone",
+          "lock": true
         },
         "Timing": {
-          "desc": "started around 2 hours ago, got better on the way here and stopped 20-30 minutes ago",
+          "desc": "usually it lasts about 5 or 10 minutes and then goes away",
           "lock": false
         },
         "Pattern": {
-          "desc": "constant",
+          "desc": "",
           "lock": true
         },
         "Severity": {
-          "desc": "it was pretty severe when it first started, gradually improved and is now gone",
+          "desc": "has gotten worse over the past month",
           "lock": false
         },
         "Prior History": {
-          "desc": "You have never had chest pain or pressure like you are experiencing now, but have experienced a milder chest discomfort when walking (thought this was heart burn or you had a stomach problem). Discomfort would happen when walking up long hill near end of route, where you would take an antacid and feel better.",
+          "desc": "You have been experiencing generalized bloating and burning/pressure sensation intermittently for the last 6 months, initially about once or twice a week.  Now you are experiencing it every day over the last week.",
           "lock": true
         },
         "Radiation": {
-          "desc": "You also felt an aching pain in your jaw and both shoulders when the pressure was at its worst",
+          "desc": "sometimes felt burning in your stomach, but not anywhere else",
           "lock": true
         },
         "Exacerbating Factors": {
-          "desc": "you have not noticed anything that makes the heaviness worse",
+          "desc": "sometimes worse when lying down, ",
           "lock": true
         },
         "Relieving Factors": {
-          "desc": "you took two or three tums but had no relief",
+          "desc": "sometimes better when sitting up, you take TUMs and sometimes that helps relieve the burning",
           "lock": true
         }
       },
       "Associated Symptoms": [
         {
-          "desc": "You were feeling slightly nauseated and sweaty prior to arriving, but you feel better now.",
-          "lock": false
-        },
-        {
-          "desc": "You have been stressed about your finances recently.",
+          "desc": "You occasionally have mild nausea and feel sweaty when you are experiencing the indigestion. This has developed over the past month and was not there prior.",
           "lock": true
         }
       ],
       "Medical History": [
         {
-          "desc": "Hypertension: You've had high blood pressure since you were 50. You take a water pill for that and were recently started on another new medication.",
+          "desc": "High blood pressure for about 10 years",
           "lock": true
         },
         {
-          "desc": "Hyperlipidemia: You've had high cholesterol for many years and take a statin for this.",
+          "desc": "You take your medication as instructed and check your blood pressure at home and it has been good. If asked, your home blood pressure readings are usually around 120’s70’s.",
           "lock": true
         },
         {
-          "desc": "Diabetes: On your most recent visit to your doctor, she said you have pre-diabetes - you are not sure what this means, but she recommended you lose weight.  To lose weight, you started a walking program; this was about 6 months ago.",
+          "desc": "You also were diagnosed with diabetes about 20 years ago and you do check your blood sugars. If asked, your home blood sugar levels (fasting) are usually around 110. You think your last hemoglobin A1c (test that measures sugar control) was 7%.",
           "lock": true
         },
         {
-          "desc": "You have been fully boosted for COVID, but do not always get a flu vaccine.",
-          "lock": false
+          "desc": "You think your last hemoglobin A1c (test that measures sugar control) was 7%.",
+          "lock": true
+        },
+        {
+          "desc": "If asked about high cholesterol, you are on a cholesterol lowering medication but had not heard that your cholesterol was high.",
+          "lock": true
         }
       ],
       "Surgical History": [
@@ -97,44 +97,56 @@
       ],
       "Medications": [
         {
-          "desc": "Read this list from your phone if asked for specific medications: \"Hydrochlorothiazide, Amlodipine, Atorvastatin\".",
+          "desc": "If asked about medications, you will say Losartan for your blood pressure, metformin for your diabetes, and atorvastatin – which you think is for cholesterol.",
+          "lock": true
+        },
+        {
+          "desc": "If asked about over-the-counter medications, say that you have been taking TUMS for heartburn which you get occasionally.",
           "lock": true
         }
       ],
       "Allergies": [
         {
-          "desc": "You do not have any allergies that you are aware of.",
+          "desc": "no allergies",
           "lock": false
         }
       ],
       "Family History": [
         {
-          "desc": "Your father died suddenly of a heart attack when he was 50 years old.",
-          "lock": false
-        },
-        {
-          "desc": "Your mother passed away from breast cancer two years ago.",
+          "desc": "Your mother was diagnosed with breast cancer when she was 70. She is still alive.",
           "lock": false
         }
       ],
       "Social History": [
         {
-          "desc": "You are a former smoker. You started smoking when you were in college at 19 years old and quit about 5 years ago. You smoked about one pack per day.",
+          "desc": "You have never smoked.",
           "lock": true
         },
         {
-          "desc": "You drink about 2 glasses of wine or a cocktail during the week, more on the weekend.",
+          "desc": "You drink an occasional glass of wine.",
+          "lock": true
+        },
+        {
+          "desc": "You live with your partner and you have two children together, ages 20 and 15.",
+          "lock": true
+        },
+        {
+          "desc": "You are a high school teacher.",
+          "lock": true
+        },
+        {
+          "desc": "You do not exercise regularly.",
+          "lock": true
+        },
+        {
+          "desc": "If asked about change in exercise capacity- You can usually walk around the block and up a flight of stairs at home without problems, though you have sometimes noted heartburn symptoms worsen after walking a block, as noted above.",
           "lock": true
         }
       ],
       "Other Symptoms": [
         {
-          "desc": "You have had difficulty maintaining an erection for the past 2 years and have considered speaking to your doctor about this.",
-          "lock": false
-        },
-        {
-          "desc": "You do get pain in your left leg when you walk, a cramp in the calf. It goes away when you stop walking.",
-          "lock": false
+          "desc": "You have felt more tired than usual.",
+          "lock": true
         }
       ]
     }

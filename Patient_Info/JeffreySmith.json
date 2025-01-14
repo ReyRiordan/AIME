@@ -9,7 +9,7 @@
       "Voice": "onyx"
     },
     "Assets": {
-      "Physical Examination": "./Patient_Info/JeffreySmith_physical.docx",
+      "Physical Examination": "./Patient_Info/JeffreySmith_physical.docx"
     },
     "Case": {
       "Personal Details": {

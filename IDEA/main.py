@@ -81,8 +81,8 @@ if st.session_state["stage"] == LOGIN_PAGE:
         st.title("Virtual Patient (BETA)")
         st.write("For beta testing use only.")
 
-        username = st.text_input("Enter any username (full name):")
-        password = st.text_input("Enter the password you were provided:", type = "password")
+        username = st.text_input("Username:")
+        password = st.text_input("Password:", type = "password")
 
         layout12b = layout1[1].columns(5)
         if layout12b[2].button("Log in"):

@@ -114,30 +114,13 @@ if st.session_state["stage"] == SETTINGS:
                                   "class": {"input": 0, "output": 0},
                                   "diag": {"input": 0, "output": 0}}
 
-    layout1 = st.columns([1, 3, 1])
-    with layout1[1]:
-        st.title("Patient Settings")
-        st.write("Select your preferred settings for your interview with the virtual patient. Currently we have only made \"John Smith\" available, and voice input is highly encouraged.")
-        chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
-                                ["Text", "Voice"],
-                                index = None,
-                                placeholder = "Select interview mode...")
-        if chat_mode == "Text": st.session_state["chat_mode"] = CHAT_INTERFACE_TEXT
-        elif chat_mode == "Voice": st.session_state["chat_mode"] = CHAT_INTERFACE_VOICE
-        else: st.session_state["chat_mode"] = None
+    patient_name = "Jeffrey Smith"
 
-        patient_name = st.selectbox("Which patient would you like to interview?", 
-                                    ["John Smith"],
-                                    index = None,
-                                    placeholder = "Select patient...")
-        if patient_name: 
-            st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
-                                                            patient = Patient.build(patient_name))
+    st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
+                                                    patient = Patient.build(patient_name))
 
-        if st.session_state["chat_mode"] and st.session_state["interview"]: 
-            st.session_state["sent"]==False
-            st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
-
+    st.session_state["sent"]==False
+    set_stage(CHAT_SETUP)
 
 
 if st.session_state["stage"] == CHAT_SETUP:

@@ -90,18 +90,13 @@ if st.session_state["stage"] == LOGIN_PAGE:
                 st.session_state["username"] = username
                 st.write("Authentication successful!")
                 time.sleep(1)
-                set_stage(SETTINGS)
-                st.rerun()
-            if username == DATABASE_USERNAME and password == DATABASE_PASSWORD:
-                st.write("Authentication successful!")
-                time.sleep(1)
-                set_stage(VIEW_INTERVIEWS)
+                set_stage(CHAT_SETUP)
                 st.rerun()
             else:
                 st.write("Password incorect.")
 
 
-if st.session_state["stage"] == SETTINGS:    
+if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["interview"] = None
     st.session_state["messages"] = []
     st.session_state["convo_memory"] = []
@@ -120,10 +115,7 @@ if st.session_state["stage"] == SETTINGS:
                                                     patient = Patient.build(patient_name))
 
     st.session_state["sent"]==False
-    set_stage(CHAT_SETUP)
 
-
-if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
     if(st.session_state["sent"]==False):
         st.session_state["interview"].start_time = str(st.session_state["start_time"])

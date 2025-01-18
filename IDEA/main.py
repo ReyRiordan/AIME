@@ -122,38 +122,7 @@ if st.session_state["stage"] == CHAT_SETUP:
         collection.insert_one(st.session_state["interview"].model_dump())
         st.session_state["sent"]==True
 
-    set_stage(st.session_state["chat_mode"])
-
-
-if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
-    layout1 = st.columns([1, 3, 1])
-    with layout1[1]:
-        st.title("Interview")
-        st.write("You may now begin your interview with " + st.session_state["interview"].patient.id + ". Start by introducing yourself.")
-        st.write("Click the Restart button to restart the interview. Click the End Interview button to go to the download screen.")
-
-        container = st.container(height=300)
-
-        for message in st.session_state["interview"].messages:
-            with container:
-                with st.chat_message(message.role):
-                    st.markdown(message.content)
-
-        if user_input := st.chat_input("Type here..."):
-            with container:
-                with st.chat_message("User"):
-                    st.markdown(user_input)
-            
-            response, speech = get_chat_output(user_input)
-
-            with container:
-                with st.chat_message("AI"): #TODO Needs avatar eventually
-                    st.markdown(response)
-                    play_voice(speech)
-
-        columns = st.columns(4)
-        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=set_stage, args=[PHYSICAL_ECG_SCREEN])
+    set_stage(CHAT_INTERFACE_VOICE)
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:

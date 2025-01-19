@@ -177,9 +177,6 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
         physical_exam_doc = Document(st.session_state["interview"].patient.physical)
         for paragraph in physical_exam_doc.paragraphs:
             st.write(paragraph.text)
-    with layout2[1].container():
-        st.header("ECG", divider = "grey")
-        st.image(st.session_state["interview"].patient.ECG)
 
 
 if st.session_state["stage"] == DIAGNOSIS:

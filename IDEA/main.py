@@ -158,7 +158,13 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
         columns = st.columns(4)
         columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=set_stage, args=[PHYSICAL_ECG_SCREEN])
+        columns[2].button("End Interview", on_click=set_stage, args=[KEY_PHYSICALS])
+
+
+if st.session_state["stage"] == KEY_PHYSICALS:
+    st.title("Key Physical Exam Information")
+
+    st.button("Next", on_click=set_stage, args=[PHYSICAL_ECG_SCREEN])
 
 
 if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:

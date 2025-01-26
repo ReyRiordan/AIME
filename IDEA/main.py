@@ -194,13 +194,11 @@ if st.session_state["stage"] == DIAGNOSIS:
     layout1 = st.columns([1, 1])
 
     # User inputs
-    summary = layout1[0].text_area(label = "Write an interpretative summary for the patient, recording the key details of the case:", placeholder = "Interpretive summary for patient", height = 200)
-    layout11 = layout1[0].columns([1, 1, 1])
-    potential1 = layout11[0].text_input(label = "List 3 potential diagnoses:", placeholder = "First condition name")
-    potential2 = layout11[1].text_input(label = "None", placeholder = "Second condition name", label_visibility = "hidden")
-    potential3 = layout11[2].text_input(label = "None", placeholder = "Third condition name", label_visibility = "hidden")
-    rationale = layout1[0].text_area(label = "Write a rationale reasoning through the potential diagnoses you listed in order to determine what is the best diagnosis for the patient:", placeholder = "Rationale for diagnosis")
-    final = layout1[0].text_input(label = "Based on your rationale, write your final diagnosis:", placeholder = "Condition name")
+    hpi = layout1[0].text_area(label = "History of Present Illness", height = 200)
+    past_histories = layout1[0].text_area(label = "Past histories (include relevant past, family, and social histories and review of symptoms)", height = 200)
+    summary = layout1[0].text_area(label = "Summary Statement", height = 200)
+    assessment = layout1[0].text_area(label = "Assessment - specify most likely diagnosis and alternative diagnoses. Include your reasoning/explanation for each differential diagnoses.", height = 200)
+    plan = layout1[0].text_area(label = "Plan - include your reasoning for your initial diagnostic plan.", height = 200)
 
     # 3 buttons at bottom
     layout12 = layout1[0].columns([1, 1, 1])

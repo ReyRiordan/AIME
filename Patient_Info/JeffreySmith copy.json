@@ -17,50 +17,70 @@
         "Sex": "Male",
         "Birthdate": "September 5th 1959",
         "Tone": "Worried and nervous"
-      },
+      }, 
       "Background": "You were in the office a month ago because of bloating and a pressure-like burning sensation in your chest. You have been treated with heartburn medication for the past month and you are here to follow up.",
-      "HPI": {
-        "Onset": {
-          "desc": "Burning usually comes on after eating but also occurs with walking and sometimes when you are emotionally stressed. Once or twice you feel it has come “out of nowhere” when you were not doing anything.",
-          "lock": true
-        },
-        "Quality": {
-          "desc": "pressure-like burning sensation, like indigestion",
-          "lock": true
-        },
-        "Location": {
-          "desc": "burning is located in the center of the chest beneath your breast bone",
-          "lock": true
-        },
-        "Timing": {
-          "desc": "usually it lasts about 5 or 10 minutes and then goes away",
+      "HPI": [
+        {
+          "desc": "Major concern is the pressure-like burning sensation.",
           "lock": false
         },
-        "Pattern": {
-          "desc": "",
-          "lock": true
-        },
-        "Severity": {
-          "desc": "has gotten worse over the past month",
+        {
+          "desc": "The symptom has not improved, and if anything, it feels like it is more of a problem than before you started on the medication.",
           "lock": false
         },
-        "Prior History": {
+        {
+          "desc": "You have been taking the medicine, which is called pantoprazole, like you were supposed to.  ",
+          "lock": true
+        },
+        {
+          "desc": "If asked more about the what you have been experiencing, you feel like it is a pressure-like burning sensation, like indigestion.",
+          "lock": true
+        },
+        {
+          "desc": "The burning is located in the center of the chest beneath your breast bone.",
+          "lock": true
+        },
+        {
           "desc": "You have been experiencing generalized bloating and burning/pressure sensation intermittently for the last 6 months, initially about once or twice a week.  Now you are experiencing it every day over the last week.",
           "lock": true
         },
-        "Radiation": {
-          "desc": "sometimes felt burning in your stomach, but not anywhere else",
+        {
+          "desc": "It usually comes on after eating but also occurs with walking and sometimes when you are emotionally stressed. ",
           "lock": true
         },
-        "Exacerbating Factors": {
-          "desc": "sometimes worse when lying down, ",
+        {
+          "desc": "It is sometimes worse when lying down and better when sitting up.",
           "lock": true
         },
-        "Relieving Factors": {
-          "desc": "sometimes better when sitting up, you take TUMs and sometimes that helps relieve the burning",
+        {
+          "desc": "Once or twice you feel it has come “out of nowhere” when you were not doing anything.",
+          "lock": true
+        },
+        {
+          "desc": "You take TUMs and sometimes that helps relieve the burning.",
+          "lock": true
+        },
+        {
+          "desc": "Usually it lasts about 5 or 10 minutes and then goes away.",
+          "lock": true
+        },
+        {
+          "desc": "You are not experiencing the heartburn right now.",
+          "lock": true
+        },
+        {
+          "desc": "If asked to rate the severity of the burning on a scale of 1 to 10, you would say it was 4 originally, but over the past month it has gotten worse and is now a 6 or 7.",
+          "lock": true
+        },
+        {
+          "desc": "You have sometimes felt burning in your stomach, but not anywhere else.",
+          "lock": true
+        },
+        {
+          "desc": "You have been experiencing heartburn on and off for about six months.",
           "lock": true
         }
-      },
+      ],
       "Associated Symptoms": [
         {
           "desc": "You occasionally have mild nausea and feel sweaty when you are experiencing the indigestion. This has developed over the past month and was not there prior.",

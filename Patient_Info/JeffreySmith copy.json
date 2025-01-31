@@ -85,6 +85,10 @@
         {
           "desc": "You occasionally have mild nausea and feel sweaty when you are experiencing the indigestion. This has developed over the past month and was not there prior.",
           "lock": true
+        },
+        {
+          "desc": "When the heartburn is present, you have not noticed that it worsens with deep breathing or with coughing",
+          "lock": true
         }
       ],
       "Medical History": [

@@ -79,7 +79,7 @@ DIAG_TEMP = 0.0
 
 
 # Paths for prompt files
-PATHS = {"Patient Base": "./Prompts/Base_5-16.txt",
+PATHS = {"Patient Base": "./Prompts/Base_2-10.txt",
          "Convo Summarizer": "./Prompts/Summarizer_4-22.txt",
          "Static Label Descriptions": "./Prompts/label_descs.json",
          "Label Examples": "./Prompts/datacategory_examples.json",
@@ -113,9 +113,3 @@ with open(PATHS["Grade Rationale"], "r", encoding="utf8") as grade_rat_file:
     GRADE_RAT_PROMPT = grade_rat_file.read()
 with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()
-
-
-PATIENTS = {
-    "John Smith": "./Patient_Info/JohnSmith.json", 
-    "Jackie Smith": "./Patient_Info/JackieSmith.json"
-}

@@ -8,13 +8,13 @@ from lookups import *
 class Patient(pydantic.BaseModel):
     id: str
     case: Optional[dict]
-    grading: Optional[dict]
+    # grading: Optional[dict]
     physical : Optional[str]
-    ECG: Optional[str]
+    # ECG: Optional[str]
     explanation: Optional[str]
     convo_prompt: Optional[str]
     speech: Optional[dict]
-    label_descs: Optional[dict]
+    # label_descs: Optional[dict]
 
     # Attributes
         # self.name = name            # str
@@ -29,7 +29,7 @@ class Patient(pydantic.BaseModel):
     @classmethod
     def build(cls, id: str):
         
-        with open(PATIENTS[id], "r") as json_file:
+        with open("./Patient_Info/" + id.replace(" ", "") + ".json", "r") as json_file:
             JSON = json.load(json_file)
 
         # Create virtual patient prompt
@@ -39,32 +39,33 @@ class Patient(pydantic.BaseModel):
         convo_prompt += cls.process_case(case)
 
         # Extract grading for patient
-        grading = JSON["Grading"]
+        # grading = JSON["Grading"]
 
         # Assets (hardcoded for now)
         #TODO flexible assets
         physical = JSON["Assets"]["Physical Examination"]
-        ECG = JSON["Assets"]["ECG"]
+        # ECG = JSON["Assets"]["ECG"]
         explanation = JSON["Assets"]["Case Explanation"]
 
         # Extract speech settings
         speech = JSON["Speech"]
 
         # Extract label descriptions (static + patient dependent)
-        with open(PATHS["Static Label Descriptions"], "r") as label_descs_json:
-            label_descs = json.loads(label_descs_json.read())
-        for label, desc in JSON["Labels"].items():
-            label_descs[label] = desc
+        # with open(PATHS["Static Label Descriptions"], "r") as label_descs_json:
+        #     label_descs = json.loads(label_descs_json.read())
+        # for label, desc in JSON["Labels"].items():
+        #     label_descs[label] = desc
 
         return cls(id=id, 
                    speech=speech,
                    physical=physical, 
-                   ECG=ECG, 
+                #    ECG=ECG, 
                    explanation=explanation, 
                    case=case, 
-                   grading=grading, 
+                #    grading=grading, 
                    convo_prompt=convo_prompt, 
-                   label_descs=label_descs)
+                #    label_descs=label_descs
+                )
 
     @classmethod
     def process_case(cls, case: dict[str, list[dict[str]]]) -> str:
@@ -74,12 +75,12 @@ class Patient(pydantic.BaseModel):
             if category == "Personal Details":
                 for detail, desc in case[category].items():
                     case_prompt += detail + ": " + desc+ " \n"
-            elif category == "Chief Concern":
+            elif category == "Background":
                 case_prompt += case[category] + " \n"
             elif category == "HIPI":
-                for dim, dict in case[category].items():
-                    line = dim + ": " + dict["desc"]
-                    if dict["lock"]:
+                for bullet in case[category]:
+                    line = bullet["desc"]
+                    if bullet["lock"]:
                         line = "<LOCKED> " + line
                     case_prompt += line + "\n"
             else:

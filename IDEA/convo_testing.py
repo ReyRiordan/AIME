@@ -151,3 +151,62 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
 
         layout11 = st.columns([1, 1, 1])
         layout11[1].button("Proceed to Diagnosis", on_click=set_stage, args = [DIAGNOSIS], use_container_width=True)
+
+
+if st.session_state["stage"] == DIAGNOSIS:
+    st.title("Diagnosis")
+    st.write("Use the interview transcription and additional patient information (physical examination and ECG) to provide an interpretative summary, a list of potential diagnoses, a rationale reasoning through which diagnoses are more/less likely, and a final diagnosis.")
+    st.write("Click the \"Get Feedback\" button once you are all done to automatically receive grading and feedback on your interview and diagnosis.")
+    st.divider()
+
+    # 2 column full width layout
+    layout1 = st.columns([1, 1])
+
+    # User inputs
+    hpi = layout1[0].text_area(label = "History of Present Illness", height = 200)
+    past_histories = layout1[0].text_area(label = "Past Histories (include relevant past, family, and social histories and review of symptoms)", height = 200)
+    summary = layout1[0].text_area(label = "Summary Statement", height = 200)
+    assessment = layout1[0].text_area(label = "Assessment - Specify most likely diagnosis and alternative diagnoses. Include your reasoning/explanation for each differential diagnosis.", height = 200)
+    plan = layout1[0].text_area(label = "Plan - State your initial diagnostic plan. Includ eyour reasoning/explanation for the plan.", height = 200)
+
+    # Interview transcription
+    chat_container = layout1[1].container(height=400)
+    for message in st.session_state["interview"].messages:
+        with chat_container:
+            with st.chat_message(message.role):
+                st.markdown(message.content)
+    # Physical Examination
+    with layout1[1].expander("Physical Examination"):
+        physical_exam_doc = Document(st.session_state["interview"].patient.physical)
+        for paragraph in physical_exam_doc.paragraphs:
+            st.write(paragraph.text)
+
+    # 3 buttons: New Interview, Download Interview, Get Feedback
+    st.divider()
+    layout2 = st.columns([1, 1, 1, 1, 1])
+
+    # New Interview
+    layout2[1].button("New Interview", on_click=set_stage, args=[SETTINGS], use_container_width=True)
+    
+    # # Download Interview
+    # currentDateAndTime = date.datetime.now()
+    # st.session_state["interview"].date_time = str(currentDateAndTime)
+    # date_time = currentDateAndTime.strftime("%d-%m-%y__%H-%M")
+
+    # bio = io.BytesIO()
+    # st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].username, 
+    #                                                    st.session_state["interview"].patient.id, 
+    #                                                    [message.model_dump() for message in st.session_state["interview"].messages])
+    # st.session_state["convo_file"].save(bio)
+
+    # date_time = date.datetime.now().strftime("%d-%m-%y__%H-%M")
+    # layout12[1].download_button("Download interview", 
+    #                             data = bio.getvalue(), 
+    #                             file_name = st.session_state["interview"].username + "_" + date_time + ".docx", 
+    #                             mime = "docx")
+    
+    # Get Feedback
+    if layout2[3].button("Get Feedback", use_container_width=True): 
+        st.session_state["interview"].add_post_note(hpi, past_histories, summary, assessment, plan)
+        set_stage(FEEDBACK_SETUP)
+        st.rerun()

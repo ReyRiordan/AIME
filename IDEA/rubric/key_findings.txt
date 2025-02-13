@@ -1,0 +1,11 @@
+Key physical exam findings
+
+Defined as including an exam that highlights the absence and presence of key exam findings, as suggested by the diagnostic possibilities
+
+3: must include all 4:
+    a) Vital signs: Blood pressure AND pulse
+    b) Cardiovascular exam: murmur AND pulses OR carotid bruit, edema/leg swelling, chest wall tenderness
+    c) Lung exam: breath sounds (crackles/wheezes)
+    d) Abdominal exam: abdominal tenderness, mases, bruits
+2: 2 of above
+1: 0-1 of above

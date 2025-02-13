@@ -1,0 +1,14 @@
+Well reasoned plan
+
+Defined as including reasons for diagnostic testing and treatments and summarizing the evidence used to support decisions
+
+3: mentions A and B below
+    a) Mentions likely/probable or severe/worrisome/concerning or evaluate/assess for/rule in/rule out AND ischemia, coronary disease/CAD, angina, cardiac pain (allow double counting if included in explanation of differential diagnosis)
+    b) Mentions EKG/ECG/electrocardiogram, or stress test, coronary CT angiogram/CTA, cardiac catheterization or “cath”
+2: Mentions A and B below
+    a) Mentions likely/probable or severe/worrisome/concerning or evaluate/assess/rule in/rule out AND another diagnosis (allow double counting if included in explanation of differential diagnosis)
+    b) Mentions other diagnostic tests
+        a. GI: endoscopy/EGD, manometry, barium swallow
+        b. Pulm: chest X ray, pulmonary CTA
+        c. Cardiac: enzymes or troponin
+1: not meeting above criteria

@@ -1,0 +1,17 @@
+I- Interpretive summary
+
+Provides a concise summary statement that uses semantic vocabulary to highlight the most important elements from history, exam, and testing to interpret and represent the patient’s main problem(s). The presence or absence of the following features is assessed:
+    A) Key risk factors
+    B) Chief complaint
+    C) Illness time course
+    D) Use of semantic qualifiers (e.g., monoarticular vs polyarticular) or unified medical concepts (e.g., volume overload, cardiovascular risk factors).
+
+4: all 4 features present
+    a) Risk factors - mentions diabetes/DM, hypertension/HTN, AND age/years
+    b) Complaint - mentions chest/substernal AND pain/discomfort/pressure/burning/angina/dyspepsia, reflux, GERD
+    c) Time course - intermittent, recurring, recurrent, episodic, or on-and-off; AND months/chronic; AND lasts minutes/brief; AND worsening/more frequent/progressive
+    d) Semantic - at least 2 of: intermittent, recurring/recurrent, episodic, chronic, progressive, cardiac risk factor, atypical, unstable/stable, exertional, relieved by rest
+3: 3 features: must include A, B and D
+2: 2 features present
+1: 1 feature present
+0: 0 features present

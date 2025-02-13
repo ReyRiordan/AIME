@@ -33,7 +33,7 @@ class Interview(pydantic.BaseModel):
     def add_feedback(self):
         self.feedback = Feedback.build(patient=self.patient, messages=self.messages, diagnosis_inputs=self.diagnosis_inputs)
     
-    def add_exam_findings(self, findings: str):
+    def add_key_findings(self, findings: str):
         self.post_note["Findings"] = findings
 
     def add_post_note(self, hpi: str, past_histories: str, summary: str, assessment: str, plan: str):

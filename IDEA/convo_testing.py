@@ -131,7 +131,7 @@ if st.session_state["stage"] == KEY_PHYSICALS:
 
         layout11 = st.columns([1, 1, 1])
         if layout11[1].button("Next", use_container_width=True):
-            st.session_state["interview"].add_exam_findings(findings)
+            st.session_state["interview"].add_key_findings(findings)
             set_stage(PHYSICAL_ECG_SCREEN)
             st.rerun()
 

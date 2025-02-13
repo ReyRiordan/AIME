@@ -133,3 +133,18 @@ if st.session_state["stage"] == KEY_PHYSICALS:
         if layout11[1].button("Next", use_container_width=True):
             st.session_state["interview"].add_exam_findings(findings)
             set_stage(PHYSICAL_ECG_SCREEN)
+            st.rerun()
+
+
+if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
+    st.title("Physical and ECG Information")
+    layout1 = st.columns([7, 1])
+    layout1[0].write("Now that you've taken a chance to speak with the patient, you can take a chance to take a look at data obtained during a physical upon admittance to the ER. Review it before proceeding.")
+    layout1[1].button("Proceed to Diagnosis", on_click=set_stage, args = [DIAGNOSIS])
+    
+    layout2 = st.columns([1, 1])
+    with layout2[0].container():
+        st.header("Physical Examination", divider = "grey")
+        physical_exam_doc = Document(st.session_state["interview"].patient.physical)
+        for paragraph in physical_exam_doc.paragraphs:
+            st.write(paragraph.text)

@@ -120,3 +120,16 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         columns = st.columns(4)
         columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
         columns[2].button("End Interview", on_click=set_stage, args=[KEY_PHYSICALS])
+
+
+if st.session_state["stage"] == KEY_PHYSICALS:
+    layout1 = st.columns([2, 3, 2])
+    with layout1[1]:
+        st.title("Key Physical Exam Information")
+        findings = st.text_area(label = "Based on your interview with the patient, state the key physical examination findings that you would look for. You will be provided the actual exam results on the next screen.",
+                                height = 200)
+
+        layout11 = st.columns([1, 1, 1])
+        if layout11[1].button("Next", use_container_width=True):
+            st.session_state["interview"].add_exam_findings(findings)
+            set_stage(PHYSICAL_ECG_SCREEN)

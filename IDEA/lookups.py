@@ -70,6 +70,10 @@ CONVO_TEMP = 0.7
 SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
 
+FEEDBACK_CLIENT = Anthropic()
+FEEDBACK_MODEL = "claude-3-5-sonnet-20241022"
+FEEDBACK_TEMP = 0.0
+
 CLASS_CLIENT = Anthropic()
 CLASS_MODEL = "claude-3-5-sonnet-20241022"
 CLASS_TEMP = 0.0
@@ -87,7 +91,8 @@ PATHS = {"Patient Base": "./Prompts/Base_2-10.txt",
          "Output Classification": "./Prompts/Grade_DataOut_4-14.txt",
          "Grade Summary": "./Prompts/Grade_Sum_4-14.txt",
          "Grade Rationale": "./Prompts/Grade_Rat_6-26.txt",
-         "Grade Diagnosis": "./Prompts/Grade_Diag_4-23.txt"}
+         "Grade Diagnosis": "./Prompts/Grade_Diag_4-23.txt",
+         "Feedback": "./Prompts/Feedback_2-14.txt"}
 
 
 # Convo related
@@ -95,6 +100,8 @@ with open(PATHS["Patient Base"], "r", encoding="utf8") as base_file:
     BASE_PROMPT = base_file.read()
 with open(PATHS["Convo Summarizer"], "r", encoding="utf8") as summarizer_file:
     SUM_PROMPT = summarizer_file.read()
+with open(PATHS["Feedback"], "r", encoding="utf8") as feedback_file:
+    FEEDBACK_PROMPT = feedback_file.read()
 MAX_MEMORY = 12 # no limit rn
 
 

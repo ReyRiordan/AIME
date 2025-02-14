@@ -21,6 +21,22 @@ from web_classes.message import Message
 from web_classes.patient import Patient
 
 
+def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model = FEEDBACK_MODEL, temperature = FEEDBACK_TEMP):
+    base_split = FEEDBACK_PROMPT.split("[INSERT]")
+    system = base_split[0] + title + base_split[1] + desc + base_split[2] + rubric + base_split[3] + user_input
+    print(system)
+
+    response = FEEDBACK_CLIENT.messages.create(model = model, 
+                                               temperature = temperature, 
+                                               system = system, 
+                                               messages = [{"role": "user", "content": user_input}])
+    
+    print("\n\n")
+    print(response.content[0].text)
+    
+    return response.content[0].text
+
+
 def generate_response(model: str, temperature: float, system: str, messages: list[dict[str, str]]) -> str:
     # response = CHAT_CLIENT.messages.create(model = model, 
     #                                        temperature = temperature, 

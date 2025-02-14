@@ -210,3 +210,18 @@ if st.session_state["stage"] == DIAGNOSIS:
         st.session_state["interview"].add_post_note(hpi, past_histories, summary, assessment, plan)
         set_stage(FEEDBACK_SETUP)
         st.rerun()
+
+
+if st.session_state["stage"] == FEEDBACK_SETUP:
+     # Update the database from before
+
+    # collection.replace_one({"username":st.session_state["interview"].username, "start_time":st.session_state["interview"].start_time}, st.session_state["interview"].model_dump())
+
+    st.title("Processing feedback...")
+    st.write("This might take a few minutes.")
+    st.session_state["interview"].add_feedback()
+    # st.json(st.session_state["interview"].model_dump_json())
+    st.session_state["interview_dict"] = st.session_state["interview"].model_dump()
+    
+    set_stage(FEEDBACK_SCREEN)
+    st.rerun()

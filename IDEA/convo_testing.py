@@ -205,6 +205,29 @@ if st.session_state["stage"] == DIAGNOSIS:
     #                             file_name = st.session_state["interview"].username + "_" + date_time + ".docx", 
     #                             mime = "docx")
     
+    # Test cases
+    layout21 = layout2[2].columns([1, 1])
+    if layout21[0].button("TEST: BAD", use_container_width=True):
+        with open(".IDEA/test_cases/bad.json", "r", encoding="utf8") as bad_json:
+            bad_case = json.load(bad_json)
+            st.session_state["interview"].add_post_note(bad_case["HPI"], 
+                                                        bad_case["Past Histories"], 
+                                                        bad_case["Summary"], 
+                                                        bad_case["Assessment"], 
+                                                        bad_case["Plan"])
+        set_stage(FEEDBACK_SETUP)
+        st.rerun()
+    if layout21[1].button("TEST: GOOD", use_container_width=True):
+        with open(".IDEA/test_cases/good.json", "r", encoding="utf8") as good_json:
+            good_case = json.load(good_json)
+            st.session_state["interview"].add_post_note(good_case["HPI"], 
+                                                        good_case["Past Histories"], 
+                                                        good_case["Summary"], 
+                                                        good_case["Assessment"], 
+                                                        good_case["Plan"])
+        set_stage(FEEDBACK_SETUP)
+        st.rerun()
+    
     # Get Feedback
     if layout2[3].button("Get Feedback", use_container_width=True): 
         st.session_state["interview"].add_post_note(hpi, past_histories, summary, assessment, plan)

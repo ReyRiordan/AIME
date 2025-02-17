@@ -21,33 +21,33 @@ class Feedback(pydantic.BaseModel):
 
         # Initialize
         feedback = {"Key Findings": None,
-                    "HPI": [], # 3
-                    "Past Histories": [], # 2
+                    "HPI": {}, # 3
+                    "Past Histories": {}, # 2
                     "Summary": None,
-                    "Assessment": [], # 3
+                    "Assessment": {}, # 3
                     "Plan": None}
 
         # Feedback and grading
         for category in ["Key Findings", "HPI", "Past Histories", "Summary", "Assessment", "Plan"]:
             if feedback[category] is not None:
-                for p, d in BASE[category].items():
-                    response = generate_feedback(title = d["title"],
-                                                 desc = d["desc"],
-                                                 rubric = patient.grading[category][p]["rubric"],
+                for part, content in BASE[category].items():
+                    response = generate_feedback(title = content["title"],
+                                                 desc = content["desc"],
+                                                 rubric = patient.grading[category][part]["rubric"],
                                                  user_input = post_note[category])
                     # score = generate_score()
-                    feedback[category].append({"text": response,
-                                            #    "score": score,
-                                               "max": patient.grading[category][p]["points"]})
+                    feedback[category][part]({"text": response,
+                                               #    "score": score,
+                                               "max": patient.grading[category][part]["points"]})
             else:
                 response = generate_feedback(title = BASE[category]["title"],
                                              desc = BASE[category]["desc"],
                                              rubric = patient.grading[category]["rubric"],
                                              user_input = post_note[category])
                 # score = generate_score()
-                feedback[category].append({"text": response,
-                                        #    "score": score,
-                                           "max": patient.grading[category]["points"]})
+                feedback[category] = {"text": response,
+                                      #    "score": score,
+                                      "max": patient.grading[category]["points"]}
 
         return cls(feedback=feedback)
 

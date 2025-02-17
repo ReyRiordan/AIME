@@ -18,6 +18,31 @@ from typing import List
 from lookups import *
 
 
+def display_PostNote(feedback: dict, inputs: dict) -> None:
+    for category, d in feedback.items():
+        with st.container(border = True):
+            st.subheader(f"{category}:", divider = "grey")
+            layout1 = st.columns([1, 1])
+            with layout1[0]:
+                st.write("**Your answer:**")
+                st.write(inputs[category])
+            with layout1[1]:
+                st.write("**Feedback:**")
+                if category in ["HPI", "Past Histories", "Assessment"]:
+                    for part, dd in d.items():
+                        st.write(f"{dd['title']}:")
+                        st.write(dd["feedback"])
+                        with st.expander("Rubric"):
+                            st.write(dd["desc"])
+                            st.write(dd["rubric"])
+                else:
+                    st.write(f"{d['title']}:")
+                    st.write(d["feedback"])
+                    with st.expander("Rubric"):
+                        st.write(d["desc"])
+                        st.write(d["rubric"])
+    
+
 
 def display_DataAcquisition(data_acquisition: dict, messages: list[dict], label_descs: dict) -> None:
     layout1 = st.columns([4, 5])
@@ -121,27 +146,20 @@ def display_Diagnosis(diagnosis: dict, inputs: dict, label_descs: dict) -> None:
 
 
 def display_Interview(interview: dict) -> None:
-    st.write(f"User: {interview['username']}, Patient: {interview['patient']['id']}")
-    if 'start_time' in interview and interview['start_time']:
-        st.write(f"Start Time: {interview['start_time']}")
-    if 'time_elapsed' in interview and interview['time_elapsed']:
-        st.write(f"Time Elapsed: {interview['time_elapsed']}")
-    if 'date_time' in interview and interview['date_time']:
-        st.write(f"Time: {interview['date_time']}")
-    if 'cost' in interview and interview['cost']:
-        st.write(f"Estimated Cost: ${interview['cost']}")
+    # st.write(f"User: {interview['username']}, Patient: {interview['patient']['id']}")
+    # if 'start_time' in interview and interview['start_time']:
+    #     st.write(f"Start Time: {interview['start_time']}")
+    # if 'time_elapsed' in interview and interview['time_elapsed']:
+    #     st.write(f"Time Elapsed: {interview['time_elapsed']}")
+    # if 'date_time' in interview and interview['date_time']:
+    #     st.write(f"Time: {interview['date_time']}")
+    # if 'cost' in interview and interview['cost']:
+    #     st.write(f"Estimated Cost: ${interview['cost']}")
 
     if interview["feedback"]:
-        data, diagnosis, explanation = st.tabs(["Data Acquisition", "Diagnosis", "Case Explanation"])
-        with data:
-            if "data_acquisition" in interview["feedback"]:
-                display_DataAcquisition(interview["feedback"]["data_acquisition"], interview["messages"], interview["patient"]["label_descs"])
-            
-            # Legacy data storage with manually made dictionaries
-            # elif "Data Acquisition" in interview["feedback"]:
-            #     display_DataAcquisition(interview["feedback"]["Data Acquisition"], interview["messages"])
-        with diagnosis:
-            display_Diagnosis(interview["feedback"]["diagnosis"], interview["diagnosis_inputs"], interview["patient"]["label_descs"])
+        post_note, explanation = st.tabs(["Post Note", "Case Explanation"])
+        with post_note:
+            display_PostNote(interview["feedback"], interview["post_note_inputs"])
         with explanation:
             explanation_file = interview["patient"]["explanation"]
             with open(explanation_file, "rb") as pdf_file:

@@ -36,7 +36,10 @@ class Feedback(pydantic.BaseModel):
                                                  rubric = patient.grading[category][part]["rubric"],
                                                  user_input = post_note[category])
                     # score = generate_score()
-                    feedback[category][part]({"text": response,
+                    feedback[category][part]({"title": content["title"],
+                                              "desc": content["desc"],
+                                              "rubric": patient.grading[category][part]["rubric"],
+                                              "feedback": response,
                                                #    "score": score,
                                                "max": patient.grading[category][part]["points"]})
             else:
@@ -45,7 +48,10 @@ class Feedback(pydantic.BaseModel):
                                              rubric = patient.grading[category]["rubric"],
                                              user_input = post_note[category])
                 # score = generate_score()
-                feedback[category] = {"text": response,
+                feedback[category] = {"title": BASE[category]["title"],
+                                      "desc": BASE[category]["desc"],
+                                      "rubric": patient.grading[category]["rubric"],
+                                      "feedback": response,
                                       #    "score": score,
                                       "max": patient.grading[category]["points"]}
 

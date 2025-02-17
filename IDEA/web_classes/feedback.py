@@ -13,7 +13,7 @@ class Feedback(pydantic.BaseModel):
     feedback: Optional[dict] = {}           # {type: {text: str, points: int}}
 
     @classmethod
-    def build(cls, patient: Patient, messages: list[Message], post_note: dict[str, str]):
+    def build(cls, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str]):
 
         # Import rubric bases
         with open("./Prompts/base_rubrics.json", "r", ) as json_file:
@@ -34,19 +34,19 @@ class Feedback(pydantic.BaseModel):
                     response = generate_feedback(title = content["title"],
                                                  desc = content["desc"],
                                                  rubric = patient.grading[category][part]["rubric"],
-                                                 user_input = post_note[category])
+                                                 user_input = post_note_inputs[category])
                     # score = generate_score()
-                    feedback[category][part]({"title": content["title"],
+                    feedback[category][part] = {"title": content["title"],
                                               "desc": content["desc"],
                                               "rubric": patient.grading[category][part]["rubric"],
                                               "feedback": response,
                                                #    "score": score,
-                                               "max": patient.grading[category][part]["points"]})
+                                               "max": patient.grading[category][part]["points"]}
             else:
                 response = generate_feedback(title = BASE[category]["title"],
                                              desc = BASE[category]["desc"],
                                              rubric = patient.grading[category]["rubric"],
-                                             user_input = post_note[category])
+                                             user_input = post_note_inputs[category])
                 # score = generate_score()
                 feedback[category] = {"title": BASE[category]["title"],
                                       "desc": BASE[category]["desc"],

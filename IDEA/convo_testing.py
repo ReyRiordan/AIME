@@ -208,17 +208,22 @@ if st.session_state["stage"] == DIAGNOSIS:
     # Test cases
     layout21 = layout2[2].columns([1, 1])
     if layout21[0].button("TEST: BAD", use_container_width=True):
-        with open(".IDEA/test_cases/bad.json", "r", encoding="utf8") as bad_json:
+        with open("./IDEA/test_cases/bad.json", "r", encoding="utf8") as bad_json:
             bad_case = json.load(bad_json)
-            st.session_state["interview"].add_post_note(bad_case["HPI"], 
-                                                        bad_case["Past Histories"], 
-                                                        bad_case["Summary"], 
-                                                        bad_case["Assessment"], 
-                                                        bad_case["Plan"])
+            print(bad_case)
+            print("\n\n")
+            st.session_state["interview"].add_key_findings(bad_case["Key Findings"])
+            st.session_state["interview"].add_other_inputs(bad_case["HPI"], 
+                                                           bad_case["Past Histories"], 
+                                                           bad_case["Summary"], 
+                                                           bad_case["Assessment"], 
+                                                           bad_case["Plan"])
+            # print(st.session_state["interview"].post_note_inputs)
+            # print("\n\n")
         set_stage(FEEDBACK_SETUP)
         st.rerun()
     if layout21[1].button("TEST: GOOD", use_container_width=True):
-        with open(".IDEA/test_cases/good.json", "r", encoding="utf8") as good_json:
+        with open("./IDEA/test_cases/good.json", "r", encoding="utf8") as good_json:
             good_case = json.load(good_json)
             st.session_state["interview"].add_post_note(good_case["HPI"], 
                                                         good_case["Past Histories"], 
@@ -248,3 +253,14 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
     
     set_stage(FEEDBACK_SCREEN)
     st.rerun()
+
+
+if st.session_state["stage"] == FEEDBACK_SCREEN:
+    st.title("Feedback")
+    layout1 = st.columns([7, 1])
+    layout1[0].write("This is the WIP (the UI especially) feedback screen. There are 3 tabs of grading/feedback available. \"Data Acquisition\" looks through your interview with the patient and grades you on what information you asked for and what information you obtained from the patient. \"Diagnosis\" is self explanatory, grading you on your summary, diagnoses, and rationale. \"Case Explanation\" provides you with a PDF of a detailed explanation of the John Smith case written by Dr. Corbett.")
+    layout1[0].write("Click the \"Go to Survey\" button on the right once you are done looking through the grading/feedback; the next (final) screen will take you through a brief survey on your experience with the application")
+    layout1[1].button("Go to Survey", on_click=set_stage, args=[SURVEY])
+    
+    # Let the display methods cook
+    display_Interview(st.session_state["interview"].model_dump())

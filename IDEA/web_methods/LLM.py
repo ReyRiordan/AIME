@@ -26,14 +26,16 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
     system = base_split[0] + title + base_split[1] + desc + base_split[2] + rubric + base_split[3] + user_input
     print(system)
 
-    response = FEEDBACK_CLIENT.messages.create(model = model, 
-                                               temperature = temperature, 
-                                               system = system, 
+    response = FEEDBACK_CLIENT.messages.create(model = model,
+                                               temperature = temperature,
+                                               max_tokens = 4096,
+                                               system = system,
                                                messages = [{"role": "user", "content": user_input}])
     
-    print("\n\n")
+    print("\n")
     print(title)
     print(response.content[0].text)
+    print("\n\n")
 
     return response.content[0].text
 

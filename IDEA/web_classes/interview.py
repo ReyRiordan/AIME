@@ -17,7 +17,7 @@ class Interview(pydantic.BaseModel):
     username : str                                  # str
     patient : Patient                               # Patient
     messages : Optional[List[Message]] = []         # list[Message]
-    post_note : Optional[dict] = {}                 # dict{str, str/list[str]}
+    post_note_inputs : Optional[dict] = {}                 # dict{str, str/list[str]}
     feedback : Optional[Feedback] = None            # Feedback
     survey : Optional[dict] = None
     
@@ -34,14 +34,14 @@ class Interview(pydantic.BaseModel):
         self.feedback = Feedback.build(patient=self.patient, messages=self.messages, post_note=self.post_note)
     
     def add_key_findings(self, findings: str):
-        self.post_note["Key Findings"] = findings
+        self.post_note_inputs["Key Findings"] = findings
 
     def add_post_note(self, hpi: str, past_histories: str, summary: str, assessment: str, plan: str):
-        self.post_note["HPI"] = hpi
-        self.post_note["Past Histories"] = past_histories
-        self.post_note["Summary"] = summary
-        self.post_note["Assessment"] = assessment
-        self.post_note["Plan"] = plan
+        self.post_note_inputs["HPI"] = hpi
+        self.post_note_inputs["Past Histories"] = past_histories
+        self.post_note_inputs["Summary"] = summary
+        self.post_note_inputs["Assessment"] = assessment
+        self.post_note_inputs["Plan"] = plan
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:

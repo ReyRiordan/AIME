@@ -178,7 +178,7 @@
     "Grading": {
       "Key Findings": {
         "points": 3,
-        "rubric": "3: must include all 4:  \n  \ta) Vital signs: Blood pressure AND pulse  \n  \tb) Cardiovascular exam: murmur AND pulses OR carotid bruit, edema/leg swelling, chest wall tenderness\n\tc) Lung exam: breath sounds (crackles/wheezes)  \n  \td) Abdominal exam: abdominal tenderness, mases, bruits  \n2: 2 of above  \n1: 0-1 of above"
+        "rubric": "3: must include all 4:  \n\ta) Vital signs: Blood pressure AND pulse  \n\tb) Cardiovascular exam: murmur AND pulses OR carotid bruit, edema/leg swelling, chest wall tenderness\n\tc) Lung exam: breath sounds (crackles/wheezes)  \n\td) Abdominal exam: abdominal tenderness, mases, bruits  \n2: 2 of above  \n1: 0-1 of above"
       },
       "HPI": {
         "HPI1": {

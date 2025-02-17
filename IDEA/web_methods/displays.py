@@ -19,24 +19,30 @@ from lookups import *
 
 
 def display_PostNote(feedback: dict, inputs: dict) -> None:
-    for category, d in feedback.items():
+    # print(feedback)
+    for category, d in feedback["feedback"].items():
         with st.container(border = True):
-            st.subheader(f"{category}:", divider = "grey")
+            st.header(f"{category}", divider = "grey")
             layout1 = st.columns([1, 1])
             with layout1[0]:
-                st.write("**Your answer:**")
+                st.subheader("**Your answer:**")
                 st.write(inputs[category])
             with layout1[1]:
-                st.write("**Feedback:**")
+                st.subheader("**Feedback:**")
                 if category in ["HPI", "Past Histories", "Assessment"]:
-                    for part, dd in d.items():
-                        st.write(f"{dd['title']}:")
-                        st.write(dd["feedback"])
-                        with st.expander("Rubric"):
-                            st.write(dd["desc"])
-                            st.write(dd["rubric"])
+                    parts = [part for part in d]
+                    tabs = st.tabs(parts)
+                    for i, part in enumerate(parts):
+                        dd = d[part]
+                        with tabs[i]:
+                            st.write(f"**{dd['title']}**:")
+                            st.write(dd["feedback"])
+                            with st.expander("Rubric"):
+                                st.write(dd["desc"])
+                                st.write(dd["rubric"])
+                            st.divider()
                 else:
-                    st.write(f"{d['title']}:")
+                    st.write(f"**{d['title']}**:")
                     st.write(d["feedback"])
                     with st.expander("Rubric"):
                         st.write(d["desc"])
@@ -156,6 +162,7 @@ def display_Interview(interview: dict) -> None:
     # if 'cost' in interview and interview['cost']:
     #     st.write(f"Estimated Cost: ${interview['cost']}")
 
+    # print(interview)
     if interview["feedback"]:
         post_note, explanation = st.tabs(["Post Note", "Case Explanation"])
         with post_note:
@@ -167,17 +174,17 @@ def display_Interview(interview: dict) -> None:
                 st.download_button("Download Case Explanation (PDF)", explanation, explanation_file)
     else:
         chat_container = st.container(height=300)
-        for message in st.session_state["interview"]["messages"]:
+        for message in interview["messages"]:
             with chat_container:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
-        if interview["diagnosis_inputs"]:
-            diagnosis_inputs = interview["diagnosis_inputs"]
-            st.divider()
-            st.write("Interpretative Summary: " + diagnosis_inputs["Summary"])
-            st.write("Potential Diagnoses: " + ", ".join(diagnosis_inputs["Potential"]))
-            st.write("Rationale: " + diagnosis_inputs["Rationale"])
-            st.write("Final Diagnosis: " + diagnosis_inputs["Final"])
+        # if interview["diagnosis_inputs"]:
+        #     diagnosis_inputs = interview["diagnosis_inputs"]
+        #     st.divider()
+        #     st.write("Interpretative Summary: " + diagnosis_inputs["Summary"])
+        #     st.write("Potential Diagnoses: " + ", ".join(diagnosis_inputs["Potential"]))
+        #     st.write("Rationale: " + diagnosis_inputs["Rationale"])
+        #     st.write("Final Diagnosis: " + diagnosis_inputs["Final"])
 
 #TODO: NOT EVEN CLOSE TO DONE, PROBLEM FOR @ALI
 

@@ -92,7 +92,7 @@ PATHS = {"Patient Base": "./Prompts/Base_2-10.txt",
          "Grade Summary": "./Prompts/Grade_Sum_4-14.txt",
          "Grade Rationale": "./Prompts/Grade_Rat_6-26.txt",
          "Grade Diagnosis": "./Prompts/Grade_Diag_4-23.txt",
-         "Feedback": "./Prompts/Feedback_2-14.txt"}
+         "Feedback": "./Prompts/Feedback_2-17.txt"}
 
 
 # Convo related

@@ -20,6 +20,7 @@ from lookups import *
 
 def display_PostNote(feedback: dict, inputs: dict) -> None:
     # print(feedback)
+    inst = st.toggle("INSTRUCTOR VIEW")
     for category, d in feedback["feedback"].items():
         with st.container(border = True):
             st.header(f"{category}", divider = "grey")
@@ -35,18 +36,26 @@ def display_PostNote(feedback: dict, inputs: dict) -> None:
                     for i, part in enumerate(parts):
                         dd = d[part]
                         with tabs[i]:
-                            st.write(f"**{dd['title']}**:")
-                            st.write(dd["feedback"])
+                            if inst: st.write(f"**{dd['title']}: {dd['score']}/{dd['max']}**")
+                            else: st.write(f"**{dd['title']}:**")
+                            st.write(dd["comment"])
                             with st.expander("Rubric"):
                                 st.write(dd["desc"])
                                 st.write(dd["rubric"])
+                            if inst:
+                                with st.expander("Thought process"):
+                                    if dd["thought"]: st.write(dd["thought"])
                             st.divider()
                 else:
-                    st.write(f"**{d['title']}**:")
-                    st.write(d["feedback"])
+                    if inst: st.write(f"**{d['title']}: {d['score']}/{d['max']}**")
+                    else: st.write(f"**{d['title']}**:")
+                    st.write(d["comment"])
                     with st.expander("Rubric"):
                         st.write(d["desc"])
                         st.write(d["rubric"])
+                    if inst:
+                        with st.expander("Thought process"):
+                            if d["thought"]: st.write(d["thought"])
     
 
 
@@ -163,21 +172,25 @@ def display_Interview(interview: dict) -> None:
     #     st.write(f"Estimated Cost: ${interview['cost']}")
 
     # print(interview)
-    if interview["feedback"]:
-        post_note, explanation = st.tabs(["Post Note", "Case Explanation"])
-        with post_note:
-            display_PostNote(interview["feedback"], interview["post_note_inputs"])
-        with explanation:
-            explanation_file = interview["patient"]["explanation"]
-            with open(explanation_file, "rb") as pdf_file:
-                explanation = pdf_file.read()
-                st.download_button("Download Case Explanation (PDF)", explanation, explanation_file)
-    else:
-        chat_container = st.container(height=300)
+    transcript, post_note, explanation = st.tabs(["Interview", "Post Note", "Case Explanation"])
+    
+    with transcript:
+        chat_container = st.container(height=700)
         for message in interview["messages"]:
             with chat_container:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
+    
+    if interview["feedback"]:
+        with post_note:
+            display_PostNote(interview["feedback"], interview["post_note_inputs"])
+    
+    with explanation:
+        explanation_file = interview["patient"]["explanation"]
+        with open(explanation_file, "rb") as pdf_file:
+            explanation = pdf_file.read()
+            st.download_button("Download Case Explanation (PDF)", explanation, explanation_file)
+
         # if interview["diagnosis_inputs"]:
         #     diagnosis_inputs = interview["diagnosis_inputs"]
         #     st.divider()

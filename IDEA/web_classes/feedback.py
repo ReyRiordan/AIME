@@ -35,24 +35,45 @@ class Feedback(pydantic.BaseModel):
                                                  desc = content["desc"],
                                                  rubric = patient.grading[category][part]["rubric"],
                                                  user_input = post_note_inputs[category])
-                    # score = generate_score()
+                    split_attempt = response.strip().split("Thought process:")
+                    if len(split_attempt) == 2:
+                        comment, scoring = split_attempt
+                        thought, score = scoring.split("FINAL SCORE: ")
+                        score = int(score)
+                    else:
+                        comment = response
+                        thought = None
+                        score = 0
                     feedback[category][part] = {"title": content["title"],
-                                              "desc": content["desc"],
-                                              "rubric": patient.grading[category][part]["rubric"],
-                                              "feedback": response,
-                                               #    "score": score,
-                                               "max": patient.grading[category][part]["points"]}
+                                                "desc": content["desc"],
+                                                "rubric": patient.grading[category][part]["rubric"],
+                                                "input": post_note_inputs[category],
+                                                "comment": comment,
+                                                "thought": thought,
+                                                "score": score,
+                                                "max": patient.grading[category][part]["points"]}
+                    # score = generate_score(feedback[category][part])
             else:
                 response = generate_feedback(title = BASE[category]["title"],
                                              desc = BASE[category]["desc"],
                                              rubric = patient.grading[category]["rubric"],
                                              user_input = post_note_inputs[category])
-                # score = generate_score()
+                split_attempt = response.strip().split("Thought process:")
+                if len(split_attempt) == 2:
+                    comment, scoring = split_attempt
+                    thought, score = scoring.split("FINAL SCORE: ")
+                    score = int(score)
+                else:
+                    comment = response
+                    thought = None
+                    score = 0
                 feedback[category] = {"title": BASE[category]["title"],
                                       "desc": BASE[category]["desc"],
                                       "rubric": patient.grading[category]["rubric"],
-                                      "feedback": response,
-                                      #    "score": score,
+                                      "input": post_note_inputs[category],
+                                      "comment": comment,
+                                      "thought": thought,
+                                      "score": score,
                                       "max": patient.grading[category]["points"]}
 
         return cls(feedback=feedback)

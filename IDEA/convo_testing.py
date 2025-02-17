@@ -259,9 +259,7 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     st.title("Feedback")
     layout1 = st.columns([7, 1])
-    layout1[0].write("This is the WIP (the UI especially) feedback screen. There are 3 tabs of grading/feedback available. \"Data Acquisition\" looks through your interview with the patient and grades you on what information you asked for and what information you obtained from the patient. \"Diagnosis\" is self explanatory, grading you on your summary, diagnoses, and rationale. \"Case Explanation\" provides you with a PDF of a detailed explanation of the John Smith case written by Dr. Corbett.")
-    layout1[0].write("Click the \"Go to Survey\" button on the right once you are done looking through the grading/feedback; the next (final) screen will take you through a brief survey on your experience with the application")
-    layout1[1].button("Go to Survey", on_click=set_stage, args=[SURVEY])
+    layout1[0].write("This is the WIP feedback screen.")
     
     # Let the display methods cook
     display_Interview(st.session_state["interview"].model_dump())

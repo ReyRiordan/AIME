@@ -32,8 +32,9 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
                                                messages = [{"role": "user", "content": user_input}])
     
     print("\n\n")
+    print(title)
     print(response.content[0].text)
-    
+
     return response.content[0].text
 
 

@@ -210,8 +210,8 @@ if st.session_state["stage"] == DIAGNOSIS:
     if layout21[0].button("TEST: BAD", use_container_width=True):
         with open("./IDEA/test_cases/bad.json", "r", encoding="utf8") as bad_json:
             bad_case = json.load(bad_json)
-            print(bad_case)
-            print("\n\n")
+            # print(bad_case)
+            # print("\n\n")
             st.session_state["interview"].add_key_findings(bad_case["Key Findings"])
             st.session_state["interview"].add_other_inputs(bad_case["HPI"], 
                                                            bad_case["Past Histories"], 
@@ -225,11 +225,12 @@ if st.session_state["stage"] == DIAGNOSIS:
     if layout21[1].button("TEST: GOOD", use_container_width=True):
         with open("./IDEA/test_cases/good.json", "r", encoding="utf8") as good_json:
             good_case = json.load(good_json)
-            st.session_state["interview"].add_post_note(good_case["HPI"], 
-                                                        good_case["Past Histories"], 
-                                                        good_case["Summary"], 
-                                                        good_case["Assessment"], 
-                                                        good_case["Plan"])
+            st.session_state["interview"].add_key_findings(good_case["Key Findings"])
+            st.session_state["interview"].add_other_inputs(good_case["HPI"], 
+                                                           good_case["Past Histories"], 
+                                                           good_case["Summary"], 
+                                                           good_case["Assessment"], 
+                                                           good_case["Plan"])
         set_stage(FEEDBACK_SETUP)
         st.rerun()
     

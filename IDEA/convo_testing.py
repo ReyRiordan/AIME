@@ -51,37 +51,47 @@ if st.session_state["stage"] == LOGIN_PAGE:
                 st.session_state["username"] = username
                 st.write("Authentication successful!")
                 time.sleep(1)
-                set_stage(CHAT_SETUP)
+                set_stage(SETTINGS)
                 st.rerun()
             else:
                 st.write("Password incorect.")
 
 
-if st.session_state["stage"] == CHAT_SETUP:
+if st.session_state["stage"] == SETTINGS:
     st.session_state["interview"] = None
     st.session_state["messages"] = []
     st.session_state["convo_memory"] = []
     st.session_state["convo_summary"]=""
     st.session_state["convo_file"] = None
     st.session_state["convo_prompt"] = ""
-    st.session_state["sent"] = False
+    # st.session_state["sent"] = False
     st.session_state["start_time"] = date.datetime.now()
     st.session_state["tokens"] = {"convo": {"input": 0, "output": 0},
                                   "class": {"input": 0, "output": 0},
                                   "diag": {"input": 0, "output": 0}}
 
-    patient_name = "Jeffrey Smith"
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
+        st.title("Patient Settings")
+        patient_name = st.selectbox("Which patient would you like to interview?", 
+                                    ["Jeffrey Smith"],
+                                    index = None,
+                                    placeholder = "Select patient...")
+        if patient_name: 
+            st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
+                                                            patient = Patient.build(patient_name))
 
-    st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
-                                                    patient = Patient.build(patient_name))
+        if st.session_state["interview"]: 
+            # st.session_state["sent"]==False
+            st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
-    st.session_state["sent"]==False
 
+if st.session_state["stage"] == CHAT_SETUP:
     st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
-    if(st.session_state["sent"]==False):
-        st.session_state["interview"].start_time = str(st.session_state["start_time"])
+    # if(st.session_state["sent"]==False):
+    #     st.session_state["interview"].start_time = str(st.session_state["start_time"])
         # collection.insert_one(st.session_state["interview"].model_dump())
-        st.session_state["sent"]==True
+        # st.session_state["sent"]==True
 
     set_stage(CHAT_INTERFACE_VOICE)
 

@@ -33,7 +33,7 @@ def set_stage(stage):
     st.session_state["stage"] = stage
 
 if st.session_state["stage"] == LOGIN_PAGE:
-    st.write("Welcome, and thank you for volunteering to participate in this beta test! This is an application where you will virtually simulate an interview with a patient, provide a differential diagnosis for them, and then automatically receive grading and feedback based on your performance.")
+    st.write("Welcome, and thank you for volunteering to participate in this beta test! This is an application where you will virtually simulate an interview with a patient, after which you will provide a post note based on it and then automatically receive feedback on your performance.")
     st.write("Please follow the directions on each page to work through the whole application, and take notes on where there is potential room for improvement.")
     st.write("Begin by logging in!")
     
@@ -151,7 +151,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
     layout1 = st.columns([1, 3, 1])
     with layout1[1].container():
         st.title("Physical Examination")
-        st.write("Now that you've taken a chance to speak with the patient, you can take a chance to take a look at data obtained during a physical upon admittance to the ER. Review it before proceeding.")
+        st.write("Now that you've taken a chance to speak with the patient, you can take a chance to take a look at data obtained during a physical. Review it before proceeding.")
         
         st.divider()
         physical_exam_doc = Document(st.session_state["interview"].patient.physical)
@@ -165,8 +165,8 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
 
 if st.session_state["stage"] == DIAGNOSIS:
     st.title("Diagnosis")
-    st.write("Use the interview transcription and additional patient information (physical examination and ECG) to provide an interpretative summary, a list of potential diagnoses, a rationale reasoning through which diagnoses are more/less likely, and a final diagnosis.")
-    st.write("Click the \"Get Feedback\" button once you are all done to automatically receive grading and feedback on your interview and diagnosis.")
+    st.write("Write your post note as directed and click \"Get Feedback\" to get your feedback/scores.")
+    st.write("If you click one of the \"TEST CASE\" buttons, the post note will automatically be filled in and feedback will be processed on those example inputs.")
     st.divider()
 
     # 2 column full width layout
@@ -269,7 +269,9 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     st.title("Feedback")
     layout1 = st.columns([7, 1])
-    layout1[0].write("This is the WIP feedback screen.")
+    layout1[0].write("The \"Interview\" tab shows your interview transcript. The \"Post Note\" tab shows personalized feedback for each of your write-ups based on a detailed IDEA-based rubric. The \"Case Explanation\" tab allows you to download a document with additional details and explanations on the patient case.")
+    layout1[1].button("New Interview", on_click=set_stage, args=[SETTINGS])
+    layout1[1].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])
     
     # Let the display methods cook
     display_Interview(st.session_state["interview"].model_dump())

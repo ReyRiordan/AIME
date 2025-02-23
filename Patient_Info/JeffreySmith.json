@@ -132,7 +132,7 @@
       ],
       "Allergies": [
         {
-          "desc": "no allergies",
+          "desc": "You have no allergies.",
           "lock": false
         }
       ],

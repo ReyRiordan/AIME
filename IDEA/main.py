@@ -74,7 +74,7 @@ if st.session_state["stage"] == SETTINGS:
     with layout1[1]:
         st.title("Patient Settings")
         patient_name = st.selectbox("Which patient would you like to interview?", 
-                                    ["Jeffrey Smith"],
+                                    ["Jeffrey Smith", "Jenny Smith", "Samuel Thompson", "Sarah Thompson"],
                                     index = None,
                                     placeholder = "Select patient...")
         if patient_name: 

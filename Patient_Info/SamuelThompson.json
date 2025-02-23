@@ -1,5 +1,5 @@
 {
-    "ID": "Jeffrey Smith",
+    "ID": "Samuel Thompson",
     "Avatar": {
       "File": false
     },
@@ -9,17 +9,17 @@
       "Voice": "onyx"
     },
     "Assets": {
-      "Physical Examination": "./Patient_Info/JeffreySmith_physical.docx",
+      "Physical Examination": "./Patient_Info/JeffreySmith_physical.docx", 
       "Case Explanation": "./Patient_Info/JeffreySmith_explanation.docx"
     },
     "Case": {
       "Personal Details": {
-        "Name": "Jeffrey Smith",
+        "Name": "Samuel Thompson",
         "Sex": "Male",
-        "Birthdate": "September 5th 1959",
+        "Birthdate": "October 15th 1964",
         "Tone": "Worried and nervous"
       }, 
-      "Background": "You were in the office a month ago because of bloating and a pressure-like burning sensation in your chest. You have been treated with heartburn medication for the past month and you are here to follow up.",
+      "Background": "You were seen in the office 5 weeks ago because of discomfort, like an indigestion feeling in the front of your chest. You have been treated with a prescription antacid medication for the past month and you are here to follow up.",
       "HPI": [
         {
           "desc": "Major concern is the pressure-like burning sensation.",

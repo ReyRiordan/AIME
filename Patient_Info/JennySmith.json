@@ -9,8 +9,8 @@
       "Voice": "nova"
     },
     "Assets": {
-      "Physical Examination": "./Patient_Info/JeffreySmith_physical.docx",
-      "Case Explanation": "./Patient_Info/JeffreySmith_explanation.docx"
+      "Physical Examination": "./Patient_Info/JennySmith_physical.docx",
+      "Case Explanation": "./Patient_Info/atypical_explanation.docx"
     },
     "Case": {
       "Personal Details": {

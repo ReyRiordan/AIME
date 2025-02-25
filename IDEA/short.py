@@ -164,7 +164,6 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
 
 
 if st.session_state["stage"] == DIAGNOSIS:
-    st.title("Diagnosis")
     st.write("Write your post note as directed and click \"Get Feedback\" to get your feedback/scores.")
     st.write("If you click one of the \"TEST CASE\" buttons, the post note will automatically be filled in and feedback will be processed on those example inputs.")
     st.divider()

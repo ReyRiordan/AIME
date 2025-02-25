@@ -240,7 +240,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     
     # Get Feedback
     if layout2[3].button("Get Feedback", use_container_width=True): 
-        st.session_state["interview"].add_post_note(None, None, summary, assessment, plan)
+        st.session_state["interview"].add_other_inputs(None, None, summary, assessment, plan)
         set_stage(FEEDBACK_SETUP)
         st.rerun()
 

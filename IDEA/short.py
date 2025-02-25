@@ -173,11 +173,9 @@ if st.session_state["stage"] == DIAGNOSIS:
     layout1 = st.columns([1, 1])
 
     # User inputs
-    hpi = layout1[0].text_area(label = "History of Present Illness", height = 200)
-    past_histories = layout1[0].text_area(label = "Past Histories (include relevant past, family, and social histories and review of symptoms)", height = 200)
-    summary = layout1[0].text_area(label = "Summary Statement", height = 200)
-    assessment = layout1[0].text_area(label = "Assessment - Specify most likely diagnosis and alternative diagnoses. Include your reasoning/explanation for each differential diagnosis.", height = 200)
-    plan = layout1[0].text_area(label = "Plan - State your initial diagnostic plan. Includ eyour reasoning/explanation for the plan.", height = 200)
+    summary = layout1[0].text_area(label = "***Summary Statement:*** Provide a concise summary statement that uses semantic vocabulary to highlight the most important elements from history and exam to interpret and represent the patient’s main problem.", height = 200)
+    assessment = layout1[0].text_area(label = "***Assessment***: Provide a differential diagnosis and explain the reasoning behind each diagnosis.", height = 200)
+    plan = layout1[0].text_area(label = "***Plan***: Include a diagnostic plan that explains the rationale for your decision. ", height = 200)
 
     # Interview transcription
     chat_container = layout1[1].container(height=400)
@@ -223,9 +221,7 @@ if st.session_state["stage"] == DIAGNOSIS:
             # print(bad_case)
             # print("\n\n")
             st.session_state["interview"].add_key_findings(bad_case["Key Findings"])
-            st.session_state["interview"].add_other_inputs(bad_case["HPI"], 
-                                                           bad_case["Past Histories"], 
-                                                           bad_case["Summary"], 
+            st.session_state["interview"].add_other_inputs(bad_case["Summary"], 
                                                            bad_case["Assessment"], 
                                                            bad_case["Plan"])
             # print(st.session_state["interview"].post_note_inputs)
@@ -236,9 +232,7 @@ if st.session_state["stage"] == DIAGNOSIS:
         with open("./IDEA/test_cases/good.json", "r", encoding="utf8") as good_json:
             good_case = json.load(good_json)
             st.session_state["interview"].add_key_findings(good_case["Key Findings"])
-            st.session_state["interview"].add_other_inputs(good_case["HPI"], 
-                                                           good_case["Past Histories"], 
-                                                           good_case["Summary"], 
+            st.session_state["interview"].add_other_inputs(good_case["Summary"], 
                                                            good_case["Assessment"], 
                                                            good_case["Plan"])
         set_stage(FEEDBACK_SETUP)
@@ -246,7 +240,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     
     # Get Feedback
     if layout2[3].button("Get Feedback", use_container_width=True): 
-        st.session_state["interview"].add_post_note(hpi, past_histories, summary, assessment, plan)
+        st.session_state["interview"].add_post_note(None, None, summary, assessment, plan)
         set_stage(FEEDBACK_SETUP)
         st.rerun()
 

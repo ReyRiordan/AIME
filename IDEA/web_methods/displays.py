@@ -18,7 +18,7 @@ from typing import List
 from lookups import *
 
 
-def display_PostNote(feedback: dict, inputs: dict) -> None:
+def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
     # print(feedback)
     inst = st.toggle("INSTRUCTOR VIEW")
     for category, d in feedback["feedback"].items():
@@ -31,6 +31,7 @@ def display_PostNote(feedback: dict, inputs: dict) -> None:
             with layout1[1]:
                 st.subheader("**Feedback:**")
                 if category in ["HPI", "Past Histories", "Assessment"]:
+                    if short and category != "Assessment": break
                     parts = [part for part in d]
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
@@ -183,7 +184,8 @@ def display_Interview(interview: dict) -> None:
     
     if interview["feedback"]:
         with post_note:
-            display_PostNote(interview["feedback"], interview["post_note_inputs"])
+            if not interview["post_note_inputs"]["HPI"]: short = True
+            display_PostNote(interview["feedback"], interview["post_note_inputs"], short=short)
     
     with explanation:
         explanation_file = interview["patient"]["explanation"]

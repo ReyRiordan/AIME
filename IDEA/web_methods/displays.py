@@ -22,6 +22,7 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
     # print(feedback)
     inst = st.toggle("INSTRUCTOR VIEW")
     for category, d in feedback["feedback"].items():
+        if short and category in ["HPI", "Past Histories"]: continue
         with st.container(border = True):
             st.header(f"{category}", divider = "grey")
             layout1 = st.columns([1, 1])
@@ -31,7 +32,6 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
             with layout1[1]:
                 st.subheader("**Feedback:**")
                 if category in ["HPI", "Past Histories", "Assessment"]:
-                    if short and category != "Assessment": break
                     parts = [part for part in d]
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):

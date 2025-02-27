@@ -23,6 +23,7 @@ from web_classes.patient import Patient
 
 def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model = FEEDBACK_MODEL, temperature = FEEDBACK_TEMP):
     base_split = FEEDBACK_PROMPT.split("[INSERT]")
+    prefill = "Correct"
     if not user_input:
         user_input = "NO INPUT"
     system = base_split[0] + title + base_split[1] + desc + base_split[2] + rubric + base_split[3] + user_input
@@ -32,14 +33,15 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
                                                temperature = temperature,
                                                max_tokens = 4096,
                                                system = system,
-                                               messages = [{"role": "user", "content": user_input}])
+                                               messages = [{"role": "user", "content": user_input},
+                                                           {"role": "assistant", "content": prefill}])
     
     print("\n")
     print(title)
     print(response.content[0].text)
     print("\n\n")
 
-    return response.content[0].text
+    return prefill + response.content[0].text
 
 
 def generate_response(model: str, temperature: float, system: str, messages: list[dict[str, str]]) -> str:

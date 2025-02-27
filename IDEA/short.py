@@ -160,7 +160,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
         st.divider()
 
         layout11 = st.columns([1, 1, 1])
-        layout11[1].button("Proceed to Diagnosis", on_click=set_stage, args = [DIAGNOSIS], use_container_width=True)
+        layout11[1].button("Proceed to Post Note", on_click=set_stage, args = [DIAGNOSIS], use_container_width=True)
 
 
 if st.session_state["stage"] == DIAGNOSIS:

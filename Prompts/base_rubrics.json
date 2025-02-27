@@ -29,7 +29,7 @@
     },
     "Summary Statement": {
         "title": "Interpretive summary",
-        "desc": "Provides a concise summary statement that uses semantic vocabulary to highlight the most important elements from history, exam, and testing to interpret and represent the patient's main problem(s). The presence or absence of the following features is assessed:\n\tA) Key risk factors\n\tB) Chief complaint\n\tC) Illness time course\n\tD) Use of semantic qualifiers (e.g., monoarticular vs polyarticular) or unified medical concepts (e.g., volume overload, cardiovascular risk factors)."
+        "desc": "Provides a concise summary statement that uses semantic vocabulary to highlight the most important elements from history, exam, and testing to interpret and represent the patient's main problem(s). The presence or absence of the following features is assessed: key risk factors, chief complaint, illness time course, and use of semantic qualifiers (e.g., monoarticular vs polyarticular) or unified medical concepts (e.g., volume overload, cardiovascular risk factors)."
     },
     "Assessment": {
         "A1": {

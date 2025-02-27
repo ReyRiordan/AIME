@@ -204,7 +204,7 @@
           "rubric": "3: mention all 4:  \n  \ta) GI ROS- mention of nausea, vomiting, stool color/change/blood/black, or abdominal/stomach pain  \n  \tb) Pulmonary ROS - mention of cough, sputum, wheezing, pleuritic, or breathing/SOB  \n  \tc) CV ROS- includes family history of heart disease, high cholesterol, mention of shortness of breath/SOB, dizziness, light-headed, or sweating/diaphoresis  \n  \td) Substance use - tobacco, smoke/smoking  \n2: mention at least 3 of above  \n1: mention 0-2 of above"
         }
       },
-      "Summary": {
+      "Summary Statement": {
         "points": 4,
         "rubric": "4: all 4 features present:  \n  \ta) Risk factors - mentions diabetes/DM, hypertension/HTN, AND age/years  \n  \tb) Complaint - mentions chest/substernal AND pain/discomfort/pressure/burning/angina/dyspepsia, reflux, GERD  \n  \tc) Time course - intermittent, recurring, recurrent, episodic, or on-and-off; AND months/chronic; AND lasts minutes/brief; AND worsening/more frequent/progressive  \n  \td) Semantic - at least 2 of: intermittent, recurring/recurrent, episodic, chronic, progressive, cardiac risk factor, atypical, unstable/stable, exertional, relieved by rest  \n3: 3 features: must include A, B and D  \n2: 2 features present  \n1: 1 feature present  \n0: 0 features present"
       },

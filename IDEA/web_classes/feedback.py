@@ -23,12 +23,12 @@ class Feedback(pydantic.BaseModel):
         feedback = {"Key Findings": None,
                     "HPI": {}, # 3
                     "Past Histories": {}, # 2
-                    "Summary": None,
+                    "Summary Statement": None,
                     "Assessment": {}, # 3
                     "Plan": None}
 
         # Feedback and grading
-        for category in ["Key Findings", "HPI", "Past Histories", "Summary", "Assessment", "Plan"]:
+        for category in ["Key Findings", "HPI", "Past Histories", "Summary Statement", "Assessment", "Plan"]:
             if feedback[category] is not None:
                 for part, content in BASE[category].items():
                     response = generate_feedback(title = content["title"],

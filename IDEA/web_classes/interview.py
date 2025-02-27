@@ -39,7 +39,7 @@ class Interview(pydantic.BaseModel):
     def add_other_inputs(self, hpi: str, past_histories: str, summary: str, assessment: str, plan: str):
         self.post_note_inputs["HPI"] = hpi
         self.post_note_inputs["Past Histories"] = past_histories
-        self.post_note_inputs["Summary"] = summary
+        self.post_note_inputs["Summary Statement"] = summary
         self.post_note_inputs["Assessment"] = assessment
         self.post_note_inputs["Plan"] = plan
     

@@ -173,7 +173,12 @@ def display_Interview(interview: dict) -> None:
     #     st.write(f"Estimated Cost: ${interview['cost']}")
 
     # print(interview)
-    transcript, post_note, explanation = st.tabs(["Interview", "Post Note", "Case Explanation"])
+    post_note, transcript, explanation = st.tabs(["Post Note", "Interview Transcript", "Case Explanation"])
+    
+    if interview["feedback"]:
+        with post_note:
+            if not interview["post_note_inputs"]["HPI"]: short = True
+            display_PostNote(interview["feedback"], interview["post_note_inputs"], short=short)
     
     with transcript:
         chat_container = st.container(height=700)
@@ -181,11 +186,6 @@ def display_Interview(interview: dict) -> None:
             with chat_container:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
-    
-    if interview["feedback"]:
-        with post_note:
-            if not interview["post_note_inputs"]["HPI"]: short = True
-            display_PostNote(interview["feedback"], interview["post_note_inputs"], short=short)
     
     with explanation:
         explanation_file = interview["patient"]["explanation"]

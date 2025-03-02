@@ -32,6 +32,7 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
             with layout1[1]:
                 st.subheader("**Feedback:**")
                 if category in ["HPI", "Past Histories", "Assessment"]:
+                    st.write("Make sure to check each section!")
                     parts = [part for part in d]
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):

@@ -48,7 +48,7 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
                                     if dd["thought"]: st.write(dd["thought"])
                             st.divider()
                 else:
-                    if inst: st.write(f"Score: {d['score']}/{d['max']}**")
+                    if inst: st.write(f"**Score: {d['score']}/{d['max']}**")
                     st.write(d["comment"])
                     with st.expander("Rubric"):
                         st.write(d["desc"])

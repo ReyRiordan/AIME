@@ -37,8 +37,7 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
                     for i, part in enumerate(parts):
                         dd = d[part]
                         with tabs[i]:
-                            if inst: st.write(f"**{dd['title']}: {dd['score']}/{dd['max']}**")
-                            else: st.write(f"**{dd['title']}:**")
+                            if inst: st.write(f"**Score: {dd['score']}/{dd['max']}**")
                             st.write(dd["comment"])
                             with st.expander("Rubric"):
                                 st.write(dd["desc"])
@@ -48,8 +47,7 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
                                     if dd["thought"]: st.write(dd["thought"])
                             st.divider()
                 else:
-                    if inst: st.write(f"**{d['title']}: {d['score']}/{d['max']}**")
-                    else: st.write(f"**{d['title']}**:")
+                    if inst: st.write(f"Score: {d['score']}/{d['max']}**")
                     st.write(d["comment"])
                     with st.expander("Rubric"):
                         st.write(d["desc"])

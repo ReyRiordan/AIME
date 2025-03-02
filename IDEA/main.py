@@ -258,7 +258,7 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 
     st.title("Processing feedback...")
     st.write("This might take a few minutes.")
-    st.session_state["interview"].add_feedback()
+    st.session_state["interview"].add_feedback(short=False)
     # st.json(st.session_state["interview"].model_dump_json())
     st.session_state["interview_dict"] = st.session_state["interview"].model_dump()
     

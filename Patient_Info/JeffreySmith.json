@@ -213,7 +213,7 @@
           "points": 2,
           "rubric": "2: all 3 features present AND 2 or more diagnoses  \n  \ta) Mentions angina, cardiac chest pain, stable/unstable, ischemia, or coronary artery disease/CAD  \n  \tb) Mentions GERD, esophageal, reflux, acid, esophageal spasm, esophageal motility  \n  \tc) Statement of probability, lead(ing), likely, probable, worrisome, concerning  \n1: at least 2 feature present AND 2 or more diagnoses OR differential is implicitly stated (e.g., “cardiac”, “esophageal”) OR implicitly prioritized  \n0: 0-1 feature present OR 0 or 1 diagnosis mentioned"
         },
-        "Explanation of Lead Diagonsis": {
+        "Explanation of Lead Diagnosis": {
           "points": 2,
           "rubric": "2: at least 1 point from each of the two categories below AND explicitly linked to lead/(ing)/most likely/most probable diagnosis  \n  \ta) Epidemiology: Mention of risk factors (cardiac), hypertension, diabetes, age  \n  \tb) Key features: lack of response to PPI/pantoprazole; pressure; burning; associated; stable/unstable; intermittent, recurring, recurrent, episodic; atypical; exertional; chronic; worsening or more frequent; provoked/provoking, relieved/alleviated;  \n1: use of at least one of the terms above explicitly linked to lead/(ing)/most likely/most probable diagnosis\n0: none of these words explicitly linked to leading diagnosis"
         },

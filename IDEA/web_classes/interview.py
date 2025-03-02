@@ -30,8 +30,8 @@ class Interview(pydantic.BaseModel):
 
         return cls(username=username, patient=patient) 
             
-    def add_feedback(self):
-        self.feedback = Feedback.build(patient=self.patient, messages=self.messages, post_note_inputs=self.post_note_inputs)
+    def add_feedback(self, short: bool):
+        self.feedback = Feedback.build(short=short, patient=self.patient, messages=self.messages, post_note_inputs=self.post_note_inputs)
     
     def add_key_findings(self, findings: str):
         self.post_note_inputs["Key Findings"] = findings

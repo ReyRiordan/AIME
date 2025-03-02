@@ -209,15 +209,15 @@
         "rubric": "4: all 4 features present:  \n  \ta) Risk factors - mentions diabetes/DM, hypertension/HTN, AND age/years  \n  \tb) Complaint - mentions chest/substernal AND pain/discomfort/pressure/burning/angina/dyspepsia, reflux, GERD  \n  \tc) Time course - intermittent, recurring, recurrent, episodic, or on-and-off; AND months/chronic; AND lasts minutes/brief; AND worsening/more frequent/progressive  \n  \td) Semantic - at least 2 of: intermittent, recurring/recurrent, episodic, chronic, progressive, cardiac risk factor, atypical, unstable/stable, exertional, relieved by rest  \n3: 3 features: must include A, B and D  \n2: 2 features present  \n1: 1 feature present  \n0: 0 features present"
       },
       "Assessment": {
-        "A1": {
+        "Differential Diagnosis": {
           "points": 2,
           "rubric": "2: all 3 features present AND 2 or more diagnoses  \n  \ta) Mentions angina, cardiac chest pain, stable/unstable, ischemia, or coronary artery disease/CAD  \n  \tb) Mentions GERD, esophageal, reflux, acid, esophageal spasm, esophageal motility  \n  \tc) Statement of probability, lead(ing), likely, probable, worrisome, concerning  \n1: at least 2 feature present AND 2 or more diagnoses OR differential is implicitly stated (e.g., “cardiac”, “esophageal”) OR implicitly prioritized  \n0: 0-1 feature present OR 0 or 1 diagnosis mentioned"
         },
-        "A2": {
+        "Explanation of Lead Diagonsis": {
           "points": 2,
           "rubric": "2: at least 1 point from each of the two categories below AND explicitly linked to lead/(ing)/most likely/most probable diagnosis  \n  \ta) Epidemiology: Mention of risk factors (cardiac), hypertension, diabetes, age  \n  \tb) Key features: lack of response to PPI/pantoprazole; pressure; burning; associated; stable/unstable; intermittent, recurring, recurrent, episodic; atypical; exertional; chronic; worsening or more frequent; provoked/provoking, relieved/alleviated;  \n1: use of at least one of the terms above explicitly linked to lead/(ing)/most likely/most probable diagnosis\n0: none of these words explicitly linked to leading diagnosis"
         },
-        "A3": {
+        "Explanation of Alternative Diagnoses": {
           "points": 2,
           "rubric": "2: at least 2 terms from below, NOT explicitly linked to the lead/(ing)/most likely/most probable diagnosis, and not \"double-counting\" words used in \"Explanation of lead diagnosis\"  \n  \ta) Mention of risk factors; medication; pressure; burning; associated; stable/unstable; intermittent,recurring, recurrent, episodic; chronic; worsening or more frequent; provoked/provoking, relieved/alleviated\n\tb) Mention of pulmonary, lung (not pleuritic; breath/breathing/SOB; wheezing; cough)  \n  \tc) Mention of esophageal/gastrointestinal (nausea, cough, reflux, voice change, dysphagia, heartburn)  \n1: At least 1 of the words above, NOT explicitly linked to the lead/(ing)/most likely/most probable diagnosis, and not \"double-counting\" words used in \"Explanation of lead diagnosis\"  \n0: No additional words after accounting for score in \"Explanation of lead diagnosis\""
         }

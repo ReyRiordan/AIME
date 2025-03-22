@@ -1,0 +1,1568 @@
+[
+  {
+    "LAST_NAME": "FEMALE M1's",
+    "FIRST_NAME": NaN,
+    "NetID": NaN,
+    "First Case (Atypical 1 - Jenny or Jeffrey)": NaN,
+    "Second Case (Atypical 2 - Sam or Sarah)": NaN,
+    "Unnamed: 5": "M1's Case Breakdown (n=172; 108 F; 64 M)",
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Abbasi",
+    "FIRST_NAME": "Hifsa",
+    "NetID": "hna26",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": "Female Atypical 1",
+    "Unnamed: 6": 86.0
+  },
+  {
+    "LAST_NAME": "Ajuchi",
+    "FIRST_NAME": "Oghenevoke",
+    "NetID": "oa363",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": "Male Atypical 1",
+    "Unnamed: 6": 86.0
+  },
+  {
+    "LAST_NAME": "Amancharla",
+    "FIRST_NAME": "Nishita",
+    "NetID": "na988",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": "Female Atypical 2",
+    "Unnamed: 6": 86.0
+  },
+  {
+    "LAST_NAME": "Atrii",
+    "FIRST_NAME": "Vrindda",
+    "NetID": "vha14",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": "Male Atypical 2",
+    "Unnamed: 6": 86.0
+  },
+  {
+    "LAST_NAME": "Bancalari",
+    "FIRST_NAME": "Lauren",
+    "NetID": "leb185",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Berhane",
+    "FIRST_NAME": "Bethel",
+    "NetID": "bb884",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Bhagavathi ",
+    "FIRST_NAME": "Raga ",
+    "NetID": "rb1068",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Boatwright",
+    "FIRST_NAME": "Christina",
+    "NetID": "cab590",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Bruk",
+    "FIRST_NAME": "Yael",
+    "NetID": "yb352",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Cano",
+    "FIRST_NAME": "Gabriela",
+    "NetID": "gc862",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Cantarutti",
+    "FIRST_NAME": "Juliana",
+    "NetID": "jfc167",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Chan",
+    "FIRST_NAME": "Abbie",
+    "NetID": "ac2854",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Cheung",
+    "FIRST_NAME": "Celeste",
+    "NetID": "cc2376",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Choi",
+    "FIRST_NAME": "Alexis",
+    "NetID": "ac2763",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Chrisbacher",
+    "FIRST_NAME": "Katherine",
+    "NetID": "kc1632",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Coman",
+    "FIRST_NAME": "Adriana",
+    "NetID": "ac2843",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Considine",
+    "FIRST_NAME": "Elizabeth",
+    "NetID": "ec1325",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Cook",
+    "FIRST_NAME": "Sydney",
+    "NetID": "smc587",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Dabrowski",
+    "FIRST_NAME": "Isabella",
+    "NetID": "ikd10",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Deffler",
+    "FIRST_NAME": "Caitlin Elysse",
+    "NetID": "cyd13",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Diaz",
+    "FIRST_NAME": "Adriana",
+    "NetID": "acd203",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Diorio",
+    "FIRST_NAME": "Julia",
+    "NetID": "jd1891",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Eubanks",
+    "FIRST_NAME": "Elena",
+    "NetID": "eee44",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Fardad",
+    "FIRST_NAME": "Joana",
+    "NetID": "jtf101",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Faughnan",
+    "FIRST_NAME": "Hannah",
+    "NetID": "hf220",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Fekete",
+    "FIRST_NAME": "Julia",
+    "NetID": "jf976",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Fernandez",
+    "FIRST_NAME": "Ciara",
+    "NetID": "caf267",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Formanski",
+    "FIRST_NAME": "Lauren",
+    "NetID": "lf565",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Garvey",
+    "FIRST_NAME": "Regina",
+    "NetID": "rg1322",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Gelman",
+    "FIRST_NAME": "Beata",
+    "NetID": "bg673",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Gertie",
+    "FIRST_NAME": "Julia",
+    "NetID": "jgg109",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Gogineni",
+    "FIRST_NAME": "Sree",
+    "NetID": "sag394",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Goodman",
+    "FIRST_NAME": "Miri",
+    "NetID": "mcg235",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Greenberg",
+    "FIRST_NAME": "Rebecca",
+    "NetID": "rg1268",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Griep",
+    "FIRST_NAME": "Rachel",
+    "NetID": "rcg124",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Guo",
+    "FIRST_NAME": "Jennifer",
+    "NetID": "jyg13",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Hefner",
+    "FIRST_NAME": "Reece",
+    "NetID": "rh937",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Hill",
+    "FIRST_NAME": "Naja",
+    "NetID": "nnh35",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Hsu",
+    "FIRST_NAME": "Megan",
+    "NetID": "mah446",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Isuiza",
+    "FIRST_NAME": "Genesis",
+    "NetID": "gdi8",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ivanov",
+    "FIRST_NAME": "Juliet",
+    "NetID": "ji229",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Jadhav",
+    "FIRST_NAME": "Riddhi",
+    "NetID": "rvj10",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Jain",
+    "FIRST_NAME": "Aanchal",
+    "NetID": "aj1084",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Joyce",
+    "FIRST_NAME": "Megan",
+    "NetID": "mej113",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Karam",
+    "FIRST_NAME": "Zena",
+    "NetID": "zk182",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kim",
+    "FIRST_NAME": "Alyssa",
+    "NetID": "ahk118",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kong",
+    "FIRST_NAME": "Robin",
+    "NetID": "rk1235",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Krinsky",
+    "FIRST_NAME": "Danielle",
+    "NetID": "dek108",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kumar",
+    "FIRST_NAME": "Archana",
+    "NetID": "ask178",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kustagi",
+    "FIRST_NAME": "Anmol",
+    "NetID": "as5262",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Lannan",
+    "FIRST_NAME": "Lucille",
+    "NetID": "ll1152",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Laub",
+    "FIRST_NAME": "Ava",
+    "NetID": "al1871",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Le",
+    "FIRST_NAME": "Mi",
+    "NetID": "mtl140",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Lee",
+    "FIRST_NAME": "Christine",
+    "NetID": "csl128",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Li",
+    "FIRST_NAME": "Cynthia",
+    "NetID": "cjl301",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Lim",
+    "FIRST_NAME": "Nicole",
+    "NetID": "nl557",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Magahis",
+    "FIRST_NAME": "Angela Sophia",
+    "NetID": "atm156",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Marcellus",
+    "FIRST_NAME": "Yveeka",
+    "NetID": "ym444",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Marsh",
+    "FIRST_NAME": "Julianne",
+    "NetID": "jm3215",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Mickelsen",
+    "FIRST_NAME": "Emily",
+    "NetID": "egm112",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Muwonge-Mukasa",
+    "FIRST_NAME": "Lillian-Anne",
+    "NetID": "lnm96",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Nadkarni",
+    "FIRST_NAME": "Prianca",
+    "NetID": "pn313",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Narayan",
+    "FIRST_NAME": "Swati",
+    "NetID": "sln93",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Nembhard",
+    "FIRST_NAME": "Savannah",
+    "NetID": "stn42",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ng",
+    "FIRST_NAME": "Rebecca",
+    "NetID": "rcn28",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Okafor",
+    "FIRST_NAME": "Amarachukwu",
+    "NetID": "ao630",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "O'Mahony",
+    "FIRST_NAME": "Rosemary",
+    "NetID": "rko18",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Paghdal",
+    "FIRST_NAME": "Esha",
+    "NetID": "ejp121",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Panzarelli",
+    "FIRST_NAME": "Anna Maria",
+    "NetID": "ajp378",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Park",
+    "FIRST_NAME": "Katherine",
+    "NetID": "khp66",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Patel",
+    "FIRST_NAME": "Anjali",
+    "NetID": "amp535",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Patel",
+    "FIRST_NAME": "Risha",
+    "NetID": "rp1435",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Philip",
+    "FIRST_NAME": "Ria",
+    "NetID": "rep132",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Priadeep",
+    "FIRST_NAME": "Shushumitha",
+    "NetID": "sp1446",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Quintero",
+    "FIRST_NAME": "Stephanie",
+    "NetID": "sq136",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rajiv",
+    "FIRST_NAME": "Nivedita",
+    "NetID": "nr505",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ramaswamy",
+    "FIRST_NAME": "Swara",
+    "NetID": "sr1617",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rasheed",
+    "FIRST_NAME": "Noor",
+    "NetID": "nhr18",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rasty",
+    "FIRST_NAME": "Rose",
+    "NetID": "rr1473",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ravoori",
+    "FIRST_NAME": "Sanya",
+    "NetID": "sr1477",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Riebe",
+    "FIRST_NAME": "Natalie",
+    "NetID": "nr802",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rowe",
+    "FIRST_NAME": "Marjorie",
+    "NetID": "mr2021",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Sadangi",
+    "FIRST_NAME": "Sriya",
+    "NetID": "ss3636",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Sajankila",
+    "FIRST_NAME": "Ramita",
+    "NetID": "rs1913",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Sales",
+    "FIRST_NAME": "Julia",
+    "NetID": "jes553",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Sibilia",
+    "FIRST_NAME": "Kimberlee",
+    "NetID": "ks1403",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Silverstein",
+    "FIRST_NAME": "Sophie",
+    "NetID": "ss5230",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Sinkar",
+    "FIRST_NAME": "Shreya",
+    "NetID": "srs346",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Sivetz",
+    "FIRST_NAME": "Karlie",
+    "NetID": "ks2196",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Srinivasan",
+    "FIRST_NAME": "Harini",
+    "NetID": "hs1321",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Tasik",
+    "FIRST_NAME": "Emily",
+    "NetID": "ejt98",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Thakker",
+    "FIRST_NAME": "Mansi",
+    "NetID": "mt1380",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Towell",
+    "FIRST_NAME": "Brenna",
+    "NetID": "bt410",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Vandermillen",
+    "FIRST_NAME": "Catherine",
+    "NetID": "cv445",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Vera",
+    "FIRST_NAME": "Lauren",
+    "NetID": "lnv18",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Vicens",
+    "FIRST_NAME": "Gabrielle",
+    "NetID": "gv259",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Voruganti",
+    "FIRST_NAME": "Rishika",
+    "NetID": "rv546",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Wang",
+    "FIRST_NAME": "Sophia",
+    "NetID": "sw1335",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Wickramasinghe",
+    "FIRST_NAME": "Kithmy",
+    "NetID": "kpw43",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Wisch",
+    "FIRST_NAME": "Jenna",
+    "NetID": "jlw409",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Xie",
+    "FIRST_NAME": "Joy",
+    "NetID": "jx377",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Yang",
+    "FIRST_NAME": "Catherine",
+    "NetID": "cty17",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Yang",
+    "FIRST_NAME": "Helen",
+    "NetID": "hhy9",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Yao",
+    "FIRST_NAME": "Xuetong",
+    "NetID": "xy273",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Yu",
+    "FIRST_NAME": "Mina",
+    "NetID": "my489",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Yuan",
+    "FIRST_NAME": "Mona",
+    "NetID": "mmy42",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Zafar",
+    "FIRST_NAME": "Maryam",
+    "NetID": "mz707",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Zappley",
+    "FIRST_NAME": "Nicolina",
+    "NetID": "nrz7",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "MALE M1's",
+    "FIRST_NAME": NaN,
+    "NetID": NaN,
+    "First Case (Atypical 1 - Jenny or Jeffrey)": NaN,
+    "Second Case (Atypical 2 - Sam or Sarah)": NaN,
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ahmed",
+    "FIRST_NAME": "Jeeshan",
+    "NetID": "ja1271",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Alvarez",
+    "FIRST_NAME": "Elian",
+    "NetID": "eda45",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Asrian",
+    "FIRST_NAME": "George",
+    "NetID": "gma103",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ayyaz",
+    "FIRST_NAME": "Waasae",
+    "NetID": "wa163",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Aziz",
+    "FIRST_NAME": "Mark",
+    "NetID": "ma1818",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Barta",
+    "FIRST_NAME": "Zack",
+    "NetID": "zb184",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Blitz",
+    "FIRST_NAME": "Benjamin",
+    "NetID": "bb901",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Brill",
+    "FIRST_NAME": "Jameson",
+    "NetID": "jmb680",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Choahn",
+    "FIRST_NAME": "Daniel",
+    "NetID": "dc1683",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Choi",
+    "FIRST_NAME": "Seunghwan",
+    "NetID": "sc1884",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Dalal",
+    "FIRST_NAME": "Neal",
+    "NetID": "npd57",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Dawod",
+    "FIRST_NAME": "Mark",
+    "NetID": "md1734",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Deannuntis",
+    "FIRST_NAME": "Jacob",
+    "NetID": "jgd131",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Deng",
+    "FIRST_NAME": "Lawrence",
+    "NetID": "lyd9",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Dhurairaj",
+    "FIRST_NAME": "Puvin",
+    "NetID": "pd611",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Diaz",
+    "FIRST_NAME": "Viktor",
+    "NetID": "vdiaz27",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Dicker",
+    "FIRST_NAME": "Jeffrey",
+    "NetID": "jed266",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Galaida",
+    "FIRST_NAME": "Garrett",
+    "NetID": "gjg80",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Gluckman",
+    "FIRST_NAME": "Jacob",
+    "NetID": "jg2043",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Guevara",
+    "FIRST_NAME": "David",
+    "NetID": "dg901",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Gunda",
+    "FIRST_NAME": "Srujanesh",
+    "NetID": "sg1497",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Guven",
+    "FIRST_NAME": "Hakan",
+    "NetID": "hg373",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Hafiz",
+    "FIRST_NAME": "Mazen",
+    "NetID": "mmh259",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Hanna",
+    "FIRST_NAME": "Jacob",
+    "NetID": "jah470",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Helinek",
+    "FIRST_NAME": "Thomas",
+    "NetID": "th781",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Inan",
+    "FIRST_NAME": "Berk",
+    "NetID": "bi44",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Karev",
+    "FIRST_NAME": "Alexander",
+    "NetID": "ak2659",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Karp",
+    "FIRST_NAME": "Joshua",
+    "NetID": "jk1764",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Keane",
+    "FIRST_NAME": "James",
+    "NetID": "jak572",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kim",
+    "FIRST_NAME": "Ganghyun",
+    "NetID": "gk601",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kim",
+    "FIRST_NAME": "Henry",
+    "NetID": "hhk34",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kong",
+    "FIRST_NAME": "David",
+    "NetID": "dk1299",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Kumar",
+    "FIRST_NAME": "Hritik",
+    "NetID": "hmk100",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Mahajan",
+    "FIRST_NAME": "Aryan",
+    "NetID": "am2792",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Mourad",
+    "FIRST_NAME": "Youssef",
+    "NetID": "ymm37",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Nehmeh",
+    "FIRST_NAME": "Mohammad",
+    "NetID": "mn946",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "O'Brien",
+    "FIRST_NAME": "Nikko",
+    "NetID": "no238",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ogbu",
+    "FIRST_NAME": "Kenechukwu",
+    "NetID": "ko377",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Oloomi",
+    "FIRST_NAME": "Kevin",
+    "NetID": "ko300",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Racki",
+    "FIRST_NAME": "Steven",
+    "NetID": "scr111",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rademaker",
+    "FIRST_NAME": "Quinn",
+    "NetID": "qr23",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rahman",
+    "FIRST_NAME": "Farzam",
+    "NetID": "fur4",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rao",
+    "FIRST_NAME": "Rohan",
+    "NetID": "rr1035",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Ratner",
+    "FIRST_NAME": "Stephen",
+    "NetID": "swr40",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Reddy",
+    "FIRST_NAME": "Pranav",
+    "NetID": "pr399",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rondinella",
+    "FIRST_NAME": "Matthew",
+    "NetID": "mr2022",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rosenberg",
+    "FIRST_NAME": "Samuel",
+    "NetID": "sr2007",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Rothstein",
+    "FIRST_NAME": "Jake",
+    "NetID": "jr1535",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Royse",
+    "FIRST_NAME": "Timothy",
+    "NetID": "tbr34",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Saenz",
+    "FIRST_NAME": "Sebastian",
+    "NetID": "ss5015",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Silvergold",
+    "FIRST_NAME": "Alexander",
+    "NetID": "as3344",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Soroka",
+    "FIRST_NAME": "Nazar",
+    "NetID": "ns1004",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Syed",
+    "FIRST_NAME": "Shareef",
+    "NetID": "ss3590",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Talwar",
+    "FIRST_NAME": "Saharsh",
+    "NetID": "st1366",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Torkieh",
+    "FIRST_NAME": "Joseph",
+    "NetID": "jt1297",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Umamageswaran",
+    "FIRST_NAME": "Akul",
+    "NetID": "au203",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Vasireddi",
+    "FIRST_NAME": "Neal",
+    "NetID": "nv369",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Venkatraman",
+    "FIRST_NAME": "Surya",
+    "NetID": "sv487",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Wilde",
+    "FIRST_NAME": "Dylan",
+    "NetID": "djw227",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Winters",
+    "FIRST_NAME": "Alexander",
+    "NetID": "aw1062",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Wurtz",
+    "FIRST_NAME": "Alexander",
+    "NetID": "aw751",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Yazdani",
+    "FIRST_NAME": "Zachariya",
+    "NetID": "zmy1",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Zhang",
+    "FIRST_NAME": "Ryan",
+    "NetID": "rz436",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "M",
+    "Second Case (Atypical 2 - Sam or Sarah)": "F",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  },
+  {
+    "LAST_NAME": "Zink",
+    "FIRST_NAME": "Taylor",
+    "NetID": "tz243",
+    "First Case (Atypical 1 - Jenny or Jeffrey)": "F",
+    "Second Case (Atypical 2 - Sam or Sarah)": "M",
+    "Unnamed: 5": NaN,
+    "Unnamed: 6": NaN
+  }
+]

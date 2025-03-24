@@ -14,7 +14,7 @@ M2_original = sheets_dict["M2's Randomized Cases"]
 def valid_student(student, required_keys):
     return all(key in student and not (isinstance(student[key], float) and math.isnan(student[key])) for key in required_keys)
 
-def clean(original, required_keys):
+def prepare(original, required_keys):
     cleaned = []
     for student in original:
         if valid_student(student, required_keys):
@@ -23,13 +23,19 @@ def clean(original, required_keys):
                     "NetID": student["NetID"], 
                     "First_case": student[required_keys[3]], 
                     "Second_case": student[required_keys[4]]})
-    return cleaned
+            
+    formatted = {}
+    for student in cleaned:
+        noID = {k: v for k, v in student.items() if k != "NetID"}
+        formatted[student["NetID"]] = noID
+    
+    return formatted
 
 # Clean
 required_M1 = ["LAST_NAME", "FIRST_NAME", "NetID", "First Case (Atypical 1 - Jenny or Jeffrey)", "Second Case (Atypical 2 - Sam or Sarah)"]
-M1 = clean(M1_original, required_M1)
+M1 = prepare(M1_original, required_M1)
 required_M2 = ["LAST_NAME", "FIRST_NAME", "NetID", "First Case (Atypica 1l)", "Second Case (Atypical 2)"]
-M2 = clean(M2_original, required_M2)
+M2 = prepare(M2_original, required_M2)
 
 # Check number of students
 print(len(M1))

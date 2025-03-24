@@ -95,6 +95,11 @@ PATHS = {"Patient Base": "./Prompts/Base_2-10.txt",
          "Feedback": "./Prompts/Feedback_2-17.txt"}
 
 
+# Assignments
+with open("./IDEA/assignments/M1.json", "r") as assignments_file:
+    ASSIGNMENTS = json.load(assignments_file)
+
+
 # Convo related
 with open(PATHS["Patient Base"], "r", encoding="utf8") as base_file:
     BASE_PROMPT = base_file.read()

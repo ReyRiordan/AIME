@@ -42,13 +42,17 @@ if st.session_state["stage"] == LOGIN_PAGE:
         st.title("Virtual Patient (BETA)")
         st.write("For beta testing use only.")
 
-        username = st.text_input("Username:")
-        password = st.text_input("Password:", type = "password")
+        username = st.text_input("Username (NetID):")
+        if username and username not in ASSIGNMENTS: 
+            st.write("Invalid username.")
+        password = st.text_input("Password (LastFirst):", type = "password")
 
         layout12b = layout1[1].columns(5)
         if layout12b[2].button("Log in"):
-            if username and password == LOGIN_PASS:
+            correct = ASSIGNMENTS[username]["Last_name"] + ASSIGNMENTS[username]["First_name"]
+            if username and password == correct:
                 st.session_state["username"] = username
+                st.session_state["assignment"] = ASSIGNMENTS[username]
                 st.write("Authentication successful!")
                 time.sleep(1)
                 set_stage(SETTINGS)
@@ -73,10 +77,23 @@ if st.session_state["stage"] == SETTINGS:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Patient Settings")
-        patient_name = st.selectbox("Which patient would you like to interview?", 
-                                    ["Jeffrey Smith", "Jenny Smith", "Samuel Thompson", "Sarah Thompson"],
+        case_number = st.selectbox("Are you doing your first or second case?", 
+                                    ["First case", "Second case"],
                                     index = None,
-                                    placeholder = "Select patient...")
+                                    placeholder = "Select case...")
+        patient_name = None
+
+        if case_number:
+            case_number = case_number.replace(" ", "_")
+            gender = st.session_state["assignment"][case_number]
+            if case_number == "First_case":
+                if gender == "M": patient_name = "Jeffrey Smith"
+                elif gender == "F": patient_name = "Jenny Smith"
+            elif case_number == "Second_case":
+                if gender == "M": patient_name = "Samuel Thompson"
+                elif gender == "F": patient_name = "Sarah Thompson"
+
+        # ADD ASSIGNMENT INFO?
         if patient_name: 
             st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
                                                             patient = Patient.build(patient_name))

@@ -21,6 +21,8 @@ from lookups import *
 from web_classes import *
 from web_methods import *
 
+
+# STREAMLIT SETUP
 st.set_page_config(page_title = "AIME",
                    page_icon = "🧑‍⚕️",
                    layout = "wide",
@@ -31,6 +33,27 @@ if "stage" not in st.session_state:
 
 def set_stage(stage):
     st.session_state["stage"] = stage
+
+
+# DB SETUP
+@st.cache_resource
+def init_connection():
+    return MongoClient(DB_URI)
+
+DB_CLIENT = client = init_connection()
+
+@st.cache_data(ttl=600)
+def get_data():
+    DB = DB_CLIENT.mydb
+    items = DB.mycollection.find()
+    items = list(items)  # make hashable for st.cache_data
+    return items
+
+items = get_data()
+print(items)
+
+
+# APP CODE STARTS HERE
 
 if st.session_state["stage"] == LOGIN_PAGE:
     st.write("Welcome, and thank you for volunteering to participate in this beta test! This is an application where you will virtually simulate an interview with a patient, after which you will provide a post note based on it and then automatically receive feedback on your performance.")

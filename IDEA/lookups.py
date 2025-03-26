@@ -47,7 +47,7 @@ COSTS = {"gpt-4o": {"input": 5, "output": 15},
          "gpt-4-turbo": {"input": 10, "output": 30},
          "gpt-4": {"input": 30, "output": 60},
          "gpt-3.5-turbo-0125": {"input": 0.5, "output": 1.5},
-         "claude-3-5-sonnet-20240620": {"input": 3, "output": 15}}
+         "claude-3-7-sonnet-latest": {"input": 3, "output": 15}}
 
 # Audio related
 STT = OpenAI()
@@ -71,11 +71,11 @@ SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
 
 FEEDBACK_CLIENT = Anthropic()
-FEEDBACK_MODEL = "claude-3-5-sonnet-20241022"
+FEEDBACK_MODEL = "claude-3-7-sonnet-latest"
 FEEDBACK_TEMP = 0.0
 
 CLASS_CLIENT = Anthropic()
-CLASS_MODEL = "claude-3-5-sonnet-20241022"
+CLASS_MODEL = "claude-3-7-sonnet-latest"
 CLASS_TEMP = 0.0
 DIAG_CLIENT = OpenAI()
 DIAG_MODEL = "gpt-4-turbo"

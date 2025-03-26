@@ -56,32 +56,30 @@ print(items)
 # APP CODE STARTS HERE
 
 if st.session_state["stage"] == LOGIN_PAGE:
-    st.write("Welcome, and thank you for volunteering to participate in this beta test! This is an application where you will virtually simulate an interview with a patient, after which you will provide a post note based on it and then automatically receive feedback on your performance.")
-    st.write("Please follow the directions on each page to work through the whole application, and take notes on where there is potential room for improvement.")
-    st.write("Begin by logging in!")
     
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
-        st.title("Virtual Patient (BETA)")
-        st.write("For beta testing use only.")
+        st.title("CURRENTLY CLOSED")
+        # st.write("Welcome! This is a WIP application where you can interview AI patients, write a post note, and automatically receive feedback on your performance.")
+        # st.write("Begin by logging in as directed! If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 
-        username = st.text_input("Username (NetID):")
-        if username and username not in ASSIGNMENTS: 
-            st.write("Invalid username.")
-        password = st.text_input("Password (LastFirst):", type = "password")
+        # username = st.text_input("Username (NetID):")
+        # if username and username not in ASSIGNMENTS: 
+        #     st.write("Invalid username.")
+        # password = st.text_input("Password (LastFirst):", type = "password")
 
-        layout12b = layout1[1].columns(5)
-        if layout12b[2].button("Log in"):
-            correct = ASSIGNMENTS[username]["Last_name"] + ASSIGNMENTS[username]["First_name"]
-            if username and password == correct:
-                st.session_state["username"] = username
-                st.session_state["assignment"] = ASSIGNMENTS[username]
-                st.write("Authentication successful!")
-                time.sleep(1)
-                set_stage(SETTINGS)
-                st.rerun()
-            else:
-                st.write("Password incorect.")
+        # layout12b = layout1[1].columns(5)
+        # if layout12b[2].button("Log in"):
+        #     correct = ASSIGNMENTS[username]["Last_name"] + ASSIGNMENTS[username]["First_name"]
+        #     if username and password == correct:
+        #         st.session_state["username"] = username
+        #         st.session_state["assignment"] = ASSIGNMENTS[username]
+        #         st.write("Authentication successful!")
+        #         time.sleep(1)
+        #         set_stage(SETTINGS)
+        #         st.rerun()
+        #     else:
+        #         st.write("Password incorect.")
 
 
 if st.session_state["stage"] == SETTINGS:

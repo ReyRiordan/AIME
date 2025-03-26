@@ -51,9 +51,9 @@ COSTS = {"gpt-4o": {"input": 5, "output": 15},
 
 # Audio related
 STT = OpenAI()
-STT_MODEL = "whisper-1"
+STT_MODEL = "gpt-4o-mini-transcribe"
 TTS = OpenAI()
-# TTS_MODEL = "tts-1"
+TTS_MODEL = "gpt-4o-mini-tts"
 # AUDIO_OUT = ElevenLabs()
 
 

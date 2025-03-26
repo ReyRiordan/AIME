@@ -70,10 +70,11 @@ def transcribe_voice(voice_input):
 
 def generate_voice(patient: Patient, text_input: str) -> io.BytesIO:
     bio = io.BytesIO()
-    speech = TTS.audio.speech.create(model = patient.speech["Model"], 
+    speech = TTS.audio.speech.create(model = TTS_MODEL, 
                                      voice = patient.speech["Voice"], 
                                      response_format = "wav", 
-                                     input = text_input)
+                                     input = text_input, 
+                                     instructions = "Speak in a worried and nervous tone.")
     bio.write(speech.content)
     return bio
 

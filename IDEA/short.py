@@ -50,7 +50,7 @@ def get_data():
     return items
 
 items = get_data()
-print(items)
+# print(items)
 
 
 # APP CODE STARTS HERE
@@ -59,27 +59,27 @@ if st.session_state["stage"] == LOGIN_PAGE:
     
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
-        st.title("CURRENTLY CLOSED")
-        # st.write("Welcome! This is a WIP application where you can interview AI patients, write a post note, and automatically receive feedback on your performance.")
-        # st.write("Begin by logging in as directed! If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
+        st.title("Medical Interview Simulation")
+        st.write("Welcome! This is a WIP application where you can interview AI patients, write a post note, and automatically receive feedback on your performance.")
+        st.write("Begin by logging in as directed! If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 
-        # username = st.text_input("Username (NetID):")
-        # if username and username not in ASSIGNMENTS: 
-        #     st.write("Invalid username.")
-        # password = st.text_input("Password (LastFirst):", type = "password")
+        username = st.text_input("Username (NetID):")
+        if username and username not in ASSIGNMENTS: 
+            st.write("Invalid username.")
+        password = st.text_input("Password (LastFirst):", type = "password")
 
-        # layout12b = layout1[1].columns(5)
-        # if layout12b[2].button("Log in"):
-        #     correct = ASSIGNMENTS[username]["Last_name"] + ASSIGNMENTS[username]["First_name"]
-        #     if username and password == correct:
-        #         st.session_state["username"] = username
-        #         st.session_state["assignment"] = ASSIGNMENTS[username]
-        #         st.write("Authentication successful!")
-        #         time.sleep(1)
-        #         set_stage(SETTINGS)
-        #         st.rerun()
-        #     else:
-        #         st.write("Password incorect.")
+        layout12b = layout1[1].columns(5)
+        if layout12b[2].button("Log in"):
+            correct = ASSIGNMENTS[username]["Last_name"] + ASSIGNMENTS[username]["First_name"]
+            if username and password == correct:
+                st.session_state["username"] = username
+                st.session_state["assignment"] = ASSIGNMENTS[username]
+                st.write("Authentication successful!")
+                time.sleep(1)
+                set_stage(SETTINGS)
+                st.rerun()
+            else:
+                st.write("Password incorect.")
 
 
 if st.session_state["stage"] == SETTINGS:
@@ -118,10 +118,11 @@ if st.session_state["stage"] == SETTINGS:
         if patient_name: 
             st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
                                                             patient = Patient.build(patient_name))
-
-        if st.session_state["interview"]: 
-            # st.session_state["sent"]==False
             st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
+
+        # if st.session_state["interview"]: 
+        #     # st.session_state["sent"]==False
+        #     st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
 
 if st.session_state["stage"] == CHAT_SETUP:
@@ -138,7 +139,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write("You may now begin your interview with " + st.session_state["interview"].patient.id + ". Start by introducing yourself.")
+        st.write(f"You may now begin your interview with **{st.session_state['interview'].patient.id}**. Start by introducing yourself.")
         st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
                 The button will then turn into a Stop button, which you can click when you are done talking.
                 Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")

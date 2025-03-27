@@ -67,7 +67,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
         username = st.text_input("Username (NetID):")
         if username and username not in ASSIGNMENTS: 
             st.write("Invalid username.")
-        if username == "admin": st.session_state["admin"] = True
+        st.session_state["admin"] = True if username == "admin" else False
         password = st.text_input("Password (LastFirst):", type = "password")
 
         layout12b = layout1[1].columns(5)
@@ -104,31 +104,27 @@ if st.session_state["stage"] == SETTINGS:
                                         index = None,
                                         placeholder = "Select patient...")
         else:
-            layout1 = st.columns([1, 3, 1])
-            with layout1[1]:
-                st.title("Patient Settings")
-                case_number = st.selectbox("Are you doing your first or second case?", 
-                                            ["First case", "Second case"],
-                                            index = None,
-                                            placeholder = "Select case...")
-                patient_name = None
+            st.title("Patient Settings")
+            case_number = st.selectbox("Are you doing your first or second case?", 
+                                        ["First case", "Second case"],
+                                        index = None,
+                                        placeholder = "Select case...")
+            patient_name = None
 
-                if case_number:
-                    case_number = case_number.replace(" ", "_")
-                    gender = st.session_state["assignment"][case_number]
-                    if case_number == "First_case":
-                        if gender == "M": patient_name = "Jeffrey Smith"
-                        elif gender == "F": patient_name = "Jenny Smith"
-                    elif case_number == "Second_case":
-                        if gender == "M": patient_name = "Samuel Thompson"
-                        elif gender == "F": patient_name = "Sarah Thompson"
+            if case_number:
+                case_number = case_number.replace(" ", "_")
+                gender = st.session_state["assignment"][case_number]
+                if case_number == "First_case":
+                    if gender == "M": patient_name = "Jeffrey Smith"
+                    elif gender == "F": patient_name = "Jenny Smith"
+                elif case_number == "Second_case":
+                    if gender == "M": patient_name = "Samuel Thompson"
+                    elif gender == "F": patient_name = "Sarah Thompson"
 
         chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
                                 ["Text", "Voice"],
                                 index = None,
                                 placeholder = "Select interview mode...")
-        if chat_mode == "Text": chat_page = CHAT_INTERFACE_TEXT
-        elif chat_mode == "Voice": chat_page = CHAT_INTERFACE_VOICE
         
         # ADD ASSIGNMENT INFO?
         if st.button("Start Interview"):
@@ -137,8 +133,9 @@ if st.session_state["stage"] == SETTINGS:
                                                                 patient = Patient.build(patient_name), 
                                                                 start_time = st.session_state["start_time"], 
                                                                 chat_mode = chat_mode)
-                COLLECTION.insert_one(st.session_state["interview"].model_dump())
                 st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
+                if chat_mode == "Text": chat_page = CHAT_INTERFACE_TEXT
+                elif chat_mode == "Voice": chat_page = CHAT_INTERFACE_VOICE
                 set_stage(chat_page)
                 st.rerun()
             else: st.write("Incomplete settings.")
@@ -159,9 +156,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     with layout1[1]:
         st.title("Interview")
         st.write(f"You may now begin your interview with **{st.session_state['interview'].patient.id}**. Start by introducing yourself.")
-        st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
-                The button will then turn into a Stop button, which you can click when you are done talking.
-                Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
+        st.write("Click the Start Recording button to start recording your voice message. The button will then turn into a Stop button, which you can click when you are done talking.")
 
         audio = audiorecorder("Start Recording", "Stop")
         
@@ -187,15 +182,13 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
         columns = st.columns(4)
         if columns[1].button("Restart"):
-            COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+            st.session_state["interview"].update_tokens(st.session_state["tokens"])
+            COLLECTION.insert_one(st.session_state["interview"].model_dump())
             set_stage(SETTINGS)
             st.rerun()
         if columns[2].button("End Interview"):
-            COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+            st.session_state["interview"].update_tokens(st.session_state["tokens"])
+            COLLECTION.insert_one(st.session_state["interview"].model_dump())
             set_stage(PHYSICAL_ECG_SCREEN)
             st.rerun()
 
@@ -230,15 +223,13 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
         columns = st.columns(4)
         if columns[1].button("Restart"):
-            COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+            st.session_state["interview"].update_tokens(st.session_state["tokens"])
+            COLLECTION.insert_one(st.session_state["interview"].model_dump())
             set_stage(SETTINGS)
             st.rerun()
         if columns[2].button("End Interview"):
-            COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+            st.session_state["interview"].update_tokens(st.session_state["tokens"])
+            COLLECTION.insert_one(st.session_state["interview"].model_dump())
             set_stage(PHYSICAL_ECG_SCREEN)
             st.rerun()
 
@@ -276,7 +267,6 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
 
 if st.session_state["stage"] == DIAGNOSIS:
     st.write("Write your post note as directed and click \"Get Feedback\" to get your feedback/scores.")
-    st.write("If you click one of the \"TEST CASE\" buttons, the post note will automatically be filled in and feedback will be processed on those example inputs.")
     st.divider()
 
     # 2 column full width layout
@@ -313,11 +303,11 @@ if st.session_state["stage"] == DIAGNOSIS:
         st.rerun()
 
     # New Interview
-    layout2[2].button("New Interview", on_click=set_stage, args=[SETTINGS], use_container_width=True)
+    # layout2[2].button("New Interview", on_click=set_stage, args=[SETTINGS], use_container_width=True)
     
     # Test cases
     if st.session_state["admin"]:
-        layout21 = layout2[3].columns([1, 1])
+        layout21 = layout2[2].columns([1, 1])
         if layout21[0].button("TEST: BAD", use_container_width=True):
             with open("./IDEA/test_cases/bad.json", "r", encoding="utf8") as bad_json:
                 bad_case = json.load(bad_json)
@@ -367,6 +357,10 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
     st.title("Processing feedback...")
     st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback(short=True)
+    st.session_state["interview"].update_tokens(st.session_state["tokens"])
+    COLLECTION.replace_one({"username" : st.session_state["username"], 
+                                    "start_time" : st.session_state["start_time"]}, 
+                                    st.session_state["interview"].model_dump())
     set_stage(FEEDBACK_SCREEN)
     st.rerun()
 
@@ -387,18 +381,23 @@ if st.session_state["stage"] == SURVEY:
     with layout1[1]:
         st.title("Survey")
         response = st.text_area("Any feedback about your experience or suggestions to improve it?")
-        if response:
-            st.session_state["interview"].add_survey(response)
-            COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
-            st.button("Finish", on_click=set_stage, args=[FINAL_SCREEN])
+        if st.button("Finish"):
+            if response:
+                st.session_state["interview"].add_survey(response)
+                st.session_state["interview"].add_end_time(datetime.now().isoformat())
+                COLLECTION.replace_one({"username" : st.session_state["username"], 
+                                        "start_time" : st.session_state["start_time"]}, 
+                                        st.session_state["interview"].model_dump())
+            set_stage(FINAL_SCREEN)
+            st.rerun()
 
 
 if st.session_state["stage"] == FINAL_SCREEN:
-    layout1 = st.columns([1, 3, 1])
+    layout1 = st.columns([2, 2, 2])
     with layout1[1]:
         st.title("Thank you! :heart:")
+        st.title("")
+        st.title("")
         button_columns = st.columns(2)
         button_columns[0].button("New Interview", on_click=set_stage, args=[SETTINGS])
         button_columns[1].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])

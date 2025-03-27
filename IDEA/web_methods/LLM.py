@@ -40,6 +40,9 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
     print(response.content[0].text)
     print("\n\n")
 
+    st.session_state["tokens"]["feedback"]["input"] += response.usage.input_tokens
+    st.session_state["tokens"]["feedback"]["output"] += response.usage.output_tokens
+
     return prefill + response.content[0].text
 
 
@@ -73,8 +76,7 @@ def generate_voice(patient: Patient, text_input: str) -> io.BytesIO:
     speech = TTS.audio.speech.create(model = TTS_MODEL, 
                                      voice = patient.speech["Voice"], 
                                      response_format = "wav", 
-                                     input = text_input, 
-                                     instructions = "Speak in a worried tone.")
+                                     input = text_input)
     bio.write(speech.content)
     return bio
 

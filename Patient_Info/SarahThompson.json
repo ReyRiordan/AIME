@@ -19,7 +19,7 @@
         "Birthdate": "October 15th 1964",
         "Tone": "Worried and nervous"
       }, 
-      "Background": "You were seen in the office 5 weeks ago because of discomfort, like an indigestion feeling in the front of your chest. You have been treated with a prescription antacid medication for the past month and you are here to follow up.",
+      "Background": "You were seen in the office 5 weeks ago because you had been experiencing discomfort, like an indigestion feeling in the front of your chest. You have been treated with a prescription antacid medication for the past month and you are here to follow up.",
       "HPI": [
         {
           "desc": "Major concern is the discomfort, like an indigestion feeling.",
@@ -30,11 +30,11 @@
           "lock": false
         },
         {
-          "desc": "You have been taking the medicine, which is called omeprazole,, like you were supposed to.  ",
+          "desc": "You have been taking the medicine, which is called omeprazole, like you were supposed to.  ",
           "lock": true
         },
         {
-          "desc": "If asked more about the what you have been experiencing, you feel like it is just uncomfortable, like indigestion or heartburn, like having to burp more frequently. It is not a pain.",
+          "desc": "The feeling in your chest is just uncomfortable, like indigestion or heartburn, like having to burp more frequently. It is not a pain.",
           "lock": true
         },
         {

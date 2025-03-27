@@ -19,7 +19,7 @@
         "Birthdate": "September 5th 1959",
         "Tone": "Worried and nervous"
       }, 
-      "Background": "You were in the office a month ago because of bloating and a pressure-like burning sensation in your chest. You have been treated with heartburn medication for the past month and you are here to follow up.",
+      "Background": "You were in the office a month ago because you had been experiencing a bloating and pressure-like burning sensation in your chest. You have been treated with heartburn medication for the past month and you are here to follow up.",
       "HPI": [
         {
           "desc": "Major concern is the pressure-like burning sensation.",
@@ -34,7 +34,7 @@
           "lock": true
         },
         {
-          "desc": "If asked more about the what you have been experiencing, you feel like it is a pressure-like burning sensation, like indigestion.",
+          "desc": "The feeling in your chest feels kind of like indigestion.",
           "lock": true
         },
         {
@@ -110,7 +110,7 @@
           "lock": true
         },
         {
-          "desc": "If asked about high cholesterol, you are on a cholesterol lowering medication but had not heard that your cholesterol was high.",
+          "desc": "If asked about high cholesterol, you are on a cholesterol lowering medication but have not heard that your cholesterol was high.",
           "lock": true
         }
       ],

@@ -20,7 +20,7 @@ from lookups import *
 
 def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
     # print(feedback)
-    inst = st.toggle("INSTRUCTOR VIEW")
+    inst = st.session_state["admin"]
     for category, d in feedback["feedback"].items():
         if short and category in ["Key Findings", "HPI", "Past Histories"]: continue
         with st.container(border = True):

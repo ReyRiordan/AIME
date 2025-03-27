@@ -22,13 +22,13 @@ class Interview(pydantic.BaseModel):
     survey : Optional[str] = None
     
     @classmethod
-    def build(cls, username: str, patient: Patient, start_time: str, chat_mode):
+    def build(cls, username: str, patient: Patient, start_time: str, chat_mode: str):
         #Attributes
         # messages = []            # list[Message]
         # user_diagnosis = None     # dict{str, str/list[str]}
         # feedback = None          # Feedback
 
-        return cls(username=username, patient=patient, start_time=start_time) 
+        return cls(username=username, patient=patient, start_time=start_time, chat_mode=chat_mode) 
             
     def add_feedback(self, short: bool):
         self.feedback = Feedback.build(short=short, patient=self.patient, messages=self.messages, post_note_inputs=self.post_note_inputs)
@@ -49,6 +49,12 @@ class Interview(pydantic.BaseModel):
     
     def add_survey(self, survey: str) -> None:
         self.survey = survey
+    
+    def add_end_time(self, end_time: str) -> None:
+        self.end_time = end_time
+
+    def update_tokens(self, tokens: dict) -> None:
+        self.tokens = tokens
 
     # DEPRECATED get_dict() method
     # Will keep around for a week in case something breaks

@@ -20,7 +20,7 @@ import json
 # SECRETS
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 DB_URI = os.getenv("DB_URI")
-DB_NAME = "TEST"
+DB_NAME = "M1"
 # DATABASE_USERNAME=os.getenv("DB_USERNAME")
 # DATABASE_PASSWORD=os.getenv("DB_PASSWORD")
 
@@ -54,7 +54,7 @@ COSTS = {"gpt-4o": {"input": 5, "output": 15},
 STT = OpenAI()
 STT_MODEL = "gpt-4o-mini-transcribe"
 TTS = OpenAI()
-TTS_MODEL = "gpt-4o-mini-tts"
+TTS_MODEL = "tts-1"
 # AUDIO_OUT = ElevenLabs()
 
 
@@ -67,7 +67,7 @@ TTS_MODEL = "gpt-4o-mini-tts"
 # SUM_TEMP = 0.0
 CHAT_CLIENT = OpenAI()
 CONVO_MODEL = "gpt-4o"
-CONVO_TEMP = 0.3
+CONVO_TEMP = 0.7
 SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
 
@@ -84,7 +84,7 @@ DIAG_TEMP = 0.0
 
 
 # Paths for prompt files
-PATHS = {"Patient Base": "./Prompts/Base_2-10.txt",
+PATHS = {"Patient Base": "./Prompts/Base_3-27.txt",
          "Convo Summarizer": "./Prompts/Summarizer_4-22.txt",
          "Static Label Descriptions": "./Prompts/label_descs.json",
          "Label Examples": "./Prompts/datacategory_examples.json",

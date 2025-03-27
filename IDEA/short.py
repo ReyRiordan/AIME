@@ -105,7 +105,7 @@ if st.session_state["stage"] == SETTINGS:
                                         placeholder = "Select patient...")
         else:
             st.title("Patient Settings")
-            case_number = st.selectbox("Are you doing your first or second case?", 
+            case_number = st.selectbox("Are you doing your first or second case? Please make sure to do both.", 
                                         ["First case", "Second case"],
                                         index = None,
                                         placeholder = "Select case...")
@@ -121,7 +121,7 @@ if st.session_state["stage"] == SETTINGS:
                     if gender == "M": patient_name = "Samuel Thompson"
                     elif gender == "F": patient_name = "Sarah Thompson"
 
-        chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
+        chat_mode = st.selectbox("Would you like to use text or voice input for the interview? Voice is encouraged both for practice and testing purposes.",
                                 ["Text", "Voice"],
                                 index = None,
                                 placeholder = "Select interview mode...")
@@ -190,7 +190,6 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             st.session_state["interview"].update_tokens(st.session_state["tokens"])
             COLLECTION.insert_one(st.session_state["interview"].model_dump())
             set_stage(PHYSICAL_ECG_SCREEN)
-            st.rerun()
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:

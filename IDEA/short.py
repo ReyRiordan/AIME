@@ -217,17 +217,13 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
                     st.markdown(response)
                     play_voice(speech)
 
+        def next_stage(screen):
+            st.session_state["interview"].update_tokens(st.session_state["tokens"])
+            COLLECTION.insert_one(st.session_state["interview"].model_dump())
+            set_stage(screen)
         columns = st.columns(4)
-        if columns[1].button("Restart"):
-            st.session_state["interview"].update_tokens(st.session_state["tokens"])
-            COLLECTION.insert_one(st.session_state["interview"].model_dump())
-            set_stage(SETTINGS)
-            st.rerun()
-        if columns[2].button("End Interview"):
-            st.session_state["interview"].update_tokens(st.session_state["tokens"])
-            COLLECTION.insert_one(st.session_state["interview"].model_dump())
-            set_stage(PHYSICAL_ECG_SCREEN)
-            st.rerun()
+        columns[1].button("Restart", on_click=next_stage, args=[SETTINGS])
+        columns[2].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
 
 
 # if st.session_state["stage"] == KEY_PHYSICALS:

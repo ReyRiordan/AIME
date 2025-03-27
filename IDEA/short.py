@@ -68,12 +68,12 @@ if st.session_state["stage"] == LOGIN_PAGE:
         if username and username not in ASSIGNMENTS: 
             st.write("Invalid username.")
         st.session_state["admin"] = True if username == "admin" else False
-        password = st.text_input("Password (LastFirst):", type = "password")
+        password = st.text_input("Password (LastFirst, can also just use NetID if not working):", type = "password")
 
         layout12b = layout1[1].columns(5)
         if layout12b[2].button("Log in"):
             correct = ASSIGNMENTS[username]["Last_name"] + ASSIGNMENTS[username]["First_name"]
-            if username and password == correct:
+            if username in ASSIGNMENTS and (password == correct or password == username):
                 st.session_state["username"] = username
                 st.session_state["assignment"] = ASSIGNMENTS[username]
                 st.write("Authentication successful!")

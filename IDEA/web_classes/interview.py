@@ -19,7 +19,7 @@ class Interview(pydantic.BaseModel):
     messages : Optional[List[Message]] = []         # list[Message]
     post_note_inputs : Optional[dict] = {}                 # dict{str, str/list[str]}
     feedback : Optional[Feedback] = None            # Feedback
-    survey : Optional[dict] = None
+    survey : Optional[str] = None
     
     @classmethod
     def build(cls, username: str, patient: Patient, start_time: str, chat_mode):
@@ -46,6 +46,9 @@ class Interview(pydantic.BaseModel):
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:
             self.messages.append(message)
+    
+    def add_survey(self, survey: str) -> None:
+        self.survey = survey
 
     # DEPRECATED get_dict() method
     # Will keep around for a week in case something breaks

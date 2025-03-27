@@ -67,7 +67,7 @@ TTS_MODEL = "gpt-4o-mini-tts"
 # SUM_TEMP = 0.0
 CHAT_CLIENT = OpenAI()
 CONVO_MODEL = "gpt-4o"
-CONVO_TEMP = 0.7
+CONVO_TEMP = 0.3
 SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
 

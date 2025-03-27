@@ -74,7 +74,7 @@ def generate_voice(patient: Patient, text_input: str) -> io.BytesIO:
                                      voice = patient.speech["Voice"], 
                                      response_format = "wav", 
                                      input = text_input, 
-                                     instructions = "Speak in a worried and nervous tone.")
+                                     instructions = "Speak in a worried tone.")
     bio.write(speech.content)
     return bio
 

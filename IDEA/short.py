@@ -157,6 +157,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         st.title("Interview")
         st.write(f"You may now begin your interview with **{st.session_state['interview'].patient.id}**. Start by introducing yourself.")
         st.write("Click the Start Recording button to start recording your voice message. The button will then turn into a Stop button, which you can click when you are done talking.")
+        st.write("Once you decide that you're done interviewing, click \"End Interview\" to proceed.")
 
         audio = audiorecorder("Start Recording", "Stop")
         
@@ -194,9 +195,8 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     with layout1[1]:
         st.title("Interview")
         st.write(f"You may now begin your interview with **{st.session_state['interview'].patient.id}**. Start by introducing yourself.")
-        st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
-                The button will then turn into a Stop button, which you can click when you are done talking.
-                Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
+        st.write("Enter your message into the text box below the chat screen and either click \"Enter\" on your keyboard or the paper airplane button to send it.")
+        st.write("Once you decide that you're done interviewing, click \"End Interview\" to proceed.")
 
         container = st.container(height=300)
 
@@ -245,7 +245,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
     layout1 = st.columns([1, 3, 1])
     with layout1[1].container():
         st.title("Physical Examination")
-        st.write("Now that you've taken a chance to speak with the patient, you can take a chance to take a look at data obtained during a physical. Review it before proceeding.")
+        st.write("This is the physical examination obtained for the patient you interviewed. Review it before proceeding.")
         
         st.divider()
         physical_exam_doc = Document(st.session_state["interview"].patient.physical)
@@ -258,7 +258,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
 
 
 if st.session_state["stage"] == DIAGNOSIS:
-    st.write("Write your post note as directed and click \"Get Feedback\" to get your feedback/scores.")
+    st.write("Write your post note as directed, then click \"Get Feedback\" to see how you did.")
     st.divider()
 
     # 2 column full width layout
@@ -360,7 +360,7 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     st.title("Feedback")
     layout1 = st.columns([7, 1])
-    layout1[0].write("The \"Interview\" tab shows your interview transcript. The \"Post Note\" tab shows personalized feedback for each of your write-ups based on a detailed IDEA-based rubric. The \"Case Explanation\" tab allows you to download a document with additional details and explanations on the patient case.")
+    layout1[0].write("The \"Post Note\" tab shows personalized feedback for each of your write-ups based on a detailed IDEA-based rubric. The \"Interview\" tab shows your interview transcript. The \"Case Explanation\" tab allows you to download a document with additional details and explanations on the patient case.")
     layout1[0].write("You're almost done! Click \"Next\" to proceed to the final screen.")
     layout1[1].button("Next", on_click=set_stage, args=[SURVEY])
     
@@ -372,7 +372,7 @@ if st.session_state["stage"] == SURVEY:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
         st.title("Survey")
-        response = st.text_area("Any feedback about your experience or suggestions to improve it?")
+        response = st.text_area("Any feedback about your experience or suggestions for improvement?")
         if st.button("Finish"):
             if response:
                 st.session_state["interview"].add_survey(response)
@@ -388,7 +388,6 @@ if st.session_state["stage"] == FINAL_SCREEN:
     layout1 = st.columns([2, 2, 2])
     with layout1[1]:
         st.title("Thank you! :heart:")
-        st.title("")
         st.title("")
         button_columns = st.columns(2)
         button_columns[0].button("New Interview", on_click=set_stage, args=[SETTINGS])

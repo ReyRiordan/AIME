@@ -185,8 +185,8 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             COLLECTION.insert_one(st.session_state["interview"].model_dump())
             set_stage(screen)
         columns = st.columns(4)
-        st.columns[1].button("Restart", on_click=next_stage, args=[SETTINGS])
-        st.columns[2].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
+        columns[1].button("Restart", on_click=next_stage, args=[SETTINGS])
+        columns[2].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:

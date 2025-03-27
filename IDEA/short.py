@@ -359,13 +359,18 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
 
 if st.session_state["stage"] == FEEDBACK_SCREEN:
     st.title("Feedback")
-    layout1 = st.columns([7, 1])
+    layout1 = st.columns([3, 1])
     layout1[0].write("The \"Post Note\" tab shows personalized feedback for each of your write-ups based on a detailed IDEA-based rubric. The \"Interview\" tab shows your interview transcript. The \"Case Explanation\" tab allows you to download a document with additional details and explanations on the patient case.")
     layout1[0].write("You're almost done! Click \"Next\" to proceed to the final screen.")
-    layout1[1].button("Next", on_click=set_stage, args=[SURVEY])
+    layout11 = layout1[1].columns([1, 2, 1])
+    layout11[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=1)
     
     # Let the display methods cook
     display_Interview(st.session_state["interview"].model_dump())
+
+    st.divider()
+    layout2 = st.columns([1, 2, 1])
+    layout2[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=2)
 
 
 if st.session_state["stage"] == SURVEY:

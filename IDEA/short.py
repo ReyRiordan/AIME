@@ -1,5 +1,5 @@
 import time
-import datetime as date
+from datetime import datetime
 from docx import Document
 import io
 import os
@@ -40,16 +40,17 @@ def set_stage(stage):
 def init_connection():
     return MongoClient(DB_URI)
 
-DB_CLIENT = client = init_connection()
+DB_CLIENT = init_connection()
+COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
-@st.cache_data(ttl=600)
-def get_data():
-    DB = DB_CLIENT.mydb
-    items = DB.mycollection.find()
-    items = list(items)  # make hashable for st.cache_data
-    return items
+# @st.cache_data(ttl=600)
+# def get_data():
+#     DB = DB_CLIENT.mydb
+#     items = DB.M1_interviews.find()
+#     items = list(items)  # make hashable for st.cache_data
+#     return items
 
-items = get_data()
+# items = get_data()
 # print(items)
 
 
@@ -61,11 +62,12 @@ if st.session_state["stage"] == LOGIN_PAGE:
     with layout1[1]:
         st.title("Medical Interview Simulation")
         st.write("Welcome! This is a WIP application where you can interview AI patients, write a post note, and automatically receive feedback on your performance.")
-        st.write("Begin by logging in as directed! If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
+        st.write("Begin by logging in as directed. If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 
         username = st.text_input("Username (NetID):")
         if username and username not in ASSIGNMENTS: 
             st.write("Invalid username.")
+        if username == "admin": st.session_state["admin"] = True
         password = st.text_input("Password (LastFirst):", type = "password")
 
         layout12b = layout1[1].columns(5)
@@ -89,50 +91,67 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["convo_summary"]=""
     st.session_state["convo_file"] = None
     st.session_state["convo_prompt"] = ""
-    # st.session_state["sent"] = False
-    st.session_state["start_time"] = date.datetime.now()
+    st.session_state["start_time"] = datetime.now().isoformat()
     st.session_state["tokens"] = {"convo": {"input": 0, "output": 0},
-                                  "class": {"input": 0, "output": 0},
-                                  "diag": {"input": 0, "output": 0}}
+                                  "feedback": {"input": 0, "output": 0}},
 
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
-        st.title("Patient Settings")
-        case_number = st.selectbox("Are you doing your first or second case?", 
-                                    ["First case", "Second case"],
-                                    index = None,
-                                    placeholder = "Select case...")
-        patient_name = None
+        if st.session_state["admin"]:
+            st.title("Patient Settings")
+            patient_name = st.selectbox("Which patient would you like to interview?", 
+                                        ["Jeffrey Smith", "Jenny Smith", "Samuel Thompson", "Sarah Thompson"],
+                                        index = None,
+                                        placeholder = "Select patient...")
+        else:
+            layout1 = st.columns([1, 3, 1])
+            with layout1[1]:
+                st.title("Patient Settings")
+                case_number = st.selectbox("Are you doing your first or second case?", 
+                                            ["First case", "Second case"],
+                                            index = None,
+                                            placeholder = "Select case...")
+                patient_name = None
 
-        if case_number:
-            case_number = case_number.replace(" ", "_")
-            gender = st.session_state["assignment"][case_number]
-            if case_number == "First_case":
-                if gender == "M": patient_name = "Jeffrey Smith"
-                elif gender == "F": patient_name = "Jenny Smith"
-            elif case_number == "Second_case":
-                if gender == "M": patient_name = "Samuel Thompson"
-                elif gender == "F": patient_name = "Sarah Thompson"
+                if case_number:
+                    case_number = case_number.replace(" ", "_")
+                    gender = st.session_state["assignment"][case_number]
+                    if case_number == "First_case":
+                        if gender == "M": patient_name = "Jeffrey Smith"
+                        elif gender == "F": patient_name = "Jenny Smith"
+                    elif case_number == "Second_case":
+                        if gender == "M": patient_name = "Samuel Thompson"
+                        elif gender == "F": patient_name = "Sarah Thompson"
 
+        chat_mode = st.selectbox("Would you like to use text or voice input for the interview?",
+                                ["Text", "Voice"],
+                                index = None,
+                                placeholder = "Select interview mode...")
+        if chat_mode == "Text": chat_page = CHAT_INTERFACE_TEXT
+        elif chat_mode == "Voice": chat_page = CHAT_INTERFACE_VOICE
+        
         # ADD ASSIGNMENT INFO?
-        if patient_name: 
-            st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
-                                                            patient = Patient.build(patient_name))
-            st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
+        if st.button("Start Interview"):
+            if patient_name and chat_mode:
+                st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
+                                                                patient = Patient.build(patient_name), 
+                                                                start_time = st.session_state["start_time"], 
+                                                                chat_mode = chat_mode)
+                COLLECTION.insert_one(st.session_state["interview"].model_dump())
+                st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
+                set_stage(chat_page)
+                st.rerun()
+            else: st.write("Incomplete settings.")
 
-        # if st.session_state["interview"]: 
-        #     # st.session_state["sent"]==False
-        #     st.button("Start Interview", on_click=set_stage, args=[CHAT_SETUP])
 
+# if st.session_state["stage"] == CHAT_SETUP:
+#     st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
+#     # if(st.session_state["sent"]==False):
+#     #     st.session_state["interview"].start_time = str(st.session_state["start_time"])
+#         # collection.insert_one(st.session_state["interview"].model_dump())
+#         # st.session_state["sent"]==True
 
-if st.session_state["stage"] == CHAT_SETUP:
-    st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
-    # if(st.session_state["sent"]==False):
-    #     st.session_state["interview"].start_time = str(st.session_state["start_time"])
-        # collection.insert_one(st.session_state["interview"].model_dump())
-        # st.session_state["sent"]==True
-
-    set_stage(CHAT_INTERFACE_VOICE)
+#     set_stage(CHAT_INTERFACE_VOICE)
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
@@ -167,8 +186,57 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
                     play_voice(speech)
 
         columns = st.columns(4)
-        columns[1].button("Restart", on_click=set_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=set_stage, args=[PHYSICAL_ECG_SCREEN])
+        if columns[1].button("Restart"):
+            COLLECTION.replace_one({"username" : st.session_state["username"], 
+                                    "start_time" : st.session_state["start_time"]}, 
+                                    st.session_state["interview"].model_dump())
+            set_stage(SETTINGS)
+        if columns[2].button("End Interview"):
+            COLLECTION.replace_one({"username" : st.session_state["username"], 
+                                    "start_time" : st.session_state["start_time"]}, 
+                                    st.session_state["interview"].model_dump())
+            set_stage(PHYSICAL_ECG_SCREEN)
+
+
+if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
+    layout1 = st.columns([1, 3, 1])
+    with layout1[1]:
+        st.title("Interview")
+        st.write(f"You may now begin your interview with **{st.session_state['interview'].patient.id}**. Start by introducing yourself.")
+        st.write("""Click the Start Recording button to start recording your voice input to the virtual patient.
+                The button will then turn into a Stop button, which you can click when you are done talking.
+                Click the Restart button to restart the interview, and the End Interview button to go to the download screen.""")
+
+        container = st.container(height=300)
+
+        for message in st.session_state["interview"].messages:
+            with container:
+                with st.chat_message(message.role):
+                    st.markdown(message.content)
+
+        if user_input := st.chat_input("Type here..."):
+            with container:
+                with st.chat_message("User"):
+                    st.markdown(user_input)
+            
+            response, speech = get_chat_output(user_input)
+
+            with container:
+                with st.chat_message("AI"): #TODO Needs avatar eventually
+                    st.markdown(response)
+                    play_voice(speech)
+
+        columns = st.columns(4)
+        if columns[1].button("Restart"):
+            COLLECTION.replace_one({"username" : st.session_state["username"], 
+                                    "start_time" : st.session_state["start_time"]}, 
+                                    st.session_state["interview"].model_dump())
+            set_stage(SETTINGS)
+        if columns[2].button("End Interview"):
+            COLLECTION.replace_one({"username" : st.session_state["username"], 
+                                    "start_time" : st.session_state["start_time"]}, 
+                                    st.session_state["interview"].model_dump())
+            set_stage(PHYSICAL_ECG_SCREEN)
 
 
 # if st.session_state["stage"] == KEY_PHYSICALS:

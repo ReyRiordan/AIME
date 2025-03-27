@@ -76,6 +76,8 @@ class Feedback(pydantic.BaseModel):
                                       "thought": thought,
                                       "score": score,
                                       "max": patient.grading[category]["points"]}
+            
+            st.write(f"Section \"{category}\" complete.")
 
         return cls(feedback=feedback)
 

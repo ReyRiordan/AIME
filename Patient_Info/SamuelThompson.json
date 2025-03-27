@@ -5,7 +5,7 @@
     },
     "Speech": {
       "Host": "openai",
-      "Model": "tts-1",
+      "Model": "gpt-4o-mini-tts",
       "Voice": "onyx"
     },
     "Assets": {

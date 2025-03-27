@@ -10,10 +10,10 @@ from .message import *
 from .feedback import *
 
 class Interview(pydantic.BaseModel):
-    id : Optional[int] = None
     start_time : Optional[str] = None
-    time_elapsed : Optional[str] = None
-    cost : Optional[int] = None
+    end_time : Optional[str] = None
+    chat_mode : Optional[str] = None
+    tokens : Optional[int] = None
     username : str                                  # str
     patient : Patient                               # Patient
     messages : Optional[List[Message]] = []         # list[Message]
@@ -22,13 +22,13 @@ class Interview(pydantic.BaseModel):
     survey : Optional[dict] = None
     
     @classmethod
-    def build(cls, username: str, patient: Patient):
+    def build(cls, username: str, patient: Patient, start_time: str, chat_mode):
         #Attributes
         # messages = []            # list[Message]
         # user_diagnosis = None     # dict{str, str/list[str]}
         # feedback = None          # Feedback
 
-        return cls(username=username, patient=patient) 
+        return cls(username=username, patient=patient, start_time=start_time) 
             
     def add_feedback(self, short: bool):
         self.feedback = Feedback.build(short=short, patient=self.patient, messages=self.messages, post_note_inputs=self.post_note_inputs)

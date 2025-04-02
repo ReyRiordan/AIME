@@ -61,7 +61,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
         st.title("Medical Interview Simulation")
-        st.write("**NOTICE: We are aware of a brief outage that occurred with our feedback AI - the issue has already been resolved. All students that encountered this error do not have to redo their case as all post note responses and interviews were saved automatically. The deadline has been extended 24 hours to Wednesday at midnight for now. We apologize for the inconvenience!**")
+        st.write("**NOTICE: We are aware of a brief outage that occurred with our feedback AI - the issue has already been resolved. All students that encountered this error do not have to redo their case as all post note responses and interviews were saved automatically. The deadline has been extended 24 hours to Wednesday at midnight as an apology for the inconvenience.**")
         st.write("Welcome! This is a WIP application where you can interview AI patients, write a post note, and automatically receive feedback on your performance.")
         st.write("Begin by logging in as directed. If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 

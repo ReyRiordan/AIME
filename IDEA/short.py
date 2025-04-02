@@ -61,6 +61,8 @@ if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
         st.title("Medical Interview Simulation")
+        st.write("**WARNING: The AI company that supplies the base model for our feedback is currently experiencing an outage. You are still able to do interviews and write your post notes, however you will likely not be able to get your feedback. Clicking the \"Get Feedback\" button will still save all of your responses and count as participation, but we recommend waiting till the outage is over.**")
+        st.write("**Due to this issue, the deadline has been extended to Wednesday (tomorrow) at midnight and will be extended further if necessary. So sorry for the inconvenience!**")
         st.write("Welcome! This is a WIP application where you can interview AI patients, write a post note, and automatically receive feedback on your performance.")
         st.write("Begin by logging in as directed. If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 
@@ -393,7 +395,7 @@ if st.session_state["stage"] == FINAL_SCREEN:
     layout1 = st.columns([2, 2, 2])
     with layout1[1]:
         st.title("Thank you! :heart:")
-        st.title("")
+        st.write("Your responses have been saved automatically.")
         button_columns = st.columns(2)
         button_columns[0].button("New Interview", on_click=set_stage, args=[SETTINGS])
         button_columns[1].button("Back to Login", on_click=set_stage, args=[LOGIN_PAGE])

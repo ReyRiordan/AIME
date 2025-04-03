@@ -32,27 +32,27 @@ def prepare(original, required_keys):
     return formatted
 
 # Clean
-# required_M1 = ["LAST_NAME", "FIRST_NAME", "NetID", "First Case (Atypical 1 - Jenny or Jeffrey)", "Second Case (Atypical 2 - Sam or Sarah)"]
-# M1 = prepare(M1_original, required_M1)
+required_M1 = ["LAST_NAME", "FIRST_NAME", "NetID", "First Case (Atypical 1 - Jenny or Jeffrey)", "Second Case (Atypical 2 - Sam or Sarah)"]
+M1 = prepare(M1_original, required_M1)
 required_M2 = ["LAST_NAME", "FIRST_NAME", "NetID", "First Case (Atypica 1l)", "Second Case (Atypical 2)"]
 M2 = prepare(M2_original, required_M2)
 
 print(dict(list(M2.items())[:5]))
 
 # Check number of students
-# print(len(M1))
+print(len(M1))
 print(len(M2))
 
 # Save to JSONs
 # with open("M1_original.json", "w") as json_file:
 #     json.dump(M1_original, json_file, indent=2)
-with open("M2_original.json", "w") as json_file:
-    json.dump(M2_original, json_file, indent=2)
+# with open("M2_original.json", "w") as json_file:
+#     json.dump(M2_original, json_file, indent=2)
 
 # with open("M1.json", "w") as json_file:
 #     json.dump(M1, json_file, indent=2)
-with open("M2.json", "w") as json_file:
-    json.dump(M2, json_file, indent=2)
+# with open("M2.json", "w") as json_file:
+#     json.dump(M2, json_file, indent=2)
 
 # Exit
 print("Conversion complete!")

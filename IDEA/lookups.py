@@ -29,6 +29,7 @@ EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
 
 
 # Streamlit stages
+CLOSED = -1
 LOGIN_PAGE = 0
 SETTINGS = 1
 CHAT_SETUP = 2

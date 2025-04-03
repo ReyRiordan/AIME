@@ -29,7 +29,7 @@ st.set_page_config(page_title = "AIME",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = LOGIN_PAGE
+    st.session_state["stage"] = CLOSED
 
 def set_stage(stage):
     st.session_state["stage"] = stage
@@ -55,6 +55,13 @@ COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
 
 # APP CODE STARTS HERE
+
+if st.session_state["stage"] == CLOSED:
+    layout1 = st.columns([2, 3, 2])
+    with layout1[1]:
+        st.title("CURRENTLY CLOSED")
+        st.write("rhr58@scarletmail.rutgers.edu")
+
 
 if st.session_state["stage"] == LOGIN_PAGE:
     

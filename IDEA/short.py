@@ -64,7 +64,6 @@ if st.session_state["stage"] == CLOSED:
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
-    
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
         st.title("Medical Interview Simulation")

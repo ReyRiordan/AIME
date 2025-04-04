@@ -23,7 +23,7 @@ from web_methods import *
 
 
 # STREAMLIT SETUP
-st.set_page_config(page_title = "AIME",
+st.set_page_config(page_title = "MEWAI",
                    page_icon = "🧑‍⚕️",
                    layout = "wide",
                    initial_sidebar_state="collapsed")

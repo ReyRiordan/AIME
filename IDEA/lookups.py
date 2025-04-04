@@ -44,6 +44,7 @@ FINAL_SCREEN = 11
 VIEW_INTERVIEWS = 12
 SURVEY = 13
 KEY_PHYSICALS = 14
+VIEW_INTERVIEWS_ADMIN = 15
 
 COSTS = {"gpt-4o": {"input": 5, "output": 15},
          "gpt-4-turbo": {"input": 10, "output": 30},

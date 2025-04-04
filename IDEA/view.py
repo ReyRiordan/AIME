@@ -20,6 +20,7 @@ from pymongo.server_api import ServerApi
 from lookups import *
 from web_classes import *
 from web_methods import *
+import pytz
 
 
 # STREAMLIT SETUP
@@ -63,6 +64,8 @@ def get_data(username: str = None) -> list[dict]:
 def read_time(iso_time) -> str:
     if not iso_time: return "N/A"
     dt = datetime.fromisoformat(iso_time)
+    est = pytz.timezone("US/Eastern")
+    dt_est = dt.astimezone(est)
     return dt.strftime("%B %d, %Y at %I:%M %p")
 
 

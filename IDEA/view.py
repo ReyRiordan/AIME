@@ -66,7 +66,7 @@ def read_time(iso_time) -> str:
     dt = datetime.fromisoformat(iso_time)
     est = pytz.timezone("US/Eastern")
     dt_est = dt.astimezone(est)
-    return dt.strftime("%B %d, %Y at %I:%M %p")
+    return dt_est.strftime("%B %d, %Y at %I:%M %p")
 
 
 if st.session_state["stage"] == LOGIN_PAGE:

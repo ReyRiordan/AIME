@@ -106,8 +106,9 @@ if st.session_state["stage"] == VIEW_INTERVIEWS_ADMIN:
     st.title("ADMIN VIEW")
     view_tab, stats_tab, surveys_tab = st.tabs(["View", "Stats", "Surveys"])
 
+
     with view_tab:
-        # SELECTION
+        ##### SELECTION #####
         if "view_index" not in st.session_state:
             st.session_state["view_index"] = 0
         
@@ -124,12 +125,14 @@ if st.session_state["stage"] == VIEW_INTERVIEWS_ADMIN:
 
         st.divider()
 
-        # VIEW
+        ##### VIEW ######
         CURRENT = DATA[st.session_state["view_index"]]
 
-        # st.write(f"Start time: {read_time(CURRENT['start_time'])}, end time: {read_time(CURRENT['end_time'])}")
-        # st.write(f"Chat mode: {CURRENT['chat_mode']}")
-        # st.write(f"Patient: {CURRENT['patient']['id']}")
+        st.write(f"START: {read_time(CURRENT['start_time'])} / END: {read_time(CURRENT['end_time'])}")
+        if CURRENT["end_time"]:
+            duration = datetime.fromisoformat(CURRENT["end_time"]) - datetime.fromisoformat(CURRENT["start_time"])
+            st.write(f"Duration: {duration.total_seconds() // 60} min")
+        st.write(f"Patient: {CURRENT['patient']['id']} ({CURRENT['chat_mode']})")
 
         st.subheader("Transcript")
         chat_container = st.container(height=700)
@@ -178,13 +181,13 @@ if st.session_state["stage"] == VIEW_INTERVIEWS_ADMIN:
 
         st.write("Total cost $51.21 -> ~11.6 cents per interview, of which ~75% used for interview")
 
+
     with surveys_tab:
         surveys = []
         for interview in DATA:
             if interview["survey"]: surveys.append(interview["survey"])
         for survey in surveys:
             st.write(survey)
-
 
 
 if st.session_state["stage"] == VIEW_INTERVIEWS:

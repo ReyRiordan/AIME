@@ -21,6 +21,7 @@ from lookups import *
 from web_classes import *
 from web_methods import *
 import pytz
+import statistics
 
 
 # STREAMLIT SETUP
@@ -152,10 +153,28 @@ if st.session_state["stage"] == VIEW_INTERVIEWS_ADMIN:
     with stats_tab:
         st.write("Total number of M1 students: 172 (108 F, 64 M)")
         st.write(f"Total interviews: {len(DATA)}")
-        unique = set()
+
+        counts = {}
+        durations = []
         for interview in DATA:
-            unique.add(interview["username"])
-        st.write(f"Number of unique students who participated: {len(unique)}")
+            if interview["username"] not in counts:
+                counts[interview["username"]] = 1
+            else: counts[interview["username"]] += 1
+            if interview["end_time"]:
+                duration = datetime.fromisoformat(interview["end_time"]) - datetime.fromisoformat(interview["start_time"])
+                durations.append(duration.total_seconds())
+        st.write(f"Number of unique students who participated: {len(counts)}")
+        st.write(f"Durations: mean {statistics.mean(durations) // 60} min, median {statistics.median(durations) // 60} min, stdev {statistics.stdev(durations) // 60} min")
+
+        slackers = []
+        for username in ASSIGNMENTS:
+            if username not in counts and username not in ["rhr58", "admin"]: slackers.append(username)
+        overachievers = {}
+        for user in counts:
+            if counts[user] > 2: overachievers[user] = counts[user]
+        overachievers = dict(sorted(overachievers.items(), key=lambda x: x[1], reverse=True))
+        st.write(f"Students who didn't participate: {slackers}")
+        st.write(f"Students who did more than 2 interviews: {overachievers}")
 
         st.write("Total cost $51.21 -> ~11.6 cents per interview, of which ~75% used for interview")
 

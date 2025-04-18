@@ -20,7 +20,7 @@ import json
 # SECRETS
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 DB_URI = os.getenv("DB_URI")
-DB_NAME = "M1"
+DB_NAME = "TESTING"
 # DATABASE_USERNAME=os.getenv("DB_USERNAME")
 # DATABASE_PASSWORD=os.getenv("DB_PASSWORD")
 

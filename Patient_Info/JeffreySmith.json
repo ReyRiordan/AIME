@@ -175,56 +175,5 @@
         }
       ]
     },
-    "Grading": {
-      "Key Findings": {
-        "points": 3,
-        "rubric": "3: must include all 4:  \n\ta) Vital signs: Blood pressure AND pulse  \n\tb) Cardiovascular exam: murmur AND pulses OR carotid bruit, edema/leg swelling, chest wall tenderness\n\tc) Lung exam: breath sounds (crackles/wheezes)  \n\td) Abdominal exam: abdominal tenderness, mases, bruits  \n2: 2 of above  \n1: 0-1 of above"
-      },
-      "HPI": {
-        "HPI1": {
-          "points": 3,
-          "rubric": "3: must have all 5:  \n  \ta) Something re location: mid-chest or substernal  \n  \tb) Something re quality: pressure, pain, or burning  \n  \tc) Four elements re timing: intermittent, recurring, recurrent, episodic, or on-and-off; AND months (duration); AND lasts minutes; AND worsening or more frequent  \n  \td) Something about provoking/alleviating factors: eating, exercise, walking, rest, stress, Tums, or medication\n\te) Something re associated symptoms: nausea, bloating, breath(ing), cough, sweating/diaphoresis  \n2: must have at least 3 of above  \n1: 0-2 of above"
-        },
-        "HPI2": {
-          "points": 3,
-          "rubric": "3: must have 2 features:  \n  \ta) terms re timing: chronic, intermittent, recurring/recurrent, episodic, exertional,  \n  \tb) terms re provoking: provoked/provoking/exacerbated, relieved/alleviated/improved  \n  \tc) cardiac risk factors present  \n2: uses at least 1 of above or synonyms  \n1: uses none of above"
-        },
-        "HPI3": {
-          "points": 3,
-          "rubric": "3: must have all 3:  \n  \ta) Identifies start/beginning of symptoms as months ago  \n  \tb) Identifies starting new medication of pantoprazole/PPI a month or weeks ago  \n  \tc) re timing: intermittent, recurring, recurrent, episodic, or on-and-off; AND lasts minutes; AND worsening or more frequent  \n2: must have at least 2 of above  \n1: 0-1 elements"
-        }
-      },
-      "Past Histories": {
-        "PH1": {
-          "points": 3,
-          "rubric": "3: mention of hypertension/HTN AND diabetes/DM  \n2: mention hypertension OR diabetes OR cardiac risk factor  \n1: no mention of above"
-        },
-        "PH2": {
-          "points": 3,
-          "rubric": "3: mention all 4:  \n  \ta) GI ROS- mention of nausea, vomiting, stool color/change/blood/black, or abdominal/stomach pain  \n  \tb) Pulmonary ROS - mention of cough, sputum, wheezing, pleuritic, or breathing/SOB  \n  \tc) CV ROS- includes family history of heart disease, high cholesterol, mention of shortness of breath/SOB, dizziness, light-headed, or sweating/diaphoresis  \n  \td) Substance use - tobacco, smoke/smoking  \n2: mention at least 3 of above  \n1: mention 0-2 of above"
-        }
-      },
-      "Summary Statement": {
-        "points": 4,
-        "rubric": "4: all 4 features present:  \n  \ta) Risk factors - mentions [diabetes/DM OR hypertension/HTN OR smoking OR cardiac risk factors] AND age/years  \n  \tb) Complaint - mentions chest/substernal AND pain/discomfort/pressure/burning/angina/dyspepsia, reflux, GERD  \n  \tc) Time course - [intermittent, recurring, recurrent, episodic, on-and-off, months/chronic, OR lasts minutes/brief] AND worsening/more frequent/progressive  \n  \td) Semantic - at least 2 of: intermittent, recurring/recurrent, episodic, chronic, progressive, cardiac risk factor, atypical, unstable/stable, exertional, relieved by rest  \n3: 3 features: must include A, B and D  \n2: 2 features present  \n1: 1 feature present  \n0: 0 features present"
-      },
-      "Assessment": {
-        "Differential Diagnosis": {
-          "points": 2,
-          "rubric": "2: all 3 features present AND 2 or more diagnoses  \n  \ta) Mentions angina, cardiac chest pain, stable/unstable, ischemia, or coronary artery disease/CAD  \n  \tb) Mentions GERD, esophageal, reflux, acid, esophageal spasm, esophageal motility  \n  \tc) Statement of probability, lead(ing), likely, probable, worrisome, concerning  \n1: at least 2 feature present AND 2 or more diagnoses OR differential is implicitly stated (e.g., “cardiac”, “esophageal”) OR implicitly prioritized  \n0: 0-1 feature present OR 0 or 1 diagnosis mentioned"
-        },
-        "Explanation of Lead Diagnosis": {
-          "points": 2,
-          "rubric": "2: at least 1 point from each of the two categories below AND explicitly linked to lead/(ing)/most likely/most probable diagnosis  \n  \ta) Epidemiology: Mention of risk factors (cardiac), hypertension, diabetes, age  \n  \tb) Key features: lack of response to PPI/pantoprazole; pressure; burning; associated; stable/unstable; intermittent, recurring, recurrent, episodic; atypical; exertional; chronic; worsening or more frequent; provoked/provoking, relieved/alleviated;  \n1: use of at least one of the terms above explicitly linked to lead/(ing)/most likely/most probable diagnosis  \n0: none of these words explicitly linked to leading diagnosis"
-        },
-        "Explanation of Alternative Diagnoses": {
-          "points": 2,
-          "rubric": "2: at least 2 terms from below, NOT explicitly linked to the lead/(ing)/most likely/most probable diagnosis, and not \"double-counting\" words used in \"Explanation of lead diagnosis\"  \n  \ta) Mention of risk factors; medication; pressure; burning; associated; stable/unstable; intermittent,recurring, recurrent, episodic; chronic; worsening or more frequent; provoked/provoking, relieved/alleviated  \n  \tb) Mention of pulmonary, lung (not pleuritic; breath/breathing/SOB; wheezing; cough)  \n  \tc) Mention of esophageal/gastrointestinal (nausea, cough, reflux, voice change, dysphagia, heartburn)  \n1: At least 1 of the words above, NOT explicitly linked to the lead/(ing)/most likely/most probable diagnosis, and not \"double-counting\" words used in \"Explanation of lead diagnosis\"  \n0: No additional words after accounting for score in \"Explanation of lead diagnosis\""
-        }
-      },
-      "Plan": {
-        "points": 3,
-        "rubric": "3: mentions A, B and C below  \n  \ta) Mentions likely/probable or severe/worrisome/concerning or evaluate/assess for/rule in/rule out  \n  \tb) Has cardiac AND GI diagnosis: ischemia, coronary disease/CAD, angina, cardiac pain; GERD, esophageal, reflux, acid, esophageal spasm, esophageal motility, gallstone, biliary colic/disease  \n  \tc) AND cardiac and GI tests: EKG/ECG/electrocardiogram, or stress test, coronary CT angiogram/CTA, cardiac catheterization or “cath”; endoscopy/EGD, manometry, barium swallow, ultrasound, CT abdomen  \n2: Mentions A, B and C below  \n  \ta) Mentions likely/probable or severe/worrisome/concerning or evaluate/assess for/rule in/rule out  \n  \tb) Has cardiac or GI diagnosis: ischemia, coronary disease/CAD, angina, cardiac pain; GERD, esophageal, reflux, acid, esophageal spasm, esophageal motility, gallstone, biliary colic/disease  \n  \t  c) AND a test that matches their lead diagnosis above. For cardiac: EKG/ECG/electrocardiogram, or stress test, coronary CT angiogram/CTA, cardiac catheterization or “cath”; for GI: endoscopy/EGD, manometry, barium swallow, ultrasound, CT abdomen  \n1: not meeting above criteria"
-      }
-    }
+    "Grading": "./Patient_Info/grading_atypicals.json"
 }

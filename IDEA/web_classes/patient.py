@@ -40,6 +40,9 @@ class Patient(pydantic.BaseModel):
 
         # Extract grading for patient
         grading = JSON["Grading"]
+        if isinstance(grading, str):
+            with open(grading, "r") as grading_file:
+                grading = json.load(grading_file)
 
         # Assets (hardcoded for now)
         #TODO flexible assets

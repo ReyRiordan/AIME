@@ -42,7 +42,7 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
                             st.write(dd["comment"])
                             with st.expander("Rubric"):
                                 st.write(dd["desc"])
-                                st.write(dd["rubric"])
+                                st.html(dd["html"])
                             if inst:
                                 with st.expander("Thought process"):
                                     if dd["thought"]: st.write(dd["thought"])
@@ -52,7 +52,7 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
                     st.write(d["comment"])
                     with st.expander("Rubric"):
                         st.write(d["desc"])
-                        st.write(d["rubric"])
+                        st.html(d["html"])
                     if inst:
                         with st.expander("Thought process"):
                             if d["thought"]: st.write(d["thought"])

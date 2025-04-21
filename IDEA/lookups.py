@@ -24,11 +24,14 @@ DB_NAME = "M2"
 # DATABASE_USERNAME=os.getenv("DB_USERNAME")
 # DATABASE_PASSWORD=os.getenv("DB_PASSWORD")
 
-# Email API
-EMAIL_TO_SEND = [('rutgers.aime@gmail.com')]
+# Error handling
+INITIAL_BACKOFF = 30
+MAX_ATTEMPTS = 3
+EMAIL = [('rutgers.aime@gmail.com')]
 
 
 # Streamlit stages
+ERROR = 99
 CLOSED = -1
 LOGIN_PAGE = 0
 SETTINGS = 1

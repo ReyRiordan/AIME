@@ -14,36 +14,56 @@ from anthropic import Anthropic
 import tempfile
 from annotated_text import annotated_text
 import json
+import time
+from email.mime.text import MIMEText
+import smtplib
 
 from lookups import *
 from web_classes.message import Message
 from web_classes.patient import Patient
 
 
-def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model = FEEDBACK_MODEL, temperature = FEEDBACK_TEMP):
+def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model=FEEDBACK_MODEL, temperature=FEEDBACK_TEMP):
     base_split = FEEDBACK_PROMPT.split("[INSERT]")
     prefill = "Correct"
     if not user_input:
         user_input = "NO INPUT"
     system = base_split[0] + title + base_split[1] + desc + base_split[2] + rubric + base_split[3] + user_input
-    print(system)
 
-    response = FEEDBACK_CLIENT.messages.create(model = model,
-                                               temperature = temperature,
-                                               max_tokens = 4096,
-                                               system = system,
-                                               messages = [{"role": "user", "content": user_input},
-                                                           {"role": "assistant", "content": prefill}])
-    
-    print("\n")
-    print(title)
-    print(response.content[0].text)
-    print("\n\n")
-
-    st.session_state["tokens"]["feedback"]["input"] += response.usage.input_tokens
-    st.session_state["tokens"]["feedback"]["output"] += response.usage.output_tokens
-
-    return prefill + response.content[0].text
+    backoff = INITIAL_BACKOFF
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        try:
+            response = FEEDBACK_CLIENT.messages.create(
+                model=model,
+                temperature=temperature,
+                max_tokens=4096,
+                system=system,
+                messages=[
+                    {"role": "user", "content": user_input},
+                    {"role": "assistant", "content": prefill}
+                ]
+            )
+            st.session_state["tokens"]["feedback"]["input"] += response.usage.input_tokens
+            st.session_state["tokens"]["feedback"]["output"] += response.usage.output_tokens
+            return prefill + response.content[0].text
+        except Exception as e:
+            if attempt == MAX_ATTEMPTS:
+                error_details = f"Error: {e}"
+                msg = MIMEText(error_details)
+                msg["Subject"] = st.session_state["username"] + " FEEDBACK ERROR"
+                msg["From"] = "rutgers.aime@gmail.com"
+                msg["To"] = "reyriordan@gmail.com"
+                with smtplib.SMTP("smtp.gmail.com", 587) as server:
+                    server.starttls()
+                    server.login("rutgers.aime@gmail.com", "AhmedRiordan")
+                    server.send_message(msg)
+                st.session_state["error_details"] = error_details
+                st.session_state["stage"] = ERROR
+                st.rerun()
+            else:
+                st.write(f"Attempt {attempt} failed. Retrying in {backoff} seconds")
+                time.sleep(backoff)
+                backoff *= 2  # Exponential backoff
 
 
 def generate_response(model: str, temperature: float, system: str, messages: list[dict[str, str]]) -> str:

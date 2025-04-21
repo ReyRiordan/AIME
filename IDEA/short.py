@@ -56,6 +56,13 @@ COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
 # APP CODE STARTS HERE
 
+if st.session_state["stage"] == ERROR:
+    layout1 = st.columns([2, 3, 2])
+    with layout1[1]:
+        st.title("ERROR")
+        st.write("An error has occurred. No worries - the admin has been alerted, and your responses so far have been automatically saved.")
+        st.write(f"Error details: {st.session_state['error_details']}")
+
 if st.session_state["stage"] == CLOSED:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
@@ -66,7 +73,7 @@ if st.session_state["stage"] == CLOSED:
 if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
-        st.title("Medical Interview Simulation")
+        st.title("Medical Interview Simulation (BETA)")
         st.write("Welcome! This is a WIP application where you can interview AI patients, write a post note, and automatically receive feedback on your performance.")
         st.write("Begin by logging in as directed. If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 

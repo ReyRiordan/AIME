@@ -29,7 +29,7 @@ st.set_page_config(page_title = "MEWAI",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = LOGIN_PAGE
+    st.session_state["stage"] = CLOSED
 
 def set_stage(stage):
     st.session_state["stage"] = stage

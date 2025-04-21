@@ -20,7 +20,7 @@ import json
 # SECRETS
 LOGIN_PASS = os.getenv("LOGIN_PASS")
 DB_URI = os.getenv("DB_URI")
-DB_NAME = "TESTING"
+DB_NAME = "M2"
 # DATABASE_USERNAME=os.getenv("DB_USERNAME")
 # DATABASE_PASSWORD=os.getenv("DB_PASSWORD")
 
@@ -99,7 +99,7 @@ PATHS = {"Patient Base": "./Prompts/Base_3-27.txt",
 
 
 # Assignments
-with open("./IDEA/assignments/M1.json", "r") as assignments_file:
+with open("./IDEA/assignments/M2.json", "r") as assignments_file:
     ASSIGNMENTS = json.load(assignments_file)
 
 

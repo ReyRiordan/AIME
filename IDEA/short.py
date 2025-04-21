@@ -271,7 +271,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
 
 
 if st.session_state["stage"] == DIAGNOSIS:
-    st.write("Write your post note as directed, then click \"Get Feedback\" to see how you did.")
+    st.write("Write your post note as directed, then click \"Get Feedback\" to see how you did. Note that you can save your progress if you're afraid of losing it and expand the text boxes by dragging the bottom-right corner.")
     st.divider()
 
     # 2 column full width layout
@@ -283,13 +283,14 @@ if st.session_state["stage"] == DIAGNOSIS:
     plan = layout1[0].text_area(label = "**Plan**: Include a diagnostic plan that explains the rationale for your decision. ", height = 200)
 
     # Interview transcription
+    layout1[1].write("**Transcript**:")
     chat_container = layout1[1].container(height=400)
     for message in st.session_state["interview"].messages:
         with chat_container:
             with st.chat_message(message.role):
                 st.markdown(message.content)
     # Physical Examination
-    with layout1[1].expander("Physical Examination"):
+    with layout1[1].expander("**Physical Examination**"):
         physical_exam_doc = Document(st.session_state["interview"].patient.physical)
         for paragraph in physical_exam_doc.paragraphs:
             st.write(paragraph.text)
@@ -298,12 +299,19 @@ if st.session_state["stage"] == DIAGNOSIS:
     st.divider()
     layout2 = st.columns([1, 1, 1, 1, 1])
 
-    # Get Feedback
-    if layout2[1].button("Get Feedback", use_container_width=True): 
+    # Save
+    if layout2[1].button("Save", use_container_width=True): 
         st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
         COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+                                "start_time" : st.session_state["start_time"]}, 
+                                st.session_state["interview"].model_dump())
+
+    # Get Feedback
+    if layout2[2].button("Get Feedback", use_container_width=True): 
+        st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
+        COLLECTION.replace_one({"username" : st.session_state["username"], 
+                                "start_time" : st.session_state["start_time"]}, 
+                                st.session_state["interview"].model_dump())
         set_stage(FEEDBACK_SETUP)
         st.rerun()
 
@@ -312,7 +320,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     
     # Test cases
     if st.session_state["admin"]:
-        layout21 = layout2[2].columns([1, 1])
+        layout21 = layout2[0].columns([1, 1])
         if layout21[0].button("TEST: BAD", use_container_width=True):
             with open("./IDEA/test_cases/bad.json", "r", encoding="utf8") as bad_json:
                 bad_case = json.load(bad_json)

@@ -136,26 +136,34 @@ if st.session_state["stage"] == VIEW_INTERVIEWS_ADMIN:
         st.write(f"Patient: {CURRENT['patient']['id']} ({CURRENT['chat_mode']})")
 
         st.subheader("Transcript")
-        chat_container = st.container(height=700)
-        for message in CURRENT["messages"]:
-            with chat_container:
-                with st.chat_message(message["role"]):
-                    st.markdown(message["content"])
+        if CURRENT["messages"]:
+            chat_container = st.container(height=700)
+            for message in CURRENT["messages"]:
+                with chat_container:
+                    with st.chat_message(message["role"]):
+                        st.markdown(message["content"])
+        else:
+            st.write("N/A")
 
         st.divider()
 
         st.subheader("Feedback")
-        display_PostNote(CURRENT["feedback"], CURRENT["post_note_inputs"], short = True)
+        if CURRENT["feedback"]: 
+            display_PostNote(CURRENT["feedback"], CURRENT["post_note_inputs"], short = True)
+        else: 
+            st.write("N/A")
 
         st.divider()
 
         st.subheader("Survey")
-        if CURRENT["survey"]: st.write(CURRENT["survey"])
-        else: st.write("NO RESPONSE")
+        if CURRENT["survey"]: 
+            st.write(CURRENT["survey"])
+        else: 
+            st.write("N/A")
 
 
     with stats_tab:
-        st.write("Total number of M1 students: 172 (108 F, 64 M)")
+        # st.write("Total number of M1 students: 172 (108 F, 64 M)")
         st.write(f"Total interviews: {len(DATA)}")
 
         counts = {}
@@ -164,11 +172,11 @@ if st.session_state["stage"] == VIEW_INTERVIEWS_ADMIN:
             if interview["username"] not in counts:
                 counts[interview["username"]] = 1
             else: counts[interview["username"]] += 1
-            if interview["end_time"]:
-                duration = datetime.fromisoformat(interview["end_time"]) - datetime.fromisoformat(interview["start_time"])
-                durations.append(duration.total_seconds())
+            # if interview["end_time"]:
+            #     duration = datetime.fromisoformat(interview["end_time"]) - datetime.fromisoformat(interview["start_time"])
+            #     durations.append(duration.total_seconds())
         st.write(f"Number of unique students who participated: {len(counts)}")
-        st.write(f"Durations: mean {statistics.mean(durations) // 60} min, median {statistics.median(durations) // 60} min, stdev {statistics.stdev(durations) // 60} min")
+        # st.write(f"Durations: mean {statistics.mean(durations) // 60} min, median {statistics.median(durations) // 60} min, stdev {statistics.stdev(durations) // 60} min")
 
         slackers = []
         for username in ASSIGNMENTS:
@@ -180,7 +188,7 @@ if st.session_state["stage"] == VIEW_INTERVIEWS_ADMIN:
         st.write(f"Students who didn't participate: {slackers}")
         st.write(f"Students who did more than 2 interviews: {overachievers}")
 
-        st.write("Total cost $51.21 -> ~11.6 cents per interview, of which ~75% used for interview")
+        # st.write("Total cost $51.21 -> ~11.6 cents per interview, of which ~75% used for interview")
 
 
     with surveys_tab:

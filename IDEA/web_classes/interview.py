@@ -1,7 +1,7 @@
 from lookups import *
 import json
 from openai import OpenAI
-import datetime as date
+from datetime import datetime
 import pydantic 
 from typing import Optional, List
 
@@ -11,9 +11,10 @@ from .feedback import *
 
 class Interview(pydantic.BaseModel):
     start_time : Optional[str] = None
-    end_time : Optional[str] = None
+    finished = Optional[bool] = False
+    times : Optional[dict] = {}
     chat_mode : Optional[str] = None
-    tokens : Optional[int] = None
+    tokens : Optional[dict] = None
     username : str                                  # str
     patient : Patient                               # Patient
     messages : Optional[List[Message]] = []         # list[Message]
@@ -23,11 +24,6 @@ class Interview(pydantic.BaseModel):
     
     @classmethod
     def build(cls, username: str, patient: Patient, start_time: str, chat_mode: str):
-        #Attributes
-        # messages = []            # list[Message]
-        # user_diagnosis = None     # dict{str, str/list[str]}
-        # feedback = None          # Feedback
-
         return cls(username=username, patient=patient, start_time=start_time, chat_mode=chat_mode) 
             
     def add_feedback(self, short: bool):
@@ -50,11 +46,15 @@ class Interview(pydantic.BaseModel):
     def add_survey(self, survey: str) -> None:
         self.survey = survey
     
-    def add_end_time(self, end_time: str) -> None:
-        self.end_time = end_time
+    def record_time(self, checkpoint: str) -> None:
+        current_time = datetime.now().isoformat()
+        self.times[current_time] = checkpoint
 
     def update_tokens(self, tokens: dict) -> None:
         self.tokens = tokens
+
+    def finish(self) -> None:
+        self.finished = True
 
     # DEPRECATED get_dict() method
     # Will keep around for a week in case something breaks

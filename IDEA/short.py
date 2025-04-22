@@ -20,6 +20,7 @@ from pymongo.server_api import ServerApi
 from lookups import *
 from web_classes import *
 from web_methods import *
+import pytz
 
 
 # STREAMLIT SETUP
@@ -29,10 +30,22 @@ st.set_page_config(page_title = "MEWAI",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = CLOSED
+    st.session_state["stage"] = LOGIN_PAGE
 
 def set_stage(stage):
     st.session_state["stage"] = stage
+
+def update_interview():
+    COLLECTION.replace_one({"username" : st.session_state["username"], 
+                            "start_time" : st.session_state["start_time"]}, 
+                            st.session_state["interview"].model_dump())
+    
+def read_time(iso_time) -> str:
+    if not iso_time: return "N/A"
+    dt = datetime.fromisoformat(iso_time)
+    est = pytz.timezone("US/Eastern")
+    dt_est = dt.astimezone(est)
+    return dt_est.strftime("%B %d, %Y at %I:%M %p")
 
 
 # DB SETUP
@@ -43,15 +56,20 @@ def init_connection():
 DB_CLIENT = init_connection()
 COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
-# @st.cache_data(ttl=600)
-# def get_data():
-#     DB = DB_CLIENT.mydb
-#     items = DB.M1_interviews.find()
-#     items = list(items)  # make hashable for st.cache_data
-#     return items
+@st.cache_data(ttl=600)
+def get_data(username: str = None) -> list[dict]:
+    DB = DB_CLIENT[DB_NAME]
+    items = DB["Interviews"].find()
+    items = list(items)  # make hashable for st.cache_data
 
-# items = get_data()
-# print(items)
+    if username:
+        only_user = []
+        for item in items:
+            if item["username"] == username: only_user.append(item)
+        items = only_user
+    
+    items = sorted(items, key=lambda x: datetime.fromisoformat(x["start_time"]), reverse=True)
+    return items
 
 
 # APP CODE STARTS HERE
@@ -62,6 +80,7 @@ if st.session_state["stage"] == ERROR:
         st.title("ERROR")
         st.write("An error has occurred. No worries - the admin has been alerted, and your responses so far have been automatically saved.")
         st.write(f"Error details: {st.session_state['error_details']}")
+
 
 if st.session_state["stage"] == CLOSED:
     layout1 = st.columns([2, 3, 2])
@@ -81,7 +100,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
         if username and username not in ASSIGNMENTS: 
             st.write("Invalid username.")
         st.session_state["admin"] = True if username == "admin" else False
-        password = st.text_input("Password (FirstLast, can also just use NetID if not working):", type = "password")
+        password = st.text_input("Password (FirstLast):", type = "password")
 
         layout12b = layout1[1].columns(5)
         if layout12b[2].button("Log in"):
@@ -102,7 +121,6 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["messages"] = []
     st.session_state["convo_memory"] = []
     st.session_state["convo_summary"]=""
-    st.session_state["convo_file"] = None
     st.session_state["convo_prompt"] = ""
     st.session_state["start_time"] = datetime.now().isoformat()
     st.session_state["tokens"] = {"convo": {"input": 0, "output": 0},
@@ -134,7 +152,7 @@ if st.session_state["stage"] == SETTINGS:
                     if gender == "M": patient_name = "Samuel Thompson"
                     elif gender == "F": patient_name = "Sarah Thompson"
 
-        chat_mode = st.selectbox("Would you like to use text or voice input for the interview? Voice is encouraged both for practice and testing purposes.",
+        chat_mode = st.selectbox("Would you like to use text or voice input for the interview? Voice is encouraged for both practice and testing purposes.",
                                 ["Text", "Voice"],
                                 index = None,
                                 placeholder = "Select interview mode...")
@@ -146,22 +164,16 @@ if st.session_state["stage"] == SETTINGS:
                                                                 patient = Patient.build(patient_name), 
                                                                 start_time = st.session_state["start_time"], 
                                                                 chat_mode = chat_mode)
+                st.session_state["interview"].record_time("start")
                 st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
+                COLLECTION.insert_one(st.session_state["interview"].model_dump()) # INSERT INTERVIEW
+
                 if chat_mode == "Text": chat_page = CHAT_INTERFACE_TEXT
                 elif chat_mode == "Voice": chat_page = CHAT_INTERFACE_VOICE
                 set_stage(chat_page)
                 st.rerun()
+
             else: st.write("Incomplete settings.")
-
-
-# if st.session_state["stage"] == CHAT_SETUP:
-#     st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
-#     # if(st.session_state["sent"]==False):
-#     #     st.session_state["interview"].start_time = str(st.session_state["start_time"])
-#         # collection.insert_one(st.session_state["interview"].model_dump())
-#         # st.session_state["sent"]==True
-
-#     set_stage(CHAT_INTERFACE_VOICE)
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
@@ -175,7 +187,6 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
         audio = audiorecorder("Start Recording", "Stop")
         
         container = st.container(height=300)
-
         for message in st.session_state["interview"].messages:
             with container:
                 with st.chat_message(message.role):
@@ -186,9 +197,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             with container:
                 with st.chat_message("User"):
                     st.markdown(user_input)
-            
             response, speech = get_chat_output(user_input)
-
             with container:
                 with st.chat_message("AI"): # Needs avatar eventually
                     st.markdown(response)
@@ -196,8 +205,10 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
 
         def next_stage(screen):
             st.session_state["interview"].update_tokens(st.session_state["tokens"])
-            COLLECTION.insert_one(st.session_state["interview"].model_dump())
+            st.session_state["interview"].record_time("end_interview")
+            update_interview()
             set_stage(screen)
+
         columns = st.columns(4)
         columns[1].button("Restart", on_click=next_stage, args=[SETTINGS])
         columns[2].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
@@ -212,7 +223,6 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
         st.write("Once you decide that you're done interviewing, click \"End Interview\" to proceed.")
 
         container = st.container(height=300)
-
         for message in st.session_state["interview"].messages:
             with container:
                 with st.chat_message(message.role):
@@ -222,9 +232,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             with container:
                 with st.chat_message("User"):
                     st.markdown(user_input)
-            
             response, speech = get_chat_output(user_input)
-
             with container:
                 with st.chat_message("AI"): #TODO Needs avatar eventually
                     st.markdown(response)
@@ -232,8 +240,10 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
 
         def next_stage(screen):
             st.session_state["interview"].update_tokens(st.session_state["tokens"])
-            COLLECTION.insert_one(st.session_state["interview"].model_dump())
+            st.session_state["interview"].record_time("end_interview")
+            update_interview()
             set_stage(screen)
+
         columns = st.columns(4)
         columns[1].button("Restart", on_click=next_stage, args=[SETTINGS])
         columns[2].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
@@ -302,16 +312,14 @@ if st.session_state["stage"] == DIAGNOSIS:
     # Save
     if layout2[1].button("Save", use_container_width=True): 
         st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
-        COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                "start_time" : st.session_state["start_time"]}, 
-                                st.session_state["interview"].model_dump())
+        st.session_state["interview"].record_time("save_postnote")
+        update_interview()
 
     # Get Feedback
     if layout2[2].button("Get Feedback", use_container_width=True): 
         st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
-        COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                "start_time" : st.session_state["start_time"]}, 
-                                st.session_state["interview"].model_dump())
+        st.session_state["interview"].record_time("get_feedback")
+        update_interview()
         set_stage(FEEDBACK_SETUP)
         st.rerun()
 
@@ -334,9 +342,7 @@ if st.session_state["stage"] == DIAGNOSIS:
                                                             bad_case["Plan"])
                 # print(st.session_state["interview"].post_note_inputs)
                 # print("\n\n")
-            COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+            update_interview()
             set_stage(FEEDBACK_SETUP)
             st.rerun()
         if layout21[1].button("TEST: GOOD", use_container_width=True):
@@ -348,9 +354,7 @@ if st.session_state["stage"] == DIAGNOSIS:
                                                             good_case["Summary"], 
                                                             good_case["Assessment"], 
                                                             good_case["Plan"])
-            COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+            update_interview()
             set_stage(FEEDBACK_SETUP)
             st.rerun()
     else:
@@ -371,9 +375,8 @@ if st.session_state["stage"] == FEEDBACK_SETUP:
     st.write("This might take a few minutes.")
     st.session_state["interview"].add_feedback(short=True)
     st.session_state["interview"].update_tokens(st.session_state["tokens"])
-    COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                    "start_time" : st.session_state["start_time"]}, 
-                                    st.session_state["interview"].model_dump())
+    st.session_state["interview"].record_time("feedback_processed")
+    update_interview()
     set_stage(FEEDBACK_SCREEN)
     st.rerun()
 
@@ -402,10 +405,9 @@ if st.session_state["stage"] == SURVEY:
         if st.button("Finish"):
             if response:
                 st.session_state["interview"].add_survey(response)
-                st.session_state["interview"].add_end_time(datetime.now().isoformat())
-                COLLECTION.replace_one({"username" : st.session_state["username"], 
-                                        "start_time" : st.session_state["start_time"]}, 
-                                        st.session_state["interview"].model_dump())
+                st.session_state["interview"].record_time("end")
+                st.session_state["interview"].finish()
+                update_interview()
             set_stage(FINAL_SCREEN)
             st.rerun()
 

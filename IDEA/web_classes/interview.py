@@ -11,7 +11,7 @@ from .feedback import *
 
 class Interview(pydantic.BaseModel):
     start_time : Optional[str] = None
-    finished = Optional[bool] = False
+    finished : Optional[bool] = False
     times : Optional[dict] = {}
     chat_mode : Optional[str] = None
     tokens : Optional[dict] = None

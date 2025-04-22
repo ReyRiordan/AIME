@@ -54,7 +54,7 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
                 msg = MIMEText(error_details)
                 msg["Subject"] = st.session_state["username"] + " FEEDBACK ERROR"
                 msg["From"] = "rutgers.aime@gmail.com"
-                msg["To"] = "reyriordan@gmail.com"
+                msg["To"] = "rhr58@scarletmail.rutgers.edu"
                 with smtplib.SMTP("smtp.gmail.com", 587) as server:
                     server.starttls()
                     server.login("rutgers.aime@gmail.com", "klwlvaxxkpejpsuu")

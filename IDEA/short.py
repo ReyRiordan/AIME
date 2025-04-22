@@ -225,8 +225,8 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write("You may now begin your interview - start by introducing yourself.")
-        st.write("Click the Start Recording button to start recording your voice message. The button will then turn into a Stop button, which you can click when you are done talking.")
+        st.write("You may now begin your interview - start by introducing yourself. Click \"Save\" to save your progress.")
+        st.write("Click the \"Start Recording\" button to start recording your voice message. The button will then turn into a Stop button, which you can click when you are done talking.")
         st.write("Once you decide that you're done interviewing, click \"End Interview\" to proceed.")
 
         audio = audiorecorder("Start Recording", "Stop")
@@ -276,7 +276,7 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write("You may now begin your interview - start by introducing yourself.")
+        st.write("You may now begin your interview - start by introducing yourself. Click \"Save\" to save your progress.")
         st.write("Enter your message into the text box below the chat screen and either click \"Enter\" on your keyboard or the paper airplane button to send it.")
         st.write("Once you decide that you're done interviewing, click \"End Interview\" to proceed.")
 
@@ -332,7 +332,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
     layout1 = st.columns([1, 3, 1])
     with layout1[1].container():
         st.title("Physical Examination")
-        st.write("This is the physical examination obtained for the patient you interviewed. Review it before proceeding.")
+        st.write("This is the physical examination obtained for the patient you interviewed. You will still be able to view it later, but please review it before proceeding.")
         
         st.divider()
         physical_exam_doc = Document(st.session_state["interview"].patient.physical)
@@ -345,7 +345,7 @@ if st.session_state["stage"] == PHYSICAL_ECG_SCREEN:
 
 
 if st.session_state["stage"] == DIAGNOSIS:
-    st.write("Write your post note as directed, then click \"Get Feedback\" to see how you did. Note that you can save your progress if you're afraid of losing it and expand the text boxes by dragging the bottom-right corner.")
+    st.write("Write your post note as directed, then click \"Get Feedback\" to see how you did. Note that you can click \"Save\" to save your work and expand the text boxes by dragging the bottom-right corner.")
     st.divider()
 
     # 2 column full width layout

@@ -47,6 +47,8 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
             st.session_state["tokens"]["feedback"]["output"] += response.usage.output_tokens
             return prefill + response.content[0].text
         except Exception as e:
+            print(e)
+            print("\n\n")
             if attempt == MAX_ATTEMPTS:
                 error_details = f"Error: {e}"
                 msg = MIMEText(error_details)
@@ -55,7 +57,7 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
                 msg["To"] = "reyriordan@gmail.com"
                 with smtplib.SMTP("smtp.gmail.com", 587) as server:
                     server.starttls()
-                    server.login("rutgers.aime@gmail.com", "AhmedRiordan")
+                    server.login("rutgers.aime@gmail.com", "klwlvaxxkpejpsuu")
                     server.send_message(msg)
                 st.session_state["error_details"] = error_details
                 st.session_state["stage"] = ERROR

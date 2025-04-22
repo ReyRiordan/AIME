@@ -13,6 +13,10 @@ class Feedback(pydantic.BaseModel):
     feedback: Optional[dict] = {}           # {type: {text: str, points: int}}
 
     @classmethod
+    def restore_previous(cls, feedback: dict):
+        return cls(feedback=feedback)
+    
+    @classmethod
     def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str]):
 
         # Import rubric bases

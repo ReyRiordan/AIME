@@ -30,7 +30,7 @@ st.set_page_config(page_title = "MEWAI",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = CLOSED
+    st.session_state["stage"] = LOGIN_PAGE
 
 def set_stage(stage):
     st.session_state["stage"] = stage
@@ -56,7 +56,6 @@ def init_connection():
 DB_CLIENT = init_connection()
 COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
-@st.cache_data(ttl=600)
 def get_data(username: str = None) -> list[dict]:
     DB = DB_CLIENT[DB_NAME]
     items = DB["Interviews"].find()
@@ -122,11 +121,16 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["interview"] = None
     st.session_state["messages"] = []
     st.session_state["convo_memory"] = []
-    st.session_state["convo_summary"]=""
+    st.session_state["convo_summary"] = ""
     st.session_state["convo_prompt"] = ""
     st.session_state["start_time"] = datetime.now().isoformat()
     st.session_state["tokens"] = {"convo": {"input": 0, "output": 0},
                                   "feedback": {"input": 0, "output": 0}}
+    st.session_state["saved_inputs"] = {"HPI": "", 
+                                        "Past Histories": "",
+                                        "Summary Statement": "", 
+                                        "Assessment": "", 
+                                        "Plan": ""}
 
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
@@ -139,34 +143,33 @@ if st.session_state["stage"] == SETTINGS:
         else:
             st.title("Patient Settings")
             DATA = get_data(st.session_state["username"])
-            interview_list = {"First case": 0, "Second case": 1}
+            interview_list = {"First case": -99, "Second case": -99}
             for i in range(len(DATA)):
                 interview = DATA[i]
-                label = "CONTINUE: " + interview["patient"]["id"] + " @ " + read_time(interview["start_time"])
-                interview_list[label] = i+2
+                if interview["finished"] == False:
+                    label = "CONTINUE: " + interview["patient"]["id"] + " @ " + read_time(interview["start_time"])
+                    interview_list[label] = i
 
-            selected = st.selectbox("Are you doing your first or second case? Please make sure to do both. You may also continue a previous unfinished interview.", 
+            case = st.selectbox("Are you doing your first or second case? Please make sure to do both. You may also continue a previous unfinished case.", 
                                     options = interview_list, 
-                                    placeholder = "Select interview...")
-            
-            case_number = st.selectbox("Are you doing your first or second case? Please make sure to do both.", 
-                                        ["First case", "Second case"],
-                                        index = None,
-                                        placeholder = "Select case...")
+                                    index = None, 
+                                    placeholder = "Select case...")
             patient_name = None
             continue_previous = False
 
-            if case_number < 2:
-                case_number = case_number.replace(" ", "_")
-                gender = st.session_state["assignment"][case_number]
-                if case_number == "First_case":
-                    if gender == "M": patient_name = "Jeffrey Smith"
-                    elif gender == "F": patient_name = "Jenny Smith"
-                elif case_number == "Second_case":
-                    if gender == "M": patient_name = "Samuel Thompson"
-                    elif gender == "F": patient_name = "Sarah Thompson"
-            else:
-                continue_previous = True
+            if case:
+                if case in ["First case", "Second case"]:
+                    case_number = case.replace(" ", "_")
+                    gender = st.session_state["assignment"][case_number]
+                    if case_number == "First_case":
+                        if gender == "M": patient_name = "Jeffrey Smith"
+                        elif gender == "F": patient_name = "Jenny Smith"
+                    elif case_number == "Second_case":
+                        if gender == "M": patient_name = "Samuel Thompson"
+                        elif gender == "F": patient_name = "Sarah Thompson"
+                else:
+                    case_index = interview_list[case]
+                    continue_previous = True
 
         chat_mode = st.selectbox("Would you like to use text or voice input for the interview? Voice is encouraged for both practice and testing purposes.",
                                 ["Text", "Voice"],
@@ -175,9 +178,31 @@ if st.session_state["stage"] == SETTINGS:
         
         # ADD ASSIGNMENT INFO?
         if st.button("Start Interview"):
-            if continue_previous:
-                PREVIOUS_INTERVIEW = DATA[case_number-2]
-
+            if continue_previous and chat_mode:
+                TBC = DATA[case_index]
+                st.session_state["interview"] = Interview.restore_previous(TBC)
+                st.session_state["start_time"] = st.session_state["interview"].start_time
+                st.session_state["convo_prompt"] = st.session_state["interview"].patient.convo_prompt
+                st.session_state["interview"].record_time("continue")
+                jump = 0 # WHERE TO CONTINUE FROM
+                if chat_mode == "Text": jump = CHAT_INTERFACE_TEXT
+                elif chat_mode == "Voice": jump = CHAT_INTERFACE_VOICE
+                if TBC["messages"]:
+                    for message in TBC["messages"]:
+                        st.session_state["interview"].add_message(Message(type=message["type"], role=message["role"], content=message["content"]))
+                    if TBC["convo_data"]:
+                        st.session_state["messages"] = TBC["convo_data"]["messages"]
+                        st.session_state["convo_memory"] = TBC["convo_data"]["convo_memory"]
+                        st.session_state["convo_summary"] = TBC["convo_data"]["convo_summary"]
+                if TBC["post_note_inputs"]:
+                    st.session_state["interview"].post_note_inputs = TBC["post_note_inputs"]
+                    st.session_state["saved_inputs"] = TBC["post_note_inputs"]
+                    jump = DIAGNOSIS
+                if TBC["feedback"]:
+                    st.session_state["interview"].feedback = Feedback.restore_previous(TBC["feedback"]["feedback"]) # handle that weird feedback nesting sht
+                    jump = FEEDBACK_SCREEN
+                set_stage(jump)
+                st.rerun()
 
             elif patient_name and chat_mode:
                 st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
@@ -200,28 +225,35 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write(f"You may now begin your interview with **{st.session_state['interview'].patient.id}**. Start by introducing yourself.")
+        st.write("You may now begin your interview - start by introducing yourself.")
         st.write("Click the Start Recording button to start recording your voice message. The button will then turn into a Stop button, which you can click when you are done talking.")
         st.write("Once you decide that you're done interviewing, click \"End Interview\" to proceed.")
 
         audio = audiorecorder("Start Recording", "Stop")
         
+        # Check if a new recording has started
+        if len(audio) > 0:
+            if st.session_state.get("last_audio") != audio:
+                st.session_state["audio_handled"] = False
+                st.session_state["last_audio"] = audio
+
         container = st.container(height=300)
         for message in st.session_state["interview"].messages:
             with container:
                 with st.chat_message(message.role):
                     st.markdown(message.content)
 
-        if len(audio) > 0:
+        if len(audio) > 0 and not st.session_state["audio_handled"]:
             user_input = transcribe_voice(audio)
             with container:
                 with st.chat_message("User"):
                     st.markdown(user_input)
             response, speech = get_chat_output(user_input)
             with container:
-                with st.chat_message("AI"): # Needs avatar eventually
+                with st.chat_message("AI"):
                     st.markdown(response)
                     play_voice(speech)
+            st.session_state["audio_handled"] = True
 
         def next_stage(screen):
             st.session_state["interview"].update_tokens(st.session_state["tokens"])
@@ -229,16 +261,22 @@ if st.session_state["stage"] == CHAT_INTERFACE_VOICE:
             update_interview()
             set_stage(screen)
 
-        columns = st.columns(4)
+        def save():
+            st.session_state["interview"].store_convo_data()
+            st.session_state["interview"].record_time("save_interview")
+            update_interview()
+
+        columns = st.columns(5)
         columns[1].button("Restart", on_click=next_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
+        columns[2].button("Save", on_click=save)
+        columns[3].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
 
 
 if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
     layout1 = st.columns([1, 3, 1])
     with layout1[1]:
         st.title("Interview")
-        st.write(f"You may now begin your interview with **{st.session_state['interview'].patient.id}**. Start by introducing yourself.")
+        st.write("You may now begin your interview - start by introducing yourself.")
         st.write("Enter your message into the text box below the chat screen and either click \"Enter\" on your keyboard or the paper airplane button to send it.")
         st.write("Once you decide that you're done interviewing, click \"End Interview\" to proceed.")
 
@@ -264,9 +302,15 @@ if st.session_state["stage"] == CHAT_INTERFACE_TEXT:
             update_interview()
             set_stage(screen)
 
-        columns = st.columns(4)
+        def save():
+            st.session_state["interview"].store_convo_data()
+            st.session_state["interview"].record_time("save_interview")
+            update_interview()
+
+        columns = st.columns(5)
         columns[1].button("Restart", on_click=next_stage, args=[SETTINGS])
-        columns[2].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
+        columns[2].button("Save", on_click=save)
+        columns[3].button("End Interview", on_click=next_stage, args=[PHYSICAL_ECG_SCREEN])
 
 
 # if st.session_state["stage"] == KEY_PHYSICALS:
@@ -308,9 +352,15 @@ if st.session_state["stage"] == DIAGNOSIS:
     layout1 = st.columns([1, 1])
 
     # User inputs
-    summary = layout1[0].text_area(label = "**Summary Statement:** Provide a concise summary statement that uses semantic vocabulary to highlight the most important elements from history and exam to interpret and represent the patient’s main problem.", height = 200)
-    assessment = layout1[0].text_area(label = "**Assessment**: Provide a differential diagnosis and explain the reasoning behind each diagnosis.", height = 200)
-    plan = layout1[0].text_area(label = "**Plan**: Include a diagnostic plan that explains the rationale for your decision. ", height = 200)
+    summary = layout1[0].text_area(label = "**Summary Statement:** Provide a concise summary statement that uses semantic vocabulary to highlight the most important elements from history and exam to interpret and represent the patient’s main problem.", 
+                                   height = 200, 
+                                   value = st.session_state["saved_inputs"]["Summary Statement"])
+    assessment = layout1[0].text_area(label = "**Assessment**: Provide a differential diagnosis and explain the reasoning behind each diagnosis.", 
+                                      height = 200, 
+                                      value = st.session_state["saved_inputs"]["Assessment"])
+    plan = layout1[0].text_area(label = "**Plan**: Include a diagnostic plan that explains the rationale for your decision. ", 
+                                height = 200, 
+                                value = st.session_state["saved_inputs"]["Plan"])
 
     # Interview transcription
     layout1[1].write("**Transcript**:")
@@ -332,12 +382,14 @@ if st.session_state["stage"] == DIAGNOSIS:
     # Save
     if layout2[1].button("Save", use_container_width=True): 
         st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
+        st.session_state["saved_inputs"] = st.session_state["interview"].post_note_inputs
         st.session_state["interview"].record_time("save_postnote")
         update_interview()
 
     # Get Feedback
     if layout2[2].button("Get Feedback", use_container_width=True): 
         st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
+        st.session_state["saved_inputs"] = st.session_state["interview"].post_note_inputs
         st.session_state["interview"].record_time("get_feedback")
         update_interview()
         set_stage(FEEDBACK_SETUP)

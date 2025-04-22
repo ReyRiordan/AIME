@@ -10,17 +10,37 @@ from .message import *
 from .feedback import *
 
 class Interview(pydantic.BaseModel):
+    username : str
+    patient : Patient
     start_time : Optional[str] = None
     finished : Optional[bool] = False
     times : Optional[dict] = {}
-    chat_mode : Optional[str] = None
     tokens : Optional[dict] = None
-    username : str                                  # str
-    patient : Patient                               # Patient
-    messages : Optional[List[Message]] = []         # list[Message]
-    post_note_inputs : Optional[dict] = {}                 # dict{str, str/list[str]}
-    feedback : Optional[Feedback] = None            # Feedback
+    chat_mode : Optional[str] = None
+    messages : Optional[List[Message]] = []
+    post_note_inputs : Optional[dict] = {}
+    feedback : Optional[Feedback] = None
     survey : Optional[str] = None
+    convo_data : Optional[dict] = None
+    
+    @classmethod
+    def restore_previous(cls, previous: dict):
+        # messages = []
+        # for message in previous["messages"]:
+        #     messages.append(Message(type=message["type"], role=message["role"], content=message["content"]))
+            
+        return cls(username=previous["username"], 
+                   patient=Patient.build(previous["patient"]["id"]), 
+                   start_time=previous["start_time"], 
+                   finished=previous["finished"], 
+                   times=previous["times"], 
+                   tokens=previous["tokens"], 
+                   chat_mode=previous["chat_mode"], 
+                #    messages=messages, 
+                #    post_note_inputs=previous["post_note_inputs"], 
+                #    feedback=Feedback.restore_previous(previous["feedback"]), 
+                   survey=previous["survey"], 
+                   convo_data=previous["convo_data"])
     
     @classmethod
     def build(cls, username: str, patient: Patient, start_time: str, chat_mode: str):
@@ -55,6 +75,13 @@ class Interview(pydantic.BaseModel):
 
     def finish(self) -> None:
         self.finished = True
+
+    def store_convo_data(self) -> None:
+        temp = {}
+        temp["messages"] = st.session_state["messages"]
+        temp["convo_memory"] = st.session_state["convo_memory"]
+        temp["convo_summary"] = st.session_state["convo_summary"]
+        self.convo_data = temp
 
     # DEPRECATED get_dict() method
     # Will keep around for a week in case something breaks

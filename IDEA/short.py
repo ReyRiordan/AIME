@@ -30,7 +30,7 @@ st.set_page_config(page_title = "MEWAI",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = LOGIN_PAGE
+    st.session_state["stage"] = CLOSED
 
 def set_stage(stage):
     st.session_state["stage"] = stage
@@ -86,6 +86,8 @@ if st.session_state["stage"] == CLOSED:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
         st.title("CURRENTLY CLOSED")
+        st.write("We are experiencing an outage beyond our control that is delaying the release - please come back later :(")
+        st.write("Rest assured, the deadline will be extended if this issue persists.")
         st.write("rhr58@scarletmail.rutgers.edu")
 
 
@@ -136,13 +138,25 @@ if st.session_state["stage"] == SETTINGS:
                                         placeholder = "Select patient...")
         else:
             st.title("Patient Settings")
+            DATA = get_data(st.session_state["username"])
+            interview_list = {"First case": 0, "Second case": 1}
+            for i in range(len(DATA)):
+                interview = DATA[i]
+                label = "CONTINUE: " + interview["patient"]["id"] + " @ " + read_time(interview["start_time"])
+                interview_list[label] = i+2
+
+            selected = st.selectbox("Are you doing your first or second case? Please make sure to do both. You may also continue a previous unfinished interview.", 
+                                    options = interview_list, 
+                                    placeholder = "Select interview...")
+            
             case_number = st.selectbox("Are you doing your first or second case? Please make sure to do both.", 
                                         ["First case", "Second case"],
                                         index = None,
                                         placeholder = "Select case...")
             patient_name = None
+            continue_previous = False
 
-            if case_number:
+            if case_number < 2:
                 case_number = case_number.replace(" ", "_")
                 gender = st.session_state["assignment"][case_number]
                 if case_number == "First_case":
@@ -151,6 +165,8 @@ if st.session_state["stage"] == SETTINGS:
                 elif case_number == "Second_case":
                     if gender == "M": patient_name = "Samuel Thompson"
                     elif gender == "F": patient_name = "Sarah Thompson"
+            else:
+                continue_previous = True
 
         chat_mode = st.selectbox("Would you like to use text or voice input for the interview? Voice is encouraged for both practice and testing purposes.",
                                 ["Text", "Voice"],
@@ -159,7 +175,11 @@ if st.session_state["stage"] == SETTINGS:
         
         # ADD ASSIGNMENT INFO?
         if st.button("Start Interview"):
-            if patient_name and chat_mode:
+            if continue_previous:
+                PREVIOUS_INTERVIEW = DATA[case_number-2]
+
+
+            elif patient_name and chat_mode:
                 st.session_state["interview"] = Interview.build(username = st.session_state["username"], 
                                                                 patient = Patient.build(patient_name), 
                                                                 start_time = st.session_state["start_time"], 

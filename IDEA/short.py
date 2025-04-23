@@ -105,16 +105,17 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
         layout12b = layout1[1].columns(5)
         if layout12b[2].button("Log in"):
-            correct = ASSIGNMENTS[username]["First_name"] + ASSIGNMENTS[username]["Last_name"]
-            if username in ASSIGNMENTS and (password == correct or password == username):
-                st.session_state["username"] = username
-                st.session_state["assignment"] = ASSIGNMENTS[username]
-                st.write("Authentication successful!")
-                time.sleep(1)
-                set_stage(SETTINGS)
-                st.rerun()
-            else:
-                st.write("Password incorect.")
+            if username in ASSIGNMENTS:
+                correct = ASSIGNMENTS[username]["First_name"] + ASSIGNMENTS[username]["Last_name"]
+                if username in ASSIGNMENTS and (password == correct or password == username):
+                    st.session_state["username"] = username
+                    st.session_state["assignment"] = ASSIGNMENTS[username]
+                    st.write("Authentication successful!")
+                    time.sleep(1)
+                    set_stage(SETTINGS)
+                    st.rerun()
+                else:
+                    st.write("Password incorrect.")
 
 
 if st.session_state["stage"] == SETTINGS:

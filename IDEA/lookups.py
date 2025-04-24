@@ -2,6 +2,7 @@ import os
 import streamlit as st
 from openai import OpenAI
 from anthropic import Anthropic
+from google import genai
 import json
 
 # from dotenv import load_dotenv
@@ -75,17 +76,19 @@ CONVO_MODEL = "gpt-4o"
 CONVO_TEMP = 0.7
 SUM_MODEL = "gpt-4o"
 SUM_TEMP = 0.0
+# GOOGLE_CLIENT = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+# GOOGLE_MODEL = "gemini-2.0-flash"
 
 FEEDBACK_CLIENT = Anthropic()
 FEEDBACK_MODEL = "claude-3-7-sonnet-latest"
 FEEDBACK_TEMP = 0.0
 
-CLASS_CLIENT = Anthropic()
-CLASS_MODEL = "claude-3-7-sonnet-latest"
-CLASS_TEMP = 0.0
-DIAG_CLIENT = OpenAI()
-DIAG_MODEL = "gpt-4-turbo"
-DIAG_TEMP = 0.0
+# CLASS_CLIENT = Anthropic()
+# CLASS_MODEL = "claude-3-7-sonnet-latest"
+# CLASS_TEMP = 0.0
+# DIAG_CLIENT = OpenAI()
+# DIAG_MODEL = "gpt-4-turbo"
+# DIAG_TEMP = 0.0
 
 
 # Paths for prompt files

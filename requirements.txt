@@ -9,3 +9,4 @@ streamlit-audiorecorder
 st-annotated-text
 pymongo
 pytz
+google-genai

@@ -11,6 +11,8 @@ import streamlit as st
 from audiorecorder import audiorecorder
 from openai import OpenAI
 from anthropic import Anthropic
+from google import genai
+
 import tempfile
 from annotated_text import annotated_text
 import json
@@ -81,6 +83,15 @@ def generate_response(model: str, temperature: float, system: str, messages: lis
     st.session_state["tokens"]["convo"]["input"] += response.usage.prompt_tokens
     st.session_state["tokens"]["convo"]["output"] += response.usage.completion_tokens
     return response.choices[0].message.content
+    # contents = []
+    # for message in messages:
+    #     contents.append({"role": message["role"], "parts": [{"text": message["content"]}]})
+    # response = GOOGLE_CLIENT.models.generate_content(
+    #     model = GOOGLE_MODEL,
+    #     config = genai.types.GenerateContentConfig(system_instruction=system),
+    #     contents = contents
+    # )
+    # return response.text
 
 
 def transcribe_voice(voice_input):

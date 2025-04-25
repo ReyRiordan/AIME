@@ -47,15 +47,6 @@ def read_time(iso_time) -> str:
     dt_est = dt.astimezone(est)
     return dt_est.strftime("%B %d, %Y at %I:%M %p")
 
-
-# DB SETUP
-@st.cache_resource
-def init_connection():
-    return MongoClient(DB_URI)
-
-DB_CLIENT = init_connection()
-COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
-
 def get_data(username: str = None) -> list[dict]:
     DB = DB_CLIENT[DB_NAME]
     if username:

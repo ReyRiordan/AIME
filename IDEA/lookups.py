@@ -4,6 +4,7 @@ from openai import OpenAI
 from anthropic import Anthropic
 from google import genai
 import json
+from pymongo.mongo_client import MongoClient
 
 # from dotenv import load_dotenv
 
@@ -134,3 +135,12 @@ with open(PATHS["Grade Rationale"], "r", encoding="utf8") as grade_rat_file:
     GRADE_RAT_PROMPT = grade_rat_file.read()
 with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()
+
+
+# DB SETUP
+@st.cache_resource
+def init_connection():
+    return MongoClient(DB_URI)
+
+DB_CLIENT = init_connection()
+COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]

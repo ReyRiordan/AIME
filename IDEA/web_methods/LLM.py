@@ -148,5 +148,12 @@ def get_chat_output(user_input: str):
 
         st.session_state["convo_summary"] = "\nSummary of conversation so far: \n" + summary # overwrite summary
         st.session_state["convo_memory"] = st.session_state["convo_memory"][-2:]
+        
+        # AUTO SAVE
+        st.session_state["interview"].store_convo_data()
+        st.session_state["interview"].record_time("save_interview")
+        COLLECTION.replace_one({"username" : st.session_state["username"], 
+                            "start_time" : st.session_state["start_time"]}, 
+                            st.session_state["interview"].model_dump())
 
     return response, speech

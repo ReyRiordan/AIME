@@ -58,15 +58,9 @@ COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
 def get_data(username: str = None) -> list[dict]:
     DB = DB_CLIENT[DB_NAME]
-    items = DB["Interviews"].find()
-    items = list(items)  # make hashable for st.cache_data
-
     if username:
-        only_user = []
-        for item in items:
-            if item["username"] == username: only_user.append(item)
-        items = only_user
-    
+        query = {"username": username} if username else {}
+        items = list(DB["Interviews"].find(query))
     items = sorted(items, key=lambda x: datetime.fromisoformat(x["start_time"]), reverse=True)
     return items
 

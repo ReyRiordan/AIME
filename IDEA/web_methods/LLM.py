@@ -144,7 +144,7 @@ def get_chat_output(user_input: str):
                                 temperature = SUM_TEMP, 
                                 system = SUM_PROMPT + conversation, 
                                 messages = [{"role": "user", "content": conversation}])
-        print("Summary: " + summary + "\n") # bug fixing
+        # print("Summary: " + summary + "\n") # bug fixing
 
         st.session_state["convo_summary"] = "\nSummary of conversation so far: \n" + summary # overwrite summary
         st.session_state["convo_memory"] = st.session_state["convo_memory"][-2:]

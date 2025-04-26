@@ -37,14 +37,6 @@ def set_stage(stage):
     st.session_state["stage"] = stage
 
 
-# DB SETUP
-@st.cache_resource
-def init_connection():
-    return MongoClient(DB_URI)
-
-DB_CLIENT = init_connection()
-COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
-
 @st.cache_data(ttl=600)
 def get_data(username: str = None) -> list[dict]:
     DB = DB_CLIENT[DB_NAME]

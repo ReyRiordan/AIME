@@ -52,6 +52,12 @@ def get_data(username: str = None) -> list[dict]:
     items = sorted(items, key=lambda x: datetime.fromisoformat(x["start_time"]), reverse=True)
     return items
 
+# @st.cache_data(ttl=600)
+# def get_data(username: str = None) -> list[dict]:
+#     DB = DB_CLIENT[DB_NAME]
+#     query = {"username": username} if username else {}
+#     return list(DB["Interviews"].find(query).sort("start_time", -1))
+
 
 # MISC
 def read_time(iso_time) -> str:

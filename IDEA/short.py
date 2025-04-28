@@ -30,7 +30,7 @@ st.set_page_config(page_title = "MEWAI",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = LOGIN_PAGE
+    st.session_state["stage"] = CLOSED
 
 def set_stage(stage):
     st.session_state["stage"] = stage
@@ -70,8 +70,7 @@ if st.session_state["stage"] == CLOSED:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
         st.title("CURRENTLY CLOSED")
-        st.write("We are experiencing an outage beyond our control that is delaying the release - please come back later :(")
-        st.write("Rest assured, the deadline will be extended if this issue persists.")
+        st.write("Thank you to everyone who participated! We will be back soon with a new and improved version.")
         st.write("rhr58@scarletmail.rutgers.edu")
 
 

@@ -1,0 +1,35 @@
+import time
+from datetime import datetime
+from docx import Document
+import io
+import os
+import streamlit as st
+import streamlit.components.v1 as components
+# import streamlit_authenticator as auth
+import base64
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import (
+    Mail, Attachment, FileContent, FileName,
+    FileType, Disposition, ContentId)
+from audiorecorder import audiorecorder
+from openai import OpenAI
+import tempfile
+from annotated_text import annotated_text
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from lookups import *
+from web_classes import *
+from web_methods import *
+import pytz
+
+# STREAMLIT SETUP
+st.set_page_config(page_title = "MEWAI",
+                   page_icon = "🧑‍⚕️",
+                   layout = "wide",
+                   initial_sidebar_state="collapsed")
+
+if "stage" not in st.session_state:
+    st.session_state["stage"] = CLOSED
+
+def set_stage(stage):
+    st.session_state["stage"] = stage

@@ -50,6 +50,7 @@ VIEW_INTERVIEWS = 12
 SURVEY = 13
 KEY_PHYSICALS = 14
 VIEW_INTERVIEWS_ADMIN = 15
+HUMAN_EVAL = 16
 
 COSTS = {"gpt-4o": {"input": 5, "output": 15},
          "gpt-4-turbo": {"input": 10, "output": 30},
@@ -144,3 +145,8 @@ def init_connection():
 
 DB_CLIENT = init_connection()
 COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
+
+
+# HUMAN EVAL
+with open("./IDEA/assignments/eval.json", "r") as eval_file:
+    EVALS = json.load(eval_file)

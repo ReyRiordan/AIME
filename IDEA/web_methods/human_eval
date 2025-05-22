@@ -60,3 +60,19 @@ if st.session_state["stage"] == LOGIN_PAGE:
                     st.rerun()
                 else:
                     st.write("Password incorrect.")
+
+
+if st.session_state["stage"] == HUMAN_EVAL:
+    st.title("Human Evaluation")
+    layout1 = st.columns([3, 1])
+    layout1[0].write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side.")
+    layout1[0].write("Note that the rubrics start out hidden for each section; please click on the dropdown to display. In addition, some sections have multiple parts/tabs - please provide a score for each one.")
+    layout11 = layout1[1].columns([1, 2, 1])
+    layout11[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=1)
+    
+    # Let the display methods cook
+    display_Interview(st.session_state["interview"].model_dump())
+
+    st.divider()
+    layout2 = st.columns([1, 2, 1])
+    layout2[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=2)

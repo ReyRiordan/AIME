@@ -35,6 +35,15 @@ def set_stage(stage):
     st.session_state["stage"] = stage
 
 
+# DB SETUP
+@st.cache_resource
+def init_connection():
+    return MongoClient(DB_URI)
+
+DB_CLIENT = init_connection()
+COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
+
+
 if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:

@@ -138,15 +138,6 @@ with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
     GRADE_DIAG_PROMPT = grade_diag_file.read()
 
 
-# DB SETUP
-@st.cache_resource
-def init_connection():
-    return MongoClient(DB_URI)
-
-DB_CLIENT = init_connection()
-COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
-
-
 # HUMAN EVAL
 with open("./IDEA/assignments/eval.json", "r") as eval_file:
     EVALS = json.load(eval_file)

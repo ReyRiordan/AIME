@@ -21,6 +21,7 @@ from lookups import *
 from web_classes import *
 from web_methods import *
 import pytz
+import random
 
 
 def copy_filtered_interviews():
@@ -53,4 +54,61 @@ def copy_filtered_interviews():
         else:
             print(f"No documents to copy for {source_name}")
 
-copy_filtered_interviews()
+def select_eval_set():
+    client = MongoClient(DB_URI)
+    source = client["Benchmark"]["M2"]
+    eval_test = client["Benchmark"]["M2_eval_test"]
+    eval_rem = client["Benchmark"]["M2_eval_rem"]
+
+    # retrieve all and random shuffle
+    all_docs = list(source.find())
+    random.shuffle(all_docs)
+
+    # split into groups by patient
+    groups = {"Jeffrey Smith": [],
+              "Jenny Smith": [],
+              "Samuel Thompson": [],
+              "Sarah Thompson": []}
+    for doc in all_docs:
+        groups[doc["patient"]["id"]].append(doc)
+
+    # select 20 (5 for each patient, all unique students)
+    selected = []
+    used = set()
+    for patient, docs in groups.items():
+        group_selected = []
+        for doc in docs:
+            if doc["netid"] not in used:
+                group_selected.append(doc)
+                used.add(doc["netid"])
+            if len(group_selected) == 5:
+                break
+        selected.extend(group_selected)
+
+    # get remaining
+    selected_ids = {doc["_id"] for doc in selected}
+    remaining = [doc for doc in all_docs if doc["_id"] not in selected_ids]
+    
+    # store each
+    for doc in selected:
+        doc.pop("_id", None)
+    eval_test.insert_many(selected)
+    for doc in remaining:
+        doc.pop("_id", None)
+    eval_rem.insert_many(remaining)
+
+def check_selections():
+    client = MongoClient(DB_URI)
+    source = client["Benchmark"]
+    test = {(doc["netid"], doc["start_time"]) for doc in source["M2_eval_test"].find({}, {"netid": 1, "start_time": 1})}
+    rem = {(doc["netid"], doc["start_time"]) for doc in source["M2_eval_rem"].find({}, {"netid": 1, "start_time": 1})}
+
+    dupes = test & rem
+    if dupes:
+        print(f"{len(dupes)} dupes found, you mesed up")
+    else:
+        print("No dupes, all good")
+
+
+select_eval_set()
+check_selections()

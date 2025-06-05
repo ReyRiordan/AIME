@@ -37,6 +37,10 @@ def set_stage(stage):
     st.session_state["stage"] = stage
 
 
+# DB SETUP
+DB_CLIENT = init_connection()
+COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
+
 @st.cache_data(ttl=600)
 def get_data(username: str = None) -> list[dict]:
     DB = DB_CLIENT[DB_NAME]

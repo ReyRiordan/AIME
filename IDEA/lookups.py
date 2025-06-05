@@ -5,6 +5,9 @@ from anthropic import Anthropic
 from google import genai
 import json
 from pymongo.mongo_client import MongoClient
+from datetime import datetime
+import pytz
+
 
 # from dotenv import load_dotenv
 
@@ -25,6 +28,18 @@ DB_URI = os.getenv("DB_URI")
 DB_NAME = "M2"
 # DATABASE_USERNAME=os.getenv("DB_USERNAME")
 # DATABASE_PASSWORD=os.getenv("DB_PASSWORD")
+
+# DB
+@st.cache_resource
+def init_connection():
+    return MongoClient(DB_URI)
+
+def read_time(iso_time) -> str:
+    if not iso_time: return "N/A"
+    dt = datetime.fromisoformat(iso_time)
+    est = pytz.timezone("US/Eastern")
+    dt_est = dt.astimezone(est)
+    return dt_est.strftime("%B %d, %Y at %I:%M %p")
 
 # Error handling
 INITIAL_BACKOFF = 30

@@ -37,10 +37,6 @@ def set_stage(stage):
 
 
 # DB SETUP
-@st.cache_resource
-def init_connection():
-    return MongoClient(DB_URI)
-
 DB_CLIENT = init_connection()
 COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
@@ -48,13 +44,6 @@ def update_interview():
     COLLECTION.replace_one({"username" : st.session_state["username"], 
                             "start_time" : st.session_state["start_time"]}, 
                             st.session_state["interview"].model_dump())
-    
-def read_time(iso_time) -> str:
-    if not iso_time: return "N/A"
-    dt = datetime.fromisoformat(iso_time)
-    est = pytz.timezone("US/Eastern")
-    dt_est = dt.astimezone(est)
-    return dt_est.strftime("%B %d, %Y at %I:%M %p")
 
 def get_data(username: str = None) -> list[dict]:
     DB = DB_CLIENT[DB_NAME]

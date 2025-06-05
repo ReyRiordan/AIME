@@ -43,6 +43,23 @@ def init_connection():
 DB_CLIENT = init_connection()
 COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
+def insert_eval(EVAL):
+    COLLECTION.insert_one(EVAL)
+
+def update_eval(EVAL):
+    COLLECTION.replace_one({"username" : EVAL["username"], 
+                            "netid": EVAL["netid"],
+                            "start_time": EVAL["start_time"]}, 
+                            EVAL)
+
+def get_interview(netid: str, start_time: str) -> dict | None:
+    DB = DB_CLIENT[DB_NAME]
+    query = {
+        "netid": netid,
+        "start_time": start_time
+    }
+    return DB["Interviews"].find_one(query)
+
 
 if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([2, 3, 2])

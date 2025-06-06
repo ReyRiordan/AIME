@@ -18,7 +18,7 @@ from typing import List
 from lookups import *
 
 
-def display_evaluation(interview: dict, user_inputs: dict) -> None:
+def display_evaluation(interview: dict, user_inputs: dict) -> dict:
     student_responses = interview["post_note_inputs"]
     grading = interview["feedback"]["feedback"]
     categories = []
@@ -40,24 +40,35 @@ def display_evaluation(interview: dict, user_inputs: dict) -> None:
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
                         with tabs[i]:
-                            user_inputs[category][part]["comment"] = st.text_area("Comments/feedback: ", key=part+"1")
+                            comment_key = f"{interview['_id']}_{category}_{part}_comment"
+                            score_key = f"{interview['_id']}_{category}_{part}_score"
+                            user_inputs[category][part]["comment"] = st.text_area("Comments/feedback: ", 
+                                                                                  key = comment_key, 
+                                                                                  value = user_inputs[category][part]["comment"])
                             layout11 = st.columns([1, 5])
-                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{grading[category][part]['max']}**): ", key=part+"2")
+                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{grading[category][part]['max']}**): ", 
+                                                                                          key = score_key, 
+                                                                                          value = user_inputs[category][part]["score"])
                             with st.container(border=True):
                                 st.write("**Rubric:**")
                                 st.write(grading[category][part]["desc"])
                                 st.html(grading[category][part]["html"])
-                            # if inst:
-                            #     with st.expander("Thought process"):
-                            #         if dd["thought"]: st.write(dd["thought"])
                 else:
-                    user_inputs[category]["comment"] = st.text_area("Comments/feedback: ", key=category+"1")
+                    comment_key = f"{interview['_id']}_{category}_comment"
+                    score_key = f"{interview['_id']}_{category}_score"
+                    user_inputs[category]["comment"] = st.text_area("Comments/feedback: ", 
+                                                                    key = comment_key, 
+                                                                    value = user_inputs[category]["comment"])
                     layout11 = st.columns([1, 5])
-                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{grading[category]['max']}**): ", key=category+"2")
+                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{grading[category]['max']}**): ", 
+                                                                            key = score_key, 
+                                                                            value = user_inputs[category]["score"])
                     with st.container(border=True):
                         st.write("**Rubric:**")
                         st.write(grading[category]["desc"])
                         st.html(grading[category]["html"])
+        
+    return user_inputs
 
         
 

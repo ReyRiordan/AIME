@@ -38,6 +38,7 @@ def set_stage(stage):
 
 # DB SETUP
 DB_CLIENT = init_connection()
+DB_NAME = "M2"
 COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
 def update_interview():

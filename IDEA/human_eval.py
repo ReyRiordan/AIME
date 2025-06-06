@@ -41,7 +41,8 @@ def init_connection():
     return MongoClient(DB_URI)
 
 DB_CLIENT = init_connection()
-COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
+DB_NAME = "Benchmark"
+COLLECTION = DB_CLIENT[DB_NAME]["M2_eval_test"]
 
 def insert_eval(EVAL):
     COLLECTION.insert_one(EVAL)

@@ -154,4 +154,4 @@ with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
 
 # HUMAN EVAL
 with open("./IDEA/assignments/eval.json", "r") as eval_file:
-    EVALS = json.load(eval_file)
+    EVALUATORS = json.load(eval_file)

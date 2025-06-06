@@ -29,7 +29,7 @@ st.set_page_config(page_title = "MEWAI",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = CLOSED
+    st.session_state["stage"] = LOGIN_PAGE
 
 def set_stage(stage):
     st.session_state["stage"] = stage
@@ -53,13 +53,9 @@ def update_eval(EVAL):
                             "start_time": EVAL["start_time"]}, 
                             EVAL)
 
-def get_interview(netid: str, start_time: str) -> dict | None:
-    DB = DB_CLIENT[DB_NAME]
-    query = {
-        "netid": netid,
-        "start_time": start_time
-    }
-    return DB["Interviews"].find_one(query)
+def get_interview(start_time: str) -> dict | None:
+    query = {"start_time": start_time}
+    return COLLECTION.find_one(query)
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
@@ -70,16 +66,16 @@ if st.session_state["stage"] == LOGIN_PAGE:
         st.write("Please begin by logging in as you were directed. If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 
         username = st.text_input("Username:")
-        if username and username not in EVALS: 
+        if username and username not in EVALUATORS: 
             st.write("Invalid username.")
         st.session_state["admin"] = True if username == "admin" else False
         password = st.text_input("Password:", type = "password")
 
         layout12b = layout1[1].columns(5)
         if layout12b[2].button("Log in"):
-            if username in EVALS:
-                correct = EVALS[username]["password"]
-                if username in EVALS and password == correct:
+            if username in EVALUATORS:
+                correct = EVALUATORS[username]["password"]
+                if username in EVALUATORS and password == correct:
                     st.session_state["username"] = username
                     st.write("Authentication successful!")
                     time.sleep(1)
@@ -94,11 +90,30 @@ if st.session_state["stage"] == HUMAN_EVAL:
     layout1 = st.columns([3, 1])
     layout1[0].write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side.")
     layout1[0].write("Note that the rubrics start out hidden for each section; please click on the dropdown to display. In addition, some sections have multiple parts/tabs - please provide a score for each one.")
-    layout11 = layout1[1].columns([1, 2, 1])
-    layout11[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=1)
-    
-    # Let the display methods cook
-    display_Interview(st.session_state["interview"].model_dump())
+    layout12 = layout1[1].columns([1, 2, 1])
+    # layout12[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=1)
+
+    # Selection
+    if "view_index" not in st.session_state:
+        st.session_state["view_index"] = 0
+        raw_data = list(COLLECTION.find({}, {"netid": 1, "patient": 1, "start_time": 1}))
+        st.session_state["interview_list"] = {}
+        for interview in raw_data:
+            label = interview["netid"] + ": " + interview["patient"]["id"]
+            st.session_state["interview_list"][label] = interview["start_time"]
+
+    layout11 = layout1[0].columns([1, 3])
+    selected = layout11[0].selectbox("Select an interview:", 
+                            options = st.session_state["interview_list"], 
+                            placeholder = "Select Interview")
+    st.session_state["view_index"] = st.session_state["interview_list"][selected]
+
+    st.divider()
+
+    # Evaluation
+    interview = get_interview(st.session_state["view_index"])
+    if interview:
+        display_evaluation(interview, None)
 
     st.divider()
     layout2 = st.columns([1, 2, 1])

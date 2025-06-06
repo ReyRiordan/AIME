@@ -18,6 +18,46 @@ from typing import List
 from lookups import *
 
 
+def display_evaluation(interview: dict, user_inputs: dict) -> None:
+    student_responses = interview["post_note_inputs"]
+    grading = interview["feedback"]["feedback"]
+    categories = []
+    for cat, input in student_responses.items():
+        if input: categories.append(cat)
+    for category in categories:
+        response = student_responses[category]
+        with st.container(border = True):
+            st.header(f"{category}", divider = "grey")
+            layout1 = st.columns([1, 1])
+            with layout1[0]:
+                st.subheader("**Student response:**")
+                st.write(student_responses[category])
+            with layout1[1]:
+                st.subheader("**Evaluation:**")
+                if category in ["Assessment"]:
+                    st.write("Make sure to check each part!")
+                    parts = [part for part in grading[category]]
+                    print(parts) # checking
+                    tabs = st.tabs(parts)
+                    for i, part in enumerate(parts):
+                        with tabs[i]:
+                            # if inst: st.write(f"**Score: {dd['score']}/{dd['max']}**")
+                            # st.write(dd["comment"])
+                            with st.expander("Rubric"):
+                                st.write(grading[category][part]["desc"])
+                                st.html(grading[category][part]["html"])
+                            # if inst:
+                            #     with st.expander("Thought process"):
+                            #         if dd["thought"]: st.write(dd["thought"])
+                            st.divider()
+                else:
+                    with st.expander("Rubric"):
+                        st.write(grading[category]["desc"])
+                        st.html(grading[category]["html"])
+
+        
+
+
 def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
     # print(feedback)
     inst = st.session_state["admin"]

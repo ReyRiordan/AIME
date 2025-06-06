@@ -94,24 +94,24 @@ if st.session_state["stage"] == HUMAN_EVAL:
     # layout12[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=1)
 
     # Selection
-    if "view_index" not in st.session_state:
-        st.session_state["view_index"] = 0
-        raw_data = list(COLLECTION.find({}, {"netid": 1, "patient": 1, "start_time": 1}))
-        st.session_state["interview_list"] = {}
-        for interview in raw_data:
-            label = interview["netid"] + ": " + interview["patient"]["id"]
-            st.session_state["interview_list"][label] = interview["start_time"]
+    if "selection_setup" not in st.session_state:
+        st.session_state["selection_setup"] = True
+        st.session_state["interview_list"] = list(COLLECTION.find({}, {"_id": 0, "netid": 1, "patient": 1, "start_time": 1}))
+        st.session_state["label_list"] = {}
+        for i in range(len(st.session_state["interview_list"])):
+            label = st.session_state["interview_list"][i]["netid"] + ": " + st.session_state["interview_list"][i]["patient"]["id"]
+            st.session_state["label_list"][label] = i
 
     layout11 = layout1[0].columns([1, 3])
     selected = layout11[0].selectbox("Select an interview:", 
-                            options = st.session_state["interview_list"], 
-                            placeholder = "Select Interview")
-    st.session_state["view_index"] = st.session_state["interview_list"][selected]
+                                     options = st.session_state["label_list"], 
+                                     placeholder = "Select Interview")
+    view_index = st.session_state["label_list"][selected]
 
     st.divider()
 
     # Evaluation
-    interview = get_interview(st.session_state["view_index"])
+    interview = COLLECTION.find_one(st.session_state["interview_list"][view_index])
     if interview:
         display_evaluation(interview, None)
 

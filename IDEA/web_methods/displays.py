@@ -18,7 +18,7 @@ from typing import List
 from lookups import *
 
 
-def display_evaluation(interview: dict, user_inputs: dict) -> None:
+def display_evaluation(interview: dict, evaluation: dict) -> None:
     student_responses = interview["post_note_inputs"]
     grading = interview["feedback"]["feedback"]
     categories = []
@@ -34,7 +34,7 @@ def display_evaluation(interview: dict, user_inputs: dict) -> None:
                 st.write(student_responses[category])
             with layout1[1]:
                 st.subheader("**Evaluation:**")
-                if category in ["Assessment"]:
+                if category in ["Assessment"]: # if multiple parts
                     st.write("Make sure to check each part!")
                     parts = [part for part in grading[category]]
                     tabs = st.tabs(parts)

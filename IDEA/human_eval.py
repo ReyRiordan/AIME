@@ -41,21 +41,21 @@ def init_connection():
     return MongoClient(DB_URI)
 
 DB_CLIENT = init_connection()
-DB_NAME = "Benchmark"
-COLLECTION = DB_CLIENT[DB_NAME]["M2_eval_test"]
+COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["M2_eval_test"]
+COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human"]["M2_eval_test"]
 
-def insert_eval(EVAL):
-    COLLECTION.insert_one(EVAL)
+# def insert_eval(EVAL):
+#     COLLECTION.insert_one(EVAL)
 
-def update_eval(EVAL):
-    COLLECTION.replace_one({"username" : EVAL["username"], 
-                            "netid": EVAL["netid"],
-                            "start_time": EVAL["start_time"]}, 
-                            EVAL)
+# def update_eval(EVAL):
+#     COLLECTION.replace_one({"username" : EVAL["username"], 
+#                             "netid": EVAL["netid"],
+#                             "start_time": EVAL["start_time"]}, 
+#                             EVAL)
 
-def get_interview(start_time: str) -> dict | None:
-    query = {"start_time": start_time}
-    return COLLECTION.find_one(query)
+# def get_interview(start_time: str) -> dict | None:
+#     query = {"start_time": start_time}
+#     return COLLECTION.find_one(query)
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
@@ -94,9 +94,10 @@ if st.session_state["stage"] == HUMAN_EVAL:
     # layout12[1].button("**Next**", on_click=set_stage, args=[SURVEY], use_container_width=True, key=1)
 
     # Selection
-    if "selection_setup" not in st.session_state:
-        st.session_state["selection_setup"] = True
-        st.session_state["interview_list"] = list(COLLECTION.find({}, {"_id": 0, "netid": 1, "patient": 1, "start_time": 1}))
+    if "eval_setup" not in st.session_state:
+        st.session_state["eval_setup"] = True
+        st.session_state["evaluation_list"] = list(COLLECTION_EVALUATIONS.find({}, {"netid": 1, "patient.id": 1, "start_time": 1}))
+        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient.id": 1, "start_time": 1}))
         st.session_state["label_list"] = {}
         for i in range(len(st.session_state["interview_list"])):
             label = st.session_state["interview_list"][i]["netid"] + ": " + st.session_state["interview_list"][i]["patient"]["id"]
@@ -111,9 +112,22 @@ if st.session_state["stage"] == HUMAN_EVAL:
     st.divider()
 
     # Evaluation
-    interview = COLLECTION.find_one(st.session_state["interview_list"][view_index])
-    if interview:
-        display_evaluation(interview, None)
+    interview = COLLECTION_INTERVIEWS.find_one({"_id": st.session_state["interview_list"][view_index]["_id"]})
+    evaluation = COLLECTION_EVALUATIONS.find_one(st.session_state["interview_list"][view_index])
+    if not evaluation:
+        evaluation = {"interview_info": st.session_state["interview_list"][view_index]}
+        # evaluation["interview_info"].pop("_id", None) # del interview's _id
+        feedback = {}
+        for category, data in interview["feedback"]["feedback"].items():
+            if category in ["Assessment"]: # if multiple parts
+                feedback[category] = {}
+                for part in data:
+                    feedback[category][part] = {"comment": None, "score": None}
+            else:
+                feedback[category] = {"comment": None, "score": None}
+        evaluation["feedback"] = feedback
+        print(evaluation)
+    display_evaluation(interview, evaluation)
 
     st.divider()
     layout2 = st.columns([1, 2, 1])

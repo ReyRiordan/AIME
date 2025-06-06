@@ -126,8 +126,8 @@ if st.session_state["stage"] == HUMAN_EVAL:
             else:
                 feedback[category] = {"comment": None, "score": None}
         evaluation["feedback"] = feedback
-        print(evaluation)
-    display_evaluation(interview, evaluation)
+
+    display_evaluation(interview, evaluation["feedback"])
 
     st.divider()
     layout2 = st.columns([1, 2, 1])

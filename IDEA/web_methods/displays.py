@@ -18,7 +18,7 @@ from typing import List
 from lookups import *
 
 
-def display_evaluation(interview: dict, evaluation: dict) -> None:
+def display_evaluation(interview: dict, user_inputs: dict) -> None:
     student_responses = interview["post_note_inputs"]
     grading = interview["feedback"]["feedback"]
     categories = []
@@ -35,13 +35,14 @@ def display_evaluation(interview: dict, evaluation: dict) -> None:
             with layout1[1]:
                 st.subheader("**Evaluation:**")
                 if category in ["Assessment"]: # if multiple parts
-                    st.write("Make sure to check each part!")
+                    st.write("Please make sure to do each part!")
                     parts = [part for part in grading[category]]
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
                         with tabs[i]:
-                            # if inst: st.write(f"**Score: {dd['score']}/{dd['max']}**")
-                            # st.write(dd["comment"])
+                            user_inputs[category][part]["comment"] = st.text_area("Comments/feedback: ", key=part+"1")
+                            layout11 = st.columns([1, 5])
+                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{grading[category][part]['max']}**): ", key=part+"2")
                             with st.container(border=True):
                                 st.write("**Rubric:**")
                                 st.write(grading[category][part]["desc"])
@@ -50,6 +51,9 @@ def display_evaluation(interview: dict, evaluation: dict) -> None:
                             #     with st.expander("Thought process"):
                             #         if dd["thought"]: st.write(dd["thought"])
                 else:
+                    user_inputs[category]["comment"] = st.text_area("Comments/feedback: ", key=category+"1")
+                    layout11 = st.columns([1, 5])
+                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{grading[category]['max']}**): ", key=category+"2")
                     with st.container(border=True):
                         st.write("**Rubric:**")
                         st.write(grading[category]["desc"])

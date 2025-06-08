@@ -35,7 +35,7 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
             with layout1[1]:
                 st.subheader("**Evaluation:**")
                 if category in ["Assessment"]: # if multiple parts
-                    st.write("Please make sure to do each part!")
+                    st.write(":exclamation: Please make sure to do each part by switching between the 3 tabs! :exclamation:")
                     parts = [part for part in grading[category]]
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
@@ -44,7 +44,8 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                             score_key = f"{interview['_id']}_{category}_{part}_score"
                             user_inputs[category][part]["comment"] = st.text_area("Comments/feedback: ", 
                                                                                   key = comment_key, 
-                                                                                  value = user_inputs[category][part]["comment"])
+                                                                                  value = user_inputs[category][part]["comment"], 
+                                                                                  height = 1)
                             layout11 = st.columns([1, 5])
                             user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{grading[category][part]['max']}**): ", 
                                                                                           key = score_key, 
@@ -58,7 +59,8 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                     score_key = f"{interview['_id']}_{category}_score"
                     user_inputs[category]["comment"] = st.text_area("Comments/feedback: ", 
                                                                     key = comment_key, 
-                                                                    value = user_inputs[category]["comment"])
+                                                                    value = user_inputs[category]["comment"], 
+                                                                    height = 1)
                     layout11 = st.columns([1, 5])
                     user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{grading[category]['max']}**): ", 
                                                                             key = score_key, 

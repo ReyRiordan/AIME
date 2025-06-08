@@ -89,7 +89,7 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
 if st.session_state["stage"] == HUMAN_EVAL:
     st.title("Human Evaluation")
-    with st.expander("**Directions**"):
+    with st.expander("**Directions (click to expand)**"):
         st.write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side. In addition, one section has multiple parts/tabs - please provide a score for each one.")
         st.write("Use the \"Back\", \"Next\", and dropdown box to navigate freely between notes. Please note that you MUST press one of the buttons to save your progress, but all buttons including the ones for navigation will save. Marking a note as done will mark it with a :white_check_mark: beside it in the dropdown. Flagging it will mark it with a :question:.")
         st.write("NOTE: the comments/feedback section is optional!")

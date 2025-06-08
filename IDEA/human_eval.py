@@ -89,8 +89,10 @@ if st.session_state["stage"] == LOGIN_PAGE:
 
 if st.session_state["stage"] == HUMAN_EVAL:
     st.title("Human Evaluation")
-    st.write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side.")
-    st.write("Note that the rubrics start out hidden for each section; please click on the dropdown to display. In addition, some sections have multiple parts/tabs - please provide a score for each one.")
+    with st.expander("**Directions**"):
+        st.write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side. In addition, one section has multiple parts/tabs - please provide a score for each one.")
+        st.write("Use the \"Back\", \"Next\", and dropdown box to navigate freely between notes. Please note that you MUST press one of the buttons to save your progress, but all buttons including the ones for navigation will save. Marking a note as done will mark it with a :white_check_mark: beside it in the dropdown. Flagging it will mark it with a :question:.")
+        st.write("NOTE: the comments/feedback section is optional!")
     layout1 = st.columns([2, 3, 2])
 
     # Initialize data if needed
@@ -102,7 +104,6 @@ if st.session_state["stage"] == HUMAN_EVAL:
             st.session_state["label_list"][label] = i
         st.session_state["view_index"] = 0
         st.session_state["current_evaluation"] = None
-        st.session_state["navigation_clicked"] = False
 
     # Get the list of interview labels for the selectbox
     interview_labels = list(st.session_state["label_list"].keys())
@@ -190,9 +191,6 @@ if st.session_state["stage"] == HUMAN_EVAL:
                                               st.session_state["view_index"] + 1)
         elif direction == "back":
             st.session_state["view_index"] = max(0, st.session_state["view_index"] - 1)
-        
-        # Set flag for navigation
-        st.session_state["navigation_clicked"] = True
 
     # Function to save current evaluation
     def save_evaluation():

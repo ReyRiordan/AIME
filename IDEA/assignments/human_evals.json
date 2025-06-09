@@ -1,0 +1,18 @@
+{
+    "admin": {
+        "netid": "rhr58",
+        "password": "corbetsi"
+    },
+    "Fac1": {
+        "netid": null,
+        "password": "Fac1"
+    },
+    "Fac2": {
+        "netid": null,
+        "password": "Fac2"
+    },
+    "Fac3": {
+        "netid": null,
+        "password": "Fac3"
+    }
+}

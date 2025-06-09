@@ -153,7 +153,7 @@ with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
 
 
 # HUMAN EVAL
-with open("./IDEA/assignments/eval.json", "r") as eval_file:
+with open("./IDEA/assignments/human_evals.json", "r") as eval_file:
     EVALUATORS = json.load(eval_file)
 
 with open("./Rubrics/base_rubric.json", "r") as rubric_base_file:
@@ -168,4 +168,3 @@ for category in rubric_base:
             RUBRIC[category][part] = {**rubric_base[category][part], **rubric_points[category][part]}
     else:
         RUBRIC[category] = {**rubric_base[category], **rubric_points[category]}
-print(RUBRIC)

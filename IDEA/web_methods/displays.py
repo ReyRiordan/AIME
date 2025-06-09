@@ -43,8 +43,7 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                             score_key = f"{interview['_id']}_{category}_{part}_score"
                             user_inputs[category][part]["comment"] = st.text_area("Comments/feedback: ", 
                                                                                   key = comment_key, 
-                                                                                  value = user_inputs[category][part]["comment"], 
-                                                                                  height = 1)
+                                                                                  value = user_inputs[category][part]["comment"])
                             layout11 = st.columns([1, 5])
                             user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category][part]['points']}**): ", 
                                                                                           key = score_key, 
@@ -59,8 +58,7 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                     score_key = f"{interview['_id']}_{category}_score"
                     user_inputs[category]["comment"] = st.text_area("Comments/feedback: ", 
                                                                     key = comment_key, 
-                                                                    value = user_inputs[category]["comment"], 
-                                                                    height = 1)
+                                                                    value = user_inputs[category]["comment"])
                     layout11 = st.columns([1, 5])
                     user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category]['points']}**): ", 
                                                                             key = score_key, 

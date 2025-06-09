@@ -51,8 +51,9 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                                           value = user_inputs[category][part]["score"])
                             with st.container(border=True):
                                 st.write("**Rubric:**")
-                                # st.write(RUBRIC[category][part]["desc"])
                                 st.html(RUBRIC[category][part]["html"])
+                                with st.expander("Description"):
+                                    st.write(RUBRIC[category][part]["title"] + ": " + RUBRIC[category][part]["desc"])
                 else:
                     comment_key = f"{interview['_id']}_{category}_comment"
                     score_key = f"{interview['_id']}_{category}_score"
@@ -66,8 +67,9 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                             value = user_inputs[category]["score"])
                     with st.container(border=True):
                         st.write("**Rubric:**")
-                        # st.write(RUBRIC[category]["desc"])
                         st.html(RUBRIC[category]["html"])
+                        with st.expander("Description"):
+                            st.write(RUBRIC[category]["title"] + ": " + RUBRIC[category]["desc"])
         
     return user_inputs
 

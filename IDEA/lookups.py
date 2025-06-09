@@ -155,5 +155,17 @@ with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
 # HUMAN EVAL
 with open("./IDEA/assignments/eval.json", "r") as eval_file:
     EVALUATORS = json.load(eval_file)
-with open("./Rubrics/rubric_atypicals_6-8-25.json", "r") as rubric_file:
-    RUBRIC = json.load(rubric_file)
+
+with open("./Rubrics/base_rubric.json", "r") as rubric_base_file:
+    rubric_base = json.load(rubric_base_file)
+with open("./Rubrics/rubric_atypicals_6-8-25.json", "r") as rubric_points_file:
+    rubric_points = json.load(rubric_points_file)
+RUBRIC = {}
+for category in rubric_base:
+    if category in ["HPI", "Past Histories", "Assessment"]: # multiple parts
+        RUBRIC[category] = {}
+        for part in rubric_base[category]:
+            RUBRIC[category][part] = {**rubric_base[category][part], **rubric_points[category][part]}
+    else:
+        RUBRIC[category] = {**rubric_base[category], **rubric_points[category]}
+print(RUBRIC)

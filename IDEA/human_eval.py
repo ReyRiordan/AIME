@@ -21,6 +21,7 @@ from lookups import *
 from web_classes import *
 from web_methods import *
 import pytz
+import emoji
 
 # STREAMLIT SETUP
 st.set_page_config(page_title = "MEWAI",
@@ -34,6 +35,10 @@ if "stage" not in st.session_state:
 def set_stage(stage):
     st.session_state["stage"] = stage
 
+def record_time(evaluation):
+    current_time = datetime.now().isoformat()
+    evaluation["times"].append(current_time)
+
 
 # DB SETUP
 @st.cache_resource
@@ -42,10 +47,7 @@ def init_connection():
 
 DB_CLIENT = init_connection()
 COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["Interviews"]["M2_test"]
-COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_rem"]
-
-# def insert_eval(EVAL):
-#     COLLECTION.insert_one(EVAL)
+COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_test"]
 
 def update_evaluation(evaluation):
     """Update or insert an evaluation document in the database."""
@@ -54,10 +56,6 @@ def update_evaluation(evaluation):
         "interview_info._id": evaluation["interview_info"]["_id"]
     }
     COLLECTION_EVALUATIONS.replace_one(query, evaluation, upsert=True)
-
-# def get_interview(start_time: str) -> dict | None:
-#     query = {"start_time": start_time}
-#     return COLLECTION.find_one(query)
 
 
 if st.session_state["stage"] == LOGIN_PAGE:
@@ -90,21 +88,28 @@ if st.session_state["stage"] == LOGIN_PAGE:
 if st.session_state["stage"] == HUMAN_EVAL:
     st.title("Human Evaluation")
     with st.expander("**Directions (click to expand)**"):
-        st.write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side. In addition, one section has multiple parts/tabs - please provide a score for each one.")
-        st.write("Use the \"Back\", \"Next\", and dropdown box to navigate freely between notes. Please note that you MUST press one of the buttons to save your progress, but all buttons including the ones for navigation will save. Marking a note as done will mark it with a :white_check_mark: beside it in the dropdown. Flagging it will mark it with a :question:.")
+        st.write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side. Clicking to expand the \"Description\" will give you a detailed description of each section. In addition, at least one section has multiple parts - please provide a score for each part.")
+        st.write("Use the \"Back\", \"Next\", and dropdown box to navigate freely between notes. Please note that you MUST press one of the buttons to save your progress, but all buttons including the dropdown select will save.")
+        st.write(emoji.emojize("Marking a note as done will mark it with a :white_check_mark: beside it in the dropdown. Flagging it will mark it with a :triangular_flag_on_post:."))
         st.write("NOTE: the comments/feedback section is optional!")
     layout1 = st.columns([2, 3, 2])
 
-    # Initialize data if needed
-    if "interview_list" not in st.session_state:
-        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient": 1}))
+    # Update/initialize main lookup dict labels
+    def update_labels():
         st.session_state["interviews_label:index"] = {}
         for index, interview in enumerate(st.session_state["interview_list"]):
             label = interview["netid"] + ": " + interview["patient"]
             eval_for_label = COLLECTION_EVALUATIONS.find_one({"username": st.session_state["username"], "interview_info._id": interview["_id"]})
             if eval_for_label:
-                label += eval_for_label["mark"]
+                label += " " + eval_for_label["mark"]
+                label = emoji.emojize(label, language='alias')
             st.session_state["interviews_label:index"][label] = index
+
+    
+    # Initialize data if needed
+    if "interview_list" not in st.session_state:
+        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient": 1}))
+        update_labels()
         st.session_state["current_index"] = 0
         st.session_state["current_evaluation"] = None
 
@@ -122,8 +127,11 @@ if st.session_state["stage"] == HUMAN_EVAL:
         evaluation = {
             "username": st.session_state["username"],
             "interview_info": st.session_state["interview_list"][st.session_state["current_index"]],
-            "mark": ""
+            "mark": "",
+            "times": []
         }
+        # Record start time
+        record_time(evaluation)
         # Initialize feedback structure
         feedback = {}
         for category, data in RUBRIC.items():
@@ -143,14 +151,10 @@ if st.session_state["stage"] == HUMAN_EVAL:
     # Selectbox section
     layout11 = layout1[1].columns([1, 2, 1])
     
-    # Get the current index and label
-    # current_index = st.session_state["current_index"]
-    
     # Function for selectbox change
     def on_select_change():
-        # Save current form values before switching
+        record_time(st.session_state["current_evaluation"])
         update_evaluation(st.session_state["current_evaluation"])
-        
         # Get the new index from the selected label
         st.session_state["current_index"] = st.session_state["interviews_label:index"][st.session_state["selected_label"]]
         
@@ -168,12 +172,12 @@ if st.session_state["stage"] == HUMAN_EVAL:
     # The meat - display the evaluation form and capture updated feedback
     evaluation["feedback"] = display_evaluation(interview, evaluation["feedback"])
     
-    # Update the session state with the latest form values
+    # Update session state with latest evaluation
     st.session_state["current_evaluation"] = evaluation
 
-    # Function to handle navigation clicks
+    # Function to handle dropdown navigation
     def navigate(direction):
-        # Save the current evaluation
+        record_time(st.session_state["current_evaluation"])
         update_evaluation(st.session_state["current_evaluation"])
         
         # Update the view index based on direction
@@ -183,8 +187,16 @@ if st.session_state["stage"] == HUMAN_EVAL:
         elif direction == "back":
             st.session_state["current_index"] = max(0, st.session_state["current_index"] - 1)
 
+    # Function to mark current evaluation
+    def mark_evaluation(mark: str):
+        record_time(st.session_state["current_evaluation"])
+        st.session_state["current_evaluation"]["mark"] = mark
+        update_evaluation(st.session_state["current_evaluation"])
+        update_labels()
+
     # Function to save current evaluation
     def save_evaluation():
+        record_time(st.session_state["current_evaluation"])
         update_evaluation(st.session_state["current_evaluation"])
         
     # Top navigation buttons
@@ -197,18 +209,31 @@ if st.session_state["stage"] == HUMAN_EVAL:
     
     # Save button
     layout12 = layout1[1].columns([1, 1, 1])
+    if layout12[0].button(emoji.emojize("Flag :triangular_flag_on_post:"), use_container_width=True, key="flagtop"):
+        mark_evaluation(":triangular_flag_on_post:")
+        st.rerun()
     if layout12[1].button("Save", use_container_width=True, key="savetop"):
         save_evaluation()
+        st.rerun()
+    if layout12[2].button(emoji.emojize("Done :white_check_mark:"), use_container_width=True, key="donetop"):
+        mark_evaluation(":white_check_mark:")
         st.rerun()
 
     # Bottom navigation buttons
     layout2 = st.columns([2, 3, 2])
-    layout22 = layout2[1].columns([1, 2, 1])
-    if layout22[0].button("Back", use_container_width=True, key="backbot"):
-        navigate("back")
+    layout21 = layout2[1].columns([1, 1, 1])
+    if layout21[0].button(emoji.emojize("Flag :triangular_flag_on_post:", language="alias"), use_container_width=True, key="flagbot"):
+        mark_evaluation(":triangular_flag_on_post:")
         st.rerun()
-    if layout22[1].button("Save", use_container_width=True, key="savebot"):
+    if layout21[1].button("Save", use_container_width=True, key="savebot"):
         save_evaluation()
+        st.rerun()
+    if layout21[2].button(emoji.emojize("Done :white_check_mark:"), use_container_width=True, key="donebot"):
+        mark_evaluation(":white_check_mark:")
+        st.rerun()
+    layout22 = layout2[1].columns([1, 2, 2, 1])
+    if layout22[1].button("Back", use_container_width=True, key="backbot"):
+        navigate("back")
         st.rerun()
     if layout22[2].button("Next", use_container_width=True, key="nextbot"):
         navigate("next")

@@ -24,91 +24,6 @@ import pytz
 import random
 
 
-def copy_filtered_interviews():
-    client = MongoClient(DB_URI)
-
-    sources = ["M1", "M2"]
-    target_db = client["Benchmark"]
-
-    for source_name in sources:
-        source_collection = client[source_name]["Interviews"]
-        target_collection = target_db[source_name]
-
-        # Filter where feedback is not null
-        filtered_docs = source_collection.find({
-            "feedback": {"$ne": None}
-        })
-
-        # Add "group" (M1/M2), change "username" to "netid"
-        modified_docs = []
-        for doc in filtered_docs:
-            doc["group"] = source_name
-            doc["netid"] = doc["username"]
-            del doc["username"]
-            doc.pop("_id", None)  # Remove _id to avoid conflict
-            modified_docs.append(doc)
-
-        if modified_docs:
-            target_collection.insert_many(modified_docs)
-            print(f"Copied {len(modified_docs)} documents to Benchmark.{source_name}")
-        else:
-            print(f"No documents to copy for {source_name}")
-
-def select_eval_set():
-    client = MongoClient(DB_URI)
-    source = client["Benchmark"]["M2"]
-    eval_test = client["Benchmark"]["M2_eval_test"]
-    eval_rem = client["Benchmark"]["M2_eval_rem"]
-
-    # retrieve all and random shuffle
-    all_docs = list(source.find())
-    random.shuffle(all_docs)
-
-    # split into groups by patient
-    groups = {"Jeffrey Smith": [],
-              "Jenny Smith": [],
-              "Samuel Thompson": [],
-              "Sarah Thompson": []}
-    for doc in all_docs:
-        groups[doc["patient"]["id"]].append(doc)
-
-    # select 20 (5 for each patient, all unique students)
-    selected = []
-    used = set()
-    for patient, docs in groups.items():
-        group_selected = []
-        for doc in docs:
-            if doc["netid"] not in used:
-                group_selected.append(doc)
-                used.add(doc["netid"])
-            if len(group_selected) == 5:
-                break
-        selected.extend(group_selected)
-
-    # get remaining
-    selected_ids = {doc["_id"] for doc in selected}
-    remaining = [doc for doc in all_docs if doc["_id"] not in selected_ids]
-    
-    # store each
-    for doc in selected:
-        doc.pop("_id", None)
-    eval_test.insert_many(selected)
-    for doc in remaining:
-        doc.pop("_id", None)
-    eval_rem.insert_many(remaining)
-
-def check_selections():
-    client = MongoClient(DB_URI)
-    source = client["Benchmark"]
-    test = {(doc["netid"], doc["start_time"]) for doc in source["M2_eval_test"].find({}, {"netid": 1, "start_time": 1})}
-    rem = {(doc["netid"], doc["start_time"]) for doc in source["M2_eval_rem"].find({}, {"netid": 1, "start_time": 1})}
-
-    dupes = test & rem
-    if dupes:
-        print(f"{len(dupes)} dupes found, you mesed up")
-    else:
-        print("No dupes, all good")
-
 def copy_post_notes():
     client = MongoClient(DB_URI)
 
@@ -158,4 +73,47 @@ def manual_filter():
         if response == "n":
             source.delete_one({"_id": doc["_id"]})
 
-manual_filter()
+def select_eval_set():
+    client = MongoClient(DB_URI)
+    source = client["Benchmark"]["Interviews"]["M2"]
+    eval_test = client["Benchmark"]["Interviews"]["M2_test"]
+    eval_rem = client["Benchmark"]["Interviews"]["M2_rem"]
+
+    # retrieve all and random shuffle
+    all_docs = list(source.find())
+    random.shuffle(all_docs)
+
+    # split into groups by patient
+    groups = {"Jeffrey Smith": [],
+              "Jenny Smith": [],
+              "Samuel Thompson": [],
+              "Sarah Thompson": []}
+    for doc in all_docs:
+        groups[doc["patient"]].append(doc)
+
+    # select 40 (10 for each patient, all unique students)
+    selected = []
+    used = set()
+    for patient, docs in groups.items():
+        group_selected = []
+        for doc in docs:
+            if doc["netid"] not in used:
+                group_selected.append(doc)
+                used.add(doc["netid"])
+            if len(group_selected) == 10:
+                break
+        selected.extend(group_selected)
+
+    # get remaining
+    selected_ids = {doc["_id"] for doc in selected}
+    remaining = [doc for doc in all_docs if doc["_id"] not in selected_ids]
+    
+    # store each
+    for doc in selected:
+        doc.pop("_id", None)
+    eval_test.insert_many(selected)
+    for doc in remaining:
+        doc.pop("_id", None)
+    eval_rem.insert_many(remaining)
+
+select_eval_set()

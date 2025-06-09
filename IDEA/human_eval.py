@@ -41,8 +41,8 @@ def init_connection():
     return MongoClient(DB_URI)
 
 DB_CLIENT = init_connection()
-COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["Interviews"]["M2_eval_test"]
-COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_eval_test"]
+COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["Interviews"]["M2_test"]
+COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_rem"]
 
 # def insert_eval(EVAL):
 #     COLLECTION.insert_one(EVAL)
@@ -98,36 +98,35 @@ if st.session_state["stage"] == HUMAN_EVAL:
     # Initialize data if needed
     if "interview_list" not in st.session_state:
         st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient": 1}))
-        st.session_state["label_list"] = {}
-        for i in range(len(st.session_state["interview_list"])):
-            label = st.session_state["interview_list"][i]["netid"] + ": " + st.session_state["interview_list"][i]["patient"]
-            st.session_state["label_list"][label] = i
-        st.session_state["view_index"] = 0
+        st.session_state["interviews_label:index"] = {}
+        for index, interview in enumerate(st.session_state["interview_list"]):
+            label = interview["netid"] + ": " + interview["patient"]
+            eval_for_label = COLLECTION_EVALUATIONS.find_one({"username": st.session_state["username"], "interview_info._id": interview["_id"]})
+            if eval_for_label:
+                label += eval_for_label["mark"]
+            st.session_state["interviews_label:index"][label] = index
+        st.session_state["current_index"] = 0
         st.session_state["current_evaluation"] = None
 
     # Get the list of interview labels for the selectbox
-    interview_labels = list(st.session_state["label_list"].keys())
+    interview_labels = list(st.session_state["interviews_label:index"].keys())
     
     # Load the current interview based on view_index
-    interview_id = st.session_state["interview_list"][st.session_state["view_index"]]["_id"]
+    interview_id = st.session_state["interview_list"][st.session_state["current_index"]]["_id"]
     interview = COLLECTION_INTERVIEWS.find_one({"_id": interview_id})
 
     # Load or create the evaluation for this interview
-    query = {
-        "username": st.session_state["username"],
-        "interview_info._id": interview_id
-    }
-    evaluation = COLLECTION_EVALUATIONS.find_one(query)
+    evaluation = COLLECTION_EVALUATIONS.find_one({"username": st.session_state["username"], "interview_info._id": interview_id})
     if not evaluation:
         # Create a new evaluation document
         evaluation = {
             "username": st.session_state["username"],
-            "interview_info": st.session_state["interview_list"][st.session_state["view_index"]],
+            "interview_info": st.session_state["interview_list"][st.session_state["current_index"]],
             "mark": ""
         }
         # Initialize feedback structure
         feedback = {}
-        for category, data in interview["feedback"]["feedback"].items():
+        for category, data in RUBRIC.items():
             if category in ["Assessment"]: # if multiple parts
                 feedback[category] = {}
                 for part in data:
@@ -145,12 +144,7 @@ if st.session_state["stage"] == HUMAN_EVAL:
     layout11 = layout1[1].columns([1, 2, 1])
     
     # Get the current index and label
-    current_index = st.session_state["view_index"]
-    current_label = None
-    for label, idx in st.session_state["label_list"].items():
-        if idx == current_index:
-            current_label = label
-            break
+    # current_index = st.session_state["current_index"]
     
     # Function for selectbox change
     def on_select_change():
@@ -158,20 +152,16 @@ if st.session_state["stage"] == HUMAN_EVAL:
         update_evaluation(st.session_state["current_evaluation"])
         
         # Get the new index from the selected label
-        selected_label = st.session_state["interview_selector"]
-        new_index = st.session_state["label_list"][selected_label]
+        st.session_state["current_index"] = st.session_state["interviews_label:index"][st.session_state["selected_label"]]
         
-        # Update the view index
-        st.session_state["view_index"] = new_index
-
     # Create the selectbox
-    selected = layout11[1].selectbox(
+    selected_label = layout11[1].selectbox(
         "Select an interview:", 
-        options=interview_labels,
-        index=interview_labels.index(current_label) if current_label else 0,
+        options=st.session_state["interviews_label:index"],
+        index=st.session_state["current_index"],
         placeholder="Select Interview", 
         label_visibility="collapsed", 
-        key="interview_selector",
+        key="selected_label",
         on_change=on_select_change
     )
     
@@ -182,16 +172,16 @@ if st.session_state["stage"] == HUMAN_EVAL:
     st.session_state["current_evaluation"] = evaluation
 
     # Function to handle navigation clicks
-    def handle_navigation(direction):
+    def navigate(direction):
         # Save the current evaluation
         update_evaluation(st.session_state["current_evaluation"])
         
         # Update the view index based on direction
         if direction == "next":
-            st.session_state["view_index"] = min(len(st.session_state["interview_list"]) - 1, 
-                                              st.session_state["view_index"] + 1)
+            st.session_state["current_index"] = min(len(st.session_state["interview_list"]) - 1, 
+                                              st.session_state["current_index"] + 1)
         elif direction == "back":
-            st.session_state["view_index"] = max(0, st.session_state["view_index"] - 1)
+            st.session_state["current_index"] = max(0, st.session_state["current_index"] - 1)
 
     # Function to save current evaluation
     def save_evaluation():
@@ -199,27 +189,27 @@ if st.session_state["stage"] == HUMAN_EVAL:
         
     # Top navigation buttons
     if layout11[0].button("Back", use_container_width=True, key="backtop"):
-        handle_navigation("back")
+        navigate("back")
         st.rerun()
     if layout11[2].button("Next", use_container_width=True, key="nexttop"):
-        handle_navigation("next")
+        navigate("next")
         st.rerun()
     
     # Save button
     layout12 = layout1[1].columns([1, 1, 1])
     if layout12[1].button("Save", use_container_width=True, key="savetop"):
         save_evaluation()
-        st.success("Evaluation saved successfully!")
+        st.rerun()
 
     # Bottom navigation buttons
     layout2 = st.columns([2, 3, 2])
     layout22 = layout2[1].columns([1, 2, 1])
     if layout22[0].button("Back", use_container_width=True, key="backbot"):
-        handle_navigation("back")
+        navigate("back")
         st.rerun()
     if layout22[1].button("Save", use_container_width=True, key="savebot"):
         save_evaluation()
-        st.success("Evaluation saved successfully!")
+        st.rerun()
     if layout22[2].button("Next", use_container_width=True, key="nextbot"):
-        handle_navigation("next")
+        navigate("next")
         st.rerun()

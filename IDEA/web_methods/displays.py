@@ -46,12 +46,12 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                                   value = user_inputs[category][part]["comment"], 
                                                                                   height = 1)
                             layout11 = st.columns([1, 5])
-                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category][part]['max']}**): ", 
+                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category][part]['points']}**): ", 
                                                                                           key = score_key, 
                                                                                           value = user_inputs[category][part]["score"])
                             with st.container(border=True):
                                 st.write("**Rubric:**")
-                                st.write(RUBRIC[category][part]["desc"])
+                                # st.write(RUBRIC[category][part]["desc"])
                                 st.html(RUBRIC[category][part]["html"])
                 else:
                     comment_key = f"{interview['_id']}_{category}_comment"
@@ -61,12 +61,12 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                     value = user_inputs[category]["comment"], 
                                                                     height = 1)
                     layout11 = st.columns([1, 5])
-                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category]['max']}**): ", 
+                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category]['points']}**): ", 
                                                                             key = score_key, 
                                                                             value = user_inputs[category]["score"])
                     with st.container(border=True):
                         st.write("**Rubric:**")
-                        st.write(RUBRIC[category]["desc"])
+                        # st.write(RUBRIC[category]["desc"])
                         st.html(RUBRIC[category]["html"])
         
     return user_inputs

@@ -51,6 +51,7 @@ COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_test"]
 
 def update_evaluation(evaluation):
     """Update or insert an evaluation document in the database."""
+    record_time(evaluation)
     query = {
         "username": st.session_state["username"],
         "interview_info._id": evaluation["interview_info"]["_id"]
@@ -96,7 +97,28 @@ if st.session_state["stage"] == HUMAN_EVAL:
     layout1 = st.columns([2, 3, 2])
 
     # Update/initialize main lookup dict labels
-    def update_labels():
+    def update_label(evaluation, current_index):
+        items = list(st.session_state["interviews_label:index"].items())
+        for label, index in items:
+            if index == current_index: 
+                old_label = label
+                break
+        interview = evaluation["interview_info"]
+        eval_for_label = COLLECTION_EVALUATIONS.find_one({"username": evaluation["username"], "interview_info._id": interview["_id"]})
+        new_label = interview["netid"] + ": " + interview["patient"] + " " + eval_for_label["mark"]
+        new_label = emoji.emojize(new_label, language='alias')
+        reconstruct = {}
+        for label, index in items:
+            if label == old_label:
+                reconstruct[new_label] = index
+            else:
+                reconstruct[label] = index
+        st.session_state["interviews_label:index"] = reconstruct
+
+    
+    # Initialize data if needed
+    if "interview_list" not in st.session_state:
+        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient": 1}))
         st.session_state["interviews_label:index"] = {}
         for index, interview in enumerate(st.session_state["interview_list"]):
             label = interview["netid"] + ": " + interview["patient"]
@@ -105,12 +127,6 @@ if st.session_state["stage"] == HUMAN_EVAL:
                 label += " " + eval_for_label["mark"]
                 label = emoji.emojize(label, language='alias')
             st.session_state["interviews_label:index"][label] = index
-
-    
-    # Initialize data if needed
-    if "interview_list" not in st.session_state:
-        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient": 1}))
-        update_labels()
         st.session_state["current_index"] = 0
         st.session_state["current_evaluation"] = None
 
@@ -154,7 +170,6 @@ if st.session_state["stage"] == HUMAN_EVAL:
     
     # Function for selectbox change
     def on_select_change():
-        record_time(st.session_state["current_evaluation"])
         update_evaluation(st.session_state["current_evaluation"])
         # Get the new index from the selected label
         st.session_state["current_index"] = st.session_state["interviews_label:index"][st.session_state["selected_label"]]
@@ -178,7 +193,6 @@ if st.session_state["stage"] == HUMAN_EVAL:
 
     # Function to handle dropdown navigation
     def navigate(direction):
-        record_time(st.session_state["current_evaluation"])
         update_evaluation(st.session_state["current_evaluation"])
         
         # Update the view index based on direction
@@ -190,14 +204,12 @@ if st.session_state["stage"] == HUMAN_EVAL:
 
     # Function to mark current evaluation
     def mark_evaluation(mark: str):
-        record_time(st.session_state["current_evaluation"])
         st.session_state["current_evaluation"]["mark"] = mark
         update_evaluation(st.session_state["current_evaluation"])
-        update_labels()
+        update_label(st.session_state["current_evaluation"], st.session_state["current_index"])
 
     # Function to save current evaluation
     def save_evaluation():
-        record_time(st.session_state["current_evaluation"])
         update_evaluation(st.session_state["current_evaluation"])
         
     # Top navigation buttons
@@ -220,22 +232,22 @@ if st.session_state["stage"] == HUMAN_EVAL:
         mark_evaluation(":white_check_mark:")
         st.rerun()
 
-    # Bottom navigation buttons
-    layout2 = st.columns([2, 3, 2])
-    layout21 = layout2[1].columns([1, 1, 1])
-    if layout21[0].button(emoji.emojize("Flag :triangular_flag_on_post:", language="alias"), use_container_width=True, key="flagbot"):
-        mark_evaluation(":triangular_flag_on_post:")
-        st.rerun()
-    if layout21[1].button("Save", use_container_width=True, key="savebot"):
-        save_evaluation()
-        st.rerun()
-    if layout21[2].button(emoji.emojize("Done :white_check_mark:"), use_container_width=True, key="donebot"):
-        mark_evaluation(":white_check_mark:")
-        st.rerun()
-    layout22 = layout2[1].columns([1, 2, 2, 1])
-    if layout22[1].button("Back", use_container_width=True, key="backbot"):
-        navigate("back")
-        st.rerun()
-    if layout22[2].button("Next", use_container_width=True, key="nextbot"):
-        navigate("next")
-        st.rerun()
+    # # Bottom navigation buttons
+    # layout2 = st.columns([2, 3, 2])
+    # layout21 = layout2[1].columns([1, 1, 1])
+    # if layout21[0].button(emoji.emojize("Flag :triangular_flag_on_post:", language="alias"), use_container_width=True, key="flagbot"):
+    #     mark_evaluation(":triangular_flag_on_post:")
+    #     st.rerun()
+    # if layout21[1].button("Save", use_container_width=True, key="savebot"):
+    #     save_evaluation()
+    #     st.rerun()
+    # if layout21[2].button(emoji.emojize("Done :white_check_mark:"), use_container_width=True, key="donebot"):
+    #     mark_evaluation(":white_check_mark:")
+    #     st.rerun()
+    # layout22 = layout2[1].columns([1, 2, 2, 1])
+    # if layout22[1].button("Back", use_container_width=True, key="backbot"):
+    #     navigate("back")
+    #     st.rerun()
+    # if layout22[2].button("Next", use_container_width=True, key="nextbot"):
+    #     navigate("next")
+    #     st.rerun()

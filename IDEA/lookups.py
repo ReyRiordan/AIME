@@ -155,3 +155,5 @@ with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
 # HUMAN EVAL
 with open("./IDEA/assignments/eval.json", "r") as eval_file:
     EVALUATORS = json.load(eval_file)
+with open("./Rubrics/rubric_atypicals_6-8-25.json", "r") as rubric_file:
+    RUBRIC = json.load(rubric_file)

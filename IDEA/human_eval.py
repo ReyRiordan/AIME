@@ -41,8 +41,8 @@ def init_connection():
     return MongoClient(DB_URI)
 
 DB_CLIENT = init_connection()
-COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["M2_eval_test"]
-COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human"]["M2_eval_test"]
+COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["Interviews"]["M2_eval_test"]
+COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_eval_test"]
 
 # def insert_eval(EVAL):
 #     COLLECTION.insert_one(EVAL)
@@ -97,10 +97,10 @@ if st.session_state["stage"] == HUMAN_EVAL:
 
     # Initialize data if needed
     if "interview_list" not in st.session_state:
-        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient.id": 1, "start_time": 1}))
+        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient": 1}))
         st.session_state["label_list"] = {}
         for i in range(len(st.session_state["interview_list"])):
-            label = st.session_state["interview_list"][i]["netid"] + ": " + st.session_state["interview_list"][i]["patient"]["id"]
+            label = st.session_state["interview_list"][i]["netid"] + ": " + st.session_state["interview_list"][i]["patient"]
             st.session_state["label_list"][label] = i
         st.session_state["view_index"] = 0
         st.session_state["current_evaluation"] = None
@@ -122,7 +122,8 @@ if st.session_state["stage"] == HUMAN_EVAL:
         # Create a new evaluation document
         evaluation = {
             "username": st.session_state["username"],
-            "interview_info": st.session_state["interview_list"][st.session_state["view_index"]]
+            "interview_info": st.session_state["interview_list"][st.session_state["view_index"]],
+            "mark": ""
         }
         # Initialize feedback structure
         feedback = {}

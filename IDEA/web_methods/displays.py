@@ -19,8 +19,7 @@ from lookups import *
 
 
 def display_evaluation(interview: dict, user_inputs: dict) -> dict:
-    student_responses = interview["post_note_inputs"]
-    grading = interview["feedback"]["feedback"]
+    student_responses = interview["post_note"]
     categories = []
     for cat, input in student_responses.items():
         if input: categories.append(cat)
@@ -36,7 +35,7 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                 st.subheader("**Evaluation:**")
                 if category in ["Assessment"]: # if multiple parts
                     st.write(":exclamation: Please make sure to do each part by switching between the 3 tabs! :exclamation:")
-                    parts = [part for part in grading[category]]
+                    parts = [part for part in RUBRIC[category]]
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
                         with tabs[i]:
@@ -47,13 +46,13 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                                   value = user_inputs[category][part]["comment"], 
                                                                                   height = 1)
                             layout11 = st.columns([1, 5])
-                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{grading[category][part]['max']}**): ", 
+                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category][part]['max']}**): ", 
                                                                                           key = score_key, 
                                                                                           value = user_inputs[category][part]["score"])
                             with st.container(border=True):
                                 st.write("**Rubric:**")
-                                st.write(grading[category][part]["desc"])
-                                st.html(grading[category][part]["html"])
+                                st.write(RUBRIC[category][part]["desc"])
+                                st.html(RUBRIC[category][part]["html"])
                 else:
                     comment_key = f"{interview['_id']}_{category}_comment"
                     score_key = f"{interview['_id']}_{category}_score"
@@ -62,13 +61,13 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                     value = user_inputs[category]["comment"], 
                                                                     height = 1)
                     layout11 = st.columns([1, 5])
-                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{grading[category]['max']}**): ", 
+                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category]['max']}**): ", 
                                                                             key = score_key, 
                                                                             value = user_inputs[category]["score"])
                     with st.container(border=True):
                         st.write("**Rubric:**")
-                        st.write(grading[category]["desc"])
-                        st.html(grading[category]["html"])
+                        st.write(RUBRIC[category]["desc"])
+                        st.html(RUBRIC[category]["html"])
         
     return user_inputs
 

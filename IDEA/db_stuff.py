@@ -109,6 +109,53 @@ def check_selections():
     else:
         print("No dupes, all good")
 
+def copy_post_notes():
+    client = MongoClient(DB_URI)
 
-select_eval_set()
-check_selections()
+    sources = ["M1", "M2"]
+    target_db = client["Benchmark"]["Interviews"]
+
+    for source_name in sources:
+        source_collection = client[source_name]["Interviews"]
+        target_collection = target_db[source_name]
+
+        # Filter where feedback is not null
+        filtered_docs = source_collection.find({
+            "feedback": {"$ne": None}
+        })
+
+        # Add "group" (M1/M2), change "username" to "netid"
+        modified_docs = []
+        for doc in filtered_docs:
+            doc["group"] = source_name
+            doc["netid"] = doc["username"]
+            del doc["username"]
+            patient = doc["patient"]["id"]
+            del doc["patient"]
+            doc["patient"] = patient
+            del doc["feedback"]
+            doc["post_note"] = doc.pop("post_note_inputs")
+            doc.pop("convo_data", None)
+            doc.pop("_id", None)  # Remove _id to avoid conflict
+            modified_docs.append(doc)
+
+        if modified_docs:
+            target_collection.insert_many(modified_docs)
+            print(f"Copied {len(modified_docs)} documents from {source_name}")
+        else:
+            print(f"No documents to copy for {source_name}")
+
+def manual_filter():
+    client = MongoClient(DB_URI)
+    source = client["Benchmark"]["Interviews"]["M2"]
+
+    docs = list(source.find({}, {"netid": 1, "patient": 1, "post_note": 1}))
+
+    for doc in docs:
+        print("---------------------------------------------------------------------")
+        print("post_note:", doc.get("post_note", "[No post_note]"))
+        response = input("Keep this doc? (y/n): ").strip().lower()
+        if response == "n":
+            source.delete_one({"_id": doc["_id"]})
+
+manual_filter()

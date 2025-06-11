@@ -116,4 +116,8 @@ def select_eval_set():
         doc.pop("_id", None)
     eval_rem.insert_many(remaining)
 
+def data_analysis():
+    client = MongoClient(DB_URI)
+    source = client["M2"]
+
 select_eval_set()

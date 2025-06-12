@@ -10,7 +10,7 @@ from web_methods.LLM import *
             
 class Feedback(pydantic.BaseModel):
 
-    feedback: Optional[dict] = {}           # {type: {text: str, points: int}}
+    post_note: Optional[dict]
 
     @classmethod
     def restore_previous(cls, feedback: dict):
@@ -18,7 +18,8 @@ class Feedback(pydantic.BaseModel):
     
     @classmethod
     def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str]):
-
+        post_note = {}
+        
         # Import rubric bases
         with open("./Prompts/base_rubrics.json", "r", ) as json_file:
             BASE = json.load(json_file)
@@ -29,12 +30,11 @@ class Feedback(pydantic.BaseModel):
         else:
             categories = ["Key Findings", "HPI", "Past Histories", "Summary Statement", "Assessment", "Plan"]
         sectioned = ["HPI", "Past Histories", "Assessment"]
-        feedback = {}
 
         # Feedback and grading
         for category in categories:
             if category in sectioned:
-                feedback[category] = {}
+                post_note[category] = {}
                 for part, content in BASE[category].items():
                     response = generate_feedback(title = content["title"],
                                                  desc = content["desc"],
@@ -49,7 +49,7 @@ class Feedback(pydantic.BaseModel):
                         comment = response
                         thought = None
                         score = 0
-                    feedback[category][part] = {"title": content["title"],
+                    post_note[category][part] = {"title": content["title"],
                                                 "desc": content["desc"],
                                                 "rubric": patient.grading[category][part]["rubric"],
                                                 "html": patient.grading[category][part]["html"],
@@ -73,7 +73,7 @@ class Feedback(pydantic.BaseModel):
                     comment = response
                     thought = None
                     score = 0
-                feedback[category] = {"title": BASE[category]["title"],
+                post_note[category] = {"title": BASE[category]["title"],
                                       "desc": BASE[category]["desc"],
                                       "rubric": patient.grading[category]["rubric"],
                                       "html": patient.grading[category]["html"],
@@ -85,7 +85,7 @@ class Feedback(pydantic.BaseModel):
             
             st.write(f"Section \"{category}\" complete.")
 
-        return cls(feedback=feedback)
+        return cls(post_note=post_note)
 
         # self.data_acquisition = DataAcquisition(patient, messages)
         # self.diagnosis = Diagnosis(patient, user_diagnosis)        

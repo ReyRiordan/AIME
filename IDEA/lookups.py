@@ -139,6 +139,21 @@ MAX_MEMORY = 12 # no limit rn
 BATCH_MAX = 20
 BATCH_DELAY = 60
 
+RUBRIC_ID = "atypicals_6-8-25"
+
+with open("./Rubrics/base.json", "r") as rubric_base_file:
+    rubric_base = json.load(rubric_base_file)
+with open("./Rubrics/" + RUBRIC_ID + ".json", "r") as rubric_points_file:
+    rubric_points = json.load(rubric_points_file)
+RUBRIC = {}
+for category in rubric_base:
+    if category in ["HPI", "Past Histories", "Assessment"]: # multiple parts
+        RUBRIC[category] = {}
+        for part in rubric_base[category]:
+            RUBRIC[category][part] = {**rubric_base[category][part], **rubric_points[category][part]}
+    else:
+        RUBRIC[category] = {**rubric_base[category], **rubric_points[category]}
+
 with open(PATHS["Label Examples"], "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())
 CLASS_INPUT = PATHS["Input Classification"]
@@ -155,16 +170,3 @@ with open(PATHS["Grade Diagnosis"], "r", encoding="utf8") as grade_diag_file:
 # HUMAN EVAL
 with open("./IDEA/assignments/human_evals.json", "r") as eval_file:
     EVALUATORS = json.load(eval_file)
-
-with open("./Rubrics/base_rubric.json", "r") as rubric_base_file:
-    rubric_base = json.load(rubric_base_file)
-with open("./Rubrics/rubric_atypicals_6-8-25.json", "r") as rubric_points_file:
-    rubric_points = json.load(rubric_points_file)
-RUBRIC = {}
-for category in rubric_base:
-    if category in ["HPI", "Past Histories", "Assessment"]: # multiple parts
-        RUBRIC[category] = {}
-        for part in rubric_base[category]:
-            RUBRIC[category][part] = {**rubric_base[category][part], **rubric_points[category][part]}
-    else:
-        RUBRIC[category] = {**rubric_base[category], **rubric_points[category]}

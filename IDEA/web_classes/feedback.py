@@ -10,6 +10,7 @@ from web_methods.LLM import *
             
 class Feedback(pydantic.BaseModel):
 
+    rubric_id: str
     post_note: Optional[dict]
 
     @classmethod
@@ -17,12 +18,8 @@ class Feedback(pydantic.BaseModel):
         return cls(feedback=feedback)
     
     @classmethod
-    def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str]):
+    def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str], rubric_id: str):
         post_note = {}
-        
-        # Import rubric bases
-        with open("./Prompts/base_rubrics.json", "r", ) as json_file:
-            BASE = json.load(json_file)
 
         # Initialize
         if short:
@@ -31,38 +28,39 @@ class Feedback(pydantic.BaseModel):
             categories = ["Key Findings", "HPI", "Past Histories", "Summary Statement", "Assessment", "Plan"]
         sectioned = ["HPI", "Past Histories", "Assessment"]
 
-        # Feedback and grading
+        # Post note
         for category in categories:
+            # categories with multiple parts
             if category in sectioned:
                 post_note[category] = {}
-                for part, content in BASE[category].items():
+                # for each part
+                for part, content in RUBRIC[category].items():
+                    # get LLM output
                     response = generate_feedback(title = content["title"],
                                                  desc = content["desc"],
-                                                 rubric = patient.grading[category][part]["rubric"],
+                                                 rubric = content["rubric"],
                                                  user_input = post_note_inputs[category])
+                    # split into feedback / thought process + final score
                     split_attempt = response.strip().split("Thought process:")
                     if len(split_attempt) == 2:
                         comment, scoring = split_attempt
+                        # split into thought process / final score
                         thought, score = scoring.split("FINAL SCORE: ")
                         score = int(score)
-                    else:
+                    else: # error handling?
                         comment = response
                         thought = None
                         score = 0
-                    post_note[category][part] = {"title": content["title"],
-                                                "desc": content["desc"],
-                                                "rubric": patient.grading[category][part]["rubric"],
-                                                "html": patient.grading[category][part]["html"],
-                                                "input": post_note_inputs[category],
+                    post_note[category][part] = {"input": post_note_inputs[category],
                                                 "comment": comment,
                                                 "thought": thought,
                                                 "score": score,
                                                 "max": patient.grading[category][part]["points"]}
-                    # score = generate_score(feedback[category][part])
+            # categories without multiple parts
             else:
-                response = generate_feedback(title = BASE[category]["title"],
-                                             desc = BASE[category]["desc"],
-                                             rubric = patient.grading[category]["rubric"],
+                response = generate_feedback(title = RUBRIC[category]["title"],
+                                             desc = RUBRIC[category]["desc"],
+                                             rubric = RUBRIC[category]["rubric"],
                                              user_input = post_note_inputs[category])
                 split_attempt = response.strip().split("Thought process:")
                 if len(split_attempt) == 2:
@@ -73,11 +71,7 @@ class Feedback(pydantic.BaseModel):
                     comment = response
                     thought = None
                     score = 0
-                post_note[category] = {"title": BASE[category]["title"],
-                                      "desc": BASE[category]["desc"],
-                                      "rubric": patient.grading[category]["rubric"],
-                                      "html": patient.grading[category]["html"],
-                                      "input": post_note_inputs[category],
+                post_note[category] = {"input": post_note_inputs[category],
                                       "comment": comment,
                                       "thought": thought,
                                       "score": score,
@@ -85,7 +79,7 @@ class Feedback(pydantic.BaseModel):
             
             st.write(f"Section \"{category}\" complete.")
 
-        return cls(post_note=post_note)
+        return cls(rubric_version=rubric_id, post_note=post_note)
 
         # self.data_acquisition = DataAcquisition(patient, messages)
         # self.diagnosis = Diagnosis(patient, user_diagnosis)        

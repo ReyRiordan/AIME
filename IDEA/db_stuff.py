@@ -116,8 +116,20 @@ def select_eval_set():
         doc.pop("_id", None)
     eval_rem.insert_many(remaining)
 
-def data_analysis():
+def add_sexes():
     client = MongoClient(DB_URI)
-    source = client["M2"]
+    source = client['Benchmark']['Interviews.M2']
+    all_docs = list(source.find())
 
-select_eval_set()
+    with open('IDEA/assignments/M2.json', 'r') as M2_file:
+        M2 = json.load(M2_file)
+
+    for doc in all_docs:
+        info = M2[doc['netid']]
+        doc['sex'] = info['sex']
+        doc['post_note_inputs'] = doc['post_note']
+        del doc['post_note']
+        source.replace_one({'_id': doc['_id']}, doc)
+
+
+add_sexes()

@@ -19,7 +19,7 @@ from lookups import *
 
 
 def display_evaluation(interview: dict, user_inputs: dict) -> dict:
-    student_responses = interview["post_note"]
+    student_responses = interview["post_note_inputs"]
     categories = []
     for cat, input in student_responses.items():
         if input: categories.append(cat)

@@ -131,5 +131,11 @@ def add_sexes():
         del doc['post_note']
         source.replace_one({'_id': doc['_id']}, doc)
 
+def benchmark():
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Interviews.M2']
+    interviews = list(source.find())
 
-add_sexes()
+    
+
+benchmark()

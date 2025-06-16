@@ -10,7 +10,7 @@ from web_methods.LLM import *
             
 class Feedback(pydantic.BaseModel):
 
-    rubric_id: str
+    info: Optional[dict]
     post_note: Optional[dict]
 
     @classmethod
@@ -18,7 +18,8 @@ class Feedback(pydantic.BaseModel):
         return cls(feedback=feedback)
     
     @classmethod
-    def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str], rubric_id: str):
+    def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str], rubric_id=RUBRIC_ID):
+        info = {'rubric_id': rubric_id}
         post_note = {}
 
         # Initialize
@@ -79,7 +80,7 @@ class Feedback(pydantic.BaseModel):
             
             st.write(f"Section \"{category}\" complete.")
 
-        return cls(rubric_version=rubric_id, post_note=post_note)
+        return cls(info=info, post_note=post_note)
 
         # self.data_acquisition = DataAcquisition(patient, messages)
         # self.diagnosis = Diagnosis(patient, user_diagnosis)        

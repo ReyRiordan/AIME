@@ -139,8 +139,15 @@ def benchmark():
     interviews = list(source.find())
     for interview in interviews:
         patient = Patient.build(interview['patient'])
+        feedback = Feedback.build(short = True,
+                                  patient = patient,
+                                  messages = interview['messages'],
+                                  post_note_inputs = interview['post_note_inputs'])
+        feedback = feedback.model_dump()
+        feedback['info']['netid'] = interview['netid']
+        feedback['info']['netid'] = interview['sex']
+        feedback['info']['patient_id'] = interview['patient']
+        feedback['ifno']['interview_id'] = interview['_id']
 
 
-
-
-add_sexes()
+benchmark()

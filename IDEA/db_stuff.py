@@ -118,7 +118,7 @@ def select_eval_set():
 
 def add_sexes():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['Interviews.M2']
+    source = client['Benchmark']['Interviews.M2_rem']
     all_docs = list(source.find())
 
     with open('IDEA/assignments/M2.json', 'r') as M2_file:
@@ -133,9 +133,14 @@ def add_sexes():
 
 def benchmark():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['Interviews.M2']
+    source = client['Benchmark']['Interviews.M2_test']
+    target = client['Benchmark']['AI_Eval.M2_test']
+
     interviews = list(source.find())
+    for interview in interviews:
+        patient = Patient.build(interview['patient'])
 
-    
 
-benchmark()
+
+
+add_sexes()

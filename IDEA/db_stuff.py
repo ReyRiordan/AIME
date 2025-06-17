@@ -138,6 +138,7 @@ def benchmark():
 
     interviews = list(source.find())
     for interview in interviews:
+        start_time = datetime.now().isoformat()
         patient = Patient.build(interview['patient'])
         feedback = Feedback.build(short = True,
                                   patient = patient,
@@ -147,7 +148,12 @@ def benchmark():
         feedback['info']['netid'] = interview['netid']
         feedback['info']['netid'] = interview['sex']
         feedback['info']['patient_id'] = interview['patient']
-        feedback['ifno']['interview_id'] = interview['_id']
+        feedback['info']['interview_id'] = interview['_id']
+        end_time = datetime.now().isoformat()
+        feedback['times'] = [start_time, end_time]
+
+        target.insert_one(feedback)
+        print(f"Completed {interview['netid']}: {interview['patient']}")
 
 
 benchmark()

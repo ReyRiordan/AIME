@@ -19,7 +19,10 @@ class Feedback(pydantic.BaseModel):
     
     @classmethod
     def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str], rubric_id=RUBRIC_ID):
-        info = {'rubric_id': rubric_id}
+        info = {'rubric_id': rubric_id, 
+                'model': FEEDBACK_MODEL, 
+                'temperature': FEEDBACK_TEMP, 
+                'token_cost': COSTS[FEEDBACK_MODEL]}
         post_note = {}
 
         # Initialize

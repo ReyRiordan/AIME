@@ -25,7 +25,7 @@ from web_classes.message import Message
 from web_classes.patient import Patient
 
 
-def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model=FEEDBACK_MODEL, temperature=FEEDBACK_TEMP):
+def generate_feedback(title: str, desc: str, rubric: str, user_input: str, tokens: dict, model=FEEDBACK_MODEL, temperature=FEEDBACK_TEMP):
     base_split = FEEDBACK_PROMPT.split("[INSERT]")
     prefill = "Correct"
     if not user_input:
@@ -45,8 +45,10 @@ def generate_feedback(title: str, desc: str, rubric: str, user_input: str, model
                     {"role": "assistant", "content": prefill}
                 ]
             )
-            st.session_state["tokens"]["feedback"]["input"] += response.usage.input_tokens
-            st.session_state["tokens"]["feedback"]["output"] += response.usage.output_tokens
+            # st.session_state["tokens"]["feedback"]["input"] += response.usage.input_tokens
+            # st.session_state["tokens"]["feedback"]["output"] += response.usage.output_tokens
+            tokens['input'] += response.usage.input_tokens
+            tokens['output'] += response.usage.output_tokens
             return prefill + response.content[0].text
         except Exception as e:
             print(e)

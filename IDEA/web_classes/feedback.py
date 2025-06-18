@@ -19,10 +19,18 @@ class Feedback(pydantic.BaseModel):
     
     @classmethod
     def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str], rubric_id=RUBRIC_ID):
-        info = {'rubric_id': rubric_id, 
-                'model': FEEDBACK_MODEL, 
+        info = {
+            'rubric_id': rubric_id, 
+            'model': {
+                'name': FEEDBACK_MODEL, 
                 'temperature': FEEDBACK_TEMP, 
-                'token_cost': COSTS[FEEDBACK_MODEL]}
+                'token_cost': COSTS[FEEDBACK_MODEL]
+                }, 
+            'tokens': {
+                'input': 0, 
+                'output': 0
+            }
+        }
         post_note = {}
 
         # Initialize
@@ -43,7 +51,8 @@ class Feedback(pydantic.BaseModel):
                     response = generate_feedback(title = content["title"],
                                                  desc = content["desc"],
                                                  rubric = content["rubric"],
-                                                 user_input = post_note_inputs[category])
+                                                 user_input = post_note_inputs[category], 
+                                                 tokens = info['tokens'])
                     # split into feedback / thought process + final score
                     split_attempt = response.strip().split("Thought process:")
                     if len(split_attempt) == 2:
@@ -59,13 +68,14 @@ class Feedback(pydantic.BaseModel):
                                                 "comment": comment,
                                                 "thought": thought,
                                                 "score": score,
-                                                "max": patient.grading[category][part]["points"]}
+                                                "max": RUBRIC[category][part]["points"]}
             # categories without multiple parts
             else:
                 response = generate_feedback(title = RUBRIC[category]["title"],
                                              desc = RUBRIC[category]["desc"],
                                              rubric = RUBRIC[category]["rubric"],
-                                             user_input = post_note_inputs[category])
+                                             user_input = post_note_inputs[category], 
+                                             tokens = info['tokens'])
                 split_attempt = response.strip().split("Thought process:")
                 if len(split_attempt) == 2:
                     comment, scoring = split_attempt
@@ -79,7 +89,7 @@ class Feedback(pydantic.BaseModel):
                                       "comment": comment,
                                       "thought": thought,
                                       "score": score,
-                                      "max": patient.grading[category]["points"]}
+                                      "max": RUBRIC[category]["points"]}
             
             st.write(f"Section \"{category}\" complete.")
 

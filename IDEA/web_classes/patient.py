@@ -8,7 +8,7 @@ from lookups import *
 class Patient(pydantic.BaseModel):
     id: str
     case: Optional[dict]
-    grading: Optional[dict]
+    # grading: Optional[dict]
     physical : Optional[str]
     # ECG: Optional[str]
     explanation: Optional[str]
@@ -38,11 +38,11 @@ class Patient(pydantic.BaseModel):
         case = JSON["Case"]
         convo_prompt += cls.process_case(case)
 
-        # Extract grading for patient
-        grading = JSON["Grading"]
-        if isinstance(grading, str):
-            with open(grading, "r") as grading_file:
-                grading = json.load(grading_file)
+        # # Extract grading for patient
+        # grading = JSON["Grading"]
+        # if isinstance(grading, str):
+        #     with open(grading, "r") as grading_file:
+        #         grading = json.load(grading_file)
 
         # Assets (hardcoded for now)
         #TODO flexible assets
@@ -65,7 +65,7 @@ class Patient(pydantic.BaseModel):
                 #    ECG=ECG, 
                    explanation=explanation, 
                    case=case, 
-                   grading=grading, 
+                #    grading=grading, 
                    convo_prompt=convo_prompt, 
                 #    label_descs=label_descs
                 )

@@ -40,70 +40,44 @@ class Feedback(pydantic.BaseModel):
             categories = ["Key Findings", "HPI", "Past Histories", "Summary Statement", "Assessment", "Plan"]
         sectioned = ["HPI", "Past Histories", "Assessment"]
 
-        # Post note
+        # Use info from source rubric + user input to generate/process/write feedback for specific section/part
+        def generate_process_write(source: dict, input: str):
+            response = generate_feedback(title = source["title"],
+                                            desc = source["desc"],
+                                            rubric = source["rubric"],
+                                            user_input = input, 
+                                            tokens = info['tokens'])
+            # split into feedback / thought process + final score
+            split_attempt = response.strip().split("Thought process:")
+            if len(split_attempt) == 2:
+                comment, scoring = split_attempt
+                # split into thought process / final score
+                thought, score = scoring.split("FINAL SCORE: ")
+                score = int(score)
+            else: # error handling?
+                comment = response
+                thought = None
+                score = 0
+            output = {"input": input,
+                        "comment": comment,
+                        "thought": thought,
+                        "score": score,
+                        "max": source["points"]}
+            return output
+
+        # Create feedback
         for category in categories:
-            # categories with multiple parts
             if category in sectioned:
                 post_note[category] = {}
-                # for each part
                 for part, content in RUBRIC[category].items():
-                    # get LLM output
-                    response = generate_feedback(title = content["title"],
-                                                 desc = content["desc"],
-                                                 rubric = content["rubric"],
-                                                 user_input = post_note_inputs[category], 
-                                                 tokens = info['tokens'])
-                    # split into feedback / thought process + final score
-                    split_attempt = response.strip().split("Thought process:")
-                    if len(split_attempt) == 2:
-                        comment, scoring = split_attempt
-                        # split into thought process / final score
-                        thought, score = scoring.split("FINAL SCORE: ")
-                        score = int(score)
-                    else: # error handling?
-                        comment = response
-                        thought = None
-                        score = 0
-                    post_note[category][part] = {"input": post_note_inputs[category],
-                                                "comment": comment,
-                                                "thought": thought,
-                                                "score": score,
-                                                "max": RUBRIC[category][part]["points"]}
-            # categories without multiple parts
+                    post_note[category][part] = generate_process_write(content, post_note_inputs[category])
             else:
-                response = generate_feedback(title = RUBRIC[category]["title"],
-                                             desc = RUBRIC[category]["desc"],
-                                             rubric = RUBRIC[category]["rubric"],
-                                             user_input = post_note_inputs[category], 
-                                             tokens = info['tokens'])
-                split_attempt = response.strip().split("Thought process:")
-                if len(split_attempt) == 2:
-                    comment, scoring = split_attempt
-                    thought, score = scoring.split("FINAL SCORE: ")
-                    score = int(score)
-                else:
-                    comment = response
-                    thought = None
-                    score = 0
-                post_note[category] = {"input": post_note_inputs[category],
-                                      "comment": comment,
-                                      "thought": thought,
-                                      "score": score,
-                                      "max": RUBRIC[category]["points"]}
-            
+                post_note[category] = generate_process_write(RUBRIC[category], post_note_inputs[category])
+                
             st.write(f"Section \"{category}\" complete.")
 
+        
         return cls(info=info, post_note=post_note)
 
         # self.data_acquisition = DataAcquisition(patient, messages)
-        # self.diagnosis = Diagnosis(patient, user_diagnosis)        
-    
-    
-
-    
-    # DEPRECATED get_dict() method
-
-    # def get_dict(self):
-    #     to_return = {"Data Acquisition": self.data_acquisition.get_dict(), 
-    #                  "Diagnosis": self.diagnosis.get_dict()}
-    #     return to_return
+        # self.diagnosis = Diagnosis(patient, user_diagnosis)

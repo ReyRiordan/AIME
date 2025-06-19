@@ -155,5 +155,7 @@ def benchmark():
         target.insert_one(feedback)
         print(f"Completed {interview['netid']}: {interview['patient']}")
 
+        break # test
+
 
 benchmark()

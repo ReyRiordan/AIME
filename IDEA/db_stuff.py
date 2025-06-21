@@ -155,7 +155,88 @@ def benchmark():
         target.insert_one(feedback)
         print(f"Completed {interview['netid']}: {interview['patient']}")
 
-        break # test
+        break # test with one
+
+def research_data():
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Interviews.M2']
+    target = client['Research']['Data.M2']
+
+    with open('./Prompts/research_data.txt', 'r') as file:
+        prompt = file.read()
+
+    interviews = list(source.find())
+    StudentID = 0
+    for interview in interviews:
+        # StudentID
+        StudentID += 1
+        dict1 = {'StudentID': StudentID}
+        # StudentSex
+        if interview['sex'] == 'M':
+            dict1['StudentSex'] = 0
+        elif interview['sex'] == 'F':
+            dict1['StudentSex'] = 1
+        else: print(f"Interview {interview['_id']} has error sex value {interview['sex']}.")
+        # Year
+        dict1['Year'] = 2
+        # CaseNum
+        if interview['patient'] in ["Jeffrey Smith", "Jenny Smith"]:
+            dict1['CaseNum'] = 0
+        elif interview['patient'] in ["Samuel Thompson", "Sarah Thompson"]:
+            dict1['CaseNum'] = 1
+        else: print(f"Interview {interview['_id']} has error patient value {interview['patient']}.")
+        # CaseSex
+        if interview['patient'] in ["Jeffrey Smith", "Samuel Thompson"]:
+            dict1['CaseSex'] = 0
+        elif interview['patient'] in ["Jenny Smith", "Sarah Thompson"]:
+            dict1['CaseSex'] = 1
+        else: print(f"Interview {interview['_id']} has error patient value {interview['patient']}.")
+        
+        # Process LLM input
+        if dict1['CaseSex'] == 0:
+            correct_sex = "MALE"
+        elif dict1['CaseSex'] == 1:
+            correct_sex = "FEMALE"
+        else: print(f"Interview {interview['_id']} has error CaseSex value {dict1['CaseSex']}.")
+        system = prompt.replace("{SEX}", correct_sex)
+        user_inputs = interview['post_note_inputs']
+        user_input = f"<summary>{user_inputs['Summary Statement']}</summary> \n<assessment>{user_inputs['Assessment']}</assessment> \n<plan>{user_inputs['Plan']}</plan>"
+        # Get all variable values that need AI
+        prefill = '{"RiskFactor": '
+        LLM_response = FEEDBACK_CLIENT.messages.create(
+                    model=FEEDBACK_MODEL,
+                    temperature=FEEDBACK_TEMP,
+                    max_tokens=4096,
+                    system=system,
+                    messages=[
+                        {"role": "user", "content": user_input},
+                        {"role": "assistant", "content": prefill}
+                    ]
+                )
+        LLM_output = prefill + LLM_response.content[0].text
+        dict2 = json.loads(LLM_output)
+        # Combine dicts
+        combined = dict1 | dict2
+
+        # Compute time elapsed in minutes from ISOs
+        def elapsed_minutes(iso1: str, iso2: str) -> int:
+            t1 = datetime.fromisoformat(iso1)
+            t2 = datetime.fromisoformat(iso2)
+            delta = abs(t2 - t1)
+            return int(delta.total_seconds() // 60)
+        times = interview['times']
+        # InterviewLength
+        combined['InterviewLength'] = elapsed_minutes(times['start'], times['end_interview'])
+        # WriteupLength
+        combined['WriteupLength'] = elapsed_minutes(times['end_interview'], times['get_feedback'])
+
+        # ResponsesExchanged
+        combined['ResponsesExchanged'] = len(interview['messages']) // 2
+
+        # Save to DB
+        target.insert_one(combined)
+
+        break # test with one
 
 
-benchmark()
+research_data()

@@ -177,7 +177,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     past_histories = layout1[0].text_area(label = "Past Histories (include relevant past, family, and social histories and review of symptoms)", height = 200)
     summary = layout1[0].text_area(label = "Summary Statement", height = 200)
     assessment = layout1[0].text_area(label = "Assessment - Specify most likely diagnosis and alternative diagnoses. Include your reasoning/explanation for each differential diagnosis.", height = 200)
-    plan = layout1[0].text_area(label = "Plan - State your initial diagnostic plan. Includ eyour reasoning/explanation for the plan.", height = 200)
+    plan = layout1[0].text_area(label = "Plan - State your initial diagnostic plan. Include your reasoning/explanation for the plan.", height = 200)
 
     # Interview transcription
     chat_container = layout1[1].container(height=400)

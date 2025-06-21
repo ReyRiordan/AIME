@@ -342,7 +342,7 @@ if st.session_state["stage"] == DIAGNOSIS:
     assessment = layout1[0].text_area(label = "**Assessment**: Provide a differential diagnosis and explain the reasoning behind each diagnosis.", 
                                       height = 200, 
                                       value = st.session_state["saved_inputs"]["Assessment"])
-    plan = layout1[0].text_area(label = "**Plan**: Include a diagnostic plan that explains the rationale for your decision. ", 
+    plan = layout1[0].text_area(label = "**Plan**: Include a diagnostic plan that explains the rationale for your decision.", 
                                 height = 200, 
                                 value = st.session_state["saved_inputs"]["Plan"])
 

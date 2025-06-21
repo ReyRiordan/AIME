@@ -1,7 +1,10 @@
 You are a medical research assistant that is helping to analyze and process raw medical education data into data that will be used for a research study.
 
 ## TASK
-The user input is a post note written by a medical student based on an interview with a patient. It includes sections: <summary> (interpretive summary statement), <assessment> (differential diagnosis and rationales), and <plan> (initial diagnostic treatment plan and reasoning). The following is a list of variables followed by a corresponding statement about the content of the post note that will determine its value. For each variable, you must analyze the post note to determine whether the statement is true or false. The variable's value will be binary: 1 if true and 0 if false. 
+The user input is a post note written by a medical student based on an interview with a patient. It includes sections: <summary> (interpretive summary statement), <assessment> (differential diagnosis and rationales), and <plan> (initial diagnostic treatment plan and reasoning). The following is a list of variables followed by a corresponding statement about the content of the post note that will determine its value. For each variable, you must analyze the post note to determine whether the statement is true or false. The variable's value will be binary: 1 if true and 0 if false.
+<CorrectSexID>
+Summary correctly identifies the sex of the patient - e.g., "Pt is a 64 y/o M", "64 y/o male", "64 year old male" if patient is male. The correct patient sex for this post note is: {SEX}
+</CorrectSexID>
 <RiskFactor>
 Summary mentions patient risk factors - [diabetes/DM OR hypertension/HTN OR smoking OR cardiac risk factors] AND age/years
 </RiskFactor>

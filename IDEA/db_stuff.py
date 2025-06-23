@@ -170,7 +170,9 @@ def research_data():
     for interview in interviews:
         # StudentID
         StudentID += 1
-        dict1 = {'StudentID': StudentID}
+        dict1 = {'interview_id': interview['_id'],
+                 'netid': interview['netid'],
+                 'StudentID': StudentID}
         # StudentSex
         if interview['sex'] == 'M':
             dict1['StudentSex'] = 0
@@ -201,8 +203,9 @@ def research_data():
         system = prompt.replace("{SEX}", correct_sex)
         user_inputs = interview['post_note_inputs']
         user_input = f"<summary>{user_inputs['Summary Statement']}</summary> \n<assessment>{user_inputs['Assessment']}</assessment> \n<plan>{user_inputs['Plan']}</plan>"
+        print(user_input) # debugging
         # Get all variable values that need AI
-        prefill = '{"RiskFactor": '
+        prefill = '{"CorrectSexID":'
         LLM_response = FEEDBACK_CLIENT.messages.create(
                     model=FEEDBACK_MODEL,
                     temperature=FEEDBACK_TEMP,
@@ -215,6 +218,7 @@ def research_data():
                 )
         LLM_output = prefill + LLM_response.content[0].text
         dict2 = json.loads(LLM_output)
+        print(dict2) # debugging
         # Combine dicts
         combined = dict1 | dict2
 
@@ -224,7 +228,7 @@ def research_data():
             t2 = datetime.fromisoformat(iso2)
             delta = abs(t2 - t1)
             return int(delta.total_seconds() // 60)
-        times = interview['times']
+        times = {v: k for k, v in interview['times'].items()}
         # InterviewLength
         combined['InterviewLength'] = elapsed_minutes(times['start'], times['end_interview'])
         # WriteupLength

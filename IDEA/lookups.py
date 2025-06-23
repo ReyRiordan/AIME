@@ -96,7 +96,7 @@ SUM_TEMP = 0.0
 # GOOGLE_MODEL = "gemini-2.0-flash"
 
 FEEDBACK_CLIENT = Anthropic()
-FEEDBACK_MODEL = "claude-3-7-sonnet-latest"
+FEEDBACK_MODEL = "claude-sonnet-4-20250514"
 FEEDBACK_TEMP = 0.0
 
 # CLASS_CLIENT = Anthropic()

@@ -160,7 +160,7 @@ def benchmark():
 def research_data():
     client = MongoClient(DB_URI)
     source = client['Benchmark']['Interviews.M2']
-    target = client['Research']['Data.M2']
+    target = client['Research']['Data.M2_thinking']
 
     with open('./Prompts/research_data.txt', 'r') as file:
         prompt = file.read()
@@ -170,6 +170,7 @@ def research_data():
     for interview in interviews:
         # StudentID
         StudentID += 1
+        print(f"\n\n--------{StudentID}/261---------\n\n")
         dict1 = {'interview_id': interview['_id'],
                  'netid': interview['netid'],
                  'StudentID': StudentID}
@@ -203,9 +204,9 @@ def research_data():
         system = prompt.replace("{SEX}", correct_sex)
         user_inputs = interview['post_note_inputs']
         user_input = f"<summary>{user_inputs['Summary Statement']}</summary> \n<assessment>{user_inputs['Assessment']}</assessment> \n<plan>{user_inputs['Plan']}</plan>"
-        print(user_input) # debugging
+        print(user_input + "\n") # debugging
         # Get all variable values that need AI
-        prefill = '{"CorrectSexID":'
+        prefill = "<thinking>Let me analyze each variable:\n\nCorrect"
         LLM_response = FEEDBACK_CLIENT.messages.create(
                     model=FEEDBACK_MODEL,
                     temperature=FEEDBACK_TEMP,
@@ -217,10 +218,20 @@ def research_data():
                     ]
                 )
         LLM_output = prefill + LLM_response.content[0].text
-        dict2 = json.loads(LLM_output)
-        print(dict2) # debugging
+        thinking_start = LLM_output.find("<thinking>")
+        thinking_end = LLM_output.find("</thinking>")
+        answer_start = LLM_output.find("<answer>")
+        answer_end = LLM_output.find("</answer>")
+        if -1 in [thinking_start, thinking_end, answer_start, answer_end]: # wrong output format
+            print("ERROR OUTPUT: " + LLM_output)
+            continue
+        thinking = LLM_output[thinking_start + len("<thinking>"):thinking_end].strip()
+        answer = LLM_output[answer_start + len("<answer>"):answer_end].strip()
+        dict2 = json.loads(answer)
         # Combine dicts
         combined = dict1 | dict2
+        print(thinking)
+        print(dict2) # debugging
 
         # Compute time elapsed in minutes from ISOs
         def elapsed_minutes(iso1: str, iso2: str) -> int:
@@ -237,10 +248,14 @@ def research_data():
         # ResponsesExchanged
         combined['ResponsesExchanged'] = len(interview['messages']) // 2
 
+        combined['thinking'] = thinking # add thinking on at very end
+
         # Save to DB
         target.insert_one(combined)
 
-        break # test with one
+        print("\nCompleted!") # debugging
+
+        if StudentID == 3: break # test with first 3
 
 
 research_data()

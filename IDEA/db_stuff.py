@@ -157,6 +157,13 @@ def benchmark():
 
         break # test with one
 
+# Compute time elapsed in minutes from ISOs
+def elapsed_minutes(iso1: str, iso2: str) -> int:
+    t1 = datetime.fromisoformat(iso1)
+    t2 = datetime.fromisoformat(iso2)
+    delta = abs(t2 - t1)
+    return int(delta.total_seconds() // 60)
+
 def research_data():
     client = MongoClient(DB_URI)
     source = client['Benchmark']['Interviews.M2']
@@ -233,12 +240,6 @@ def research_data():
         # print(thinking)
         # print(dict2) # debugging
 
-        # Compute time elapsed in minutes from ISOs
-        def elapsed_minutes(iso1: str, iso2: str) -> int:
-            t1 = datetime.fromisoformat(iso1)
-            t2 = datetime.fromisoformat(iso2)
-            delta = abs(t2 - t1)
-            return int(delta.total_seconds() // 60)
         times = {v: k for k, v in interview['times'].items()}
         # InterviewLength
         combined['InterviewLength'] = elapsed_minutes(times['start'], times['end_interview'])
@@ -261,7 +262,7 @@ import pandas as pd
 from bson import ObjectId
 def save_to_excel():
     client = MongoClient(DB_URI)
-    source = client['Research']['Data.M2_thinking']
+    source = client['Research']['Data.M2_fixed']
     docs = list(source.find())
     for doc in docs:
         for key, value in doc.items():
@@ -272,5 +273,45 @@ def save_to_excel():
     output_file = "research_data.xlsx"
     df.to_excel(output_file, index=False, engine='openpyxl')
 
+def fix_times():
+    client = MongoClient(DB_URI)
+    interviews = client['Benchmark']['Interviews.M2']
+    source = client['Research']['Data.M2_thinking']
+    target = client['Research']['Data.M2_fixed']
+    docs = list(source.find())
 
+    for doc in docs:
+        interview = interviews.find_one({'_id': doc['interview_id']})
+        times = list(interview['times'].items())
+        InterviewLength = 0
+        WriteupLength = 0
+        prev = None
+        rec_int = False
+        rec_post = False
+        for i, time in enumerate(times):
+            iso, check = time
+            if check == 'start': 
+                rec_int = True
+                prev = iso
+            if check == 'end_interview' and rec_int:
+                InterviewLength += elapsed_minutes(prev, iso) # prev -> end_interview
+                rec_int = False
+                prev = iso
+                rec_post = True
+            if check == 'get_feedback' and rec_post:
+                WriteupLength += elapsed_minutes(prev, iso) # prev -> get_feedback
+                rec_post = False
+            if check == 'continue':
+                if rec_int and times[i-1][1] == "save_interview":
+                    InterviewLength += elapsed_minutes(prev, times[i-1][0]) # prev -> recent save
+                if rec_post and times[i-1][1] == "save_postnote":
+                    WriteupLength += elapsed_minutes(prev, times[i-1][0]) # prev -> recent save
+                prev = iso
+        
+        doc['InterviewLength'] = InterviewLength
+        doc['WriteupLength'] = WriteupLength
+        target.insert_one(doc)
+            
+
+fix_times()
 save_to_excel()

@@ -257,5 +257,20 @@ def research_data():
         
         # if StudentID == 3: break # test with first 3
 
+import pandas as pd
+from bson import ObjectId
+def save_to_excel():
+    client = MongoClient(DB_URI)
+    source = client['Research']['Data.M2_thinking']
+    docs = list(source.find())
+    for doc in docs:
+        for key, value in doc.items():
+            if isinstance(value, ObjectId): 
+                doc[key] = str(value)
 
-research_data()
+    df = pd.DataFrame(docs)
+    output_file = "research_data.xlsx"
+    df.to_excel(output_file, index=False, engine='openpyxl')
+
+
+save_to_excel()

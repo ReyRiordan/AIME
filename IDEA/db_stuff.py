@@ -170,7 +170,7 @@ def research_data():
     for interview in interviews:
         # StudentID
         StudentID += 1
-        print(f"\n\n--------{StudentID}/261---------\n\n")
+        print(f"--------{StudentID}/261---------")
         dict1 = {'interview_id': interview['_id'],
                  'netid': interview['netid'],
                  'StudentID': StudentID}
@@ -204,9 +204,9 @@ def research_data():
         system = prompt.replace("{SEX}", correct_sex)
         user_inputs = interview['post_note_inputs']
         user_input = f"<summary>{user_inputs['Summary Statement']}</summary> \n<assessment>{user_inputs['Assessment']}</assessment> \n<plan>{user_inputs['Plan']}</plan>"
-        print(user_input + "\n") # debugging
+        # print(user_input + "\n") # debugging
         # Get all variable values that need AI
-        prefill = "<thinking>Let me analyze each variable:\n\nCorrect"
+        prefill = "<thinking>Let me analyze each variable:\n\nCorrectSexID:"
         LLM_response = FEEDBACK_CLIENT.messages.create(
                     model=FEEDBACK_MODEL,
                     temperature=FEEDBACK_TEMP,
@@ -230,8 +230,8 @@ def research_data():
         dict2 = json.loads(answer)
         # Combine dicts
         combined = dict1 | dict2
-        print(thinking)
-        print(dict2) # debugging
+        # print(thinking)
+        # print(dict2) # debugging
 
         # Compute time elapsed in minutes from ISOs
         def elapsed_minutes(iso1: str, iso2: str) -> int:
@@ -253,9 +253,9 @@ def research_data():
         # Save to DB
         target.insert_one(combined)
 
-        print("\nCompleted!") # debugging
-
-        if StudentID == 3: break # test with first 3
+        # print("Completed!") # debugging
+        
+        # if StudentID == 3: break # test with first 3
 
 
 research_data()

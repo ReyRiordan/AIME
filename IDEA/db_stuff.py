@@ -314,10 +314,14 @@ def fix_times():
 
 def transfer_data():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['Human_Eval.M2_test']
-    target = client['Benchmark']['Human_Eval.M2_test_old']
-    docs = list(source.find())
-    target.insert_many(docs)
+    source = client['Benchmark']['Interviews.M2_test']
+    target = client['Benchmark']['Interviews.M2_rem']
+    
+    doc1 = source.find_one({'netid': "pgk30", 'patient': "Jeffrey Smith"})
+    doc2 = source.find_one({'netid': "sw1232", 'patient': "Jenny Smith"})
+    target.insert_many([doc1, doc2])
+    source.delete_one({'_id': doc1['_id']})
+    source.delete_one({'_id': doc2['_id']})
 
 
 transfer_data()

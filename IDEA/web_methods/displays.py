@@ -46,7 +46,7 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                                   key = comment_key, 
                                                                                   value = user_inputs[category][part]["comment"])
                             features = user_inputs[category][part]['features']
-                            layout11 = st.columns([1 for i in range(len(features))])
+                            layout11 = st.columns([1 for i in range(10)])
                             for i, (key, value) in enumerate(features.items()):
                                 features[key] = layout11[i].checkbox(key,
                                                                      key = feature_key+str(i),
@@ -68,11 +68,11 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                                                                     key = comment_key, 
                                                                     value = user_inputs[category]["comment"])
                     features = user_inputs[category]['features']
-                    layout11 = st.columns([1 for i in range(len(features))])
+                    layout11 = st.columns([1 for i in range(10)])
                     for i, (key, value) in enumerate(features.items()):
                         features[key] = layout11[i].checkbox(key,
-                                                                key = feature_key+str(i),
-                                                                value = value)
+                                                             key = feature_key+str(i),
+                                                             value = value)
                     layout12 = st.columns([1, 5])
                     user_inputs[category]["score"] = layout12[0].text_input(f"Score (out of **{RUBRIC[category]['points']}**): ", 
                                                                             key = score_key, 

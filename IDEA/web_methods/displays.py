@@ -41,11 +41,18 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                         with tabs[i]:
                             comment_key = f"{interview['_id']}_{category}_{part}_comment"
                             score_key = f"{interview['_id']}_{category}_{part}_score"
+                            feature_key = f"{interview['_id']}_{category}_{part}_feature"
                             user_inputs[category][part]["comment"] = st.text_area("Comments/feedback: ", 
                                                                                   key = comment_key, 
                                                                                   value = user_inputs[category][part]["comment"])
-                            layout11 = st.columns([1, 5])
-                            user_inputs[category][part]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category][part]['points']}**): ", 
+                            features = user_inputs[category][part]['features']
+                            layout11 = st.columns([1 for i in range(len(features))])
+                            for i, (key, value) in enumerate(features.items()):
+                                features[key] = layout11[i].checkbox(key,
+                                                                     key = feature_key+str(i),
+                                                                     value = value)
+                            layout12 = st.columns([1, 5])
+                            user_inputs[category][part]["score"] = layout12[0].text_input(f"Score (out of **{RUBRIC[category][part]['points']}**): ", 
                                                                                           key = score_key, 
                                                                                           value = user_inputs[category][part]["score"])
                             with st.container(border=True):
@@ -56,11 +63,18 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
                 else:
                     comment_key = f"{interview['_id']}_{category}_comment"
                     score_key = f"{interview['_id']}_{category}_score"
+                    feature_key = f"{interview['_id']}_{category}_feature"
                     user_inputs[category]["comment"] = st.text_area("Comments/feedback: ", 
                                                                     key = comment_key, 
                                                                     value = user_inputs[category]["comment"])
-                    layout11 = st.columns([1, 5])
-                    user_inputs[category]["score"] = layout11[0].text_input(f"Score (out of **{RUBRIC[category]['points']}**): ", 
+                    features = user_inputs[category]['features']
+                    layout11 = st.columns([1 for i in range(len(features))])
+                    for i, (key, value) in enumerate(features.items()):
+                        features[key] = layout11[i].checkbox(key,
+                                                                key = feature_key+str(i),
+                                                                value = value)
+                    layout12 = st.columns([1, 5])
+                    user_inputs[category]["score"] = layout12[0].text_input(f"Score (out of **{RUBRIC[category]['points']}**): ", 
                                                                             key = score_key, 
                                                                             value = user_inputs[category]["score"])
                     with st.container(border=True):

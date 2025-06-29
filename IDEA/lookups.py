@@ -139,7 +139,7 @@ MAX_MEMORY = 12 # no limit rn
 BATCH_MAX = 20
 BATCH_DELAY = 60
 
-RUBRIC_ID = "atypicals_6-8-25"
+RUBRIC_ID = "atypicals_6-25-25"
 
 with open("./Rubrics/base.json", "r") as rubric_base_file:
     rubric_base = json.load(rubric_base_file)
@@ -153,6 +153,9 @@ for category in rubric_base:
             RUBRIC[category][part] = {**rubric_base[category][part], **rubric_points[category][part]}
     else:
         RUBRIC[category] = {**rubric_base[category], **rubric_points[category]}
+# SHORTEN
+for category in ["Key Findings", "HPI", "Past Histories"]:
+    del RUBRIC[category]
 
 with open(PATHS["Label Examples"], "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())

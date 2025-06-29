@@ -22,6 +22,7 @@ from web_classes import *
 from web_methods import *
 import pytz
 import emoji
+import string
 
 # STREAMLIT SETUP
 st.set_page_config(page_title = "MEWAI",
@@ -76,9 +77,15 @@ def load_and_setup():
             if category in ["Assessment"]: # if multiple parts
                 feedback[category] = {}
                 for part in data:
-                    feedback[category][part] = {"comment": None, "score": None}
+                    feedback[category][part] = {'comment': None, 'features': {}, 'score': None}
+                    for i in range(data[part]['features']):
+                        letter = string.ascii_lowercase[i]
+                        feedback[category][part]['features'][letter] = False
             else:
-                feedback[category] = {"comment": None, "score": None}
+                feedback[category] = {'comment': None, 'features': {}, 'score': None}
+                for i in range(data['features']):
+                    letter = string.ascii_lowercase[i]
+                    feedback[category]['features'][letter] = False
         evaluation["feedback"] = feedback
 
     # Insert if new, either way record start time

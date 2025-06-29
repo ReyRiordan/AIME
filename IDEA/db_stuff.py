@@ -311,7 +311,13 @@ def fix_times():
         doc['InterviewLength'] = InterviewLength
         doc['WriteupLength'] = WriteupLength
         target.insert_one(doc)
-            
 
-fix_times()
-save_to_excel()
+def transfer_data():
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Human_Eval.M2_test']
+    target = client['Benchmark']['Human_Eval.M2_test_old']
+    docs = list(source.find())
+    target.insert_many(docs)
+
+
+transfer_data()

@@ -139,7 +139,7 @@ MAX_MEMORY = 12 # no limit rn
 BATCH_MAX = 20
 BATCH_DELAY = 60
 
-RUBRIC_ID = "atypicals_6-25-25"
+RUBRIC_ID = "atypicals_6-29-25"
 
 with open("./Rubrics/base.json", "r") as rubric_base_file:
     rubric_base = json.load(rubric_base_file)

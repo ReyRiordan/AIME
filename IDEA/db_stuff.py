@@ -168,18 +168,27 @@ def elapsed_minutes(iso1: str, iso2: str) -> int:
 
 def research_data():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['Interviews.M2']
-    target = client['Research']['Data.M2_thinking']
+    source = client['Benchmark']['Interviews.M1']
+    target = client['Research']['Data.M1']
 
     with open('./Prompts/research_data.txt', 'r') as file:
         prompt = file.read()
 
     interviews = list(source.find())
-    StudentID = 0
+    n = 0
+    max_id = 0
+    student_list = {}
+    StudentID = None
     for interview in interviews:
+        n += 1
         # StudentID
-        StudentID += 1
-        print(f"--------{StudentID}/261---------")
+        if interview['netid'] in student_list:
+            StudentID = student_list[interview['netid']]
+        else:
+            max_id += 1
+            student_list[interview['netid']] = max_id
+            StudentID = max_id
+        print(f"--------{n}/330---------")
         dict1 = {'interview_id': interview['_id'],
                  'netid': interview['netid'],
                  'StudentID': StudentID}
@@ -190,7 +199,7 @@ def research_data():
             dict1['StudentSex'] = 1
         else: print(f"Interview {interview['_id']} has error sex value {interview['sex']}.")
         # Year
-        dict1['Year'] = 2
+        dict1['Year'] = 0
         # CaseNum
         if interview['patient'] in ["Jeffrey Smith", "Jenny Smith"]:
             dict1['CaseNum'] = 0
@@ -237,16 +246,17 @@ def research_data():
         thinking = LLM_output[thinking_start + len("<thinking>"):thinking_end].strip()
         answer = LLM_output[answer_start + len("<answer>"):answer_end].strip()
         dict2 = json.loads(answer)
+        print(dict2)
         # Combine dicts
         combined = dict1 | dict2
         # print(thinking)
         # print(dict2) # debugging
 
-        times = {v: k for k, v in interview['times'].items()}
-        # InterviewLength
-        combined['InterviewLength'] = elapsed_minutes(times['start'], times['end_interview'])
-        # WriteupLength
-        combined['WriteupLength'] = elapsed_minutes(times['end_interview'], times['get_feedback'])
+        # times = {v: k for k, v in interview['times'].items()}
+        # # InterviewLength
+        # combined['InterviewLength'] = elapsed_minutes(times['start'], times['end_interview'])
+        # # WriteupLength
+        # combined['WriteupLength'] = elapsed_minutes(times['end_interview'], times['get_feedback'])
 
         # ResponsesExchanged
         combined['ResponsesExchanged'] = len(interview['messages']) // 2
@@ -259,6 +269,8 @@ def research_data():
         # print("Completed!") # debugging
         
         # if StudentID == 3: break # test with first 3
+    
+    print(f"Number of unique students: {len(student_list)}")
 
 import pandas as pd
 from bson import ObjectId
@@ -327,4 +339,4 @@ def transfer_data():
             source.delete_one({'_id': x['_id']})
 
 
-manual_filter()
+research_data()

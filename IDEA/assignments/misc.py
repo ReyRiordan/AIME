@@ -3,13 +3,13 @@ import json
 import math
 
 
-with open('M2.json', 'r') as M2_file:
-    M2 = json.load(M2_file)
+with open('M1.json', 'r') as M1_file:
+    M2 = json.load(M1_file)
     sex = "F"
     for netid in M2:
-        if netid == "ab1728": sex = "M"
+        if netid == "ja1271": sex = "M"
         M2[netid]['sex'] = sex
-with open("M2_new.json", "w") as json_file:
+with open("M1_new.json", "w") as json_file:
     json.dump(M2, json_file, indent=2)
 
 

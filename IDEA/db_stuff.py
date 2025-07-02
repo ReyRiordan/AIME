@@ -62,16 +62,18 @@ def copy_post_notes():
 
 def manual_filter():
     client = MongoClient(DB_URI)
-    source = client["Benchmark"]["Interviews"]["M2"]
+    source = client["Benchmark"]["Interviews.M1"]
 
-    docs = list(source.find({}, {"netid": 1, "patient": 1, "post_note": 1}))
+    docs = list(source.find({}, {"netid": 1, "patient": 1, "post_note_inputs": 1}))
 
+    n = 1
     for doc in docs:
-        print("---------------------------------------------------------------------")
-        print("post_note:", doc.get("post_note", "[No post_note]"))
+        print(f"{n}/338------------------------{doc['netid']}: {doc['patient']}---------------------------------------------")
+        print(doc.get("post_note_inputs", "NO POST NOTE"))
         response = input("Keep this doc? (y/n): ").strip().lower()
         if response == "n":
             source.delete_one({"_id": doc["_id"]})
+        n += 1
 
 def select_eval_set():
     client = MongoClient(DB_URI)
@@ -118,14 +120,14 @@ def select_eval_set():
 
 def add_sexes():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['Interviews.M2_rem']
+    source = client['Benchmark']['Interviews.M1']
     all_docs = list(source.find())
 
-    with open('IDEA/assignments/M2.json', 'r') as M2_file:
-        M2 = json.load(M2_file)
+    with open('IDEA/assignments/M1.json', 'r') as M1_file:
+        M1 = json.load(M1_file)
 
     for doc in all_docs:
-        info = M2[doc['netid']]
+        info = M1[doc['netid']]
         doc['sex'] = info['sex']
         doc['post_note_inputs'] = doc['post_note']
         del doc['post_note']
@@ -325,4 +327,4 @@ def transfer_data():
             source.delete_one({'_id': x['_id']})
 
 
-transfer_data()
+manual_filter()

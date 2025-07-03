@@ -276,16 +276,23 @@ import pandas as pd
 from bson import ObjectId
 def save_to_excel():
     client = MongoClient(DB_URI)
-    source = client['Research']['Data.M2_fixed']
-    docs = list(source.find())
-    for doc in docs:
-        for key, value in doc.items():
-            if isinstance(value, ObjectId): 
-                doc[key] = str(value)
+    source1 = client['Research']['Data.M1']
+    source2 = client['Research']['Data.M2']
+    docs1 = list(source1.find())
+    docs2 = list(source2.find())
 
-    df = pd.DataFrame(docs)
+    df1 = pd.DataFrame(docs1)
+    df2 = pd.DataFrame(docs2)
+
+    # Remove unwanted columns from both DataFrames
+    columns_to_remove = ['_id', 'interview_id', 'thinking']
+    df1 = df1.drop(columns=[col for col in columns_to_remove if col in df1.columns])
+    df2 = df2.drop(columns=[col for col in columns_to_remove if col in df2.columns])
+
     output_file = "research_data.xlsx"
-    df.to_excel(output_file, index=False, engine='openpyxl')
+    with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+        df1.to_excel(writer, sheet_name='Data_M1', index=False)
+        df2.to_excel(writer, sheet_name='Data_M2', index=False)
 
 def fix_times():
     client = MongoClient(DB_URI)
@@ -328,15 +335,36 @@ def fix_times():
 
 def transfer_data():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['Interviews.M2_test']
-    target = client['Benchmark']['Interviews.M2_rem']
+    source = client['Research']['Data.M2_fixed']
+    target = client['Research']['Data.M2']
+    docs = list(source.find())
+
+    student_list = {}
+    max_id = 168
+    StudentID = None
+    for doc in docs:
+        # StudentID
+        if doc['netid'] in student_list:
+            StudentID = student_list[doc['netid']]
+        else:
+            max_id += 1
+            student_list[doc['netid']] = max_id
+            StudentID = max_id
+        doc['StudentID'] = StudentID
+
+        doc['Year'] = 1 # fix year variable mistake
     
-    for patient in ["Samuel Thompson", "Sarah Thompson"]:
-        interviews = list(source.find({'patient': patient}))
-        selected = random.sample(interviews, 2)
-        target.insert_many(selected)
-        for x in selected:
-            source.delete_one({'_id': x['_id']})
+    target.insert_many(docs)
+    
+    print(f"Number of unique students: {len(student_list)}")
+
+    
+    # for patient in ["Samuel Thompson", "Sarah Thompson"]:
+    #     interviews = list(source.find({'patient': patient}))
+    #     selected = random.sample(interviews, 2)
+    #     target.insert_many(selected)
+    #     for x in selected:
+    #         source.delete_one({'_id': x['_id']})
 
 
-research_data()
+save_to_excel()

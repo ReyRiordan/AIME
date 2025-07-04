@@ -335,28 +335,32 @@ def fix_times():
 
 def transfer_data():
     client = MongoClient(DB_URI)
-    source = client['Research']['Data.M2_fixed']
-    target = client['Research']['Data.M2']
+    source = client['Benchmark']['Human_Eval.M2_test']
+    target = client['Benchmark']['Human_Eval.M2_test_old']
     docs = list(source.find())
 
-    student_list = {}
-    max_id = 168
-    StudentID = None
     for doc in docs:
-        # StudentID
-        if doc['netid'] in student_list:
-            StudentID = student_list[doc['netid']]
-        else:
-            max_id += 1
-            student_list[doc['netid']] = max_id
-            StudentID = max_id
-        doc['StudentID'] = StudentID
+        if doc['username'] == "Fac3":
+            source.delete_one({'_id': doc['_id']})
 
-        doc['Year'] = 1 # fix year variable mistake
+    # student_list = {}
+    # max_id = 168
+    # StudentID = None
+    # for doc in docs:
+    #     # StudentID
+    #     if doc['netid'] in student_list:
+    #         StudentID = student_list[doc['netid']]
+    #     else:
+    #         max_id += 1
+    #         student_list[doc['netid']] = max_id
+    #         StudentID = max_id
+    #     doc['StudentID'] = StudentID
+
+    #     doc['Year'] = 1 # fix year variable mistake
     
-    target.insert_many(docs)
+    # target.insert_many(docs)
     
-    print(f"Number of unique students: {len(student_list)}")
+    # print(f"Number of unique students: {len(student_list)}")
 
     
     # for patient in ["Samuel Thompson", "Sarah Thompson"]:
@@ -367,4 +371,4 @@ def transfer_data():
     #         source.delete_one({'_id': x['_id']})
 
 
-save_to_excel()
+transfer_data()

@@ -46,18 +46,14 @@ class Interview(pydantic.BaseModel):
     def build(cls, username: str, patient: Patient, start_time: str, chat_mode: str):
         return cls(username=username, patient=patient, start_time=start_time, chat_mode=chat_mode) 
             
-    def add_feedback(self, short: bool):
-        self.feedback = Feedback.build(short=short, patient=self.patient, messages=self.messages, post_note_inputs=self.post_note_inputs)
+    def add_feedback(self):
+        self.feedback = Feedback.build(patient=self.patient, messages=self.messages, post_note_inputs=self.post_note_inputs)
     
-    def add_key_findings(self, findings: str):
-        self.post_note_inputs["Key Findings"] = findings
+    # def add_key_findings(self, findings: str):
+    #     self.post_note_inputs["Key Findings"] = findings
 
-    def add_other_inputs(self, hpi: str, past_histories: str, summary: str, assessment: str, plan: str):
-        self.post_note_inputs["HPI"] = hpi
-        self.post_note_inputs["Past Histories"] = past_histories
-        self.post_note_inputs["Summary Statement"] = summary
-        self.post_note_inputs["Assessment"] = assessment
-        self.post_note_inputs["Plan"] = plan
+    def add_other_inputs(self, post_note_inputs: dict):
+        self.post_note_inputs = post_note_inputs
     
     def add_message(self, message: Message) -> None:
         if message.type and message.role and message.content:

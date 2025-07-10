@@ -1,0 +1,175 @@
+{
+    "ID": "Samuel Thompson",
+    "Avatar": {
+      "File": false
+    },
+    "Speech": {
+      "Host": "openai",
+      "Model": "gpt-4o-mini-tts",
+      "Voice": "onyx"
+    },
+    "Assets": {
+      "Physical Examination": "./Patient_Info/SamuelThompson_physical.docx", 
+      "Case Explanation": "./Patient_Info/atypical_explanation.docx"
+    },
+    "Case": {
+      "Personal Details": {
+        "Name": "Samuel Thompson",
+        "Sex": "Male",
+        "Birthdate": "October 15th 1964",
+        "Tone": "Worried and nervous"
+      }, 
+      "Background": "You were seen in the office 5 weeks ago because you had been experiencing discomfort, like an indigestion feeling in the front of your chest. You have been treated with a prescription antacid medication for the past month and you are here to follow up.",
+      "HPI": [
+        {
+          "desc": "Major concern is the discomfort, like an indigestion feeling.",
+          "lock": false
+        },
+        {
+          "desc": "The symptom has not improved, and if anything, it feels like it is more of a problem than before you started on the medication.",
+          "lock": false
+        },
+        {
+          "desc": "You have been taking the medicine, which is called omeprazole, like you were supposed to.  ",
+          "lock": true
+        },
+        {
+          "desc": "The feeling in your chest is just uncomfortable, like indigestion or heartburn, like having to burp more frequently. It is not a pain.",
+          "lock": true
+        },
+        {
+          "desc": "The discomfort is located in the lower part of the chest, in the middle, like right between your breasts.",
+          "lock": true
+        },
+        {
+          "desc": "You have been experiencing generalized bloating and burning/indigestion sensation intermittently for the last 6 months, initially about once or twice a week.  Now you are experiencing it every day over the last 7 days.",
+          "lock": true
+        },
+        {
+          "desc": "It usually comes on after eating but also occurs with doing household chores and sometimes when you are stressed about work or home issues.",
+          "lock": true
+        },
+        {
+          "desc": "It is sometimes worse when lying down and better when sitting up.",
+          "lock": true
+        },
+        {
+          "desc": "Once or twice you feel it has come “out of nowhere” when you were not doing anything.",
+          "lock": true
+        },
+        {
+          "desc": "You take TUMs and sometimes that helps relieve the burning.",
+          "lock": true
+        },
+        {
+          "desc": "Usually it lasts about 5 or 10 minutes and then goes away.",
+          "lock": true
+        },
+        {
+          "desc": "You are not experiencing the discomfort right now.",
+          "lock": true
+        },
+        {
+          "desc": "If asked to rate the severity of the discomfort on a scale of 1 to 10, you would say it was a 3 originally, but over the past month it has gotten worse and is now a 6.",
+          "lock": true
+        },
+        {
+          "desc": "You have sometimes felt burning in your stomach, but not anywhere else.",
+          "lock": true
+        },
+        {
+          "desc": "You have been experiencing this burning like discomfort on and off for about six months.",
+          "lock": true
+        }
+      ],
+      "Associated Symptoms": [
+        {
+          "desc": "You occasionally have mild nausea and feel sweaty when you are experiencing the indigestion. This has developed over the past few weeks and was not there prior.",
+          "lock": true
+        },
+        {
+          "desc": "When the discomfort is present, you have not noticed that it worsens with deep breathing or with coughing",
+          "lock": true
+        }
+      ],
+      "Medical History": [
+        {
+          "desc": "High blood pressure for about 12 years",
+          "lock": true
+        },
+        {
+          "desc": "You take your medication as instructed and check your blood pressure at home and it has been good. If asked, your home blood pressure readings are usually around 120's70's.",
+          "lock": true
+        },
+        {
+          "desc": "You do not have diabetes.",
+          "lock": true
+        },
+        {
+          "desc": "If asked about high cholesterol, you are on a cholesterol lowering medication and your last total cholesterol was under 200.",
+          "lock": true
+        }
+      ],
+      "Surgical History": [
+        {
+          "desc": "You had tonsils removed at age 12.",
+          "lock": false
+        }
+      ],
+      "Medications": [
+        {
+          "desc": "If asked about medications, you will say amlodipine for your blood pressure and simvastatin - which you think is for cholesterol.",
+          "lock": true
+        },
+        {
+          "desc": "If asked about over-the-counter medications, say that you have been taking TUMS for heartburn which you get occasionally.",
+          "lock": true
+        }
+      ],
+      "Allergies": [
+        {
+          "desc": "You have no allergies.",
+          "lock": false
+        }
+      ],
+      "Family History": [
+        {
+          "desc": "Your father was diagnosed with prostate cancer when she was 72. He is still alive.",
+          "lock": false
+        }
+      ],
+      "Social History": [
+        {
+          "desc": "You currently smoke - have been smoking half pack a day since age 20.",
+          "lock": true
+        },
+        {
+          "desc": "You drink an occasional glass of wine.",
+          "lock": true
+        },
+        {
+          "desc": "You live with your partner and have no children.",
+          "lock": true
+        },
+        {
+          "desc": "You are a high school teacher.",
+          "lock": true
+        },
+        {
+          "desc": "You do not exercise regularly.",
+          "lock": true
+        },
+        {
+          "desc": "If asked about change in exercise capacity- You can usually walk around the library where you work without problems, though you have sometimes noted heartburn symptoms worsen after walking a block, as noted above.",
+          "lock": true
+        }
+      ],
+      "Other Symptoms": [
+        {
+          "desc": "You have felt more tired than usual.",
+          "lock": true
+        }
+      ]
+    },
+    "Grading": "./Patient_Info/grading_atypicals.json"
+}

@@ -30,7 +30,7 @@ st.set_page_config(page_title = "MEWAI",
                    initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
-    st.session_state["stage"] = CLOSED
+    st.session_state["stage"] = LOGIN_PAGE
 
 def set_stage(stage):
     st.session_state["stage"] = stage
@@ -38,7 +38,7 @@ def set_stage(stage):
 
 # DB SETUP
 DB_CLIENT = init_connection()
-DB_NAME = "M2"
+DB_NAME = "TESTING"
 COLLECTION = DB_CLIENT[DB_NAME]["Interviews"]
 
 def update_interview():
@@ -110,9 +110,7 @@ if st.session_state["stage"] == SETTINGS:
     st.session_state["start_time"] = datetime.now().isoformat()
     st.session_state["tokens"] = {"convo": {"input": 0, "output": 0},
                                   "feedback": {"input": 0, "output": 0}}
-    st.session_state["saved_inputs"] = {"HPI": "", 
-                                        "Past Histories": "",
-                                        "Summary Statement": "", 
+    st.session_state["saved_inputs"] = {"Summary Statement": "", 
                                         "Assessment": "", 
                                         "Plan": ""}
 
@@ -124,6 +122,7 @@ if st.session_state["stage"] == SETTINGS:
                                         ["Jeffrey Smith", "Jenny Smith", "Samuel Thompson", "Sarah Thompson"],
                                         index = None,
                                         placeholder = "Select patient...")
+            continue_previous = False
         else:
             st.title("Patient Settings")
             DATA = get_data(st.session_state["username"])
@@ -365,14 +364,18 @@ if st.session_state["stage"] == DIAGNOSIS:
 
     # Save
     if layout2[1].button("Save", use_container_width=True): 
-        st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
+        st.session_state["interview"].add_other_inputs({"Summary Statement": summary, 
+                                                        "Assessment": assessment, 
+                                                        "Plan": plan})
         st.session_state["saved_inputs"] = st.session_state["interview"].post_note_inputs
         st.session_state["interview"].record_time("save_postnote")
         update_interview()
 
     # Get Feedback
     if layout2[2].button("Get Feedback", use_container_width=True): 
-        st.session_state["interview"].add_other_inputs("", "", summary, assessment, plan)
+        st.session_state["interview"].add_other_inputs({"Summary Statement": summary, 
+                                                        "Assessment": assessment, 
+                                                        "Plan": plan})
         st.session_state["saved_inputs"] = st.session_state["interview"].post_note_inputs
         st.session_state["interview"].record_time("get_feedback")
         update_interview()
@@ -388,32 +391,25 @@ if st.session_state["stage"] == DIAGNOSIS:
         if layout21[0].button("TEST: BAD", use_container_width=True):
             with open("./IDEA/test_cases/bad.json", "r", encoding="utf8") as bad_json:
                 bad_case = json.load(bad_json)
-                # print(bad_case)
-                # print("\n\n")
-                st.session_state["interview"].add_key_findings(bad_case["Key Findings"])
-                st.session_state["interview"].add_other_inputs("",
-                                                            "",
-                                                            bad_case["Summary"], 
-                                                            bad_case["Assessment"], 
-                                                            bad_case["Plan"])
-                # print(st.session_state["interview"].post_note_inputs)
-                # print("\n\n")
+                # st.session_state["interview"].add_key_findings(bad_case["Key Findings"])
+                st.session_state["interview"].add_other_inputs({"Summary Statement": bad_case["Summary Statement"], 
+                                                                "Assessment": bad_case["Assessment"], 
+                                                                "Plan": bad_case["Plan"]})
             update_interview()
             set_stage(FEEDBACK_SETUP)
             st.rerun()
         if layout21[1].button("TEST: GOOD", use_container_width=True):
             with open("./IDEA/test_cases/good.json", "r", encoding="utf8") as good_json:
                 good_case = json.load(good_json)
-                st.session_state["interview"].add_key_findings(good_case["Key Findings"])
-                st.session_state["interview"].add_other_inputs("",
-                                                            "",
-                                                            good_case["Summary"], 
-                                                            good_case["Assessment"], 
-                                                            good_case["Plan"])
+                # st.session_state["interview"].add_key_findings(good_case["Key Findings"])
+                st.session_state["interview"].add_other_inputs({"Summary Statement": good_case["Summary Statement"], 
+                                                                "Assessment": good_case["Assessment"], 
+                                                                "Plan": good_case["Plan"]})
             update_interview()
             set_stage(FEEDBACK_SETUP)
             st.rerun()
     else:
+        # DOWNLOAD BUTTON?
         bio = io.BytesIO()
         st.session_state["convo_file"] = create_convo_file(st.session_state["interview"].username, 
                                                            st.session_state["interview"].patient.id, 
@@ -429,7 +425,7 @@ if st.session_state["stage"] == DIAGNOSIS:
 if st.session_state["stage"] == FEEDBACK_SETUP:
     st.title("Processing feedback...")
     st.write("This might take a few minutes.")
-    st.session_state["interview"].add_feedback(short=True)
+    st.session_state["interview"].add_feedback()
     st.session_state["interview"].update_tokens(st.session_state["tokens"])
     st.session_state["interview"].record_time("feedback_processed")
     update_interview()

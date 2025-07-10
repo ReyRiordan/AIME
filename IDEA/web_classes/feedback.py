@@ -18,7 +18,7 @@ class Feedback(pydantic.BaseModel):
         return cls(feedback=feedback)
     
     @classmethod
-    def build(cls, short: bool, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str], rubric_id=RUBRIC_ID):
+    def build(cls, patient: Patient, messages: list[Message], post_note_inputs: dict[str, str], rubric_id=RUBRIC_ID):
         info = {
             'rubric_id': rubric_id, 
             'model': {
@@ -34,10 +34,11 @@ class Feedback(pydantic.BaseModel):
         post_note = {}
 
         # Initialize
-        if short:
-            categories = ["Summary Statement", "Assessment", "Plan"]
-        else:
-            categories = ["Key Findings", "HPI", "Past Histories", "Summary Statement", "Assessment", "Plan"]
+        # if short:
+        #     categories = ["Summary Statement", "Assessment", "Plan"]
+        # else:
+        #     categories = ["Key Findings", "HPI", "Past Histories", "Summary Statement", "Assessment", "Plan"]
+        categories = ["Summary Statement", "Assessment", "Plan"]
         sectioned = ["HPI", "Past Histories", "Assessment"]
 
         # Use info from source rubric + user input to generate/process/write feedback for specific section/part

@@ -70,7 +70,8 @@ COSTS = {"gpt-4o": {"input": 5, "output": 15},
          "gpt-4-turbo": {"input": 10, "output": 30},
          "gpt-4": {"input": 30, "output": 60},
          "gpt-3.5-turbo-0125": {"input": 0.5, "output": 1.5},
-         "claude-3-7-sonnet-latest": {"input": 3, "output": 15}}
+         "claude-3-7-sonnet-latest": {"input": 3, "output": 15}, 
+         "claude-sonnet-4-20250514": {"input": 3, "output": 15}}
 
 # Audio related
 STT = OpenAI()

@@ -88,11 +88,10 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
         
 
 
-def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
+def display_PostNote(feedback: dict, inputs: dict) -> None:
     # print(feedback)
     inst = st.session_state["admin"]
-    for category, d in feedback["feedback"].items():
-        if short and category in ["Key Findings", "HPI", "Past Histories"]: continue
+    for category, d in feedback["post_note"].items():
         with st.container(border = True):
             st.header(f"{category}", divider = "grey")
             layout1 = st.columns([1, 1])
@@ -111,8 +110,8 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
                             if inst: st.write(f"**Score: {dd['score']}/{dd['max']}**")
                             st.write(dd["comment"])
                             with st.expander("Rubric"):
-                                st.write(dd["desc"])
-                                st.html(dd["html"])
+                                st.write(RUBRIC[category][part]["desc"])
+                                st.html(RUBRIC[category][part]["html"])
                             if inst:
                                 with st.expander("Thought process"):
                                     if dd["thought"]: st.write(dd["thought"])
@@ -121,8 +120,8 @@ def display_PostNote(feedback: dict, inputs: dict, short: bool) -> None:
                     if inst: st.write(f"**Score: {d['score']}/{d['max']}**")
                     st.write(d["comment"])
                     with st.expander("Rubric"):
-                        st.write(d["desc"])
-                        st.html(d["html"])
+                        st.write(RUBRIC[category]["desc"])
+                        st.html(RUBRIC[category]["html"])
                     if inst:
                         with st.expander("Thought process"):
                             if d["thought"]: st.write(d["thought"])
@@ -144,8 +143,7 @@ def display_Interview(interview: dict) -> None:
     
     if interview["feedback"]:
         with post_note:
-            if not interview["post_note_inputs"]["HPI"]: short = True
-            display_PostNote(interview["feedback"], interview["post_note_inputs"], short=short)
+            display_PostNote(interview["feedback"], interview["post_note_inputs"])
     
     with transcript:
         chat_container = st.container(height=700)

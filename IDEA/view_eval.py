@@ -1,0 +1,74 @@
+import time
+from datetime import datetime
+from docx import Document
+import io
+import os
+import streamlit as st
+import streamlit.components.v1 as components
+# import streamlit_authenticator as auth
+import base64
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import (
+    Mail, Attachment, FileContent, FileName,
+    FileType, Disposition, ContentId)
+from audiorecorder import audiorecorder
+from openai import OpenAI
+import tempfile
+from annotated_text import annotated_text
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from lookups import *
+from web_classes import *
+from web_methods import *
+import pytz
+import emoji
+import string
+
+# STREAMLIT SETUP
+st.set_page_config(page_title = "MEWAI",
+                   page_icon = "🧑‍⚕️",
+                   layout = "wide",
+                   initial_sidebar_state="collapsed")
+
+if "stage" not in st.session_state:
+    st.session_state["stage"] = LOGIN_PAGE
+
+def set_stage(stage):
+    st.session_state["stage"] = stage
+
+
+# DB SETUP
+@st.cache_resource
+def init_connection():
+    return MongoClient(DB_URI)
+
+DB_CLIENT = init_connection()
+COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["Interviews"]["M2_test"]
+COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_test"]
+
+
+if st.session_state["stage"] == LOGIN_PAGE:
+    layout1 = st.columns([2, 3, 2])
+    with layout1[1]:
+        st.title("MEWAI: Human Evaluation")
+        st.write("Thank you so much for your cooperation.")
+        st.write("Please begin by logging in as you were directed. If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
+
+        username = st.text_input("Username:")
+        if username and username not in EVALUATORS: 
+            st.write("Invalid username.")
+        st.session_state["admin"] = True if username == "admin" else False
+        password = st.text_input("Password:", type = "password")
+
+        layout12b = layout1[1].columns(5)
+        if layout12b[2].button("Log in"):
+            if username in EVALUATORS:
+                correct = EVALUATORS[username]["password"]
+                if username in EVALUATORS and password == correct:
+                    st.session_state["username"] = username
+                    st.write("Authentication successful!")
+                    time.sleep(1)
+                    set_stage(HUMAN_EVAL)
+                    st.rerun()
+                else:
+                    st.write("Password incorrect.")

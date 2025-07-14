@@ -85,7 +85,75 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
         
     return user_inputs
 
-        
+
+def display_section(interview: dict, inputs: dict, category: str, part: str) -> None:
+    if part:
+        st.write("Comments:")
+        st.write(inputs[category][part]["comment"])
+        features = inputs[category][part]['features']
+        for i, (key, value) in enumerate(features.items()):
+            st.write(f"{key}: {value}")
+        st.write(f"Score (out of **{RUBRIC[category][part]['points']}**): ")
+        st.write(inputs[category][part]["score"])
+    else:
+        st.write("Comments:")
+        st.write(inputs[category]["comment"])
+        features = inputs[category]['features']
+        for i, (key, value) in enumerate(features.items()):
+            st.write(f"{key}: {value}")
+        st.write(f"Score (out of **{RUBRIC[category]['points']}**): ")
+        st.write(inputs[category]["score"])
+
+def display_comparison(interview: dict, evaluations: list[dict]) -> None:
+    student_responses = interview["post_note_inputs"]
+    categories = []
+    for cat, input in student_responses.items():
+        if input: categories.append(cat)
+
+    for category in categories:
+        response = student_responses[category]
+        with st.container(border = True):
+            st.header(f"{category}", divider = "grey")
+            layout1 = st.columns([1, 2])
+
+            with layout1[0]:
+                st.subheader("**Student response:**")
+                st.write(student_responses[category])
+
+            with layout1[1]:
+                st.subheader("**Evaluations:**")
+                evalers = list(evaluations.keys())
+
+                if category in ["Assessment"]: # if multiple parts
+                    parts = [part for part in RUBRIC[category]]
+                    tabs = st.tabs(parts)
+                    for i, part in enumerate(parts):
+                        with tabs[i]:
+                            layout11 = st.columns([1 for i in range(len(evalers))])
+                            for evaler_index in range(len(evalers)):
+                                evaler = evalers[evaler_index]
+                                if evaluations[evaler]:
+                                    evaler_inputs = evaluations[evaler]['feedback']
+                                    with layout11[evaler_index]:
+                                        display_section(interview, evaler_inputs, category, part)
+                            with st.container(border=True):
+                                st.write("**Rubric:**")
+                                st.html(RUBRIC[category][part]["html"])
+                                with st.expander("Description"):
+                                    st.write(RUBRIC[category][part]["title"] + ": " + RUBRIC[category][part]["desc"])
+                else:
+                    layout11 = st.columns([1 for i in range(len(evalers))])
+                    for evaler_index in range(len(evalers)):
+                        evaler = evalers[evaler_index]
+                        if evaluations[evaler]:
+                            evaler_inputs = evaluations[evaler]['feedback']
+                            with layout11[evaler_index]:
+                                display_section(interview, evaler_inputs, category, None)
+                    with st.container(border=True):
+                        st.write("**Rubric:**")
+                        st.html(RUBRIC[category]["html"])
+                        with st.expander("Description"):
+                            st.write(RUBRIC[category]["title"] + ": " + RUBRIC[category]["desc"])
 
 
 def display_PostNote(feedback: dict, inputs: dict) -> None:

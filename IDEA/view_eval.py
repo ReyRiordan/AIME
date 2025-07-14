@@ -46,6 +46,26 @@ DB_CLIENT = init_connection()
 COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["Interviews"]["M2_test"]
 COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_test"]
 
+# OTHER
+def load_and_setup():
+    # Load the current interview based on view_index
+    interview_id = st.session_state["interview_list"][st.session_state["current_index"]]["_id"]
+    interview = COLLECTION_INTERVIEWS.find_one({"_id": interview_id})
+
+    # Load evals
+    evaluations = {
+        'Fac1': None,
+        'Fac2': None,
+        'Fac3': None
+    }
+    eval_list = COLLECTION_EVALUATIONS.find({'interview_info._id': interview_id})
+    for eval in eval_list:
+        if eval['username'] in evaluations:
+            evaluations[eval['username']] = eval
+    print(evaluations)
+
+    return interview, evaluations
+
 
 if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([2, 3, 2])
@@ -68,7 +88,50 @@ if st.session_state["stage"] == LOGIN_PAGE:
                     st.session_state["username"] = username
                     st.write("Authentication successful!")
                     time.sleep(1)
-                    set_stage(HUMAN_EVAL)
+                    set_stage(VIEW_EVAL)
                     st.rerun()
                 else:
                     st.write("Password incorrect.")
+
+
+if st.session_state["stage"] == VIEW_EVAL:
+    st.title("View Evaluations")
+    layout1 = st.columns([2, 3, 2])
+
+    # Initialize data if needed
+    if "interview_list" not in st.session_state:
+        st.session_state["interview_list"] = list(COLLECTION_INTERVIEWS.find({}, {"netid": 1, "patient": 1}))
+        st.session_state["interviews_label:index"] = {}
+        for index, interview in enumerate(st.session_state["interview_list"]):
+            label = interview["netid"] + ": " + interview["patient"]
+            eval_for_label = COLLECTION_EVALUATIONS.find_one({"username": st.session_state["username"], "interview_info._id": interview["_id"]})
+            if eval_for_label:
+                label += " " + eval_for_label["mark"]
+                label = emoji.emojize(label, language='alias')
+            st.session_state["interviews_label:index"][label] = index
+        st.session_state["current_index"] = None
+        st.session_state["current_evaluation"] = None
+
+    # Selectbox section
+    layout11 = layout1[1].columns([1, 2, 1])
+    
+    # Function for selectbox change
+    def on_select_change():
+        # Get the new index from the selected label
+        st.session_state["current_index"] = st.session_state["interviews_label:index"][st.session_state["selected"]]
+        
+    # Create the selectbox
+    layout11[1].selectbox(
+        "Select an interview:", 
+        options=st.session_state["interviews_label:index"],
+        index=st.session_state["current_index"],
+        placeholder="Select Interview", 
+        label_visibility="collapsed", 
+        key="selected",
+        on_change=on_select_change
+    )
+
+    if st.session_state["current_index"] is not None:
+        # Load/setup current interview and evaluation as needed
+        interview, evaluations = load_and_setup()
+        display_comparison(interview, evaluations)

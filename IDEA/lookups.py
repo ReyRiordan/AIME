@@ -65,6 +65,7 @@ SURVEY = 13
 KEY_PHYSICALS = 14
 VIEW_INTERVIEWS_ADMIN = 15
 HUMAN_EVAL = 16
+VIEW_EVAL = 17
 
 COSTS = {"gpt-4o": {"input": 5, "output": 15},
          "gpt-4-turbo": {"input": 10, "output": 30},

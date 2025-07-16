@@ -86,23 +86,13 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
     return user_inputs
 
 
-def display_section(interview: dict, inputs: dict, category: str, part: str) -> None:
-    if part:
-        st.write("Comments:")
-        st.write(inputs[category][part]["comment"])
-        features = inputs[category][part]['features']
-        for i, (key, value) in enumerate(features.items()):
-            st.write(f"{key}: {value}")
-        st.write(f"Score (out of **{RUBRIC[category][part]['points']}**): ")
-        st.write(inputs[category][part]["score"])
-    else:
-        st.write("Comments:")
-        st.write(inputs[category]["comment"])
-        features = inputs[category]['features']
-        for i, (key, value) in enumerate(features.items()):
-            st.write(f"{key}: {value}")
-        st.write(f"Score (out of **{RUBRIC[category]['points']}**): ")
-        st.write(inputs[category]["score"])
+def display_section(interview: dict, inputs: dict, rubric: dict) -> None:
+    st.write("Comments:")
+    st.write(inputs["comment"])
+    for i, (key, value) in enumerate(inputs['features'].items()):
+        st.write(f"{key}: {value}")
+    st.write(f"Score (out of **{rubric['points']}**): ")
+    st.write(inputs["score"])
 
 def display_comparison(interview: dict, evaluations: list[dict]) -> None:
     student_responses = interview["post_note_inputs"]
@@ -130,30 +120,32 @@ def display_comparison(interview: dict, evaluations: list[dict]) -> None:
                     for i, part in enumerate(parts):
                         with tabs[i]:
                             layout11 = st.columns([1 for i in range(len(evalers))])
+                            rubric = RUBRIC[category][part]
                             for evaler_index in range(len(evalers)):
                                 evaler = evalers[evaler_index]
                                 if evaluations[evaler]:
-                                    evaler_inputs = evaluations[evaler]['feedback']
+                                    evaler_inputs = evaluations[evaler]['feedback'][category][part]
                                     with layout11[evaler_index]:
-                                        display_section(interview, evaler_inputs, category, part)
+                                        display_section(interview, evaler_inputs, rubric)
                             with st.container(border=True):
                                 st.write("**Rubric:**")
-                                st.html(RUBRIC[category][part]["html"])
+                                st.html(rubric["html"])
                                 with st.expander("Description"):
-                                    st.write(RUBRIC[category][part]["title"] + ": " + RUBRIC[category][part]["desc"])
+                                    st.write(rubric["title"] + ": " + rubric["desc"])
                 else:
                     layout11 = st.columns([1 for i in range(len(evalers))])
+                    rubric = RUBRIC[category]
                     for evaler_index in range(len(evalers)):
                         evaler = evalers[evaler_index]
                         if evaluations[evaler]:
-                            evaler_inputs = evaluations[evaler]['feedback']
+                            evaler_inputs = evaluations[evaler]['feedback'][category]
                             with layout11[evaler_index]:
-                                display_section(interview, evaler_inputs, category, None)
+                                display_section(interview, evaler_inputs, rubric)
                     with st.container(border=True):
                         st.write("**Rubric:**")
-                        st.html(RUBRIC[category]["html"])
+                        st.html(rubric["html"])
                         with st.expander("Description"):
-                            st.write(RUBRIC[category]["title"] + ": " + RUBRIC[category]["desc"])
+                            st.write(rubric["title"] + ": " + rubric["desc"])
 
 
 def display_PostNote(feedback: dict, inputs: dict) -> None:

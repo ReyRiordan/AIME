@@ -16,6 +16,8 @@ import tempfile
 from web_classes import *
 from typing import List
 from lookups import *
+import string
+import pandas as pd
 
 
 def display_evaluation(interview: dict, user_inputs: dict) -> dict:
@@ -87,11 +89,9 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
 
 
 def display_section(interview: dict, inputs: dict, rubric: dict) -> None:
-    st.write("Comments:")
     st.write(inputs["comment"])
     for i, (key, value) in enumerate(inputs['features'].items()):
-        st.write(f"{key}: {value}")
-    st.write(f"Score (out of **{rubric['points']}**): ")
+        st.write(f"{value}")
     st.write(inputs["score"])
 
 def display_comparison(interview: dict, evaluations: list[dict]) -> None:
@@ -133,14 +133,33 @@ def display_comparison(interview: dict, evaluations: list[dict]) -> None:
                                 with st.expander("Description"):
                                     st.write(rubric["title"] + ": " + rubric["desc"])
                 else:
-                    layout11 = st.columns([1 for i in range(len(evalers))])
+                    layout11 = st.columns([1] + [2 for i in range(len(evalers))])
                     rubric = RUBRIC[category]
-                    for evaler_index in range(len(evalers)):
-                        evaler = evalers[evaler_index]
+                    to_df = {'evaler': [],
+                             'score': []}
+                    for i in range(rubric['features']):
+                        to_df[string.ascii_lowercase[i]] = []
+                    to_df['comment'] = []
+                    for evaler in evalers:
+                        to_df['evaler'].append(evaler)
                         if evaluations[evaler]:
-                            evaler_inputs = evaluations[evaler]['feedback'][category]
-                            with layout11[evaler_index]:
-                                display_section(interview, evaler_inputs, rubric)
+                            inputs = evaluations[evaler]['feedback'][category]
+                            for key, value in inputs.items():
+                                if key == 'features':
+                                    for k, v in inputs['features'].items(): 
+                                        to_df[k].append(v)
+                                else:
+                                    to_df[key].append(value)
+                        else:
+                            for key, value in to_df.items():
+                                if key != 'evaler': to_df[key].append(None)
+                    df = pd.DataFrame(to_df)
+                    config = {
+                        'evaler': st.column_config.Column("Evaluator", width="small", pinned=True),
+                        'score': st.column_config.Column(f"Score / {rubric['points']}", width="small"),
+                        'comment': st.column_config.Column(f"Comment", width="large")
+                    }
+                    st.dataframe(df, column_config=config, hide_index=True, use_container_width=True)
                     with st.container(border=True):
                         st.write("**Rubric:**")
                         st.html(rubric["html"])

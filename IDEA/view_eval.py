@@ -132,3 +132,24 @@ if st.session_state["stage"] == VIEW_EVAL:
         # Load/setup current interview and evaluation as needed
         interview, evaluations = load_and_setup()
         display_comparison(interview, evaluations)
+    
+    # Function to handle dropdown navigation
+    def navigate(direction):
+        if direction == "next":
+            st.session_state["current_index"] = min(len(st.session_state["interview_list"]) - 1, 
+                                              st.session_state["current_index"] + 1)
+        elif direction == "back":
+            st.session_state["current_index"] = max(0, st.session_state["current_index"] - 1)
+
+        st.session_state['started_time'] = False
+
+    if st.session_state["current_index"] is not None:
+        # Top navigation buttons
+        if layout11[0].button("Back", use_container_width=True, key="backtop"):
+            navigate("back")
+            st.rerun()
+        if layout11[2].button("Next", use_container_width=True, key="nexttop"):
+            navigate("next")
+            st.rerun()
+
+    

@@ -88,11 +88,38 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
     return user_inputs
 
 
-def display_section(interview: dict, inputs: dict, rubric: dict) -> None:
-    st.write(inputs["comment"])
-    for i, (key, value) in enumerate(inputs['features'].items()):
-        st.write(f"{value}")
-    st.write(inputs["score"])
+def display_section(evaluations: dict, category: str, part: str) -> None:
+    rubric = RUBRIC[category][part] if part else RUBRIC[category]
+    df = {'evaler': [],
+                'score': []}
+    for i in range(rubric['features']):
+        df[string.ascii_lowercase[i]] = []
+    df['comment'] = []
+    for evaler in list(evaluations.keys()):
+        df['evaler'].append(evaler)
+        if evaluations[evaler]:
+            inputs = evaluations[evaler]['feedback'][category][part] if part else evaluations[evaler]['feedback'][category]
+            for key, value in inputs.items():
+                if key == 'features':
+                    for k, v in inputs['features'].items(): 
+                        df[k].append(v)
+                else:
+                    df[key].append(value)
+        else:
+            for key, value in df.items():
+                if key != 'evaler': df[key].append(None)
+    config = {
+        'evaler': st.column_config.Column("Evaluator", width="small", pinned=True),
+        'score': st.column_config.Column(f"Score / {rubric['points']}", width="small"),
+        'comment': st.column_config.Column(f"Comment", width="large")
+    }
+    st.dataframe(df, column_config=config, hide_index=True, use_container_width=True)
+
+    with st.container(border=True):
+        st.write("**Rubric:**")
+        st.html(rubric["html"])
+        with st.expander("Description"):
+            st.write(rubric["title"] + ": " + rubric["desc"])
 
 def display_comparison(interview: dict, evaluations: list[dict]) -> None:
     student_responses = interview["post_note_inputs"]
@@ -119,52 +146,9 @@ def display_comparison(interview: dict, evaluations: list[dict]) -> None:
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
                         with tabs[i]:
-                            layout11 = st.columns([1 for i in range(len(evalers))])
-                            rubric = RUBRIC[category][part]
-                            for evaler_index in range(len(evalers)):
-                                evaler = evalers[evaler_index]
-                                if evaluations[evaler]:
-                                    evaler_inputs = evaluations[evaler]['feedback'][category][part]
-                                    with layout11[evaler_index]:
-                                        display_section(interview, evaler_inputs, rubric)
-                            with st.container(border=True):
-                                st.write("**Rubric:**")
-                                st.html(rubric["html"])
-                                with st.expander("Description"):
-                                    st.write(rubric["title"] + ": " + rubric["desc"])
+                            display_section(evaluations, category, part)
                 else:
-                    layout11 = st.columns([1] + [2 for i in range(len(evalers))])
-                    rubric = RUBRIC[category]
-                    to_df = {'evaler': [],
-                             'score': []}
-                    for i in range(rubric['features']):
-                        to_df[string.ascii_lowercase[i]] = []
-                    to_df['comment'] = []
-                    for evaler in evalers:
-                        to_df['evaler'].append(evaler)
-                        if evaluations[evaler]:
-                            inputs = evaluations[evaler]['feedback'][category]
-                            for key, value in inputs.items():
-                                if key == 'features':
-                                    for k, v in inputs['features'].items(): 
-                                        to_df[k].append(v)
-                                else:
-                                    to_df[key].append(value)
-                        else:
-                            for key, value in to_df.items():
-                                if key != 'evaler': to_df[key].append(None)
-                    df = pd.DataFrame(to_df)
-                    config = {
-                        'evaler': st.column_config.Column("Evaluator", width="small", pinned=True),
-                        'score': st.column_config.Column(f"Score / {rubric['points']}", width="small"),
-                        'comment': st.column_config.Column(f"Comment", width="large")
-                    }
-                    st.dataframe(df, column_config=config, hide_index=True, use_container_width=True)
-                    with st.container(border=True):
-                        st.write("**Rubric:**")
-                        st.html(rubric["html"])
-                        with st.expander("Description"):
-                            st.write(rubric["title"] + ": " + rubric["desc"])
+                    display_section(evaluations, category, part=None)
 
 
 def display_PostNote(feedback: dict, inputs: dict) -> None:

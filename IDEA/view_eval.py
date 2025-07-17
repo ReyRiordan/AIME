@@ -105,9 +105,6 @@ if st.session_state["stage"] == VIEW_EVAL:
         for index, interview in enumerate(st.session_state["interview_list"]):
             label = interview["netid"] + ": " + interview["patient"]
             eval_for_label = COLLECTION_EVALUATIONS.find_one({"username": st.session_state["username"], "interview_info._id": interview["_id"]})
-            if eval_for_label:
-                label += " " + eval_for_label["mark"]
-                label = emoji.emojize(label, language='alias')
             st.session_state["interviews_label:index"][label] = index
         st.session_state["current_index"] = None
         st.session_state["current_evaluation"] = None

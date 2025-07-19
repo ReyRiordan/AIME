@@ -62,7 +62,6 @@ def load_and_setup():
     for eval in eval_list:
         if eval['username'] in evaluations:
             evaluations[eval['username']] = eval
-    print(evaluations)
 
     return interview, evaluations
 

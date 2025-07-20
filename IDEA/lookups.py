@@ -147,6 +147,8 @@ with open("./Rubrics/base.json", "r") as rubric_base_file:
     rubric_base = json.load(rubric_base_file)
 with open("./Rubrics/" + RUBRIC_ID + ".json", "r") as rubric_points_file:
     rubric_points = json.load(rubric_points_file)
+
+# CREATE RUBRIC
 RUBRIC = {}
 for category in rubric_base:
     if category in ["HPI", "Past Histories", "Assessment"]: # multiple parts
@@ -158,6 +160,7 @@ for category in rubric_base:
 # SHORTEN
 for category in ["Key Findings", "HPI", "Past Histories"]:
     del RUBRIC[category]
+
 
 with open(PATHS["Label Examples"], "r") as cat_examples_json:
     LABEL_EXAMPLES = json.loads(cat_examples_json.read())

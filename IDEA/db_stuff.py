@@ -503,13 +503,15 @@ def AI_evaluation():
 
 def standardize_naming():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['Human_Eval.M2_test']
+    source = client['Benchmark']['AI_Eval.M2_test']
+    target = client['Benchmark']['AI_Eval.M2_test_old']
     docs = list(source.find())
+    target.insert_many(docs)
 
-    for doc in docs:
-        doc['sim_info'] = doc.pop("interview_info")
-        doc['evaluation'] = doc.pop("feedback")
-        source.replace_one({"_id": doc['_id']}, doc)
+    # for doc in docs:
+    #     doc['sim_info'] = doc.pop("interview_info")
+    #     doc['evaluation'] = doc.pop("feedback")
+    #     source.replace_one({"_id": doc['_id']}, doc)
 
 
-standardize_naming()
+AI_evaluation()

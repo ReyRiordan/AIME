@@ -396,13 +396,28 @@ def generate_eval(sim: dict, prompt: str, client: Anthropic, AI_info: dict, rubr
     usage['input_tokens'] += raw_output.usage.input_tokens
     usage['output_tokens'] += raw_output.usage.output_tokens
 
-    think = re.search(r'<think>([\s\S]*?)</think>', output).group(1).strip()
-    grade = re.search(r'<grade>([\s\S]*?)</grade>', output).group(1).strip()
-    grade_dict = json.loads(grade)
-    features = grade_dict['features']
-    score = grade_dict['score']
-    comment = re.search(r'<comment>([\s\S]*?)</comment>', output).group(1).strip()
-    feedback = re.search(r'<feedback>([\s\S]*?)</feedback>', output).group(1).strip()
+    def extract(tag: str):
+        match = re.search(rf'<{tag}>([\s\S]*?)</{tag}>', output)
+        if match:
+            return match.group(1).strip()
+        else:
+            print(f"ERROR: no match for <{tag}> in output")
+            return None
+
+    think = extract("think")
+    grade = extract("grade")
+    if grade:
+        try:
+            grade_dict = json.loads(grade)
+            features = grade_dict['features']
+            score = grade_dict['score']
+        except json.JSONDecodeError as e:
+            print(f"ERROR: Could not parse grade JSON '{grade}': {e}")
+            grade_dict = features = score = None
+    else:
+        grade_dict = features = score = None
+    comment = extract("comment")
+    feedback = extract("feedback")
 
     return {
         "comment": comment,

@@ -44,10 +44,10 @@ class Feedback(pydantic.BaseModel):
         # Use info from source rubric + user input to generate/process/write feedback for specific section/part
         def generate_process_write(source: dict, input: str):
             response = generate_feedback(title = source["title"],
-                                            desc = source["desc"],
-                                            rubric = source["rubric"],
-                                            user_input = input, 
-                                            tokens = info['tokens'])
+                                         desc = source["desc"],
+                                         rubric = source["rubric"],
+                                         user_input = input, 
+                                         tokens = info['tokens'])
             # split into feedback / thought process + final score
             split_attempt = response.strip().split("Thought process:")
             if len(split_attempt) == 2:
@@ -60,10 +60,10 @@ class Feedback(pydantic.BaseModel):
                 thought = None
                 score = 0
             output = {"input": input,
-                        "comment": comment,
-                        "thought": thought,
-                        "score": score,
-                        "max": source["points"]}
+                      "comment": comment,
+                      "thought": thought,
+                      "score": score,
+                      "max": source["points"]}
             return output
 
         # Create feedback

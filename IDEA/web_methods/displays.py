@@ -16,6 +16,8 @@ import tempfile
 from web_classes import *
 from typing import List
 from lookups import *
+import string
+import pandas as pd
 
 
 def display_evaluation(interview: dict, user_inputs: dict) -> dict:
@@ -85,7 +87,75 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
         
     return user_inputs
 
-        
+
+def display_section(evaluations: dict, category: str, part: str) -> None:
+    rubric = RUBRIC[category][part] if part else RUBRIC[category]
+    df = {'evaler': [], 'score': []}
+    for i in range(rubric['features']):
+        df[string.ascii_lowercase[i]] = []
+    df['comment'] = []
+
+    for evaler in list(evaluations.keys()):
+        df['evaler'].append(evaler)
+        if evaluations[evaler]:
+            inputs = evaluations[evaler]['evaluation'][category][part] if part else evaluations[evaler]['evaluation'][category]
+            for key, value in inputs.items():
+                if key not in ['comment', 'features', 'score']: continue
+                elif key == 'features':
+                    for k, v in inputs['features'].items(): 
+                        df[k].append(v)
+                elif key == 'score':
+                    if value is not None:
+                        value = int(value)
+                    df[key].append(value)
+                else:
+                    df[key].append(value)
+        else:
+            for key in df: 
+                if key != 'evaler': df[key].append(None)
+
+    config = {
+        'evaler': st.column_config.Column("Evaluator", width="small", pinned=True),
+        'score': st.column_config.Column(f"Score / {rubric['points']}", width="small"),
+        'comment': st.column_config.Column(f"Comment", width="large")
+    }
+    df = pd.DataFrame(df)
+    st.dataframe(df, column_config=config, hide_index=True, use_container_width=True)
+
+    with st.container(border=True):
+        st.write("**Rubric:**")
+        st.html(rubric["html"])
+        with st.expander("Description"):
+            st.write(rubric["title"] + ": " + rubric["desc"])
+
+def display_comparison(interview: dict, evaluations: list[dict]) -> None:
+    student_responses = interview["post_note_inputs"]
+    categories = []
+    for cat, input in student_responses.items():
+        if input: categories.append(cat)
+
+    for category in categories:
+        response = student_responses[category]
+        with st.container(border = True):
+            st.header(f"{category}", divider = "grey")
+            layout1 = st.columns([1, 2])
+
+            with layout1[0]:
+                st.subheader("**Student response:**")
+                st.write(student_responses[category])
+
+            with layout1[1]:
+                st.subheader("**Evaluations:**")
+                evalers = list(evaluations.keys())
+
+                if category in ["Assessment"]: # if multiple parts
+                    parts = [part for part in RUBRIC[category]]
+                    tabs = st.tabs(parts)
+                    for i, part in enumerate(parts):
+                        with tabs[i]:
+                            display_section(evaluations, category, part)
+                else:
+                    display_section(evaluations, category, part=None)
 
 
 def display_PostNote(feedback: dict, inputs: dict) -> None:

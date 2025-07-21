@@ -500,13 +500,83 @@ def AI_evaluation():
 
         target.insert_one(final_result)
         
+def AI_evaluate_single():
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Interviews.M2_test']
+    target = client['Benchmark']['AI_Eval.M2_test']
+    sim = source.find_one({"netid": "jg1512", "patient": "Jeffrey Smith"})
 
-def standardize_naming():
+    username = "Claude 4S"
+    AI_info = {
+        "provider": "Anthropic",
+        "model": "claude-sonnet-4-20250514",
+        "temperature": 0.0,
+        "thinking": False,
+        "prompt_id": "Feedback_7-18"
+    }
+
+    client = Anthropic()
+    with open('./Prompts/Feedback_7-18.txt', 'r') as prompt_file:
+        prompt = prompt_file.read()
+
+    start_time = datetime.now().isoformat()
+
+    sim_info = {
+        "_id": sim['_id'],
+        "netid": sim['netid'],
+        "patient": sim['patient'], 
+        "rubric_id": "atypicals_7-2-25"
+    }
+
+    print(f"(Single) {sim['netid']} | {sim['patient']}")
+
+    post_note = sim['post_note_inputs']
+    evaluation = {}
+    usage = {
+        "input_tokens": 0,
+        "output_tokens": 0
+    }
+    for category, student_response in post_note.items():
+        if not student_response: continue
+
+        if category in ["Assessment"]:
+            evaluation[category] = {}
+            for part in RUBRIC[category]:
+                rubric = RUBRIC[category][part]
+                # print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {part}]... ----------")
+                eval_dict = generate_eval(sim, prompt, client, AI_info, rubric, student_response, usage)
+                evaluation[category][part] = eval_dict
+        else:
+            rubric = RUBRIC[category]
+            # print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {category}]... ----------")
+            eval_dict = generate_eval(sim, prompt, client, AI_info, rubric, student_response, usage)
+            evaluation[category] = eval_dict
+
+    end_time = datetime.now().isoformat()
+    times = {
+        start_time: "start",
+        end_time: "end"
+    }
+
+    final_result = {
+        "username": username,
+        "ai_info": AI_info,
+        "sim_info": sim_info,
+        "times": times,
+        "usage": usage,
+        "evaluation": evaluation
+    }
+
+    target.insert_one(final_result)
+
+
+def transfer():
     client = MongoClient(DB_URI)
     source = client['Benchmark']['AI_Eval.M2_test']
     target = client['Benchmark']['AI_Eval.M2_test_old']
-    docs = list(source.find())
-    target.insert_many(docs)
+    doc = source.find_one({"sim_info.netid": "cz422"})
+    
+    target.insert_one(doc)
 
     # for doc in docs:
     #     doc['sim_info'] = doc.pop("interview_info")
@@ -514,4 +584,4 @@ def standardize_naming():
     #     source.replace_one({"_id": doc['_id']}, doc)
 
 
-AI_evaluation()
+AI_evaluate_single()

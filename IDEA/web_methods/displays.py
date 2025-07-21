@@ -90,29 +90,36 @@ def display_evaluation(interview: dict, user_inputs: dict) -> dict:
 
 def display_section(evaluations: dict, category: str, part: str) -> None:
     rubric = RUBRIC[category][part] if part else RUBRIC[category]
-    df = {'evaler': [],
-                'score': []}
+    df = {'evaler': [], 'score': []}
     for i in range(rubric['features']):
         df[string.ascii_lowercase[i]] = []
     df['comment'] = []
+
     for evaler in list(evaluations.keys()):
         df['evaler'].append(evaler)
         if evaluations[evaler]:
-            inputs = evaluations[evaler]['feedback'][category][part] if part else evaluations[evaler]['feedback'][category]
+            inputs = evaluations[evaler]['evaluation'][category][part] if part else evaluations[evaler]['evaluation'][category]
             for key, value in inputs.items():
-                if key == 'features':
+                if key not in ['comment', 'features', 'score']: continue
+                elif key == 'features':
                     for k, v in inputs['features'].items(): 
                         df[k].append(v)
+                elif key == 'score':
+                    if value is not None:
+                        value = int(value)
+                    df[key].append(value)
                 else:
                     df[key].append(value)
         else:
-            for key, value in df.items():
+            for key in df: 
                 if key != 'evaler': df[key].append(None)
+
     config = {
         'evaler': st.column_config.Column("Evaluator", width="small", pinned=True),
         'score': st.column_config.Column(f"Score / {rubric['points']}", width="small"),
         'comment': st.column_config.Column(f"Comment", width="large")
     }
+    df = pd.DataFrame(df)
     st.dataframe(df, column_config=config, hide_index=True, use_container_width=True)
 
     with st.container(border=True):

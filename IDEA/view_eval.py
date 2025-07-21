@@ -43,8 +43,9 @@ def init_connection():
     return MongoClient(DB_URI)
 
 DB_CLIENT = init_connection()
-COLLECTION_INTERVIEWS = DB_CLIENT["Benchmark"]["Interviews"]["M2_test"]
-COLLECTION_EVALUATIONS = DB_CLIENT["Benchmark"]["Human_Eval"]["M2_test"]
+COLLECTION_INTERVIEWS = DB_CLIENT['Benchmark']['Interviews.M2_test']
+COLLECTION_EVALS_HUMAN = DB_CLIENT['Benchmark']['Human_Eval.M2_test']
+COLLECTION_EVALS_AI = DB_CLIENT['Benchmark']['AI_Eval.M2_test']
 
 # OTHER
 def load_and_setup():
@@ -56,9 +57,12 @@ def load_and_setup():
     evaluations = {
         'Fac1': None,
         'Fac2': None,
-        'Fac3': None
+        'Fac3': None,
+        'Claude 4S': None
     }
-    eval_list = COLLECTION_EVALUATIONS.find({'interview_info._id': interview_id})
+    eval_list_human = list(COLLECTION_EVALS_HUMAN.find({'sim_info._id': interview_id}))
+    eval_list_ai = list(COLLECTION_EVALS_AI.find({'sim_info._id': interview_id}))
+    eval_list = eval_list_human + eval_list_ai
     for eval in eval_list:
         if eval['username'] in evaluations:
             evaluations[eval['username']] = eval
@@ -103,7 +107,6 @@ if st.session_state["stage"] == VIEW_EVAL:
         st.session_state["interviews_label:index"] = {}
         for index, interview in enumerate(st.session_state["interview_list"]):
             label = interview["netid"] + ": " + interview["patient"]
-            eval_for_label = COLLECTION_EVALUATIONS.find_one({"username": st.session_state["username"], "interview_info._id": interview["_id"]})
             st.session_state["interviews_label:index"][label] = index
         st.session_state["current_index"] = None
         st.session_state["current_evaluation"] = None

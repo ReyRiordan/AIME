@@ -45,7 +45,7 @@ def init_connection():
 DB_CLIENT = init_connection()
 COLLECTION_INTERVIEWS = DB_CLIENT['Benchmark']['Interviews.M2_test']
 COLLECTION_EVALS_HUMAN = DB_CLIENT['Benchmark']['Human_Eval.M2_test']
-COLLECTION_EVALS_AI = DB_CLIENT['Benchmark']['AI_Eval.M2_test_old']
+COLLECTION_EVALS_AI = DB_CLIENT['Benchmark']['AI_Eval.M2_test']
 
 # OTHER
 def load_and_setup():
@@ -73,7 +73,7 @@ def load_and_setup():
 if st.session_state["stage"] == LOGIN_PAGE:
     layout1 = st.columns([2, 3, 2])
     with layout1[1]:
-        st.title("MEWAI: Human Evaluation")
+        st.title("MEWAI: View/Compare Evaluations")
         st.write("Thank you so much for your cooperation.")
         st.write("Please begin by logging in as you were directed. If you encounter any issues, please contact rhr58@scarletmail.rutgers.edu")
 

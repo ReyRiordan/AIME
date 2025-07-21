@@ -45,7 +45,7 @@ def init_connection():
 DB_CLIENT = init_connection()
 COLLECTION_INTERVIEWS = DB_CLIENT['Benchmark']['Interviews.M2_test']
 COLLECTION_EVALS_HUMAN = DB_CLIENT['Benchmark']['Human_Eval.M2_test']
-COLLECTION_EVALS_AI = DB_CLIENT['Benchmark']['AI_Eval.M2_test']
+COLLECTION_EVALS_AI = DB_CLIENT['Benchmark']['AI_Eval.M2_test_old']
 
 # OTHER
 def load_and_setup():

@@ -392,7 +392,7 @@ def generate_eval(sim: dict, prompt: str, client: Anthropic, AI_info: dict, rubr
             ]
         )
     output = prefill + raw_output.content[0].text
-    print(output)
+    # print(output)
     usage['input_tokens'] += raw_output.usage.input_tokens
     usage['output_tokens'] += raw_output.usage.output_tokens
 
@@ -418,18 +418,20 @@ def AI_evaluation():
     target = client['Benchmark']['AI_Eval.M2_test']
     sim_headers = list(source.find({}, {"netid": 1, "patient": 1}))
 
-    name = "Claude 4S"
+    username = "Claude 4S"
     AI_info = {
         "provider": "Anthropic",
         "model": "claude-sonnet-4-20250514",
         "temperature": 0.0,
-        "thinking": False
+        "thinking": False,
+        "prompt_id": "Feedback_7-18"
     }
 
     client = Anthropic()
     with open('./Prompts/Feedback_7-18.txt', 'r') as prompt_file:
         prompt = prompt_file.read()
 
+    n = 0
     for header in sim_headers:
         sim = source.find_one({"_id": header['_id']})
         start_time = datetime.now().isoformat()
@@ -437,8 +439,12 @@ def AI_evaluation():
         sim_info = {
             "_id": sim['_id'],
             "netid": sim['netid'],
-            "patient": sim['patient']
+            "patient": sim['patient'], 
+            "rubric_id": "atypicals_7-2-25"
         }
+
+        n += 1
+        print(f"({n}/30) {sim['netid']} | {sim['patient']}")
 
         post_note = sim['post_note_inputs']
         evaluation = {}
@@ -453,12 +459,12 @@ def AI_evaluation():
                 evaluation[category] = {}
                 for part in RUBRIC[category]:
                     rubric = RUBRIC[category][part]
-                    print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {part}]... ----------")
+                    # print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {part}]... ----------")
                     eval_dict = generate_eval(sim, prompt, client, AI_info, rubric, student_response, usage)
                     evaluation[category][part] = eval_dict
             else:
                 rubric = RUBRIC[category]
-                print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {category}]... ----------")
+                # print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {category}]... ----------")
                 eval_dict = generate_eval(sim, prompt, client, AI_info, rubric, student_response, usage)
                 evaluation[category] = eval_dict
 
@@ -469,7 +475,7 @@ def AI_evaluation():
         }
 
         final_result = {
-            "name": name,
+            "username": username,
             "ai_info": AI_info,
             "sim_info": sim_info,
             "times": times,
@@ -478,8 +484,6 @@ def AI_evaluation():
         }
 
         target.insert_one(final_result)
-
-        break # ONLY ONE
         
 
 AI_evaluation()

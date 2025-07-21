@@ -14,7 +14,7 @@ The user will input the relevant section of the student's clinical note. Careful
 
 ### Example output
 
-<think>Insert thinking here...</think>
+<think>Let me analyze each feature...</think>
 <grade>{"features": {"a": true, "b": false, "c": true}, "score": 2}</grade>
 <comment>Nothing to note.</comment>
 <feedback>You could have gotten full credit by...</feedback>

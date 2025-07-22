@@ -55,48 +55,48 @@ def update_evaluation(checkpoint: str, evaluation: dict):
     evaluation['times'][current_time] = checkpoint
     query = {
         "username": st.session_state["username"],
-        "interview_info._id": evaluation["interview_info"]["_id"]
+        "sim_info._id": evaluation["sim_info"]["_id"]
     }
     st.session_state['db_evals'].replace_one(query, evaluation, upsert=True)
 
 # OTHER
 def load_and_setup():
-    # Load the current interview based on view_index
-    interview_id = st.session_state["interview_list"][st.session_state["current_index"]]["_id"]
-    interview = st.session_state['db_sims'].find_one({"_id": interview_id})
+    # Load the current sim based on view_index
+    sim_id = st.session_state["sim_list"][st.session_state["current_index"]]["_id"]
+    sim = st.session_state['db_sims'].find_one({"_id": sim_id})
 
-    # Load or create the evaluation for this interview
-    evaluation = st.session_state['db_evals'].find_one({"username": st.session_state["username"], "interview_info._id": interview_id})
+    # Load or create the evaluation for this sim
+    evaluation = st.session_state['db_evals'].find_one({"username": st.session_state["username"], "sim_info._id": sim_id})
     if not evaluation:
         evaluation = {
             "username": st.session_state["username"],
-            "interview_info": st.session_state["interview_list"][st.session_state["current_index"]],
+            "sim_info": st.session_state["sim_list"][st.session_state["current_index"]],
             "mark": "",
             "times": {}
         }
-        # Initialize feedback structure
-        feedback = {}
+        # Initialize eval structure
+        evaluation = {}
         for category, data in RUBRIC.items():
             if category in ["Assessment"]: # if multiple parts
-                feedback[category] = {}
+                evaluation[category] = {}
                 for part in data:
-                    feedback[category][part] = {'comment': None, 'features': {}, 'score': None}
+                    evaluation[category][part] = {'comment': None, 'features': {}, 'score': None}
                     for i in range(data[part]['features']):
                         letter = string.ascii_lowercase[i]
-                        feedback[category][part]['features'][letter] = False
+                        evaluation[category][part]['features'][letter] = False
             else:
-                feedback[category] = {'comment': None, 'features': {}, 'score': None}
+                evaluation[category] = {'comment': None, 'features': {}, 'score': None}
                 for i in range(data['features']):
                     letter = string.ascii_lowercase[i]
-                    feedback[category]['features'][letter] = False
-        evaluation["feedback"] = feedback
+                    evaluation[category]['features'][letter] = False
+        evaluation["evaluation"] = evaluation
 
     # Insert if new, either way record start time
     if not st.session_state['started_time']:
         update_evaluation("start", evaluation)
         st.session_state['started_time'] = True
 
-    return interview, evaluation
+    return sim, evaluation
 
 
 if st.session_state["stage"] == "LOGIN_PAGE":
@@ -169,14 +169,14 @@ if st.session_state["stage"] == "HUMAN_EVAL":
 
     # Update/initialize main lookup dict labels
     def update_label(evaluation, current_index):
-        items = list(st.session_state["interviews_label:index"].items())
+        items = list(st.session_state["sims_label:index"].items())
         for label, index in items:
             if index == current_index: 
                 old_label = label
                 break
-        interview = evaluation["interview_info"]
-        eval_for_label = st.session_state['db_evals'].find_one({"username": evaluation["username"], "interview_info._id": interview["_id"]})
-        new_label = interview["netid"] + ": " + interview["patient"] + " " + eval_for_label["mark"]
+        sim = evaluation["sim_info"]
+        eval_for_label = st.session_state['db_evals'].find_one({"username": evaluation["username"], "sim_info._id": sim["_id"]})
+        new_label = sim["netid"] + ": " + sim["patient"] + " " + eval_for_label["mark"]
         new_label = emoji.emojize(new_label, language='alias')
         reconstruct = {}
         for label, index in items:
@@ -184,20 +184,20 @@ if st.session_state["stage"] == "HUMAN_EVAL":
                 reconstruct[new_label] = index
             else:
                 reconstruct[label] = index
-        st.session_state["interviews_label:index"] = reconstruct
+        st.session_state["sims_label:index"] = reconstruct
 
     
     # Initialize data if needed
-    if "interview_list" not in st.session_state:
-        st.session_state["interview_list"] = list(st.session_state['db_sims'].find({}, {"netid": 1, "patient": 1}))
-        st.session_state["interviews_label:index"] = {}
-        for index, interview in enumerate(st.session_state["interview_list"]):
-            label = interview["netid"] + ": " + interview["patient"]
-            eval_for_label = st.session_state['db_evals'].find_one({"username": st.session_state["username"], "interview_info._id": interview["_id"]})
+    if "sim_list" not in st.session_state:
+        st.session_state["sim_list"] = list(st.session_state['db_sims'].find({}, {"netid": 1, "patient": 1}))
+        st.session_state["sims_label:index"] = {}
+        for index, sim in enumerate(st.session_state["sim_list"]):
+            label = sim["netid"] + ": " + sim["patient"]
+            eval_for_label = st.session_state['db_evals'].find_one({"username": st.session_state["username"], "sim_info._id": sim["_id"]})
             if eval_for_label:
                 label += " " + eval_for_label["mark"]
                 label = emoji.emojize(label, language='alias')
-            st.session_state["interviews_label:index"][label] = index
+            st.session_state["sims_label:index"][label] = index
         st.session_state["current_index"] = None
         st.session_state["current_evaluation"] = None
         st.session_state['started_time'] = False
@@ -208,29 +208,29 @@ if st.session_state["stage"] == "HUMAN_EVAL":
         if st.session_state["current_evaluation"]:
             update_evaluation("end", st.session_state["current_evaluation"])
         # Get the new index from the selected label
-        st.session_state["current_index"] = st.session_state["interviews_label:index"][st.session_state["selected"]]
+        st.session_state["current_index"] = st.session_state["sims_label:index"][st.session_state["selected"]]
         st.session_state['started_time'] = False
         
     layout11[1].selectbox(
-        "Select an interview:", 
-        options=st.session_state["interviews_label:index"],
+        "Select a simulation:", 
+        options=st.session_state["sims_label:index"],
         index=st.session_state["current_index"],
-        placeholder="Select Interview", 
+        placeholder="Select Simulation", 
         label_visibility="collapsed", 
         key="selected",
         on_change=on_select_change
     )
 
     if st.session_state["current_index"] is not None:
-        interview, evaluation = load_and_setup()
+        sim, evaluation = load_and_setup()
         st.session_state["current_evaluation"] = evaluation
-        evaluation["feedback"] = display_evaluation(interview, evaluation["feedback"])
+        evaluation["evaluation"] = display_evaluation(sim, evaluation["evaluation"])
         st.session_state["current_evaluation"] = evaluation
 
     def navigate(direction):
         update_evaluation("end", st.session_state["current_evaluation"])
         if direction == "next":
-            st.session_state["current_index"] = min(len(st.session_state["interview_list"]) - 1, 
+            st.session_state["current_index"] = min(len(st.session_state["sim_list"]) - 1, 
                                               st.session_state["current_index"] + 1)
         elif direction == "back":
             st.session_state["current_index"] = max(0, st.session_state["current_index"] - 1)

@@ -75,21 +75,21 @@ def load_and_setup():
             "times": {}
         }
         # Initialize eval structure
-        evaluation = {}
+        eval = {}
         for category, data in RUBRIC.items():
             if category in ["Assessment"]: # if multiple parts
-                evaluation[category] = {}
+                eval[category] = {}
                 for part in data:
-                    evaluation[category][part] = {'comment': None, 'features': {}, 'score': None}
+                    eval[category][part] = {'comment': None, 'features': {}, 'score': None}
                     for i in range(data[part]['features']):
                         letter = string.ascii_lowercase[i]
-                        evaluation[category][part]['features'][letter] = False
+                        eval[category][part]['features'][letter] = False
             else:
-                evaluation[category] = {'comment': None, 'features': {}, 'score': None}
+                eval[category] = {'comment': None, 'features': {}, 'score': None}
                 for i in range(data['features']):
                     letter = string.ascii_lowercase[i]
-                    evaluation[category]['features'][letter] = False
-        evaluation["evaluation"] = evaluation
+                    eval[category]['features'][letter] = False
+        evaluation["evaluation"] = eval
 
     # Insert if new, either way record start time
     if not st.session_state['started_time']:

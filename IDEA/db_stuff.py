@@ -334,43 +334,6 @@ def fix_times():
         doc['WriteupLength'] = WriteupLength
         target.insert_one(doc)
 
-def transfer_data():
-    client = MongoClient(DB_URI)
-    source = client['Benchmark']['Human_Eval.M2_test']
-    target = client['Benchmark']['Human_Eval.M2_test_old']
-    docs = list(source.find())
-
-    for doc in docs:
-        if doc['username'] == "Fac3":
-            source.delete_one({'_id': doc['_id']})
-
-    # student_list = {}
-    # max_id = 168
-    # StudentID = None
-    # for doc in docs:
-    #     # StudentID
-    #     if doc['netid'] in student_list:
-    #         StudentID = student_list[doc['netid']]
-    #     else:
-    #         max_id += 1
-    #         student_list[doc['netid']] = max_id
-    #         StudentID = max_id
-    #     doc['StudentID'] = StudentID
-
-    #     doc['Year'] = 1 # fix year variable mistake
-    
-    # target.insert_many(docs)
-    
-    # print(f"Number of unique students: {len(student_list)}")
-
-    
-    # for patient in ["Samuel Thompson", "Sarah Thompson"]:
-    #     interviews = list(source.find({'patient': patient}))
-    #     selected = random.sample(interviews, 2)
-    #     target.insert_many(selected)
-    #     for x in selected:
-    #         source.delete_one({'_id': x['_id']})
-
 def generate_eval(sim: dict, prompt: str, client: Anthropic, AI_info: dict, rubric: dict, student_response: str, usage: dict) -> dict:
     # Generate prompt
     prompt = prompt.replace("<title></title>", f"<title>{rubric['title']}</title>")
@@ -570,7 +533,7 @@ def AI_evaluate_single():
     target.insert_one(final_result)
 
 
-def transfer():
+def transfer_data():
     client = MongoClient(DB_URI)
     source = client['Benchmark']['AI_Eval.M2_test']
     target = client['Benchmark']['AI_Eval.M2_test_old']
@@ -584,4 +547,17 @@ def transfer():
     #     source.replace_one({"_id": doc['_id']}, doc)
 
 
-AI_evaluate_single()
+def edit_data():
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Interviews.M2_test']
+    docs = list(source.find())
+
+    source.update_many(
+        {},  # Empty filter means all documents
+        {"$unset": {
+            "post_note_inputs.HPI": "",
+            "post_note_inputs.Past Histories": ""
+        }}
+    )
+
+edit_data()

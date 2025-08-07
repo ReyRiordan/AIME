@@ -51,9 +51,10 @@ def auto_score(part: str, features: dict[str, bool]) -> int:
         elif features['A'] and ((features['B'] and features['D']) or (features['C'] and features['E'])): return 2
         else: return 1
 
-def display_part(eval: dict, section: str, part: str) -> None:
+def display_part(eval: dict, section: str, part: str, sim_id: str) -> None:
         values = eval[section][part]
         rubric = RUBRIC[section][part]
+        prefix = f"{sim_id}_{part}" # Use sim_id to make keys unique across simulations
 
         score_placeholder = st.empty()
         
@@ -61,11 +62,11 @@ def display_part(eval: dict, section: str, part: str) -> None:
         for i, (key, value) in enumerate(features.items()):
             label = f"**{key}**: {rubric['features'][key]}"
             features[key] = st.checkbox(label,
-                                        key = f"{part}_feature"+str(i),
+                                        key = f"{prefix}_feature_{key}"+str(i),
                                         value = value)
         
         values["comment"] = st.text_area("Comments (PLEASE INCLUDE DETAILED RATIONALE): ", 
-                                        key = f"{part}_comment", 
+                                        key = f"{prefix}_comment", 
                                         value = values["comment"])
         
         score = auto_score(part, features)
@@ -74,6 +75,7 @@ def display_part(eval: dict, section: str, part: str) -> None:
             st.html(f"<span style=\"font-size: larger;\"><b>Score: {score}/{next(iter(rubric['points']))}</b></span>")
 
 def display_evaluation(interview: dict, evaluation: dict) -> dict:
+    sim_id = str(interview["_id"])  # Get unique sim ID
     student_responses = interview["post_note_inputs"]
     for section in student_responses:
         with st.container(border = True):
@@ -90,9 +92,9 @@ def display_evaluation(interview: dict, evaluation: dict) -> dict:
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
                         with tabs[i]:
-                            display_part(evaluation, section, part)
+                            display_part(evaluation, section, part, sim_id)
                 else:
-                    display_part(evaluation, section, section)
+                    display_part(evaluation, section, section, sim_id)
         
     return evaluation
 

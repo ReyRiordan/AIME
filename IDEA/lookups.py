@@ -46,12 +46,6 @@ MAX_ATTEMPTS = 3
 EMAIL = [('rutgers.aime@gmail.com')]
 
 
-# STREAMLIT SETUP
-st.set_page_config(page_title = "MEWAI",
-                   page_icon = "🧑‍⚕️",
-                   layout = "wide",
-                   initial_sidebar_state="collapsed")
-
 # Streamlit stages
 ERROR = 99
 CLOSED = -1

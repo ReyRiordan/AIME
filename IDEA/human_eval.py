@@ -25,6 +25,12 @@ import emoji
 import string
 
 
+# STREAMLIT SETUP
+st.set_page_config(page_title = "MEWAI",
+                   page_icon = "🧑‍⚕️",
+                   layout = "wide",
+                   initial_sidebar_state="collapsed")
+
 if "stage" not in st.session_state:
     st.session_state["stage"] = "LOGIN_PAGE"
 

@@ -535,11 +535,11 @@ def AI_evaluate_single():
 
 def transfer_data():
     client = MongoClient(DB_URI)
-    source = client['Benchmark']['AI_Eval.M2_test']
-    target = client['Benchmark']['AI_Eval.M2_test_old']
-    doc = source.find_one({"sim_info.netid": "cz422"})
+    source = client['Benchmark']['Human_Eval.M2_test_copy']
+    target = client['Benchmark']['Human_Eval.M2_test_old']
+    docs = list(source.find())
     
-    target.insert_one(doc)
+    target.insert_many(docs)
 
     # for doc in docs:
     #     doc['sim_info'] = doc.pop("interview_info")
@@ -560,4 +560,4 @@ def edit_data():
         }}
     )
 
-edit_data()
+transfer_data()

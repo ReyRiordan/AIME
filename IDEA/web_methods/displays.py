@@ -20,72 +20,81 @@ import string
 import pandas as pd
 
 
-def display_evaluation(interview: dict, user_inputs: dict) -> dict:
+def auto_score(part: str, features: dict[str, bool]) -> int:
+    num_present = 0
+    for f in features:
+        if features[f]: num_present += 1
+
+    if part == "Summary Statement":
+        if features['A']:
+            if num_present == 7: return 4
+            elif num_present >= 5 and features['G']: return 3
+            elif num_present >= 3: return 2
+            elif num_present >= 2: return 1
+            else: return 0
+        else:
+            return 0
+    elif part == "Differential Diagnosis":
+        if features['A'] and features['B'] and features['C'] and features['D']: return 2
+        elif features['A'] and num_present >= 2: return 1
+        else: return 0
+    elif part == "Explanation of Lead Diagnosis":
+        if num_present >= 3: return 2
+        elif features['A'] and num_present >= 2: return 1
+        else: return 0
+    elif part == "Explanation of Alternative Diagnoses":
+        if num_present >= 3: return 2
+        elif features['A'] and num_present >= 2: return 1
+        else: return 0
+    elif part == "Plan":
+        if num_present >= 5: return 3
+        elif features['A'] and ((features['B'] and features['D']) or (features['C'] and features['E'])): return 2
+        else: return 1
+
+def display_part(eval: dict, section: str, part: str) -> None:
+        values = eval[section][part]
+        rubric = RUBRIC[section][part]
+
+        score_placeholder = st.empty()
+        
+        features = values['features']
+        for i, (key, value) in enumerate(features.items()):
+            label = f"**{key}**: {rubric['features'][key]}"
+            features[key] = st.checkbox(label,
+                                        key = f"{part}_feature"+str(i),
+                                        value = value)
+        
+        values["comment"] = st.text_area("Comments (PLEASE INCLUDE DETAILED RATIONALE): ", 
+                                        key = f"{part}_comment", 
+                                        value = values["comment"])
+        
+        score = auto_score(part, features)
+        values["score"] = score
+        with score_placeholder:
+            st.html(f"<span style=\"font-size: larger;\"><b>Score: {score}/{next(iter(rubric['points']))}</b></span>")
+
+def display_evaluation(interview: dict, evaluation: dict) -> dict:
     student_responses = interview["post_note_inputs"]
-    categories = []
-    for cat, input in student_responses.items():
-        if input: categories.append(cat)
-    for category in categories:
-        response = student_responses[category]
+    for section in student_responses:
         with st.container(border = True):
-            st.header(f"{category}", divider = "grey")
-            layout1 = st.columns([1, 1])
+            st.subheader(f"{section}", divider = "grey")
+            layout1 = st.columns([2, 3])
+
             with layout1[0]:
-                st.subheader("**Student response:**")
-                st.write(student_responses[category])
+                st.html(f"<span style=\"font-size: larger;\"><b>Student Response:</b></span>")
+                st.write(student_responses[section])
+
             with layout1[1]:
-                st.subheader("**Evaluation:**")
-                if category in ["Assessment"]: # if multiple parts
-                    st.write(":exclamation: Please make sure to do each part by switching between the 3 tabs! :exclamation:")
-                    parts = [part for part in RUBRIC[category]]
+                if len(evaluation[section]) > 1:
+                    parts = list(evaluation[section].keys())
                     tabs = st.tabs(parts)
                     for i, part in enumerate(parts):
                         with tabs[i]:
-                            comment_key = f"{interview['_id']}_{category}_{part}_comment"
-                            score_key = f"{interview['_id']}_{category}_{part}_score"
-                            feature_key = f"{interview['_id']}_{category}_{part}_feature"
-                            user_inputs[category][part]["comment"] = st.text_area("Comments/feedback: ", 
-                                                                                  key = comment_key, 
-                                                                                  value = user_inputs[category][part]["comment"])
-                            features = user_inputs[category][part]['features']
-                            layout11 = st.columns([1 for i in range(10)])
-                            for i, (key, value) in enumerate(features.items()):
-                                features[key] = layout11[i].checkbox(key,
-                                                                     key = feature_key+str(i),
-                                                                     value = value)
-                            layout12 = st.columns([1, 5])
-                            user_inputs[category][part]["score"] = layout12[0].text_input(f"Score (out of **{RUBRIC[category][part]['points']}**): ", 
-                                                                                          key = score_key, 
-                                                                                          value = user_inputs[category][part]["score"])
-                            with st.container(border=True):
-                                st.write("**Rubric:**")
-                                st.html(RUBRIC[category][part]["html"])
-                                with st.expander("Description"):
-                                    st.write(RUBRIC[category][part]["title"] + ": " + RUBRIC[category][part]["desc"])
+                            display_part(evaluation, section, part)
                 else:
-                    comment_key = f"{interview['_id']}_{category}_comment"
-                    score_key = f"{interview['_id']}_{category}_score"
-                    feature_key = f"{interview['_id']}_{category}_feature"
-                    user_inputs[category]["comment"] = st.text_area("Comments/feedback: ", 
-                                                                    key = comment_key, 
-                                                                    value = user_inputs[category]["comment"])
-                    features = user_inputs[category]['features']
-                    layout11 = st.columns([1 for i in range(10)])
-                    for i, (key, value) in enumerate(features.items()):
-                        features[key] = layout11[i].checkbox(key,
-                                                             key = feature_key+str(i),
-                                                             value = value)
-                    layout12 = st.columns([1, 5])
-                    user_inputs[category]["score"] = layout12[0].text_input(f"Score (out of **{RUBRIC[category]['points']}**): ", 
-                                                                            key = score_key, 
-                                                                            value = user_inputs[category]["score"])
-                    with st.container(border=True):
-                        st.write("**Rubric:**")
-                        st.html(RUBRIC[category]["html"])
-                        with st.expander("Description"):
-                            st.write(RUBRIC[category]["title"] + ": " + RUBRIC[category]["desc"])
+                    display_part(evaluation, section, section)
         
-    return user_inputs
+    return evaluation
 
 
 def display_section(evaluations: dict, category: str, part: str) -> None:

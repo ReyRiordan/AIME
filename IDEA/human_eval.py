@@ -24,11 +24,6 @@ import pytz
 import emoji
 import string
 
-# STREAMLIT SETUP
-st.set_page_config(page_title = "MEWAI",
-                   page_icon = "🧑‍⚕️",
-                   layout = "wide",
-                   initial_sidebar_state="collapsed")
 
 if "stage" not in st.session_state:
     st.session_state["stage"] = "LOGIN_PAGE"
@@ -76,19 +71,12 @@ def load_and_setup():
         }
         # Initialize eval structure
         eval = {}
-        for category, data in RUBRIC.items():
-            if category in ["Assessment"]: # if multiple parts
-                eval[category] = {}
-                for part in data:
-                    eval[category][part] = {'comment': None, 'features': {}, 'score': None}
-                    for i in range(data[part]['features']):
-                        letter = string.ascii_lowercase[i]
-                        eval[category][part]['features'][letter] = False
-            else:
-                eval[category] = {'comment': None, 'features': {}, 'score': None}
-                for i in range(data['features']):
-                    letter = string.ascii_lowercase[i]
-                    eval[category]['features'][letter] = False
+        for section in RUBRIC:
+            eval[section] = {}
+            for part in RUBRIC[section]:
+                eval[section][part] = {'comment': None, 'features': {}, 'score': None}
+                for letter in RUBRIC[section][part]['features'].keys():
+                    eval[section][part]['features'][letter] = False
         evaluation["evaluation"] = eval
 
     # Insert if new, either way record start time

@@ -65,7 +65,7 @@ def display_part(eval: dict, section: str, part: str, sim_id: str) -> None:
                                         key = f"{prefix}_feature_{key}"+str(i),
                                         value = value)
         
-        values["comment"] = st.text_area("Comments (PLEASE INCLUDE DETAILED RATIONALE): ", 
+        values["comment"] = st.text_area("**Comments** (detailed rationale, as if it's a real clerkship OSCE post note review):", 
                                         key = f"{prefix}_comment", 
                                         value = values["comment"])
         

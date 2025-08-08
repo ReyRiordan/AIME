@@ -154,11 +154,10 @@ if st.session_state['stage'] == "DATASET_SELECTION":
 if st.session_state["stage"] == "HUMAN_EVAL":
     st.title("Human Evaluation")
     with st.expander("**Directions (click to expand)**"):
-        st.write("For each section of the post note, the student's response is displayed on the right. Please carefully provide scores using the corresponding rubrics on the left side. Clicking to expand the \"Description\" will give you a detailed description of each section. In addition, at least one section has multiple parts - please provide a score for each part.")
-        st.write("Use the \"Back\", \"Next\", and dropdown box to navigate freely between notes")
+        st.write("For each section of the post note, the student's response is displayed on the left. On the right side is a list of features for the rubric corresponding to that section - please grade their response by checking off the features it satisfies. Then, provide a detailed rationale for your grading in the comments box. NOTE: at least one section has multiple parts - please provide a score for each part.")
+        st.write("Use the \"Back\", \"Next\", and dropdown selection box to navigate freely between notes.")
         st.write(emoji.emojize("Marking a note as done will mark it with a :white_check_mark: beside it in the dropdown. Flagging it will mark it with a :triangular_flag_on_post:."))
         st.write("Please note that you MUST press one of the buttons to save your progress (there is no auto-save), but all buttons including the dropdown selection will save.")
-        st.write("NOTE: the comments/feedback section is optional!")
     layout1 = st.columns([2, 3, 2])
 
     # Update/initialize main lookup dict labels

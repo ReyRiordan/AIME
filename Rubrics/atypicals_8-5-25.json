@@ -26,7 +26,7 @@
                 "B": "Mentions specific diagnosis related to cardiac ischemia (angina, stable/unstable angina, cardiac ischemia, coronary artery disease/CAD, MI, STEMI, NSTEMI, acute coronary syndrome)",
                 "C": "Mentions specific GI diagnosis (GERD, esophageal, reflux, acid, esophageal spasm, esophageal motility, peptic ulcer disease/PUD, biliary disease, gallstones, cholecystitis, cholelithiasis, pancreatitis)",
                 "D": "Statement of probability is explicitly stated (most likely diagnosis is, lead(ing) diagnosis is, likely, probable, worrisome, concerning for)",
-                "E": "Statement of probability is explicitly stated (most likely diagnosis is, lead(ing) diagnosis is, likely, probable, worrisome, concerning for)",
+                "E": "Differential diagnosis is implicitly stated (e.g., “cardiac disease”, “esophageal/GI disease”)",
                 "F": "Statement of probability is implied but not explicitly stated (“should consider”, “X is possible”, or ddx list is numbered e.g. #1, X diagnosis, #2, Y diagnosis)"
             },
             "points": {

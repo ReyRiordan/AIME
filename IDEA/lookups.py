@@ -7,11 +7,10 @@ import json
 from pymongo.mongo_client import MongoClient
 from datetime import datetime
 import pytz
+from dotenv import load_dotenv
 
 
-# from dotenv import load_dotenv
-
-# load_dotenv()
+load_dotenv('.venv/.env')
 
 # if "lookups" not in st.session_state:
 #     st.session_state.lookups = {

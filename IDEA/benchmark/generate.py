@@ -57,6 +57,7 @@ def extract_from_output(output: str) -> dict:
     }
 
 
+# https://platform.openai.com/docs/api-reference/responses/create
 def generate_openai(model: str, temperature: float, system_prompt: str, student_response: str) -> dict:
     client = OpenAI()
 
@@ -83,6 +84,7 @@ def generate_openai(model: str, temperature: float, system_prompt: str, student_
     return eval
 
 
+# https://docs.anthropic.com/en/api/messages
 def generate_anthropic(model: str, temperature: float, system_prompt: str, student_response: str) -> dict:
     client = Anthropic()
 
@@ -114,6 +116,7 @@ def generate_anthropic(model: str, temperature: float, system_prompt: str, stude
     return eval
 
 
+# https://ai.google.dev/api/generate-content#method:-models.generatecontent
 def generate_google(model: str, temperature: float, system_prompt: str, student_response: str) -> dict:
     client = genai.Client()
 

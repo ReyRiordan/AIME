@@ -51,10 +51,6 @@ def evaluate_set(provider: str, model_name: str, username: str):
 
         evaluation = {}
         post_note = sim['post_note_inputs']
-        usage = {
-            "input_tokens": 0,
-            "output_tokens": 0
-        }
         for section in RUBRIC:
             student_response = post_note[section]
             if not student_response:
@@ -87,9 +83,81 @@ def evaluate_set(provider: str, model_name: str, username: str):
         target.insert_one(final_result)
 
 
+def evaluate_single(provider: str, model_name: str, username: str, netid: str, patient: str):
+    # DB SETTINGS
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Interviews.M2_test']
+    target = client['Benchmark']['AI_Eval.M2_test']
+    # MODEL SETTINGS
+    model_info = {
+        "provider": provider,
+        "name": model_name,
+        "temperature": 0.0,
+        "thinking": True,
+        "prompt_id": "Feedback_7-18",
+        "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0
+        }
+    }
+    # EVAL PROMPT
+    with open(f"./Prompts/{model_info['prompt_id']}.txt", 'r') as prompt_file:
+        base_prompt = prompt_file.read()
+
+    start_time = datetime.now().isoformat()
+
+    sim = source.find_one({"netid": netid, "patient": patient}) # FIND THE SINGLE
+    sim_info = {
+        "_id": sim['_id'],
+        "netid": sim['netid'],
+        "patient": sim['patient'], 
+    }
+
+    evaluation = {}
+    post_note = sim['post_note_inputs']
+    for section in RUBRIC:
+        student_response = post_note[section]
+        if not student_response:
+            evaluation[section] = None
+            continue
+        
+        evaluation[section] = {}
+        for part, rubric in RUBRIC[section].items():
+            part_eval = generate_eval(model_info, base_prompt, rubric, student_response)
+            part_usage = part_eval.pop('usage')
+            model_info['usage']['input_tokens'] += part_usage['input_tokens']
+            model_info['usage']['output_tokens'] += part_usage['output_tokens']
+            evaluation[section][part] = part_eval
+
+    end_time = datetime.now().isoformat()
+    times = {
+        start_time: "start",
+        end_time: "end"
+    }
+
+    final_result = {
+        "username": username,
+        "model_info": model_info,
+        "sim_info": sim_info,
+        "rubric_id": RUBRIC_ID,
+        "evaluation": evaluation,
+        "times": times,
+    }
+
+    target.insert_one(final_result)
+
+
 if __name__ == "__main__":
     evaluate_set(
         provider = "anthropic",
         model_name = "claude-sonnet-4-20250514",
         username = "Claude"
+    )
+
+    evaluate_single(
+        provider = "anthropic",
+        model_name = "claude-sonnet-4-20250514",
+        username = "Claude",
+        netid = "",
+        patient = ""
     )

@@ -36,7 +36,7 @@ def extract_from_output(output: str) -> dict:
             print(f"ERROR: no match for <{tag}> in output")
             return None
 
-    reasoning = extract("reasoning")
+    reasoning = extract("rationale")
     grade = extract("grade")
     if grade:
         try:
@@ -51,7 +51,7 @@ def extract_from_output(output: str) -> dict:
     feedback = extract("feedback")
 
     return {
-        'reasoning': reasoning,
+        'rationale': reasoning,
         'grade': grade,
         'feedback': feedback
     }

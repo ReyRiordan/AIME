@@ -2,18 +2,20 @@ import time
 from datetime import datetime
 from docx import Document
 import io
-import os
 import base64
 from openai import OpenAI
 import tempfile
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from lookups import *
 from generate import *
-import re
 
 
-def evaluate_set(provider: str, model_name: str, username: str):
+def evaluate_all(provider: str, model_name: str, username: str):
     # DB SETTINGS
     client = MongoClient(DB_URI)
     source = client['Benchmark']['Interviews.M2_test']
@@ -25,7 +27,7 @@ def evaluate_set(provider: str, model_name: str, username: str):
         "name": model_name,
         "temperature": 0.0,
         "thinking": True,
-        "prompt_id": "Feedback_7-18",
+        "prompt_id": "Feedback_8-16",
         "usage": {
             "input_tokens": 0,
             "output_tokens": 0
@@ -94,7 +96,7 @@ def evaluate_single(provider: str, model_name: str, username: str, netid: str, p
         "name": model_name,
         "temperature": 0.0,
         "thinking": True,
-        "prompt_id": "Feedback_7-18",
+        "prompt_id": "Feedback_8-16",
         "usage": {
             "input_tokens": 0,
             "output_tokens": 0
@@ -147,17 +149,46 @@ def evaluate_single(provider: str, model_name: str, username: str, netid: str, p
     target.insert_one(final_result)
 
 
-if __name__ == "__main__":
-    evaluate_set(
-        provider = "anthropic",
-        model_name = "claude-sonnet-4-20250514",
-        username = "Claude"
-    )
+def evaluate(type: str, provider: str, netid = None, patient = None):
+    models = {
+        "anthropic": {
+            "name": "claude-sonnet-4-20250514",
+            "username": "Claude 4S"
+        },
+        "openai": {
+            "name": "",
+            "username": "GPT 5"
+        },
+        "google": {
+            "name": "",
+            "username": "Gemini 2.5P"
+        }
+    }
 
-    evaluate_single(
+    if type == "all":
+        evaluate_all(
+            provider = provider,
+            model_name = models[provider]['name'],
+            username = models[provider]['username'],
+        )
+
+    elif type == "single":
+        evaluate_single(
+            provider = provider,
+            model_name = models[provider]['name'],
+            username = models[provider]['username'],
+            netid = netid,
+            patient = patient
+        )
+
+    else:
+        print("ERROR")
+
+
+if __name__ == "__main__":
+    evaluate(
+        type = "single",
         provider = "anthropic",
-        model_name = "claude-sonnet-4-20250514",
-        username = "Claude",
-        netid = "",
-        patient = ""
+        netid = "mi360",
+        patient = "Jeffrey Smith"
     )

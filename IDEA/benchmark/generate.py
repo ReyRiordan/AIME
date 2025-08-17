@@ -36,23 +36,24 @@ def extract_from_output(output: str) -> dict:
             print(f"ERROR: no match for <{tag}> in output")
             return None
 
-    reasoning = extract("rationale")
-    grade = extract("grade")
-    if grade:
+    rationale = extract("rationale")
+    raw_grades = extract("grades")
+    if raw_grades:
         try:
-            grade_dict = json.loads(grade)
+            grade_dict = json.loads(raw_grades)
             features = grade_dict['features']
             score = grade_dict['score']
         except json.JSONDecodeError as e:
-            print(f"ERROR: Could not parse grade JSON '{grade}': {e}")
+            print(f"ERROR: Could not parse grade JSON '{raw_grades}': {e}")
             grade_dict = features = score = None
     else:
         grade_dict = features = score = None
     feedback = extract("feedback")
 
     return {
-        'rationale': reasoning,
-        'grade': grade,
+        'comment': rationale,
+        'features': features,
+        'score': score,
         'feedback': feedback
     }
 
@@ -89,21 +90,22 @@ def generate_anthropic(model_info: dict, system_prompt: str, student_response: s
     client = Anthropic()
 
     # Generate output
-    prefill = "<reasoning>"
+    # prefill = "<reasoning>"
     raw_output = client.messages.create(
             model = model_info['name'],
-            temperature = model_info['temperature'],
+            temperature = 1, # REQUIRED FOR THINKING
             system = system_prompt,
             thinking = {
                 "type": "enabled",
                 "budget_tokens": 2048
             },
+            max_tokens = 4096,
             messages = [
                 {"role": "user", "content": student_response},
-                {"role": "assistant", "content": prefill}
+                # {"role": "assistant", "content": prefill}
             ]
         )
-    output = prefill + raw_output.content[0].text
+    output = raw_output.content[1].text
     print(output)
 
     eval = extract_from_output(output) # reasoning, grade, feedback

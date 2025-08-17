@@ -188,7 +188,7 @@ def evaluate(type: str, provider: str, netid = None, patient = None):
 if __name__ == "__main__":
     evaluate(
         type = "single",
-        provider = "openai",
+        provider = "google",
         netid = "mi360",
         patient = "Jeffrey Smith"
     )

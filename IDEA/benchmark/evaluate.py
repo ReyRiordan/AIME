@@ -156,11 +156,11 @@ def evaluate(type: str, provider: str, netid = None, patient = None):
             "username": "Claude 4S"
         },
         "openai": {
-            "name": "",
+            "name": "gpt-5-2025-08-07",
             "username": "GPT 5"
         },
         "google": {
-            "name": "",
+            "name": "gemini-2.5-pro",
             "username": "Gemini 2.5P"
         }
     }
@@ -188,7 +188,7 @@ def evaluate(type: str, provider: str, netid = None, patient = None):
 if __name__ == "__main__":
     evaluate(
         type = "single",
-        provider = "anthropic",
+        provider = "openai",
         netid = "mi360",
         patient = "Jeffrey Smith"
     )

@@ -65,14 +65,14 @@ def generate_openai(model_info: dict, system_prompt: str, student_response: str)
     # Generate output
     raw_output = client.responses.create(
             model = model_info['name'],
-            temperature = model_info['temperature'],
+            # temperature = model_info['temperature'], # NOT SUPPORTED WITH GPT5?
             instructions = system_prompt,
             reasoning = {
                 'effort': 'medium',
             },
             input = student_response
         )
-    output = raw_output.output[0].content.text
+    output = raw_output.output[1].content[0].text
     print(output)
     
     eval = extract_from_output(output) # reasoning, grade, feedback

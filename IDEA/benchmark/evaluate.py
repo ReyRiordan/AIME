@@ -49,7 +49,82 @@ def evaluate_all(provider: str, model_name: str, username: str):
         }
 
         n += 1
-        print(f"({n}/30) {sim['netid']} | {sim['patient']}")
+        print(f"({n}/{len(sim_headers)}) {sim['netid']} | {sim['patient']}")
+
+        evaluation = {}
+        post_note = sim['post_note_inputs']
+        for section in RUBRIC:
+            student_response = post_note[section]
+            if not student_response:
+                evaluation[section] = None
+                continue
+            
+            evaluation[section] = {}
+            for part, rubric in RUBRIC[section].items():
+                part_eval = generate_eval(model_info, base_prompt, rubric, student_response)
+                part_usage = part_eval.pop('usage')
+                model_info['usage']['input_tokens'] += part_usage['input_tokens']
+                model_info['usage']['output_tokens'] += part_usage['output_tokens']
+                evaluation[section][part] = part_eval
+
+        end_time = datetime.now().isoformat()
+        times = {
+            start_time: "start",
+            end_time: "end"
+        }
+
+        final_result = {
+            "username": username,
+            "model_info": model_info,
+            "sim_info": sim_info,
+            "rubric_id": RUBRIC_ID,
+            "evaluation": evaluation,
+            "times": times,
+        }
+
+        target.insert_one(final_result)
+
+
+def evaluate_rem(provider: str, model_name: str, username: str):
+    # DB SETTINGS
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Interviews.M2_test']
+    target = client['Benchmark']['AI_Eval.M2_test']
+    sim_headers = list(source.find({}, {"netid": 1, "patient": 1}))
+    # FILTER TO ONLY REMAINDERS
+    sim_headers = [header for header in sim_headers 
+                   if not target.find_one({"model_info.provider": "google",
+                                           "sim_info.netid": header['netid'],
+                                           "sim_info.patient": header['patient']})]
+    # MODEL SETTINGS
+    model_info = {
+        "provider": provider,
+        "name": model_name,
+        "temperature": 0.0,
+        "thinking": True,
+        "prompt_id": "Feedback_8-16",
+        "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0
+        }
+    }
+    # EVAL PROMPT
+    with open(f"./Prompts/{model_info['prompt_id']}.txt", 'r') as prompt_file:
+        base_prompt = prompt_file.read()
+
+    n = 0
+    for header in sim_headers:
+        sim = source.find_one({"_id": header['_id']})
+        start_time = datetime.now().isoformat()
+
+        sim_info = {
+            "_id": sim['_id'],
+            "netid": sim['netid'],
+            "patient": sim['patient'], 
+        }
+
+        n += 1
+        print(f"({n}/{len(sim_headers)}) {sim['netid']} | {sim['patient']}")
 
         evaluation = {}
         post_note = sim['post_note_inputs']
@@ -172,6 +247,13 @@ def evaluate(type: str, provider: str, netid = None, patient = None):
             username = models[provider]['username'],
         )
 
+    elif type == "rem":
+        evaluate_rem(
+            provider = provider,
+            model_name = models[provider]['name'],
+            username = models[provider]['username'],
+        )
+
     elif type == "single":
         evaluate_single(
             provider = provider,
@@ -187,8 +269,8 @@ def evaluate(type: str, provider: str, netid = None, patient = None):
 
 if __name__ == "__main__":
     evaluate(
-        type = "single",
+        type = "rem",
         provider = "google",
-        netid = "mi360",
-        patient = "Jeffrey Smith"
+        netid = "",
+        patient = ""
     )

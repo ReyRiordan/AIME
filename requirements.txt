@@ -11,3 +11,4 @@ pymongo
 pytz
 google-genai
 emoji
+python-dotenv

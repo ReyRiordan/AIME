@@ -7,11 +7,10 @@ import json
 from pymongo.mongo_client import MongoClient
 from datetime import datetime
 import pytz
+from dotenv import load_dotenv
 
 
-# from dotenv import load_dotenv
-
-# load_dotenv()
+load_dotenv('.venv/.env')
 
 # if "lookups" not in st.session_state:
 #     st.session_state.lookups = {
@@ -141,7 +140,7 @@ MAX_MEMORY = 12 # no limit rn
 BATCH_MAX = 20
 BATCH_DELAY = 60
 
-RUBRIC_ID = "atypicals_7-2-25"
+RUBRIC_ID = "atypicals_8-5-25"
 
 with open("./Rubrics/base.json", "r") as rubric_base_file:
     rubric_base = json.load(rubric_base_file)
@@ -149,17 +148,26 @@ with open("./Rubrics/" + RUBRIC_ID + ".json", "r") as rubric_points_file:
     rubric_points = json.load(rubric_points_file)
 
 # CREATE RUBRIC
+def generate_rubric_html(rubric):
+    html = ""
+    html += "<p><b><u>Rubric:</u></b></p>"
+    for feature, desc in rubric['features'].items():
+        html += f"<p><b>{feature}:</b> {desc}</p>"
+    html += "<hr>"
+    for points, desc in rubric['points'].items():
+        html += f"<p><b>{points}:</b> {desc}</p>"
+    
+    return html
+
 RUBRIC = {}
-for category in rubric_base:
-    if category in ["HPI", "Past Histories", "Assessment"]: # multiple parts
-        RUBRIC[category] = {}
-        for part in rubric_base[category]:
-            RUBRIC[category][part] = {**rubric_base[category][part], **rubric_points[category][part]}
+for section in rubric_base:
+    if section in ["Key Findings", "HPI", "Past Histories"]: 
+        continue
     else:
-        RUBRIC[category] = {**rubric_base[category], **rubric_points[category]}
-# SHORTEN
-for category in ["Key Findings", "HPI", "Past Histories"]:
-    del RUBRIC[category]
+        RUBRIC[section] = {}
+        for part in rubric_base[section]:
+            RUBRIC[section][part] = {**rubric_base[section][part], **rubric_points[section][part]}
+            RUBRIC[section][part]['html'] = generate_rubric_html(RUBRIC[section][part])
 
 
 with open(PATHS["Label Examples"], "r") as cat_examples_json:

@@ -334,178 +334,13 @@ def fix_times():
         doc['WriteupLength'] = WriteupLength
         target.insert_one(doc)
 
+
 def transfer_data():
-    client = MongoClient(DB_URI)
-    source = client['Benchmark']['Human_Eval.M2_test']
-    target = client['Benchmark']['Human_Eval.M2_test_old']
-    docs = list(source.find())
-
-    for doc in docs:
-        if doc['username'] == "Fac3":
-            source.delete_one({'_id': doc['_id']})
-
-    # student_list = {}
-    # max_id = 168
-    # StudentID = None
-    # for doc in docs:
-    #     # StudentID
-    #     if doc['netid'] in student_list:
-    #         StudentID = student_list[doc['netid']]
-    #     else:
-    #         max_id += 1
-    #         student_list[doc['netid']] = max_id
-    #         StudentID = max_id
-    #     doc['StudentID'] = StudentID
-
-    #     doc['Year'] = 1 # fix year variable mistake
-    
-    # target.insert_many(docs)
-    
-    # print(f"Number of unique students: {len(student_list)}")
-
-    
-    # for patient in ["Samuel Thompson", "Sarah Thompson"]:
-    #     interviews = list(source.find({'patient': patient}))
-    #     selected = random.sample(interviews, 2)
-    #     target.insert_many(selected)
-    #     for x in selected:
-    #         source.delete_one({'_id': x['_id']})
-
-def generate_eval(sim: dict, prompt: str, client: Anthropic, AI_info: dict, rubric: dict, student_response: str, usage: dict) -> dict:
-    # Generate prompt
-    prompt = prompt.replace("<title></title>", f"<title>{rubric['title']}</title>")
-    prompt = prompt.replace("<desc></desc>", f"<desc>{rubric['desc']}</desc>")
-    exclude = ['title', 'desc', 'html']
-    to_insert = {k: v for k, v in rubric.items() if k not in exclude}
-    prompt = prompt.replace("<rubric></rubric>", f"<rubric>{to_insert}</rubric>")
-
-    # Generate output
-    prefill = "<think>"
-    raw_output = client.messages.create(
-            model = AI_info['model'],
-            temperature = AI_info['temperature'],
-            max_tokens = 4096,
-            system = prompt,
-            messages = [
-                {"role": "user", "content": student_response},
-                {"role": "assistant", "content": prefill}
-            ]
-        )
-    output = prefill + raw_output.content[0].text
-    # print(output)
-    usage['input_tokens'] += raw_output.usage.input_tokens
-    usage['output_tokens'] += raw_output.usage.output_tokens
-
-    def extract(tag: str):
-        match = re.search(rf'<{tag}>([\s\S]*?)</{tag}>', output)
-        if match:
-            return match.group(1).strip()
-        else:
-            print(f"ERROR: no match for <{tag}> in output")
-            return None
-
-    think = extract("think")
-    grade = extract("grade")
-    if grade:
-        try:
-            grade_dict = json.loads(grade)
-            features = grade_dict['features']
-            score = grade_dict['score']
-        except json.JSONDecodeError as e:
-            print(f"ERROR: Could not parse grade JSON '{grade}': {e}")
-            grade_dict = features = score = None
-    else:
-        grade_dict = features = score = None
-    comment = extract("comment")
-    feedback = extract("feedback")
-
-    return {
-        "comment": comment,
-        "features": features,
-        "score": score,
-        "feedback": feedback,
-        "think": think
-        }
-
-def AI_evaluation():
-    client = MongoClient(DB_URI)
-    source = client['Benchmark']['Interviews.M2_test']
-    target = client['Benchmark']['AI_Eval.M2_test']
-    sim_headers = list(source.find({}, {"netid": 1, "patient": 1}))
-
-    username = "Claude 4S"
-    AI_info = {
-        "provider": "Anthropic",
-        "model": "claude-sonnet-4-20250514",
-        "temperature": 0.0,
-        "thinking": False,
-        "prompt_id": "Feedback_7-18"
-    }
-
-    client = Anthropic()
-    with open('./Prompts/Feedback_7-18.txt', 'r') as prompt_file:
-        prompt = prompt_file.read()
-
-    n = 0
-    for header in sim_headers:
-        sim = source.find_one({"_id": header['_id']})
-        start_time = datetime.now().isoformat()
-
-        sim_info = {
-            "_id": sim['_id'],
-            "netid": sim['netid'],
-            "patient": sim['patient'], 
-            "rubric_id": "atypicals_7-2-25"
-        }
-
-        n += 1
-        print(f"({n}/30) {sim['netid']} | {sim['patient']}")
-
-        post_note = sim['post_note_inputs']
-        evaluation = {}
-        usage = {
-            "input_tokens": 0,
-            "output_tokens": 0
-        }
-        for category, student_response in post_note.items():
-            if not student_response: continue
-
-            if category in ["Assessment"]:
-                evaluation[category] = {}
-                for part in RUBRIC[category]:
-                    rubric = RUBRIC[category][part]
-                    # print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {part}]... ----------")
-                    eval_dict = generate_eval(sim, prompt, client, AI_info, rubric, student_response, usage)
-                    evaluation[category][part] = eval_dict
-            else:
-                rubric = RUBRIC[category]
-                # print(f"\n\n--------- Generating output for [{sim['netid']} | {sim['patient']} | {category}]... ----------")
-                eval_dict = generate_eval(sim, prompt, client, AI_info, rubric, student_response, usage)
-                evaluation[category] = eval_dict
-
-        end_time = datetime.now().isoformat()
-        times = {
-            start_time: "start",
-            end_time: "end"
-        }
-
-        final_result = {
-            "username": username,
-            "ai_info": AI_info,
-            "sim_info": sim_info,
-            "times": times,
-            "usage": usage,
-            "evaluation": evaluation
-        }
-
-        target.insert_one(final_result)
-        
-
-def standardize_naming():
     client = MongoClient(DB_URI)
     source = client['Benchmark']['AI_Eval.M2_test']
     target = client['Benchmark']['AI_Eval.M2_test_old']
     docs = list(source.find())
+    
     target.insert_many(docs)
 
     # for doc in docs:
@@ -514,4 +349,18 @@ def standardize_naming():
     #     source.replace_one({"_id": doc['_id']}, doc)
 
 
-AI_evaluation()
+def edit_data():
+    client = MongoClient(DB_URI)
+    source = client['Benchmark']['Interviews.M2_test']
+    docs = list(source.find())
+
+    source.update_many(
+        {},  # Empty filter means all documents
+        {"$unset": {
+            "post_note_inputs.HPI": "",
+            "post_note_inputs.Past Histories": ""
+        }}
+    )
+
+if __name__ == "__main__":
+    transfer_data()

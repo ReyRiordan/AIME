@@ -47,6 +47,9 @@ COLLECTION_INTERVIEWS = DB_CLIENT['Benchmark']['Interviews.M2_test']
 COLLECTION_EVALS_HUMAN = DB_CLIENT['Benchmark']['Human_Eval.M2_test']
 COLLECTION_EVALS_AI = DB_CLIENT['Benchmark']['AI_Eval.M2_test']
 
+EVALUATORS_HUMAN = ['Fac1', 'Fac2', 'Fac3']
+EVALUATORS_AI = ['Claude 4S', 'GPT 5', 'Gemini 2.5P']
+
 # OTHER
 def load_and_setup():
     # Load the current interview based on view_index
@@ -54,12 +57,9 @@ def load_and_setup():
     interview = COLLECTION_INTERVIEWS.find_one({"_id": interview_id})
 
     # Load evals
-    evaluations = {
-        'Fac1': None,
-        'Fac2': None,
-        'Fac3': None,
-        'Claude 4S': None
-    }
+    evaluations = {}
+    for evaler in EVALUATORS_HUMAN + EVALUATORS_AI:
+        evaluations[evaler] = None
     eval_list_human = list(COLLECTION_EVALS_HUMAN.find({'sim_info._id': interview_id}))
     eval_list_ai = list(COLLECTION_EVALS_AI.find({'sim_info._id': interview_id}))
     eval_list = eval_list_human + eval_list_ai

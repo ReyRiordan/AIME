@@ -8,7 +8,6 @@ import datetime as date
 import base64
 import io
 import streamlit as st
-from audiorecorder import audiorecorder
 from openai import OpenAI
 from annotated_text import annotated_text
 import json

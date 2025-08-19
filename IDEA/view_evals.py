@@ -7,11 +7,6 @@ import streamlit as st
 import streamlit.components.v1 as components
 # import streamlit_authenticator as auth
 import base64
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import (
-    Mail, Attachment, FileContent, FileName,
-    FileType, Disposition, ContentId)
-from audiorecorder import audiorecorder
 from openai import OpenAI
 import tempfile
 from annotated_text import annotated_text

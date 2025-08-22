@@ -61,7 +61,13 @@ def evaluate_all(provider: str, model_name: str, username: str):
             
             evaluation[section] = {}
             for part, rubric in RUBRIC[section].items():
-                part_eval = generate_eval(model_info, base_prompt, rubric, student_response)
+                if "extra_context" in rubric:
+                    extra = rubric['extra_context']
+                    user_prompt += f"\n<{extra}>{post_note[extra]}</{extra}>"
+                else:
+                    user_prompt = f"<{section}>{student_response}</{section}>"
+
+                part_eval = generate_eval(model_info, base_prompt, rubric, user_prompt)
                 part_usage = part_eval.pop('usage')
                 model_info['usage']['input_tokens'] += part_usage['input_tokens']
                 model_info['usage']['output_tokens'] += part_usage['output_tokens']
@@ -93,7 +99,7 @@ def evaluate_rem(provider: str, model_name: str, username: str):
     sim_headers = list(source.find({}, {"netid": 1, "patient": 1}))
     # FILTER TO ONLY REMAINDERS
     sim_headers = [header for header in sim_headers 
-                   if not target.find_one({"model_info.provider": "google",
+                   if not target.find_one({"model_info.provider": provider,
                                            "sim_info.netid": header['netid'],
                                            "sim_info.patient": header['patient']})]
     # MODEL SETTINGS
@@ -136,7 +142,13 @@ def evaluate_rem(provider: str, model_name: str, username: str):
             
             evaluation[section] = {}
             for part, rubric in RUBRIC[section].items():
-                part_eval = generate_eval(model_info, base_prompt, rubric, student_response)
+                if "extra_context" in rubric:
+                    extra = rubric['extra_context']
+                    user_prompt += f"\n<{extra}>{post_note[extra]}</{extra}>"
+                else:
+                    user_prompt = f"<{section}>{student_response}</{section}>"
+                
+                part_eval = generate_eval(model_info, base_prompt, rubric, user_prompt)
                 part_usage = part_eval.pop('usage')
                 model_info['usage']['input_tokens'] += part_usage['input_tokens']
                 model_info['usage']['output_tokens'] += part_usage['output_tokens']
@@ -200,7 +212,12 @@ def evaluate_single(provider: str, model_name: str, username: str, netid: str, p
         
         evaluation[section] = {}
         for part, rubric in RUBRIC[section].items():
-            part_eval = generate_eval(model_info, base_prompt, rubric, student_response)
+            user_prompt = f"<{section}>{student_response}</{section}>"
+            if "extra_context" in rubric:
+                extra = rubric['extra_context']
+                user_prompt += f"\n<{extra}>{post_note[extra]}</{extra}>"
+            
+            part_eval = generate_eval(model_info, base_prompt, rubric, user_prompt)
             part_usage = part_eval.pop('usage')
             model_info['usage']['input_tokens'] += part_usage['input_tokens']
             model_info['usage']['output_tokens'] += part_usage['output_tokens']
@@ -270,7 +287,7 @@ def evaluate(type: str, provider: str, netid = None, patient = None):
 if __name__ == "__main__":
     evaluate(
         type = "rem",
-        provider = "google",
-        netid = "",
-        patient = ""
+        provider = "anthropic",
+        netid = "mi360",
+        patient = "Jeffrey Smith"
     )
